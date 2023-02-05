@@ -1,20 +1,14 @@
 const routes = {
   home: '/',
+  projects: '/projects',
   swap: '/swap',
-  liquidity: '/liquidity',
-  liquidityPosition: '/liquidity-position',
-  farms: '/farms',
-  createNft: '/create-nft',
-  nftDetails: '/nft-details',
-  search: '/search',
-  notification: '/notifications',
-  vote: '/vote',
-  proposals: '/proposals',
-  createProposal: '/proposals/create',
-  charts: '/charts',
+  roadmaps: '/roadmaps',
+  issues: '/issues',
+  incentivizeContributors: 'incentivize-contributors',
   profile: '/profile',
-  portfolio: '/profile?view=portfolio',
-  history: '/profile?view=history',
+  jobs: '/jobs',
+  enterprise: '/enterprise',
+  notification: '/notifications',
 };
 
 export default routes;

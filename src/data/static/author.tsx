@@ -3,11 +3,13 @@ import AuthorImage from '@/assets/images/author.jpg';
 import { Instagram } from '@/components/icons/brands/instagram';
 import { Twitter } from '@/components/icons/brands/twitter';
 import { Facebook } from '@/components/icons/brands/facebook';
-import User1 from '@/assets/images/avatar/4.png';
-import User2 from '@/assets/images/avatar/2.png';
-import User3 from '@/assets/images/avatar/3.png';
-import User4 from '@/assets/images/avatar/1.png';
-import User5 from '@/assets/images/avatar/6.png';
+import { Bitcoin } from '@/components/icons/bitcoin';
+import { Ethereum } from '@/components/icons/ethereum';
+import { Tether } from '@/components/icons/tether';
+import { Bnb } from '@/components/icons/bnb';
+import { Usdc } from '@/components/icons/usdc';
+import { Cardano } from '@/components/icons/cardano';
+import { Doge } from '@/components/icons/doge';
 
 export const authorData = {
   id: 157896,
@@ -27,60 +29,40 @@ export const authorData = {
     original: AuthorImage,
   },
   bio: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis.',
-  following: '1,504',
-  followers: '1,845',
-  followed_by: [
+  issuesSolved: '92',
+  issuesCreated: '20',
+  coins: [
     {
       id: 1,
-      name: 'Thirtythree',
-      slug: 'thirtythree',
-      avatar: {
-        id: 1,
-        thumbnail: User1,
-        original: User1,
-      },
+      element: <Bitcoin />,
     },
     {
       id: 2,
-      name: 'Thirtythree',
-      slug: 'thirtythree',
-      avatar: {
-        id: 1,
-        thumbnail: User2,
-        original: User2,
-      },
+      element: <Ethereum />,
     },
     {
       id: 3,
-      name: 'Thirtythree',
-      slug: 'thirtythree',
-      avatar: {
-        id: 1,
-        thumbnail: User3,
-        original: User3,
-      },
+      element: <Tether />,
     },
     {
       id: 4,
-      name: 'Thirtythree',
-      slug: 'thirtythree',
-      avatar: {
-        id: 1,
-        thumbnail: User4,
-        original: User4,
-      },
+      element: <Bnb />,
     },
     {
       id: 5,
-      name: 'Thirtythree',
-      slug: 'thirtythree',
-      avatar: {
-        id: 1,
-        thumbnail: User5,
-        original: User5,
-      },
+      element: <Usdc />,
+    },
+    {
+      id: 6,
+      element: <Cardano />,
+    },
+    {
+      id: 7,
+      element: <Doge />,
     },
   ],
+  totalAmount:'250',
+  syncDate:'05-02-2023',
   socials: [
     {
       id: 1,

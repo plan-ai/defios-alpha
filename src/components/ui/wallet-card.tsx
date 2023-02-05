@@ -36,8 +36,8 @@ export default function WalletCard() {
   const [isChangePositive, setChangeStatus] = useState(true);
   const [percentage, setPercentage] = useState(data[0].volume);
   return (
-    <div className="rounded-lg p-6 shadow-card bg-light-dark sm:p-8">
-      <h3 className="mb-6 text-base font-medium uppercase">Wallet</h3>
+    <div className="rounded-lg p-6 shadow-card bg-light-dark sm:p-6">
+      <h3 className="mb-0 text-base font-medium uppercase">Top Holders</h3>
 
       <div className="relative flex h-[290px] justify-center">
         <ResponsiveContainer width={290} height="100%">
@@ -88,7 +88,7 @@ export default function WalletCard() {
         </div>
       </div>
 
-      <div className="mt-20">
+      <div className="mt-5">
         <div className="mb-5 flex items-center justify-between text-sm font-medium text-gray-400">
           <span>Coin Name</span>
           <span>Volume</span>

@@ -52,64 +52,45 @@ export default function Profile() {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-12 xl:gap-8 xl:py-6">
           <div>
             <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
-              {authorData?.following}
+              {authorData?.issuesSolved}
             </div>
             <div className="text-sm tracking-tighter text-gray-400">
-              Following
+              # issues solved
             </div>
           </div>
           <div>
             <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
-              {authorData?.followers}
+              {authorData?.issuesCreated}
             </div>
             <div className="text-sm tracking-tighter text-gray-400">
-              Followers
+              # issues created
             </div>
           </div>
-          <Button
-            color="white"
-            className="bg-light-dark shadow-card md:h-10 md:px-5 xl:h-12 xl:px-7"
-          >
-            Follow
-          </Button>
         </div>
         <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
           <div className="mb-2 text-sm font-medium uppercase tracking-wider text-white">
-            Followed by
+            Top Solves
           </div>
           <div className="flex justify-center md:justify-start">
-            {authorData?.followed_by?.map((item) => (
-              <AnchorLink
-                key={`author-key-${item?.id}`}
-                href="/"
-                className="-ml-2 first:ml-0"
-              >
-                <Avatar
-                  size="sm"
-                  image={item?.avatar?.thumbnail}
-                  alt="Author"
-                  height={28}
-                  width={28}
-                  className="border-gray-500"
-                />
-              </AnchorLink>
+            {authorData?.coins?.map((item) => (
+              <div key={item?.id} className="-ml-1 first:ml-0">
+                <div className=" rounded-full border border-gray-500">
+                  {item.element}
+                </div>
+              </div>
             ))}
           </div>
-          <div className="mt-4">
-            <AnchorLink
-              href="/"
-              className="text-sm tracking-tighter text-gray-400 transition hover:text-white"
-            >
-              View All
-            </AnchorLink>
+          <div className="mt-4 text-sm tracking-tighter text-gray-400">
+            {authorData.totalAmount} USDC
+          </div>
+          <div className="mt-4 text-sm tracking-tighter text-gray-400">
+            Last Synced Date : {authorData.syncDate}
           </div>
         </div>
-        <AuthorInformation className="hidden md:block" data={authorData} />
       </div>
       <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 3xl:pl-14">
         <ProfileTab />
       </div>
-      <AuthorInformation data={authorData} />
     </div>
   );
 }

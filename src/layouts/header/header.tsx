@@ -5,7 +5,6 @@ import { useWindowScroll } from '@/lib/hooks/use-window-scroll';
 import { FlashIcon } from '@/components/icons/flash';
 import Hamburger from '@/components/ui/hamburger';
 import ActiveLink from '@/components/ui/links/active-link';
-import SearchButton from '@/components/search/button';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import WalletConnect from '@/components/nft/wallet-connect';
@@ -62,10 +61,6 @@ export default function Header({ className }: { className?: string }) {
               className="text-white"
             />
           </div>
-          <SearchButton
-            variant="transparent"
-            className="-ml-[17px] text-white"
-          />
         </div>
         <HeaderRightArea />
       </div>

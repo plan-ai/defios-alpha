@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import Button from '@/components/ui/button';
@@ -10,55 +11,63 @@ import User1 from '@/assets/images/avatar/8.jpg';
 import User2 from '@/assets/images/avatar/9.jpg';
 import User3 from '@/assets/images/avatar/10.jpg';
 import User4 from '@/assets/images/avatar/11.jpg';
+import User5 from '@/assets/images/avatar/8.jpg';
 
-const notifications = [
+let notifications = [
   {
     id: 1,
-    type: 'followed',
+    type: 'issue-raised',
     actor: {
       name: 'dolcemariposa',
       avatar: User1,
     },
     time: 'Just Now',
     url: '#',
-    notifier: 'you',
   },
   {
     id: 2,
-    type: 'liked',
+    type: 'issue-staked',
     actor: {
       name: 'pimptronot',
       avatar: User2,
     },
     time: '10 minutes ago',
     url: '#',
-    notifier: 'Cryppo #1491',
   },
   {
     id: 3,
-    type: 'purchased',
+    type: 'issue-voting-open',
     actor: {
       name: 'centralgold',
       avatar: User3,
     },
     time: '20 minutes ago',
     url: '#',
-    notifier: 'Pepe mfer #16241',
   },
   {
     id: 4,
-    type: 'followed',
+    type: 'issue-closed',
     actor: {
       name: 'theline',
       avatar: User4,
     },
     time: '30 minutes ago',
     url: '#',
-    notifier: 'you',
+  },
+  {
+    id: 4,
+    type: 'new-obj-added-on-roadmap',
+    actor: {
+      name: 'bruhh',
+      avatar: User5,
+    },
+    time: '50 minutes ago',
+    url: '#',
   },
 ];
 
 const NotificationPage: NextPageWithLayout = () => {
+  const [notificationList, setNotificationList] = useState(notifications);
   return (
     <>
       <NextSeo
@@ -75,17 +84,25 @@ const NotificationPage: NextPageWithLayout = () => {
             variant="transparent"
             size="mini"
             shape="rounded"
+            onClick={() => {
+              setNotificationList([]);
+            }}
           >
             <span className="text-xs tracking-tighter">Mark all as read</span>
           </Button>
         </div>
 
-        {notifications.map((notification) => {
+        {notificationList.map((notification) => {
           const notificationItem = notification as NotificationCardProps;
           return (
             <NotificationCard key={notification.id} {...notificationItem} />
           );
         })}
+        {notificationList.length === 0 && (
+          <div className="mt-20 flex h-full w-full items-center justify-center pt-20">
+            No More Notifications Left
+          </div>
+        )}
       </div>
     </>
   );

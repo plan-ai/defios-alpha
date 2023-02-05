@@ -5,7 +5,6 @@ import { PoolIcon } from '@/components/icons/pool';
 import { ProfileIcon } from '@/components/icons/profile';
 import { DiskIcon } from '@/components/icons/disk';
 import { ExchangeIcon } from '@/components/icons/exchange';
-import { VoteIcon } from '@/components/icons/vote-icon';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
 
@@ -16,9 +15,9 @@ export const menuItems = [
     href: routes.home,
   },
   {
-    name: 'Farm',
+    name: 'Projects',
     icon: <FarmIcon />,
-    href: routes.farms,
+    href: routes.projects,
   },
   {
     name: 'Swap',
@@ -26,24 +25,19 @@ export const menuItems = [
     href: routes.swap,
   },
   {
-    name: 'Liquidity',
-    icon: <PoolIcon />,
-    href: routes.liquidity,
-  },
-  {
-    name: 'Explore NFTs',
+    name: 'Roadmaps',
     icon: <CompassIcon />,
-    href: routes.search,
+    href: routes.roadmaps,
   },
   {
-    name: 'Create NFT',
+    name: 'Issues',
+    icon: <PoolIcon />,
+    href: routes.issues,
+  },
+  {
+    name: 'Incentivize Contributors',
     icon: <PlusCircle />,
-    href: routes.createNft,
-  },
-  {
-    name: 'NFT Details',
-    icon: <DiskIcon />,
-    href: routes.nftDetails,
+    href: routes.incentivizeContributors,
   },
   {
     name: 'Profile',
@@ -51,22 +45,13 @@ export const menuItems = [
     href: routes.profile,
   },
   {
-    name: 'Vote',
-    icon: <VoteIcon />,
-    href: routes.vote,
-    dropdownItems: [
-      {
-        name: 'Explore',
-        href: routes.vote,
-      },
-      {
-        name: 'Vote with pools',
-        href: routes.proposals,
-      },
-      {
-        name: 'Create proposal',
-        href: routes.createProposal,
-      },
-    ],
+    name: 'Jobs [coming soon]',
+    icon: <DiskIcon />,
+    href: routes.jobs,
+  },
+  {
+    name: 'Enterprise [coming soon]',
+    icon: <DiskIcon />,
+    href: routes.enterprise,
   },
 ];
