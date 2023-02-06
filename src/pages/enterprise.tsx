@@ -8,7 +8,7 @@ const EnterprisePage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Enterprise"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Defios - Tokenize your Open Source Project."
       />
       <ComingSoon
         header="Secure your open source dependencies"

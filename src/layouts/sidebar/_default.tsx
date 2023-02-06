@@ -15,7 +15,7 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        'top-0 left-0 z-40 h-full w-full max-w-full border-r border-dashed border-gray-700 bg-dark xs:w-80 xl:fixed  xl:w-72 2xl:w-80',
+        'top-0 left-0 z-40 h-full w-full max-w-full border-r border-dashed border-gray-700 bg-dark xs:w-[20rem] xl:fixed  xl:w-[20rem] 2xl:w-[20rem]',
         className
       )}
     >
@@ -43,14 +43,14 @@ export default function Sidebar({ className }: { className?: string }) {
             role="admin"
           />
 
-          <div className="mt-12">
+          <div className="mt-5">
             {menuItems.map((item, index) => (
               <MenuItem
                 key={'default' + item.name + index}
                 name={item.name}
                 href={item.href}
                 icon={item.icon}
-                dropdownItems={item.dropdownItems}
+                comingSoon={item.comingSoon || undefined}
               />
             ))}
           </div>

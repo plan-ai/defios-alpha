@@ -1,39 +1,35 @@
-import { Bitcoin } from '@/components/icons/bitcoin';
-import { Tether } from '@/components/icons/tether';
-import { Bnb } from '@/components/icons/bnb';
-import { Cardano } from '@/components/icons/cardano';
+import User1 from '@/assets/images/avatar/8.jpg';
+import User2 from '@/assets/images/avatar/9.jpg';
+import User3 from '@/assets/images/avatar/10.jpg';
+import User4 from '@/assets/images/avatar/11.jpg';
 
 export const walletCurrencies = [
   {
-    icon: <Bitcoin />,
-    name: 'Bitcoin',
-    code: 'BTC',
-    volume: '+12.5%',
+    avatar: User1,
+    name: 'never2average',
+    id: 1,
+    volume: '400',
     color: '#F79517',
-    isChangePositive: true,
   },
   {
-    icon: <Tether />,
-    name: 'Tether USD',
-    code: 'USDT',
-    volume: '-8.47%',
+    avatar: User2,
+    name: 'Rohitkk432',
+    id: 2,
+    volume: '300',
     color: '#259C77',
-    isChangePositive: false,
   },
   {
-    icon: <Cardano />,
-    name: 'Cardano',
-    code: 'ADA',
-    volume: '+5.63%',
+    avatar: User3,
+    name: 'AbhishekBasu01',
+    id: 3,
+    volume: '300',
     color: '#3468D1',
-    isChangePositive: true,
   },
   {
-    icon: <Bnb />,
-    name: 'Binance Coin',
-    code: 'BNB',
-    volume: '-3.02%',
+    avatar: User4,
+    name: 'Mayank',
+    id: 4,
+    volume: '15',
     color: '#F3BA2F',
-    isChangePositive: false,
   },
 ];

@@ -19,14 +19,14 @@ export default function ModernScreen() {
     <>
       <NextSeo
         title="Criptic"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Defios - Tokenize your Open Source Project."
       />
       <div className="flex flex-wrap">
         <div className="mb-8 w-full sm:mb-0 sm:w-1/2 sm:pr-6 md:w-[calc(100%-256px)] lg:w-[calc(100%-288px)] 2xl:w-[calc(100%-320px)] 3xl:w-[calc(100%-358px)]">
           <CoinSlider coins={coinSlideData} />
         </div>
         <div className="w-full sm:w-1/2 md:w-64 lg:w-72 2xl:w-80 3xl:w-[358px]">
-          <div className="flex h-full flex-col justify-center rounded-lg p-6 shadow-card bg-light-dark xl:p-8">
+          <div className="flex h-full flex-col justify-center rounded-lg bg-light-dark p-6 shadow-card xl:p-8">
             <Avatar
               image={AuthorImage}
               alt="Author"

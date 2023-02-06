@@ -108,7 +108,7 @@ export default function CoinSlider({ coins }: CoinSliderProps) {
         dir="ltr"
         className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
       >
-        {coins.map((coin) => (
+        {coins && coins.map((coin) => (
           <SwiperSlide key={coin.id}>
             <CoinCard
               id={coin.id}

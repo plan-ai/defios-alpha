@@ -12,6 +12,7 @@ type MenuItemProps = {
   href: string;
   dropdownItems?: DropdownItemProps[];
   isActive?: boolean;
+  comingSoon?: boolean;
 };
 
 type DropdownItemProps = {
@@ -25,6 +26,7 @@ export function MenuItem({
   href,
   dropdownItems,
   isActive,
+  comingSoon,
 }: MenuItemProps) {
   const router = useRouter();
   const { pathname } = router;
@@ -116,7 +118,11 @@ export function MenuItem({
             {icon}
           </span>
           <span className="relative z-[1] "> {name}</span>
-
+          {comingSoon && href !== pathname && (
+            <span className="relative z-[2] mx-1 rounded-full bg-gray-800 px-2">
+              coming soon
+            </span>
+          )}
           {href === pathname && (
             <motion.span
               className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"

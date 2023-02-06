@@ -9,8 +9,7 @@ import { SwapIcon } from '@/components/icons/swap-icon';
 import Trade from '@/components/ui/trade';
 import RootLayout from '@/layouts/_root-layout';
 
-import WalletCard from '@/components/ui/wallet-card';
-import CoinDetailsCard from '@/components/ui/coin-details-card';
+import RightSideInfo from '@/components/swaps/right-side-info';
 
 const SwapPage: NextPageWithLayout = () => {
   let [toggleCoin, setToggleCoin] = useState(false);
@@ -18,9 +17,9 @@ const SwapPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Swaps"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Defios - Tokenize your Open Source Project."
       />
-      <div className="flex w-full flex-row items-start justify-evenly px-5">
+      <div className="flex h-full w-full items-center justify-between px-40">
         <Trade>
           <div className="mb-5 border-b border-dashed border-gray-800 pb-5 xs:mb-7 xs:pb-6">
             <div
@@ -71,10 +70,7 @@ const SwapPage: NextPageWithLayout = () => {
             SWAP
           </Button>
         </Trade>
-        <div className="flex flex-col items-center justify-start">
-          <CoinDetailsCard />
-          <WalletCard />
-        </div>
+        <RightSideInfo />
       </div>
     </>
   );

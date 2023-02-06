@@ -27,7 +27,7 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
           name="viewport"
           content="width=device-width, initial-scale=1 maximum-scale=1"
         />
-        <title>Criptic - React Next Web3 NFT Crypto Dashboard Template</title>
+        <title>Defios - Tokenize your Open Source Project.</title>
       </Head>
       <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
         <WalletProvider>

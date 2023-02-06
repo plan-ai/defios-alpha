@@ -30,9 +30,6 @@ export default function Profile() {
             @{authorData?.user_name}
           </div>
           <div className="md:max-w-auto mx-auto mt-5 flex h-9 max-w-sm items-center rounded-full bg-light-dark shadow-card md:mx-0 xl:mt-6">
-            <div className="inline-flex h-full shrink-0 grow-0 items-center rounded-full bg-gray-900 px-4 text-xs text-white sm:text-sm">
-              #{authorData?.id}
-            </div>
             <div className="text truncate text-ellipsis bg-center pl-4 text-xs text-gray-300 sm:text-sm">
               {authorData?.wallet_key}
             </div>
@@ -85,6 +82,11 @@ export default function Profile() {
           </div>
           <div className="mt-4 text-sm tracking-tighter text-gray-400">
             Last Synced Date : {authorData.syncDate}
+          </div>
+        </div>
+        <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
+          <div className="mb-2 text-sm font-medium uppercase tracking-wider text-white">
+            Top Solves
           </div>
         </div>
       </div>

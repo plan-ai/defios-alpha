@@ -39,7 +39,7 @@ export function LivePriceFeed({
   return (
     <div
       className={cn(
-        'flex items-center gap-4 rounded-lg p-5 bg-light-dark lg:flex-row',
+        'flex items-center gap-4 rounded-lg bg-light-dark p-5 lg:flex-row',
         {
           'light:border light:border-slate-200': !isBorder,
           'shadow-card': !isBorder,
@@ -49,9 +49,7 @@ export function LivePriceFeed({
       <div className="w-full flex-col">
         <div className="mb-3 flex items-center">
           {icon}
-          <h4 className="ml-3 text-sm font-medium text-white">
-            {name}
-          </h4>
+          <h4 className="ml-3 text-sm font-medium text-white">{name}</h4>
         </div>
 
         <div className="mb-2 text-sm font-medium tracking-tighter text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
@@ -170,11 +168,12 @@ export default function PriceFeedSlider({
       observer={true}
       dir="ltr"
     >
-      {priceFeeds.map((item) => (
-        <SwiperSlide key={item.id}>
-          <LivePriceFeed {...item} />
-        </SwiperSlide>
-      ))}
+      {priceFeeds &&
+        priceFeeds.map((item) => (
+          <SwiperSlide key={item.id}>
+            <LivePriceFeed {...item} />
+          </SwiperSlide>
+        ))}
     </Swiper>
   ) : (
     <div className={cn('grid', gridClassName)}>

@@ -20,9 +20,9 @@ export default function Scrollbar({
   return (
     <OverlayScrollbarsComponent
       options={{
-        className: cn('os-theme-thin', className),
         scrollbars: {
           autoHide: autoHide,
+          theme: 'os-theme-thin',
         },
         ...options,
       }}

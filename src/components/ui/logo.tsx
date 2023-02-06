@@ -1,7 +1,7 @@
 import Image from '@/components/ui/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
-import darkLogo from '@/assets/images/logo-white.svg';
+import darkLogo from '@/assets/images/logo-full.png';
 import routes from '@/config/routes';
 
 export default function Logo() {

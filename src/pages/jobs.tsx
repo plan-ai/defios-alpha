@@ -8,7 +8,7 @@ const JobsPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Jobs"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Defios - Tokenize your Open Source Project."
       />
       <ComingSoon
         header="2-click job application"

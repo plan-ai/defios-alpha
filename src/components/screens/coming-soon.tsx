@@ -21,10 +21,10 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
-        <div className="mb-5 text-4xl">{header}</div>
-        <div className="w-[80%] text-center text-lg">{discription}</div>
+        <div className="mb-3 text-3xl">{header}</div>
+        <div className="w-[75%] text-center text-md">{discription}</div>
       </div>
-      <div className="m-5 h-[28rem] w-[50rem] bg-body">
+      <div className="m-5 h-[24rem] w-[40rem] bg-body">
         <iframe
           width="100%"
           height="100%"
@@ -34,7 +34,7 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
         ></iframe>
       </div>
       <div className="flex w-full items-center justify-center">
-        <Input className="w-[65%]" type="email" placeholder={inputPrompt} />
+        <Input className="w-[55%]" type="email" placeholder={inputPrompt} />
         <Button shape="rounded">{submitPrompt}</Button>
       </div>
     </div>

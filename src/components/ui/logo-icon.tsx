@@ -1,6 +1,6 @@
 import Image from '@/components/ui/image';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
-import darkLogo from '@/assets/images/logo-icon-white.png';
+import darkLogo from '@/assets/images/logo.png';
 
 const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   const isMounted = useIsMounted();

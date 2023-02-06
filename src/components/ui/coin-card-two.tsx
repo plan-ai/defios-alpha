@@ -110,7 +110,7 @@ export default function CoinSlider({ coins }: CoinSliderProps) {
         observer={true}
         dir="ltr"
       >
-        {coins.map((coin) => (
+        {coins && coins.map((coin) => (
           <SwiperSlide key={coin.id}>
             <CoinCard
               id={coin.id}

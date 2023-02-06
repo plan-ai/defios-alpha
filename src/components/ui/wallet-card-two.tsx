@@ -1,44 +1,38 @@
 import cn from 'classnames';
 import { useState } from 'react';
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
-import { ArrowUp } from '@/components/icons/arrow-up';
-import { LongArrowUp } from '@/components/icons/long-arrow-up';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
+import Avatar from './avatar';
 
 const data = [
   {
-    name: 'Bitcoin',
+    name: 'never2average',
     value: 400,
-    volume: '+12.5%',
-    isChangePositive: true,
+    volume: '400',
   },
   {
-    name: 'Tether',
+    name: 'Rohitkk432',
     value: 300,
-    volume: '-8.47%',
-    isChangePositive: false,
+    volume: '300',
   },
   {
-    name: 'Cardano',
+    name: 'AbhishekBasu01',
     value: 300,
-    volume: '+5.63%',
-    isChangePositive: true,
+    volume: '300',
   },
   {
-    name: 'Binance Coin',
+    name: 'Mayank',
     value: 15,
-    volume: '-3.02%',
-    isChangePositive: false,
+    volume: '15',
   },
 ];
 
 export default function WalletCard() {
-  const [isChangePositive, setChangeStatus] = useState(true);
   const [percentage, setPercentage] = useState(data[0].volume);
   return (
     <div className="rounded-lg bg-transparent  ">
-      <h3 className="mb-10 text-center text-base font-medium uppercase md:mb-3 lg:text-left xl:mb-10">
-        Available Coin
+      <h3 className="text-center text-base font-medium uppercase lg:text-left">
+        Top Holders
       </h3>
 
       <div className="relative flex h-[290px] justify-center">
@@ -48,15 +42,12 @@ export default function WalletCard() {
               data={data}
               cx={140}
               cy={140}
-              innerRadius={98}
-              outerRadius={135}
+              innerRadius={78}
+              outerRadius={105}
               fill="#8884d8"
               paddingAngle={2}
               dataKey="value"
               onMouseMove={(data) => {
-                setChangeStatus(
-                  data.payload.payload && data.payload.payload.isChangePositive
-                );
                 setPercentage(
                   data.payload.payload && data.payload.payload.volume
                 );
@@ -64,7 +55,7 @@ export default function WalletCard() {
             >
               {walletCurrencies.map((currency) => (
                 <Cell
-                  key={`cell-${currency.code}`}
+                  key={`cell-${currency.id}`}
                   fill={currency.color}
                   stroke="transparent"
                 />
@@ -73,52 +64,30 @@ export default function WalletCard() {
             <Tooltip content={<></>} />
           </PieChart>
         </ResponsiveContainer>
-        <div className="absolute left-2/4 top-2/4 flex h-[156px]  w-[156px] -translate-x-2/4 -translate-y-2/4 transform  items-center  justify-center rounded-full border border-dashed border-gray-600 bg-transparent md:h-32 md:w-32 xl:h-[156px] xl:w-[156px]">
-          <span
-            className={cn(
-              'flex items-center text-base font-medium',
-              isChangePositive ? 'text-green-500' : 'text-red-500'
-            )}
-          >
-            <LongArrowUp
-              className={cn('w-4', {
-                'rotate-180': !isChangePositive,
-              })}
-            />
+        <div className="absolute left-2/4 top-2/4 flex h-[136px]  w-[136px] -translate-x-2/4 -translate-y-2/4 transform  items-center  justify-center rounded-full border border-dashed border-gray-600 bg-transparent md:h-32 md:w-32 xl:h-[136px] xl:w-[136px]">
+          <span className={cn('flex items-center text-base font-medium')}>
             {percentage}
           </span>
         </div>
       </div>
 
-      <div className="mt-12 md:mt-6 xl:mt-12">
+      <div className="mb-20">
         <div className="mb-5 flex items-center justify-between text-sm font-medium text-gray-400">
-          <span>Coin Name</span>
-          <span>Volume</span>
+          <span>Username</span>
+          <span>Supply Owned</span>
         </div>
         <ul className="grid gap-5">
           {walletCurrencies.map((currency) => (
             <li
-              key={currency.code}
+              key={currency.id}
               className="grid grid-cols-[150px_repeat(2,1fr)] items-center justify-between text-sm font-medium text-white 2xl:grid-cols-[140px_repeat(2,1fr)] 3xl:grid-cols-[150px_repeat(2,1fr)]"
             >
               <span className="flex items-center gap-2.5 whitespace-nowrap">
-                {currency.icon}
+                <Avatar image={currency.avatar} alt="img" />
                 {currency.name}
               </span>
               <span className="text-center"></span>
-              <span
-                className={cn(
-                  'flex items-center justify-end',
-                  currency.isChangePositive ? 'text-green-500' : 'text-red-500'
-                )}
-              >
-                <span
-                  className={cn('mr-2', {
-                    'rotate-180': !currency.isChangePositive,
-                  })}
-                >
-                  <ArrowUp />
-                </span>
+              <span className={cn('flex items-center justify-end')}>
                 {currency.volume}
               </span>
             </li>

@@ -3,10 +3,11 @@ import { HomeIcon } from '@/components/icons/home';
 import { FarmIcon } from '@/components/icons/farm';
 import { PoolIcon } from '@/components/icons/pool';
 import { ProfileIcon } from '@/components/icons/profile';
-import { DiskIcon } from '@/components/icons/disk';
 import { ExchangeIcon } from '@/components/icons/exchange';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
+import { BriefcaseIcon } from '@/components/icons/briefcase';
+import { BuildingIcon } from '@/components/icons/building';
 
 export const menuItems = [
   {
@@ -45,13 +46,15 @@ export const menuItems = [
     href: routes.profile,
   },
   {
-    name: 'Jobs [coming soon]',
-    icon: <DiskIcon />,
+    name: 'Jobs',
+    icon: <BriefcaseIcon />,
     href: routes.jobs,
+    comingSoon: true,
   },
   {
-    name: 'Enterprise [coming soon]',
-    icon: <DiskIcon />,
+    name: 'Enterprise',
+    icon: <BuildingIcon />,
     href: routes.enterprise,
+    comingSoon: true,
   },
 ];

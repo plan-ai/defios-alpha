@@ -48,7 +48,7 @@ export default function CreateNFT() {
     <>
       <NextSeo
         title="Create NFT"
-        description="Criptic - React Next Web3 NFT Crypto Dashboard Template"
+        description="Defios - Tokenize your Open Source Project."
       />
       <div className="mx-auto w-full sm:pt-0 lg:px-8 xl:px-10 2xl:px-0">
         <h2 className="mb-6 text-lg font-medium uppercase tracking-wider text-white sm:mb-10 sm:text-2xl">

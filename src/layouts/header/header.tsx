@@ -4,20 +4,27 @@ import LogoIcon from '@/components/ui/logo-icon';
 import { useWindowScroll } from '@/lib/hooks/use-window-scroll';
 import { FlashIcon } from '@/components/icons/flash';
 import Hamburger from '@/components/ui/hamburger';
-import ActiveLink from '@/components/ui/links/active-link';
+import AnchorLink from '@/components/ui/links/anchor-link';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import WalletConnect from '@/components/nft/wallet-connect';
 import routes from '@/config/routes';
 
 function NotificationButton() {
+  const router = useRouter();
   return (
-    <ActiveLink href={routes.notification}>
+    <AnchorLink
+      href={
+        router.pathname === routes.notification
+          ? routes.home
+          : routes.notification
+      }
+    >
       <div className="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-700 bg-light-dark text-white shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none sm:h-12 sm:w-12">
         <FlashIcon className="h-auto w-3 sm:w-auto" />
         <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-slate-50 shadow-light sm:h-3 sm:w-3" />
       </div>
-    </ActiveLink>
+    </AnchorLink>
   );
 }
 
