@@ -50,3 +50,41 @@ export const coinList = [
     price: 0.065,
   },
 ];
+
+export const coinListBig = [
+  {
+    icon: <Bitcoin className="h-10 w-10" />,
+    code: 'BTC',
+    name: 'Bitcoin',
+  },
+  {
+    icon: <Ethereum className="h-10 w-10" />,
+    code: 'ETH',
+    name: 'Ethereum',
+  },
+  {
+    icon: <Tether className="h-10 w-10" />,
+    code: 'USDT',
+    name: 'Tether USD',
+  },
+  {
+    icon: <Bnb className="h-10 w-10" />,
+    code: 'BNB',
+    name: 'Binance Coin',
+  },
+  {
+    icon: <Usdc className="h-10 w-10" />,
+    code: 'USDC',
+    name: 'USD Coin',
+  },
+  {
+    icon: <Cardano className="h-10 w-10" />,
+    code: 'ADA',
+    name: 'Cardano',
+  },
+  {
+    icon: <Doge className="h-10 w-10" />,
+    code: 'DOGE',
+    name: 'Doge Coin',
+  },
+];

@@ -32,6 +32,7 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
     query: { ...restQuery },
   } = router;
   function handleTabChange(index: number) {
+    if (tabMenu[index].comingSoon) return;
     router.push(
       {
         pathname: router.pathname,
@@ -93,12 +94,14 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
           <div className="flex gap-6 md:gap-8 xl:gap-10 3xl:gap-12">
             {tabMenu.map((item) => (
               <TabItem key={item.path}>
-                {item.title}
-                {item.comingSoon && item.path !== router.query.view && (
-                  <span className="relative z-[2] mx-1 rounded-full bg-gray-800 px-2">
-                    coming soon
-                  </span>
-                )}
+                <div className="flex flex-row items-center justify-center">
+                  <div>{item.title}</div>
+                  {item.comingSoon && item.path !== router.query.view && (
+                    <span className="relative z-[2] mx-2 rounded-full bg-gray-800 px-2 py-0.5 normal-case text-red-700">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
               </TabItem>
             ))}
           </div>

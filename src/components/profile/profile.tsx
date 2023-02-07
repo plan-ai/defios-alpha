@@ -8,6 +8,8 @@ import Button from '@/components/ui/button';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import Avatar from '@/components/ui/avatar';
 import ProfileTab from '@/components/profile/profile-tab';
+import ToggleBtn from '../ui/button/toggle';
+import PortfolioCreator from './portfolio-creator';
 
 export default function Profile() {
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
@@ -35,7 +37,7 @@ export default function Profile() {
             </div>
             <div
               title="Copy Address"
-              className="flex cursor-pointer items-center px-4 text-gray-300 transition hover:text-white"
+              className="ml-auto flex cursor-pointer items-center px-4 text-gray-300 transition hover:text-white"
               onClick={() => handleCopyToClipboard()}
             >
               {copyButtonStatus ? (
@@ -85,9 +87,11 @@ export default function Profile() {
           </div>
         </div>
         <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
-          <div className="mb-2 text-sm font-medium uppercase tracking-wider text-white">
-            Top Solves
+          <div className="mb-4 text-sm font-medium uppercase tracking-wider text-white">
+            Portfolio
           </div>
+          <ToggleBtn option1={'Basic'} option2={'Advanced'} />
+          <PortfolioCreator isGenerated={false} />
         </div>
       </div>
       <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 3xl:pl-14">

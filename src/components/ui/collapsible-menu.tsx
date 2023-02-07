@@ -119,8 +119,8 @@ export function MenuItem({
           </span>
           <span className="relative z-[1] "> {name}</span>
           {comingSoon && href !== pathname && (
-            <span className="relative z-[2] mx-1 rounded-full bg-gray-800 px-2">
-              coming soon
+            <span className="relative z-[2] mx-2 rounded-full bg-gray-800 px-2 py-0.5 text-red-700">
+              Coming Soon
             </span>
           )}
           {href === pathname && (
