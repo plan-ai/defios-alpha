@@ -1,22 +1,28 @@
 import Image from '@/components/ui/image';
 import cn from 'classnames';
-import { StaticImageData } from 'next/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
-import Avatar from '@/components/ui/avatar';
+import GithubLogo from '@/assets/images/github-mark-white.svg';
+import CoinTicker from '@/components/custom/coin-ticker';
+import PriceChart from '@/components/ui/chats/price-chart';
+import DataWithImage from '@/components/custom/data-with-image';
+import StatsData from '@/components/custom/stats-data';
+import SecureLogo from '@/assets/images/secure.svg';
+import VulnerableLogo from '@/assets/images/vulnerable.svg';
+import BrokenLogo from '@/assets/images/broken.svg';
 
 type ItemType = {
   id?: string | number;
-  name: string;
-  slug: string;
-  title: string;
-  cover_image: StaticImageData;
-  image?: StaticImageData;
-  number_of_artwork: number;
-  user: {
-    avatar?: StaticImageData;
-    name: string;
-    slug: string;
-  };
+  repoURL: string;
+  coin: string;
+  coinValue: number;
+  change: string;
+  communityScore: string;
+  Security: string;
+  topSupporter: string;
+  topBuilder: string;
+  issues: string;
+  staked: string;
+  rewarded: string;
 };
 type CardProps = {
   item: ItemType;
@@ -24,8 +30,19 @@ type CardProps = {
 };
 
 export default function CollectionCard({ item, className = '' }: CardProps) {
-  const { name, slug, title, cover_image, image, number_of_artwork, user } =
-    item ?? {};
+  const {
+    repoURL,
+    coin,
+    coinValue,
+    change,
+    communityScore,
+    Security,
+    topBuilder,
+    topSupporter,
+    issues,
+    rewarded,
+    staked,
+  } = item ?? {};
   return (
     <div
       className={cn(
@@ -33,55 +50,78 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
         className
       )}
     >
-      <div className="relative flex aspect-[8/11] w-full justify-center overflow-hidden rounded-lg">
-        <Image
-          src={cover_image}
-          placeholder="blur"
-          layout="fill"
-          quality={100}
-          objectFit="cover"
-          alt={name}
-        />
-      </div>
-      <div className="absolute top-0 left-0 z-[5] flex h-full w-full flex-col justify-between bg-gradient-to-t from-black p-5 md:p-6">
-        <AnchorLink
-          href={slug}
-          className="absolute top-0 left-0 z-10 h-full w-full"
-        />
+      <div className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6">
         <div className="flex justify-between gap-3">
-          <div
-            className="inline-flex h-8 shrink-0 items-center rounded-2xl bg-white/20 px-4 text-xs font-medium uppercase -tracking-wide text-white
-          backdrop-blur-[40px]"
-          >
-            {name}
-          </div>
-          {image && <Avatar image={image} alt={name} shape="rounded" />}
-        </div>
-        <div className="block">
-          <h2 className="mb-1.5 truncate text-lg font-medium -tracking-wider text-white">
-            {title}
-          </h2>
-          <div className="text-sm font-medium -tracking-wide text-[#B6AAA2]">
-            {number_of_artwork} Artworks
-          </div>
           <AnchorLink
-            href={user?.slug}
-            className="relative z-10 mt-3.5 inline-flex items-center rounded-3xl bg-white/20 p-2 backdrop-blur-[40px]"
+            href={repoURL || ''}
+            target="_blank"
+            className="inline-flex h-10 shrink-0 items-center rounded-full bg-black px-4 text-sm font-medium uppercase normal-case -tracking-wide
+          text-white backdrop-blur-[40px]"
           >
-            <Avatar
-              //@ts-ignore
-              image={user?.avatar}
-              alt={user?.name}
-              size="xs"
-              width={24}
-              height={24}
-              className="rounded-full"
-            />
-
-            <div className="ml-2 truncate pr-2 text-sm -tracking-wide text-white">
-              @{user?.name}
-            </div>
+            <Image src={GithubLogo} alt={'github'} className="mr-1 h-5 w-5" />
+            {repoURL.replace('https://github.com', '').length > 27
+              ? repoURL.replace('https://github.com', '').slice(0, 27) + '...'
+              : repoURL.replace('https://github.com', '')}
           </AnchorLink>
+          <div className="flex flex-col items-center justify-center">
+            <Image
+              src={
+                Security === 'secure'
+                  ? SecureLogo
+                  : Security === 'vulnerable'
+                  ? VulnerableLogo
+                  : BrokenLogo
+              }
+              alt={Security}
+              className="h-8 w-8"
+            />
+            <div
+              className={cn('text-sm uppercase', {
+                'text-green-600': Security === 'secure',
+                'text-yellow-500': Security === 'vulnerable',
+                'text-red-600': Security === 'broken',
+              })}
+            >
+              {Security}
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-col items-center justify-center">
+          <div className="my-5 flex w-full flex-row items-center justify-center">
+            <StatsData icon={'issues'} header={'Open Issues'} value={issues} />
+            <StatsData
+              icon={'health'}
+              header={'Community Score'}
+              value={communityScore}
+            />
+          </div>
+          <div className="my-5 flex w-full flex-row items-center justify-center">
+            <StatsData icon={'lock'} header={'Staked Coins'} value={staked} />
+
+            <StatsData
+              icon={'banknotes'}
+              header={'Coins Rewarded'}
+              value={rewarded}
+            />
+          </div>
+          <div className="my-5 flex w-full flex-row items-center justify-between">
+            <DataWithImage
+              image={'briefcase'}
+              header={'Top Supporter'}
+              value={topSupporter}
+            />
+            <DataWithImage
+              image={'wench'}
+              header={'Top Builder'}
+              value={topBuilder}
+            />
+          </div>
+          <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
+            <CoinTicker value={coinValue} coin={coin} change={change} />
+            <div className="w-[50%]">
+              <PriceChart />
+            </div>
+          </div>
         </div>
       </div>
     </div>

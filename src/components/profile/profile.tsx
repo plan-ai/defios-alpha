@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
-import AuthorInformation from '@/components/author/author-information';
 import { authorData } from '@/data/static/author';
 import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
-import Button from '@/components/ui/button';
-import AnchorLink from '@/components/ui/links/anchor-link';
-import Avatar from '@/components/ui/avatar';
 import ProfileTab from '@/components/profile/profile-tab';
 import ToggleBtn from '../ui/button/toggle';
 import PortfolioCreator from './portfolio-creator';
@@ -90,7 +86,7 @@ export default function Profile() {
           <div className="mb-4 text-sm font-medium uppercase tracking-wider text-white">
             Portfolio
           </div>
-          <ToggleBtn option1={'Basic'} option2={'Advanced'} />
+          <ToggleBtn label="Theme" option1={'Basic'} option2={'Advanced'} />
           <PortfolioCreator isGenerated={false} />
         </div>
       </div>

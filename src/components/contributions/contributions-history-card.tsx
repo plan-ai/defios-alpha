@@ -46,11 +46,11 @@ const TransactionFromTo: React.FC<TransactionFromToProps> = ({
           />
         )}
       </div>
-      <div className="ml-2.5 flex flex-col truncate xl:ml-4">
+      <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">
           {transactionType === 'received' ? 'From' : 'To'}
         </span>
-        <strong className="truncate font-medium -tracking-wider text-white">
+        <strong className="font-medium -tracking-wider text-white">
           {transactionUser}
         </strong>
       </div>
@@ -63,16 +63,17 @@ interface TrasactionAmountELProps {
   transactionAmount: number;
 }
 
-const TrasactionAmountEL: React.FC<TrasactionAmountELProps> = ({
+export const TrasactionAmountEL: React.FC<TrasactionAmountELProps> = ({
   transactionAmount,
   transactionCoin,
 }) => {
+  const data = coinListBig.find((el) => el.code === transactionCoin);
   return (
     <div className="flex items-center lg:w-1/2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
-        {coinListBig.find((el) => el.code === transactionCoin)?.icon}
+        {data?.icon}
       </div>
-      <div className="ml-2.5 flex flex-col truncate xl:ml-4">
+      <div className="ml-2.5 flex flex-col  xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">
           {transactionAmount}
         </span>
@@ -114,11 +115,9 @@ export default function ContributionsHistoryCard({
             placeholder="blur"
             className="rounded-full"
           />
-          <div className="ml-2 truncate -tracking-wider text-white">
-            {projectName}
-          </div>
+          <div className="ml-2  -tracking-wider text-white">{projectName}</div>
         </div>
-        <div className="truncate pl-2 text-xs -tracking-wide text-gray-400 xs:text-sm ">
+        <div className=" pl-2 text-xs -tracking-wide text-gray-400 xs:text-sm ">
           {date}
         </div>
       </div>
@@ -138,7 +137,7 @@ export default function ContributionsHistoryCard({
                 <VerifiedIcon className="h-4 w-4" />
               </div> */}
             </div>
-            <div className="ml-2.5 flex flex-col truncate xl:ml-4">
+            <div className="ml-2.5 flex flex-col  xl:ml-4">
               <strong className="mb-0.5 font-medium -tracking-wider text-white">
                 {transactionType === 'received' ? 'Receive' : 'Send'}
               </strong>
@@ -174,11 +173,11 @@ export default function ContributionsHistoryCard({
               transactionUserAvatar={transactionUserAvatar}
             />
           )}
-          <div className="flex items-center lg:w-1/2">
+          <div className="flex items-center lg:w-2/3">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
               <PoolIcon className="h-4 w-4" />
             </div>
-            <div className="ml-2.5 flex flex-col truncate xl:ml-4">
+            <div className="ml-2.5 flex flex-col  xl:ml-4">
               <span className="mb-0.5 text-xs text-gray-400">For Solving</span>
               <strong className="font-medium -tracking-wider text-white">
                 <AnchorLink href={PRLink} target="_blank">

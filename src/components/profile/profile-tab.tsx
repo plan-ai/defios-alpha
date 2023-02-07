@@ -51,7 +51,7 @@ export default function ProfileTab() {
       </TabPanel>
       <TabPanel className="focus:outline-none">
         <div className="space-y-8 xl:space-y-9">
-          <div className="mx-10 w-full">
+          <div className="w-full lg:mx-2">
             <GitHubCalendar
               theme={{
                 level0: '#161b22',

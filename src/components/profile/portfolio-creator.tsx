@@ -10,10 +10,11 @@ interface PortfolioCreatorProps {
 }
 
 const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
+  const [generatedLink, setGeneratedLink] = useState('');
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
   function handleCopyToClipboard() {
-    copyToClipboard('https://defi-os.com');
+    copyToClipboard(generatedLink);
     setCopyButtonStatus(true);
     setTimeout(() => {
       setCopyButtonStatus(copyButtonStatus);
@@ -24,7 +25,10 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
     <>
       {!status && (
         <Button
-          onClick={() => setStatus(true)}
+          onClick={() => {
+            setGeneratedLink('https://defi-os.com');
+            setStatus(true);
+          }}
           shape="rounded"
           size="small"
           className="mt-5 w-full"
@@ -34,9 +38,9 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
       )}
       {status && (
         <div className="mt-5 flex flex-row items-center justify-center">
-          <div className="flex h-9 w-full items-center rounded-full bg-light-dark shadow-card">
+          <div className="flex h-9 w-[90%] items-center rounded-full bg-light-dark shadow-card">
             <div className="text truncate text-ellipsis bg-center pl-4 text-xs text-gray-300 sm:text-sm">
-              https://defi-os.com
+              {generatedLink}
             </div>
             <div
               title="Copy Address"
@@ -50,7 +54,17 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
               )}
             </div>
           </div>
-          <Refresh onClick={() => setStatus(false)} className="ml-2 h-5 w-5" />
+          <Refresh
+            onClick={() => {
+              setGeneratedLink(
+                generatedLink === 'https://github.com/AbhisekBasu1/DefiOS'
+                  ? 'https://defi-os.com'
+                  : 'https://github.com/AbhisekBasu1/DefiOS'
+              );
+              setStatus(true);
+            }}
+            className="ml-2 h-5 w-5"
+          />
         </div>
       )}
     </>

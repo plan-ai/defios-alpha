@@ -4,7 +4,7 @@ const routes = {
   swap: '/swap',
   roadmaps: '/roadmaps',
   issues: '/issues',
-  incentivizeContributors: 'incentivize-contributors',
+  incentivizeContributors: '/incentivize-contributors',
   profile: '/profile',
   jobs: '/jobs',
   enterprise: '/enterprise',
