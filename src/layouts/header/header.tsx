@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import cn from 'classnames';
-import LogoIcon from '@/components/ui/logo-icon';
+import Logo from '@/components/ui/logo';
 import { useWindowScroll } from '@/lib/hooks/use-window-scroll';
 import { FlashIcon } from '@/components/icons/flash';
 import Hamburger from '@/components/ui/hamburger';
@@ -54,19 +54,19 @@ export default function Header({ className }: { className?: string }) {
     >
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 3xl:px-10">
         <div className="flex items-center">
+          <div className="mr-2 block sm:mr-4 xl:hidden">
+            <Hamburger
+              isOpen={false}
+              variant="solid"
+              onClick={() => openDrawer('DASHBOARD_SIDEBAR')}
+              className="text-white"
+            />
+          </div>
           <div
             onClick={() => router.push(routes.home)}
             className="flex items-center xl:hidden"
           >
-            <LogoIcon />
-          </div>
-          <div className="mx-2 block sm:mx-4 xl:hidden">
-            <Hamburger
-              isOpen={false}
-              variant="transparent"
-              onClick={() => openDrawer('DASHBOARD_SIDEBAR')}
-              className="text-white"
-            />
+            <Logo />
           </div>
         </div>
         <HeaderRightArea />

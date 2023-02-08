@@ -6,9 +6,7 @@ import CoinTicker from '@/components/custom/coin-ticker';
 import PriceChart from '@/components/ui/chats/price-chart';
 import DataWithImage from '@/components/custom/data-with-image';
 import StatsData from '@/components/custom/stats-data';
-import SecureLogo from '@/assets/images/secure.svg';
-import VulnerableLogo from '@/assets/images/vulnerable.svg';
-import BrokenLogo from '@/assets/images/broken.svg';
+import SecurityStatus from '@/components/custom/security-status';
 
 type ItemType = {
   id?: string | number;
@@ -63,28 +61,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
               ? repoURL.replace('https://github.com', '').slice(0, 27) + '...'
               : repoURL.replace('https://github.com', '')}
           </AnchorLink>
-          <div className="flex flex-col items-center justify-center">
-            <Image
-              src={
-                Security === 'secure'
-                  ? SecureLogo
-                  : Security === 'vulnerable'
-                  ? VulnerableLogo
-                  : BrokenLogo
-              }
-              alt={Security}
-              className="h-8 w-8"
-            />
-            <div
-              className={cn('text-sm uppercase', {
-                'text-green-600': Security === 'secure',
-                'text-yellow-500': Security === 'vulnerable',
-                'text-red-600': Security === 'broken',
-              })}
-            >
-              {Security}
-            </div>
-          </div>
+          <SecurityStatus security={Security}/>
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <div className="my-5 flex w-full flex-row items-center justify-center">

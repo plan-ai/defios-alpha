@@ -6,12 +6,18 @@ interface CoinTickerProps {
   coin: string;
   value: number;
   change: string;
+  className?: string;
 }
 
-const CoinTicker: React.FC<CoinTickerProps> = ({ value, coin, change }) => {
+const CoinTicker: React.FC<CoinTickerProps> = ({
+  value,
+  coin,
+  change,
+  className,
+}) => {
   const data = coinListBig.find((el) => el.code === coin);
   return (
-    <div className="flex items-center lg:w-1/2">
+    <div className={cn('flex items-center', className)}>
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
         {data?.icon}
       </div>

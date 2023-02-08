@@ -9,7 +9,7 @@ import { Close } from '@/components/icons/close';
 import { useModal, MODAL_VIEW } from '@/components/modal-views/context';
 import Followers from '@/components/profile/followers-view';
 // dynamic imports
-const SearchView = dynamic(() => import('@/components/search/view'));
+const SearchView = dynamic(() => import('@/components/roadmaps/view'));
 const ShareView = dynamic(() => import('@/components/nft/share-view'));
 const SelectWallet = dynamic(() => import('@/components/nft/select-wallet'));
 const ProfileInfo = dynamic(

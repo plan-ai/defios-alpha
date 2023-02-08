@@ -23,10 +23,10 @@ export default function NftFooter({
 }: NftFooterProps) {
   const { openModal } = useModal();
   return (
-    <div className={cn('sticky bottom-0 z-10 bg-dark md:-mx-2', className)}>
-      <div className="-mx-4 border-t-2 border-gray-700 px-4 pt-4 pb-5 sm:-mx-6 sm:px-6 md:mx-2 md:px-0 md:pt-5 lg:pt-6 lg:pb-7">
+    <div className={cn('z-10 w-full bg-dark', className)}>
+      <div className=" w-full border-t-2 border-gray-700 px-4 pt-3 md:pt-3 lg:pt-3">
         {isAuction && (
-          <div className="flex gap-4 pb-3.5 md:pb-4 xl:gap-5">
+          <div className="flex gap-4 pb-1 md:pb-1 xl:gap-5">
             <div className="block w-1/2 shrink-0 md:w-2/5">
               <h3 className="mb-1 truncate text-13px font-medium uppercase tracking-wider text-white sm:mb-1.5 sm:text-sm">
                 Current bid <span className="md:hidden">by</span>{' '}
@@ -66,7 +66,7 @@ export default function NftFooter({
           <Button
             shape="rounded"
             variant="solid"
-            color="gray"
+            color="info"
             className="bg-gray-800"
             onClick={() => openModal('SHARE_VIEW')}
           >

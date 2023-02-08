@@ -130,6 +130,7 @@ export function PriceRange() {
           onChange={(e) => handleMinChange(parseInt(e.target.value))}
           min="0"
           max={range.max}
+          placeholder='placeholder'
         />
         <input
           className="h-9 rounded-lg text-sm outline-none focus:outline-none focus:ring-0 border-gray-600 bg-gray-800 text-white focus:border-gray-500"
@@ -137,6 +138,7 @@ export function PriceRange() {
           value={range.max}
           onChange={(e) => handleMaxChange(parseInt(e.target.value))}
           min={range.min}
+          placeholder='placeholder'
         />
       </div>
       <Slider
@@ -218,13 +220,13 @@ export function Status() {
 export function Filters() {
   return (
     <>
-      <Collapse label="Status" initialOpen>
+      <Collapse label="Order By" initialOpen>
         <Status />
       </Collapse>
-      <Collapse label="Price Range" initialOpen>
+      <Collapse label="Amount Staked" initialOpen>
         <PriceRange />
       </Collapse>
-      <Collapse label="Collection" initialOpen>
+      <Collapse label="Created By" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} />
       </Collapse>
     </>

@@ -1,7 +1,7 @@
 import Button from '@/components/ui/button';
-import FarmList from '@/components/farms/list';
+import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
-import { FarmsData } from '@/data/static/farms-data';
+import { ProjectsData } from '@/data/static/projects-data';
 import { Fragment, useState } from 'react';
 import { motion } from 'framer-motion';
 import cn from 'classnames';
@@ -12,13 +12,16 @@ import { Switch } from '@/components/ui/switch';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { SearchIcon } from '@/components/icons/search';
 import routes from '@/config/routes';
+import PriceChart from '@/components/ui/chats/price-chart';
+import CoinTicker from '@/components/custom/coin-ticker';
 
 const sort = [
   { id: 1, name: 'Hot' },
-  { id: 2, name: 'APR' },
-  { id: 3, name: 'Earned' },
-  { id: 4, name: 'Total staked' },
+  { id: 2, name: 'Urgent' },
+  { id: 3, name: 'Total Staked' },
+  { id: 4, name: 'Total Contributors' },
   { id: 5, name: 'Latest' },
+  { id: 6, name: 'Beginners' },
 ];
 
 function SortList() {
@@ -70,7 +73,7 @@ function Search() {
       <label className="flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-10 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
-          placeholder="Search farms"
+          placeholder="Search Projects"
           autoComplete="off"
         />
         <span className="pointer-events-none absolute left-0 flex h-full w-8 cursor-pointer items-center justify-center pl-2 text-gray-600 text-gray-500 hover:text-gray-900 sm:pl-3">
@@ -105,24 +108,24 @@ function StackedSwitch() {
         />
       </div>
       <span className="inline-flex text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
-        Stacked only
+        Native Tokens only
       </span>
     </Switch>
   );
 }
 
 function Status() {
-  const [status, setStatus] = useState('live');
+  const [status, setStatus] = useState('my projects');
   return (
     <RadioGroup
       value={status}
       onChange={setStatus}
       className="flex items-center sm:gap-3"
     >
-      <RadioGroup.Option value="live">
+      <RadioGroup.Option value="my projects">
         {({ checked }) => (
           <span
-            className={`relative flex h-11 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
+            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
               checked ? 'text-white' : 'text-white/50'
             }`}
           >
@@ -132,14 +135,14 @@ function Status() {
                 layoutId="statusIndicator"
               />
             )}
-            <span className="relative">LIVE</span>
+            <span className="relative">My Projects</span>
           </span>
         )}
       </RadioGroup.Option>
-      <RadioGroup.Option value="finished">
+      <RadioGroup.Option value="global projects">
         {({ checked }) => (
           <span
-            className={`relative flex h-11 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
+            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
               checked ? 'text-white' : 'text-white/50'
             }`}
           >
@@ -149,7 +152,7 @@ function Status() {
                 layoutId="statusIndicator"
               />
             )}
-            <span className="relative">FINISHED</span>
+            <span className="relative">Global Projects</span>
           </span>
         )}
       </RadioGroup.Option>
@@ -157,7 +160,7 @@ function Status() {
   );
 }
 
-export default function Farms() {
+export default function Projects() {
   return (
     <div className="mx-auto w-full">
       <div
@@ -182,52 +185,65 @@ export default function Farms() {
         </div>
       </div>
 
-      <div className="mb-3 hidden grid-cols-3 gap-6 rounded-lg bg-light-dark shadow-card sm:grid lg:grid-cols-5">
-        <span className="px-6 py-6 text-sm tracking-wider text-gray-300">
-          Pool
+      <div className="mb-3 grid grid-cols-8 gap-6 rounded-lg bg-light-dark shadow-card">
+        <span className="col-span-2 px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm">
+          Name
         </span>
-        <span className="px-6 py-6 text-sm tracking-wider text-gray-300">
-          Earned
+        <span className="px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm">
+          Open Issues
         </span>
-        <span className="px-6 py-6 text-sm tracking-wider text-gray-300">
-          APR
+        <span className="px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm">
+          Repository Status
         </span>
-        <span className="hidden px-6 py-6 text-sm tracking-wider text-gray-300 lg:block">
+        <span className="col-span-2 px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm ">
           Liquidity
         </span>
-        <span className="hidden px-4 py-6 text-sm tracking-wider text-gray-500 text-gray-300 lg:block">
-          Multiplier
+        <span className="col-span-2 px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm ">
+          Top Contributors
         </span>
       </div>
 
-      {FarmsData.map((farm) => (
-        <FarmList
-          key={farm.id}
-          from={farm.from}
-          to={farm.to}
-          earned={farm.earned}
-          apr={farm.apr}
-          liquidity={farm.liquidity}
-          multiplier={farm.multiplier}
+      {ProjectsData.map((project) => (
+        <ProjectList
+          key={project.id}
+          name={project.name}
+          openIssues={project.openIssues}
+          repositoryStatus={project.repositoryStatus}
+          liquidityStaked={project.liquidityStaked}
+          liquidityRewarded={project.liquidityRewarded}
+          topBuilder={project.topBuilder}
+          topSupporter={project.topSupporter}
         >
-          <div className="mb-4 grid grid-cols-2 gap-4 sm:mb-6 sm:gap-6">
-            <input
-              type="number"
-              placeholder="0.0"
-              className="spin-button-hidden h-11 appearance-none rounded-lg border-solid border-gray-700 bg-gray-900 px-4 text-sm tracking-tighter text-white placeholder:text-gray-500 focus:border-gray-600 focus:shadow-none focus:outline-none focus:ring-0 sm:h-13"
+          <div className="mb-2 flex flex-row items-center justify-between text-sm">
+            <CoinTicker
+              value={project.coinValue}
+              coin={project.coin}
+              change={project.change}
+              className="mr-6"
             />
-            <input
-              type="number"
-              placeholder="0.0"
-              className="spin-button-hidden h-11 appearance-none rounded-lg border-solid border-gray-700 bg-gray-900 px-4 text-sm tracking-tighter text-white placeholder:text-gray-500 focus:border-gray-600 focus:shadow-none focus:outline-none focus:ring-0 sm:h-13"
-            />
+            <div className="w-1/5">
+              <PriceChart />
+            </div>
+            <div className="w-1/5">
+              <PriceChart />
+            </div>
+            <div className="w-1/5">
+              <PriceChart />
+            </div>
           </div>
-          <ActiveLink href={routes.farms}>
-            <Button shape="rounded" fullWidth size="large">
-              APPROVE
-            </Button>
-          </ActiveLink>
-        </FarmList>
+          <div className="mb-6 grid grid-cols-2 gap-6 text-sm">
+            <ActiveLink href={routes.projects}>
+              <Button shape="rounded" fullWidth size="large">
+                Explore Roadmaps
+              </Button>
+            </ActiveLink>
+            <ActiveLink href={routes.projects}>
+              <Button shape="rounded" color="info" fullWidth size="large">
+                Explore Issues
+              </Button>
+            </ActiveLink>
+          </div>
+        </ProjectList>
       ))}
     </div>
   );
