@@ -66,12 +66,11 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
           className="w-full border-x-0 border-b border-dashed border-gray-600 bg-light-dark py-3.5 pl-14 pr-6 text-sm text-white focus:border-gray-500 focus:ring-0"
         />
       </div>
-      <ul role="listbox" className="py-3">
+      <ul className="py-3">
         {coinListData.length > 0 ? (
           coinListData.map((item, index) => (
             <li
               key={index}
-              role="listitem"
               tabIndex={index}
               onClick={() => handleSelectedCoin(item.value)}
               className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-700 focus:bg-gray-600"

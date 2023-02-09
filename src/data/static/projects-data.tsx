@@ -11,6 +11,9 @@ export const ProjectsData = [
     coin: 'USDC',
     coinValue: 1.02,
     change: '+0.01',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '+3',
   },
   {
     id: 2,
@@ -24,6 +27,9 @@ export const ProjectsData = [
     coin: 'BNB',
     coinValue: 1.02,
     change: '-0.02',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '-3',
   },
   {
     id: 3,
@@ -37,6 +43,9 @@ export const ProjectsData = [
     coin: 'ADA',
     coinValue: 1.02,
     change: '+0.01',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '+3',
   },
   {
     id: 4,
@@ -50,6 +59,9 @@ export const ProjectsData = [
     coin: 'USDT',
     coinValue: 1.02,
     change: '-0.01',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '-3',
   },
   {
     id: 5,
@@ -63,6 +75,9 @@ export const ProjectsData = [
     coin: 'DOGE',
     coinValue: 1.02,
     change: '+0.01',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '+3',
   },
   {
     id: 6,
@@ -76,5 +91,8 @@ export const ProjectsData = [
     coin: 'BNB',
     coinValue: 1.02,
     change: '+0.01',
+    healthValue: '40',
+    contributionValue: '20',
+    contributionChange: '+3',
   },
 ];

@@ -7,22 +7,28 @@ import BrokenLogo from '@/assets/images/broken.svg';
 
 interface SecurityStatusProps {
   security: string;
+  noIcon?: boolean;
 }
 
-const SecurityStatus: React.FC<SecurityStatusProps> = ({ security }) => {
+const SecurityStatus: React.FC<SecurityStatusProps> = ({
+  security,
+  noIcon,
+}) => {
   return (
     <div className="flex flex-col items-center justify-center">
-      <Image
-        src={
-          security === 'secure'
-            ? SecureLogo
-            : security === 'vulnerable'
-            ? VulnerableLogo
-            : BrokenLogo
-        }
-        alt={security}
-        className="h-8 w-8"
-      />
+      {(noIcon === undefined || noIcon === false) && (
+        <Image
+          src={
+            security === 'secure'
+              ? SecureLogo
+              : security === 'vulnerable'
+              ? VulnerableLogo
+              : BrokenLogo
+          }
+          alt={security}
+          className="h-8 w-8"
+        />
+      )}
       <div
         className={cn('text-sm uppercase', {
           'text-green-600': security === 'secure',

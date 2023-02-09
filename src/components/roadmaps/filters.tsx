@@ -20,7 +20,7 @@ export function GridSwitcher() {
   return (
     <div className="flex overflow-hidden rounded-lg">
       <button
-        className={`relative flex h-11 w-11 items-center justify-center transition bg-gray-800 ${
+        className={`relative flex h-11 w-11 items-center justify-center bg-gray-800 transition ${
           !isGridCompact ? 'z-10 text-white' : 'text-white'
         }`}
         onClick={() => setIsGridCompact(!isGridCompact)}
@@ -35,7 +35,7 @@ export function GridSwitcher() {
         <NormalGridIcon className="relative" />
       </button>
       <button
-        className={`relative flex h-11 w-11 items-center justify-center transition bg-gray-800 ${
+        className={`relative flex h-11 w-11 items-center justify-center bg-gray-800 transition ${
           isGridCompact ? 'z-10 text-white' : 'text-white'
         }`}
         onClick={() => setIsGridCompact(!isGridCompact)}
@@ -65,7 +65,7 @@ export function SortList() {
   return (
     <div className="relative">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-lg px-4 text-xs bg-gray-800 text-white sm:w-56 sm:text-sm lg:h-11">
+        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-lg bg-gray-800 px-4 text-xs text-white sm:w-56 sm:text-sm lg:h-11">
           {selectedItem.name}
           <ChevronDown className="ml-2" />
         </Listbox.Button>
@@ -77,15 +77,13 @@ export function SortList() {
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 translate-y-2"
         >
-          <Listbox.Options className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg p-3 shadow-large bg-light-dark sm:w-full">
+          <Listbox.Options className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-light-dark p-3 shadow-large sm:w-full">
             {sort.map((item) => (
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-lg px-3 py-2 text-xs font-medium transition text-white sm:text-sm  ${
-                      selected
-                        ? 'my-1 bg-gray-800'
-                        : 'hover:bg-gray-700'
+                    className={`block cursor-pointer rounded-lg px-3 py-2 text-xs font-medium text-white transition sm:text-sm  ${
+                      selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
                     }`}
                   >
                     {item.name}
@@ -124,21 +122,21 @@ export function PriceRange() {
     <div className="p-5">
       <div className="mb-4 grid grid-cols-2 gap-2">
         <input
-          className="h-9 rounded-lg text-sm outline-none focus:outline-none focus:ring-0 border-gray-600 bg-gray-800 text-white focus:border-gray-500"
+          className="h-9 rounded-lg border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
           type="number"
           value={range.min}
           onChange={(e) => handleMinChange(parseInt(e.target.value))}
           min="0"
           max={range.max}
-          placeholder='placeholder'
+          placeholder="placeholder"
         />
         <input
-          className="h-9 rounded-lg text-sm outline-none focus:outline-none focus:ring-0 border-gray-600 bg-gray-800 text-white focus:border-gray-500"
+          className="h-9 rounded-lg border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
           type="number"
           value={range.max}
           onChange={(e) => handleMaxChange(parseInt(e.target.value))}
           min={range.min}
-          placeholder='placeholder'
+          placeholder="placeholder"
         />
       </div>
       <Slider
@@ -153,81 +151,70 @@ export function PriceRange() {
   );
 }
 
-export function Status() {
+interface StatusProps {
+  values: string[];
+}
+
+export const Status: React.FC<StatusProps> = ({ values }) => {
   let [plan, setPlan] = useState('buy-now');
   return (
     <RadioGroup
       value={plan}
       onChange={setPlan}
-      className="grid grid-cols-2 gap-2 p-5"
+      className="grid grid-cols-2 gap-2 p-4"
     >
-      <RadioGroup.Option value="buy-now">
-        {({ checked }) => (
-          <span
-            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
-              checked
-                ? 'border-brand bg-brand text-white shadow-button'
-                : 'border-gray-700 bg-gray-800 text-white'
-            }`}
-          >
-            Buy Now
-          </span>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="on-auction">
-        {({ checked }) => (
-          <span
-            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
-              checked
-                ? 'border-brand bg-brand text-white shadow-button'
-                : 'border-gray-700 bg-gray-800 text-white'
-            }`}
-          >
-            On Auction
-          </span>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="new">
-        {({ checked }) => (
-          <span
-            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
-              checked
-                ? 'border-brand bg-brand text-white shadow-button'
-                : 'border-gray-700 bg-gray-800 text-white'
-            }`}
-          >
-            New
-          </span>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="has-offers">
-        {({ checked }) => (
-          <span
-            className={`flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
-              checked
-                ? 'border-brand bg-brand text-white shadow-button'
-                : 'border-gray-700 bg-gray-800 text-white'
-            }`}
-          >
-            Has offers
-          </span>
-        )}
-      </RadioGroup.Option>
+      {values.map((val, idx) => {
+        return (
+          <RadioGroup.Option value={val} key={idx}>
+            {({ checked }) => (
+              <span
+                className={`flex h-12 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+                  checked
+                    ? 'border-brand bg-brand text-white shadow-button'
+                    : 'border-gray-700 bg-gray-800 text-white'
+                }`}
+              >
+                {val}
+              </span>
+            )}
+          </RadioGroup.Option>
+        );
+      })}
     </RadioGroup>
   );
-}
+};
+
+const OrderByValues = [
+  'Newest',
+  'Oldest',
+  'Public Goods',
+  'Defi Protocols',
+  'Web3 Infra',
+  'Longevity',
+  'Deep Tech',
+];
+
+const OutlookValues = [
+  'Long-term Public',
+  'Good (>5yrs+)',
+  'Next 2 yrs',
+  'Next 5 yrs',
+];
 
 export function Filters() {
   return (
     <>
       <Collapse label="Order By" initialOpen>
-        <Status />
+        <Status values={OrderByValues} />
       </Collapse>
       <Collapse label="Amount Staked" initialOpen>
         <PriceRange />
       </Collapse>
-      <Collapse label="Created By" initialOpen>
+      <Collapse label="Creator" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} />
+      </Collapse>
+      <Collapse label="Outlook" initialOpen>
+        <Status values={OutlookValues} />
       </Collapse>
     </>
   );

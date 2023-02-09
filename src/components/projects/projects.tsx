@@ -14,6 +14,7 @@ import { SearchIcon } from '@/components/icons/search';
 import routes from '@/config/routes';
 import PriceChart from '@/components/ui/chats/price-chart';
 import CoinTicker from '@/components/custom/coin-ticker';
+import DataWithImage from '@/components/custom/data-with-image';
 
 const sort = [
   { id: 1, name: 'Hot' },
@@ -213,33 +214,50 @@ export default function Projects() {
           liquidityRewarded={project.liquidityRewarded}
           topBuilder={project.topBuilder}
           topSupporter={project.topSupporter}
+          coin={project.coin}
         >
           <div className="mb-2 flex flex-row items-center justify-between text-sm">
-            <CoinTicker
-              value={project.coinValue}
-              coin={project.coin}
-              change={project.change}
-              className="mr-6"
-            />
-            <div className="w-1/5">
-              <PriceChart />
+            <div className="flex w-[30%]">
+              <CoinTicker
+                value={project.coinValue}
+                coin={project.coin}
+                change={project.change}
+              />
+              <div className="w-full">
+                <PriceChart />
+              </div>
             </div>
-            <div className="w-1/5">
-              <PriceChart />
+            <div className="flex w-[30%]">
+              <DataWithImage
+                image="health"
+                header="Community Health"
+                value={project.healthValue}
+              />
+              <div className="w-full">
+                <PriceChart />
+              </div>
             </div>
-            <div className="w-1/5">
-              <PriceChart />
+            <div className="flex w-[30%]">
+              <DataWithImage
+                image="handshake"
+                header="Contribution History"
+                value={project.contributionValue}
+                change={project.contributionChange}
+              />
+              <div className="w-full">
+                <PriceChart />
+              </div>
             </div>
           </div>
           <div className="mb-6 grid grid-cols-2 gap-6 text-sm">
             <ActiveLink href={routes.projects}>
               <Button shape="rounded" fullWidth size="large">
-                Explore Roadmaps
+                Explore Related Roadmaps
               </Button>
             </ActiveLink>
             <ActiveLink href={routes.projects}>
               <Button shape="rounded" color="info" fullWidth size="large">
-                Explore Issues
+                Explore Open Issues
               </Button>
             </ActiveLink>
           </div>

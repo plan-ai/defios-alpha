@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { useMeasure } from '@/lib/hooks/use-measure';
-import { Plus } from '@/components/icons/plus';
+import { ChevronDown } from '@/components/icons/chevron-down';
 
 interface CollapseProps {
   label: string;
@@ -35,10 +35,10 @@ export default function Collapse({
 
         <span
           className={`ml-4 shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-45' : ''
+            isOpen ? 'rotate-180' : ''
           }`}
         >
-          <Plus className="" />
+          <ChevronDown className="" />
         </span>
       </button>
 

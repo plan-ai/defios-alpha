@@ -20,12 +20,14 @@ export default function Roadmap() {
             </span>
 
             <div className="flex gap-6 3xl:gap-8">
-              <Button shape="rounded" disabled className="!bg-gray-800">
-                + Create New Roadmap
+              <div className="flex items-center justify-center">
+                <Button shape="rounded" disabled className="!bg-gray-800">
+                  + Create New Roadmap
+                </Button>
                 <span className="relative z-[2] ml-2 rounded-full bg-gray-900 px-2 py-0.5 normal-case text-red-700">
                   Coming Soon
                 </span>
-              </Button>
+              </div>
               <div className="hidden 3xl:block">
                 <GridSwitcher />
               </div>

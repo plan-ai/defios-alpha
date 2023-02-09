@@ -5,7 +5,7 @@ interface PriceChartProps {}
 
 const PriceChart: React.FC<PriceChartProps> = ({}) => {
   return (
-    <div className="h-20 my-2 w-full">
+    <div className="my-2 h-20 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={[
