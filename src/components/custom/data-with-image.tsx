@@ -1,10 +1,17 @@
 import React from 'react';
 import { StaticImageData } from 'next/image';
-import { WenchIcon } from '../ui/icons/wench';
-import { BriefcaseIcon } from '../icons/briefcase';
+import { WenchIcon } from '@/components/ui/icons/wench';
+import { BriefcaseIcon } from '@/components/icons/briefcase';
 import { HandshakeIcon } from '@/components/ui/icons/handshake';
-import { StethoscopeIcon } from '../ui/icons/stethoscope';
-
+import { StethoscopeIcon } from '@/components/ui/icons/stethoscope';
+import { LinkIcon } from '@/components/icons/link-icon';
+import { BankNotesIcon } from '@/components/ui/icons/banknotes';
+import { TrophyIcon } from '@/components/icons/trophy';
+import { CodeIcon } from '@/components/icons/code';
+import { PresentationChartIcon } from '@/components/icons/presentation-chart';
+import { ClockIcon } from '@/components/icons/clock';
+import { DollarCoinIcon } from '@/components/icons/dollar-coin';
+import { ChartBarIcon } from '@/components/icons/chartbar';
 import cn from 'classnames';
 
 interface DataWithImageProps {
@@ -31,6 +38,14 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
         {image === 'briefcase' && <BriefcaseIcon />}
         {image === 'handshake' && <HandshakeIcon />}
         {image === 'health' && <StethoscopeIcon />}
+        {image === 'link' && <LinkIcon />}
+        {image === 'banknotes' && <BankNotesIcon />}
+        {image === 'trophy' && <TrophyIcon />}
+        {image === 'code' && <CodeIcon />}
+        {image === 'vote' && <PresentationChartIcon />}
+        {image === 'clock' && <ClockIcon />}
+        {image === 'dollar' && <DollarCoinIcon />}
+        {image === 'number' && <ChartBarIcon />}
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">{header}</span>

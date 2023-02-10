@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { RadioGroup } from '@/components/ui/radio-group';
 import { motion } from 'framer-motion';
-
+import cn from 'classnames';
 interface ToggleBtnProps {
   label?: string;
   option1: string;
   option2: string;
+  className?: string;
 }
 
-const ToggleBtn: React.FC<ToggleBtnProps> = ({ option1, option2, label }) => {
+const ToggleBtn: React.FC<ToggleBtnProps> = ({
+  option1,
+  option2,
+  label,
+  className,
+}) => {
   const [status, setStatus] = useState(option1);
   return (
     <div className="flex flex-row items-center justify-start">
@@ -21,9 +27,11 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({ option1, option2, label }) => {
         <RadioGroup.Option value={option1}>
           {({ checked }) => (
             <span
-              className={`relative flex h-8 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
-                checked ? 'text-white' : 'text-white/50'
-              }`}
+              className={cn(
+                'relative flex h-8 w-32 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:text-sm',
+                checked ? 'text-white' : 'text-white/50',
+                className
+              )}
             >
               {checked && (
                 <motion.span
@@ -38,9 +46,11 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({ option1, option2, label }) => {
         <RadioGroup.Option value={option2}>
           {({ checked }) => (
             <span
-              className={`relative flex h-8 w-20 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-24 sm:text-sm ${
-                checked ? 'text-white' : 'text-white/50'
-              }`}
+              className={cn(
+                'relative flex h-8 w-32 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:text-sm',
+                checked ? 'text-white' : 'text-white/50',
+                className
+              )}
             >
               {checked && (
                 <motion.span

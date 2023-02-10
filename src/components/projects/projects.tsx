@@ -240,7 +240,7 @@ export default function Projects() {
             <div className="flex w-[30%]">
               <DataWithImage
                 image="handshake"
-                header="Contribution History"
+                header="Contributions"
                 value={project.contributionValue}
                 change={project.contributionChange}
               />

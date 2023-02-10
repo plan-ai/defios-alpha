@@ -4,6 +4,7 @@ export const LinkIcon: React.FC<React.SVGAttributes<{}>> = (props) => {
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
       {...props}
     >
       <path
