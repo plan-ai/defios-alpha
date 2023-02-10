@@ -14,6 +14,7 @@ import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@headlessui/react';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
+import { Check } from '@/components/icons/check';
 
 export function GridSwitcher() {
   const { isGridCompact, setIsGridCompact } = useGridSwitcher();
@@ -184,6 +185,43 @@ export const Status: React.FC<StatusProps> = ({ values }) => {
   );
 };
 
+interface CheckBoxListProps {
+  list: string[];
+}
+
+const CheckBoxList: React.FC<CheckBoxListProps> = ({ list }) => {
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+  const handleCheck = (value: string) => {
+    if (selectedValues.includes(value)) {
+      const newValues = selectedValues.filter((val) => {
+        return val !== value;
+      });
+      setSelectedValues(newValues);
+    } else {
+      const newValues = [...selectedValues, value];
+      setSelectedValues(newValues);
+    }
+  };
+  return (
+    <div className="flex w-full flex-col gap-3 p-5">
+      {list.length !== 0 &&
+        list.map((item, idx) => {
+          return (
+            <div className="flex w-full flex-row" key={idx}>
+              <div
+                onClick={() => handleCheck(item)}
+                className="mr-2 flex h-6 w-6 items-center justify-center rounded-sm bg-gray-600"
+              >
+                {selectedValues.includes(item) && <Check />}
+              </div>
+              <div>{item}</div>
+            </div>
+          );
+        })}
+    </div>
+  );
+};
+
 const OrderByValues = [
   'Newest',
   'Oldest',
@@ -201,6 +239,8 @@ const OutlookValues = [
   'Next 5 yrs',
 ];
 
+const OutcomeValues = ['Protocol', 'Tooling', 'Publication', 'SAAS', 'Other'];
+
 export function Filters() {
   return (
     <>
@@ -215,6 +255,9 @@ export function Filters() {
       </Collapse>
       <Collapse label="Outlook" initialOpen>
         <Status values={OutlookValues} />
+      </Collapse>
+      <Collapse label="Outcome" initialOpen>
+        <CheckBoxList list={OutcomeValues} />
       </Collapse>
     </>
   );

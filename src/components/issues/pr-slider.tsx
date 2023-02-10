@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { LinkIcon } from '@/components/icons/link-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
+import cn from 'classnames';
 
 export type PRCardProps = {
   title: string;
@@ -10,6 +11,7 @@ export type PRCardProps = {
   originality: string;
   author: string;
   link: string;
+  checked: boolean;
 };
 
 export const PRCard: React.FC<PRCardProps> = ({
@@ -18,9 +20,15 @@ export const PRCard: React.FC<PRCardProps> = ({
   originality,
   author,
   link,
+  checked,
 }) => {
   return (
-    <div className="flex h-52 w-full flex-col justify-between rounded-lg border border-gray-800 bg-dark p-4 shadow-xl">
+    <div
+      className={cn(
+        'flex h-52 w-full flex-col justify-between rounded-lg border border-gray-800 bg-dark p-4 shadow-xl',
+        { 'border-3 border-green-700': checked }
+      )}
+    >
       <div className="flex w-full justify-between">
         <div>{title.length > 60 ? title.slice(0, 60) + '...' : title}</div>
         <AnchorLink
@@ -45,6 +53,7 @@ interface PRSliderProps {
 }
 
 export default function PRSlider({ PRs }: PRSliderProps) {
+  const [selectedPR, setSelectedPR] = useState<PRCardProps | undefined>();
   const sliderBreakPoints = {
     640: {
       slidesPerView: 3,
@@ -65,13 +74,14 @@ export default function PRSlider({ PRs }: PRSliderProps) {
         className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
       >
         {PRs.map((PR, idx) => (
-          <SwiperSlide key={idx}>
+          <SwiperSlide key={idx} onClick={() => setSelectedPR(PR)}>
             <PRCard
               title={PR.title}
               stakerConfidence={PR.stakerConfidence}
               originality={PR.originality}
               author={PR.author}
               link={PR.link}
+              checked={selectedPR !== undefined ? PR == selectedPR : false}
             />
           </SwiperSlide>
         ))}
