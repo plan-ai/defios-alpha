@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { RoadmapList } from '@/data/static/roadmap-list';
-import RoadmapCard from '@/components/ui/roadmap-card';
+import RoadmapCard from '@/components/roadmaps/roadmap-card';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
 
 export default function Feeds({ className }: { className?: string }) {
@@ -15,15 +15,16 @@ export default function Feeds({ className }: { className?: string }) {
         className
       )}
     >
-      {RoadmapList.map((nft) => (
+      {RoadmapList.map((item, idx) => (
         <RoadmapCard
-          key={nft.id}
-          name={nft.name}
-          image={nft.image}
-          creator={nft.creator}
-          creatorImage={nft.creatorImage}
-          totalStake={nft.totalStake}
-          creationDate={nft.creationDate}
+          key={idx}
+          name={item.name}
+          image={item.image}
+          creator={item.creator}
+          creatorImage={item.creatorImage}
+          totalStake={item.totalStake}
+          creationDate={item.creationDate}
+          details={item.details}
         />
       ))}
     </div>

@@ -1,115 +1,72 @@
-import { StaticImageData } from 'next/image';
+import React from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import Image from '@/components/ui/image';
-import FeaturedCard from '@/components/nft/featured-card';
-import ListCard from '@/components/ui/list-card';
-import AnchorLink from '@/components/ui/links/anchor-link';
-import { ArrowLinkIcon } from '@/components/icons/arrow-link-icon';
-import { nftData } from '@/data/static/single-nft';
-import NftDropDown from '@/components/nft/nft-dropdown';
-import Avatar from '@/components/ui/avatar';
 import NftFooter from '@/components/nft/nft-footer';
+import cn from 'classnames';
+import RoadmapPopupDetails from '@/components/roadmaps/roadmap-popup-details';
+import PreReqCard from '@/components/roadmaps/pre-req-card';
+import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
+import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
 
-type Avatar = {
-  id: string | number;
-  name: string;
-  slug: string;
-  logo: StaticImageData;
-};
-type RoadmapDetailsProps = {
-  isAuction?: boolean;
-  image: StaticImageData;
-  name: string;
-  description: string;
-  minted_date: string;
-  minted_slug: string;
-  price: number;
-  creator: Avatar;
-  collection: Avatar;
-  owner: Avatar;
-  block_chains: Avatar[];
-};
+type RoadmapDetailsProps = roadmapListType;
 
-export default function RoadmapDetails({
-  product,
-}: {
-  product: RoadmapDetailsProps;
-}) {
-  const {
-    isAuction,
-    image,
-    name,
-    description,
-    minted_date,
-    minted_slug,
-    price,
-    creator,
-    collection,
-    owner,
-    block_chains,
-  } = product;
-
+const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
+  creator,
+  creatorImage,
+  image,
+  name,
+  creationDate,
+  totalStake,
+  details,
+}) => {
   return (
-    <div className="mx-auto flex h-full w-full flex-row overflow-y-hidden rounded-lg p-10 transition-all">
-      <div className="mr-10 flex h-full flex-col items-center justify-end">
-        <div className="flex h-full max-h-full items-center justify-center overflow-hidden">
-          <div className="h-full max-h-full overflow-hidden rounded-lg">
+    <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-lg p-10 transition-all">
+      <div className="mr-10 flex h-full w-[55%] flex-col items-center justify-end">
+        <div className="flex h-full max-h-full w-full items-center justify-center overflow-hidden">
+          <div className="h-full w-full rounded-xl">
             <Image
               src={image}
               alt={name}
-              className="h-full w-auto bg-light-dark"
+              className="h-full w-full rounded-xl bg-light-dark"
             />
           </div>
         </div>
-        <NftFooter
+        {/* <NftFooter
           className="flex"
           currentBid={nftData?.bids[nftData?.bids?.length - 1]}
           auctionTime={Date.now() + 4000000 * 10}
           isAuction={isAuction}
           price={price}
-        />
+        /> */}
       </div>
 
-      <div className="flex h-full w-full flex-col justify-between">
-        <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-4">
+      <div className="flex h-full w-[40%] flex-col justify-between">
+        <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
           <div className="flex flex-col">
             <div className="flex justify-between">
               <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
                 {name}
               </h2>
-              <div className="mt-1.5 ml-3 shrink-0 xl:mt-2">
-                <NftDropDown />
-              </div>
             </div>
-            <AnchorLink
-              href={minted_slug}
-              className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5"
-            >
-              Minted on {minted_date}
-              <ArrowLinkIcon className="ml-2 h-3 w-3" />
-            </AnchorLink>
+            <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
+              created at {creationDate}
+            </div>
             <div className="mt-4 flex flex-wrap gap-6 pt-0.5 lg:-mx-6 lg:mt-6 lg:gap-0">
               <div className="shrink-0 border-dashed border-gray-700 lg:border-r lg:px-6">
                 <h3 className="text-heading-style mb-2 uppercase text-white">
                   Created By
                 </h3>
-                <AnchorLink href={creator?.slug} className="inline-flex">
-                  <ListCard
-                    item={creator}
-                    className="rounded-full p-2 text-gray-400 hover:text-white"
-                  />
-                </AnchorLink>
+                <div className="rounded-full p-2 text-gray-400 hover:text-white">
+                  {creator}
+                </div>
               </div>
               <div className="shrink-0 lg:px-6">
                 <h3 className="text-heading-style mb-2.5 uppercase text-white">
-                  Collection
+                  Total Staked
                 </h3>
-                <AnchorLink href="#" className="inline-flex">
-                  <ListCard
-                    item={collection}
-                    className="rounded-full p-2 text-gray-400 hover:text-white"
-                  />
-                </AnchorLink>
+                <div className="rounded-full p-2 text-gray-400 hover:text-white">
+                  {totalStake}
+                </div>
               </div>
             </div>
           </div>
@@ -121,77 +78,36 @@ export default function RoadmapDetails({
                   path: 'details',
                 },
                 {
-                  title: 'Bids',
-                  path: 'bids',
+                  title: 'Pre-Requisites',
+                  path: 'pre-requisites',
                 },
                 {
-                  title: 'History',
-                  path: 'history',
+                  title: 'Contributions',
+                  path: 'contributions',
                 },
               ]}
             >
               <TabPanel className="focus:outline-none">
-                <div className="space-y-6 ">
-                  <div className="block">
-                    <h3 className="text-heading-style mb-2 uppercase text-white">
-                      Description
-                    </h3>
-                    <div className="text-sm leading-6 -tracking-wider text-gray-400">
-                      {description}
-                    </div>
-                  </div>
-                  <div className="block">
-                    <h3 className="text-heading-style mb-2 uppercase text-white">
-                      Owner
-                    </h3>
-                    <AnchorLink href={owner?.slug} className="inline-block">
-                      <ListCard
-                        item={owner}
-                        className="rounded-full p-2 text-gray-400 hover:text-white"
+                <RoadmapPopupDetails
+                  details={details?.details || RoadmapList[0].details.details}
+                />
+              </TabPanel>
+              <TabPanel className="focus:outline-none">
+                <div className="flex flex-col-reverse">
+                  {details?.preRequisites &&
+                    details.preRequisites.length !== 0 &&
+                    details.preRequisites?.map((preReq: any, idx: number) => (
+                      <PreReqCard
+                        item={preReq}
+                        key={idx}
+                        className="mb-3 first:mb-0"
                       />
-                    </AnchorLink>
-                  </div>
-                  <div className="block">
-                    <h3 className="text-heading-style mb-2 uppercase text-white">
-                      Block Chain
-                    </h3>
-                    <div className="flex flex-col gap-2">
-                      {block_chains?.map((item: any) => (
-                        <AnchorLink
-                          href="#"
-                          className="inline-flex"
-                          key={item?.id}
-                        >
-                          <ListCard
-                            item={item}
-                            className="rounded-full p-2 text-gray-400 hover:text-white"
-                          />
-                        </AnchorLink>
-                      ))}
-                    </div>
-                  </div>
+                    ))}
                 </div>
               </TabPanel>
               <TabPanel className="focus:outline-none">
                 <div className="flex flex-col-reverse">
-                  {nftData?.bids?.map((bid) => (
-                    <FeaturedCard
-                      item={bid}
-                      key={bid?.id}
-                      className="mb-3 first:mb-0"
-                    />
-                  ))}
-                </div>
-              </TabPanel>
-              <TabPanel className="focus:outline-none">
-                <div className="flex flex-col-reverse">
-                  {nftData?.history?.map((item) => (
-                    <FeaturedCard
-                      item={item}
-                      key={item?.id}
-                      className="mb-3 first:mb-0"
-                    />
-                  ))}
+                  <RoadmapPieChart />
                 </div>
               </TabPanel>
             </ParamTab>
@@ -200,4 +116,6 @@ export default function RoadmapDetails({
       </div>
     </div>
   );
-}
+};
+
+export default RoadmapDetails;

@@ -9,16 +9,14 @@ import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import routes from '@/config/routes';
 import { nftData } from '@/data/static/single-nft';
-import RoadmapDetails from '../roadmaps/roadmap-details';
+import RoadmapDetails from './roadmap-details';
+import {
+  detailsType,
+  roadmapListType,
+  RoadmapList,
+} from '@/data/static/roadmap-list';
 
-type RoadmapCardProps = {
-  creator: string;
-  creatorImage: StaticImageData;
-  image: StaticImageData;
-  name: string;
-  creationDate: string;
-  totalStake: string;
-};
+type RoadmapCardProps = roadmapListType;
 
 export default function RoadmapCard({
   creator,
@@ -27,6 +25,7 @@ export default function RoadmapCard({
   name,
   creationDate,
   totalStake,
+  details,
 }: RoadmapCardProps) {
   const [roadmap, setRoadmap] = useState('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
@@ -105,8 +104,16 @@ export default function RoadmapCard({
               ref={modalContainerRef}
               className="inline-block text-left align-middle"
             >
-              <div className="h-[80vh] w-[70vw] rounded-2xl bg-dark">
-                <RoadmapDetails product={nftData} />
+              <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
+                <RoadmapDetails
+                  name={name}
+                  creationDate={creationDate}
+                  creator={creator}
+                  creatorImage={creatorImage}
+                  image={image}
+                  totalStake={totalStake}
+                  details={details || RoadmapList[0].details}
+                />
               </div>
             </motion.div>
           </motion.div>
