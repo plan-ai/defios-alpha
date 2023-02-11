@@ -106,6 +106,7 @@ const IssuesPage: NextPageWithLayout = () => {
               totalStaked={issue.totalStaked}
               tags={issue.tags}
               key={issue.id}
+              coin={issue.coin}
             >
               {issue.issueTags === 'open' && (
                 <OpenIssueExpand issueDesc={issue.description} />
@@ -131,6 +132,7 @@ const IssuesPage: NextPageWithLayout = () => {
                   timeTakenToClose={issue.winner.timeTakenToClose}
                   codeQuality={issue.winner.codeQuality}
                   winnerMargin={issue.winner.winnerMargin}
+                  coin={issue.coin}
                 />
               )}
             </IssuesList>

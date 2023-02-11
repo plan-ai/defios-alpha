@@ -1,6 +1,6 @@
 import React from 'react';
 import DataWithImage from '@/components/custom/data-with-image';
-
+import { coinListBig } from '@/data/static/coin-list';
 interface ClosedIssueExpandProps {
   winningPR: string;
   winningAuthor: string;
@@ -10,6 +10,7 @@ interface ClosedIssueExpandProps {
   timeTakenToClose: string;
   codeQuality: string;
   winnerMargin: string;
+  coin: string;
 }
 
 const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({
@@ -21,6 +22,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({
   timeTakenToClose,
   codeQuality,
   winnerMargin,
+  coin,
 }) => {
   const prValSplit = winningPR.split('/');
   const prValue =
@@ -42,7 +44,8 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({
         <DataWithImage
           header="Total amount staked"
           value={totalAmountStaked}
-          image="dollar"
+          image=""
+          coin={coin}
         />
       </div>
       <div className="flex w-full flex-row items-center justify-between">

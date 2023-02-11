@@ -5,16 +5,24 @@ import { LinkIcon } from '@/components/icons/link-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
 
-export type PRCardProps = {
+export interface PRCardProps {
+  title: string;
+  stakerConfidence: string;
+  originality: string;
+  author: string;
+  link: string;
+}
+
+interface PRChekerProps {
   title: string;
   stakerConfidence: string;
   originality: string;
   author: string;
   link: string;
   checked: boolean;
-};
+}
 
-export const PRCard: React.FC<PRCardProps> = ({
+export const PRCard: React.FC<PRChekerProps> = ({
   title,
   stakerConfidence,
   originality,

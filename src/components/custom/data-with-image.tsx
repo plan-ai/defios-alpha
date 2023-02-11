@@ -13,6 +13,7 @@ import { ClockIcon } from '@/components/icons/clock';
 import { DollarCoinIcon } from '@/components/icons/dollar-coin';
 import { ChartBarIcon } from '@/components/icons/chartbar';
 import cn from 'classnames';
+import { coinListBig } from '@/data/static/coin-list';
 
 interface DataWithImageProps {
   image: StaticImageData | string;
@@ -21,6 +22,7 @@ interface DataWithImageProps {
   change?: string;
   trunc?: number;
   className?: string;
+  coin?: string;
 }
 
 const DataWithImage: React.FC<DataWithImageProps> = ({
@@ -30,7 +32,9 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
   trunc,
   className,
   change,
+  coin,
 }) => {
+  const data = coinListBig.find((el) => el.code === coin);
   return (
     <div className={cn('flex w-full items-center', className)}>
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200 md:h-9 md:w-9 xl:h-10 xl:w-10">
@@ -46,6 +50,7 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
         {image === 'clock' && <ClockIcon />}
         {image === 'dollar' && <DollarCoinIcon />}
         {image === 'number' && <ChartBarIcon />}
+        {coin !== undefined && data?.icon}
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">{header}</span>
@@ -53,7 +58,8 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
           <strong className="text-sm font-medium -tracking-wider text-white">
             {value.length > (trunc || 12)
               ? value.slice(0, trunc || 12) + '...'
-              : value}
+              : value}{' '}
+            {coin !== undefined && coin}
           </strong>
         )}
 
