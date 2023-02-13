@@ -29,6 +29,11 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
   useEffect(() => {
     setRepo('');
   }, [reset]);
+  useEffect(() => {
+    if (stepOfCreation === 2) {
+      setModalOpen(true);
+    }
+  }, [stepOfCreation]);
 
   return (
     <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">

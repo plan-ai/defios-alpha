@@ -25,6 +25,11 @@ const CreateProject: React.FC<CreateProjectProps> = ({
     setProjectName('');
     setOwnerCut(0)
   },[reset])
+  useEffect(() => {
+    if (stepOfCreation === 1) {
+      setIsExpand(true);
+    }
+  }, [stepOfCreation]);
 
   return (
     <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">

@@ -9,7 +9,7 @@ import CreationProcess from '@/components/incentivize/creationProcess';
 import Button from '@/components/ui/button/button';
 
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
-  const [stepOfCreation, setStepOfCreation] = useState(3);
+  const [stepOfCreation, setStepOfCreation] = useState(1);
   const [reset, setReset] = useState(0);
   return (
     <>

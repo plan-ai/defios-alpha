@@ -117,7 +117,7 @@ Styles for Swiper slider
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
   background: rgb(214, 214, 214);

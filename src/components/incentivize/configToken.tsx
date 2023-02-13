@@ -9,6 +9,7 @@ import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import cn from 'classnames';
 import { Check } from '../icons/check';
+import DistributionSlider from './distribution-slider';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -91,6 +92,12 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
     setTokenType('Create New Token');
     setIsSubmitted(false);
   }, [reset]);
+
+  useEffect(() => {
+    if (stepOfCreation === 3) {
+      setIsExpand(true);
+    }
+  }, [stepOfCreation]);
 
   const CheckSubmit = () => {
     if (tokenType === 'Create New Token') {
@@ -201,6 +208,11 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                       <Uploader label="Token Icon" />
                       <SortList />
                     </div>
+
+                    <div className="mb-3 mt-4 flex w-full flex-row items-center justify-between overflow-hidden">
+                      <DistributionSlider />
+                    </div>
+
                     <Button
                       onClick={() => CheckSubmit()}
                       className="mt-4"

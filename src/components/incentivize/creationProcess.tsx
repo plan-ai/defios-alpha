@@ -21,6 +21,11 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   useEffect(() => {
     setIsExpand(false);
   }, [reset]);
+  useEffect(() => {
+    if (stepOfCreation === 4) {
+      setIsExpand(true);
+    }
+  }, [stepOfCreation]);
 
   return (
     <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">
