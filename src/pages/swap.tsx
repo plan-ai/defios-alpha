@@ -19,7 +19,7 @@ const SwapPage: NextPageWithLayout = () => {
         title="Swaps"
         description="Defios - Tokenize your Open Source Project."
       />
-      <div className="flex h-full w-full items-center justify-between px-40">
+      <div className="flex h-full w-full items-center justify-between px-60">
         <Trade>
           <div className="mb-5 border-b border-dashed border-gray-800 pb-5 xs:mb-7 xs:pb-6">
             <div

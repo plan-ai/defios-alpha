@@ -1,9 +1,21 @@
 import { StaticImageData } from 'next/dist/client/image';
-import CreatorImage from '@/assets/images/author.jpg';
 import NFT1 from '@/assets/images/nft/nft-1.jpg';
 import NFT2 from '@/assets/images/nft/nft-2.jpg';
 import NFT3 from '@/assets/images/nft/nft-3.jpg';
 import NFT4 from '@/assets/images/nft/nft-4.jpg';
+import User1 from '@/assets/images/avatar/8.jpg';
+import User2 from '@/assets/images/avatar/9.jpg';
+import User3 from '@/assets/images/avatar/10.jpg';
+import User4 from '@/assets/images/avatar/1.png';
+import User5 from '@/assets/images/avatar/2.png';
+import User6 from '@/assets/images/avatar/3.png';
+import User7 from '@/assets/images/avatar/4.png';
+import User8 from '@/assets/images/avatar/5.png';
+import { CogIcon } from '@/components/icons/cog';
+import { WenchScrewdriverIcon } from '@/components/icons/wench-screwdriver';
+import { BookOpenIcon } from '@/components/icons/book-open';
+import { CloudIcon } from '@/components/icons/cloud';
+import { ArchiveBoxIcon } from '@/components/icons/archive-box';
 
 export type roadmapListType = {
   creator: string;
@@ -12,6 +24,8 @@ export type roadmapListType = {
   name: string;
   creationDate: string;
   totalStake: string;
+  deliverable: string;
+  status: string;
   details: detailsType | undefined;
 };
 export type detailsType = {
@@ -21,6 +35,7 @@ export type detailsType = {
 export type detailsTabType = {
   description: string;
   topContributor: string;
+  topContributorImg: StaticImageData;
   tags: string[];
   timeframe: string;
   stakerIncentive: string;
@@ -37,18 +52,44 @@ export type preRequisitesType = {
   status: string;
 };
 
+export const deliverableList = [
+  {
+    name: 'Protocol',
+    element: <CogIcon />,
+  },
+  {
+    name: 'Tooling',
+    element: <WenchScrewdriverIcon />,
+  },
+  {
+    name: 'Publication',
+    element: <BookOpenIcon />,
+  },
+  {
+    name: 'SAAS',
+    element: <CloudIcon />,
+  },
+  {
+    name: 'Other',
+    element: <ArchiveBoxIcon />,
+  },
+];
+
 export const RoadmapList = [
   {
     creator: 'AbhisekBasu1',
-    creatorImage: CreatorImage,
+    creatorImage: User1,
     image: NFT1,
     name: 'DefiOS',
     creationDate: '09-02-2023',
     totalStake: '250$',
+    deliverable: 'Protocol',
+    status: 'lock',
     details: {
       details: {
         description: 'Roadmap states the working tree of DefiOS',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -88,15 +129,18 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: CreatorImage,
+    creatorImage: User2,
     image: NFT2,
     name: 'OnFinance',
     creationDate: '09-02-2023',
     totalStake: '400$',
+    deliverable: 'Tooling',
+    status: 'open',
     details: {
       details: {
         description: 'Roadmap states the working tree of OnFinance',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -136,15 +180,18 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: CreatorImage,
+    creatorImage: User3,
     image: NFT3,
     name: 'MusicProX',
     creationDate: '09-02-2023',
     totalStake: '200$',
+    deliverable: 'Publication',
+    status: 'lock',
     details: {
       details: {
         description: 'Roadmap states the working tree of MusicProX',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -184,15 +231,18 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: CreatorImage,
+    creatorImage: User4,
     image: NFT4,
     name: 'DefiOS Core',
     creationDate: '09-02-2023',
     totalStake: '200$',
+    deliverable: 'SAAS',
+    status: 'open',
     details: {
       details: {
         description: 'Roadmap states the working tree of DefiOS Core',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -232,15 +282,18 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: CreatorImage,
+    creatorImage: User5,
     image: NFT2,
     name: 'DefiOS Rust',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    deliverable: 'Other',
+    status: 'lock',
     details: {
       details: {
         description: 'Roadmap states the working tree of DefiOS Rust',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -280,15 +333,18 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: CreatorImage,
+    creatorImage: User6,
     image: NFT4,
     name: 'FitBro',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    deliverable: 'Protocol',
+    status: 'open',
     details: {
       details: {
         description: 'Roadmap states the working tree of FitBro',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -328,15 +384,18 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: CreatorImage,
+    creatorImage: User7,
     image: NFT3,
     name: 'Anime NFTs',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    deliverable: 'Tooling',
+    status: 'lock',
     details: {
       details: {
         description: 'Roadmap states the working tree of Anime NFTs',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -376,15 +435,18 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: CreatorImage,
+    creatorImage: User8,
     image: NFT1,
     name: 'Buildoor',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    deliverable: 'Publication',
+    status: 'open',
     details: {
       details: {
         description: 'Roadmap states the working tree of Buildoor',
         topContributor: 'Rohitkk432',
+        topContributorImg: User3,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',

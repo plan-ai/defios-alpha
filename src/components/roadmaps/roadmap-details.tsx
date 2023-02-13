@@ -8,6 +8,12 @@ import PreReqCard from '@/components/roadmaps/pre-req-card';
 import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
 import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
 
+import ListCard from '@/components/ui/list-card';
+import { LockIcon } from '../ui/icons/lock';
+import { YellowClock } from '../icons/yellow-clock';
+
+import { deliverableList } from '@/data/static/roadmap-list';
+
 type RoadmapDetailsProps = roadmapListType;
 
 const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
@@ -18,6 +24,8 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   creationDate,
   totalStake,
   details,
+  deliverable,
+  status,
 }) => {
   return (
     <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-lg p-10 transition-all">
@@ -47,6 +55,8 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
               <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
                 {name}
               </h2>
+              {status === 'lock' && <LockIcon />}
+              {status === 'open' && <YellowClock />}
             </div>
             <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
               created at {creationDate}
@@ -56,17 +66,24 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                 <h3 className="text-heading-style mb-2 uppercase text-white">
                   Created By
                 </h3>
-                <div className="rounded-full p-2 text-gray-400 hover:text-white">
-                  {creator}
-                </div>
+                <ListCard
+                  item={{ name: creator, logo: creatorImage }}
+                  className="rounded-full p-2 text-gray-400 hover:text-white"
+                />
               </div>
               <div className="shrink-0 lg:px-6">
                 <h3 className="text-heading-style mb-2.5 uppercase text-white">
-                  Total Staked
+                  Deliverable
                 </h3>
-                <div className="rounded-full p-2 text-gray-400 hover:text-white">
-                  {totalStake}
-                </div>
+                <ListCard
+                  item={{
+                    name: deliverable,
+                    element: deliverableList.filter((item) => {
+                      return item.name === deliverable;
+                    })[0].element,
+                  }}
+                  className="rounded-full p-2 text-gray-400 hover:text-white"
+                />
               </div>
             </div>
           </div>

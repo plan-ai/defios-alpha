@@ -10,8 +10,8 @@ interface RepoModalProps {
   setRepo: React.Dispatch<React.SetStateAction<string>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
-  stepOfCreation: number;
-  setStepOfCreation: React.Dispatch<React.SetStateAction<number>>;
+  stepOfCreation?: number;
+  setStepOfCreation?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const dummyData = [
@@ -83,7 +83,12 @@ const RepoModal: React.FC<RepoModalProps> = ({
           if (selectedRepo !== '') {
             setRepo(selectedRepo);
             setModalOpen(false);
-            setStepOfCreation(stepOfCreation + 1);
+            if (
+              stepOfCreation !== undefined &&
+              setStepOfCreation !== undefined
+            ) {
+              setStepOfCreation(stepOfCreation + 1);
+            }
           }
         }}
       >

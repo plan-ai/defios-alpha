@@ -1,10 +1,12 @@
+import React from 'react';
 import Image from '@/components/ui/image';
 import cn from 'classnames';
 import { StaticImageData } from 'next/image';
 type ItemType = {
   id?: string | number;
   name: string;
-  logo: StaticImageData;
+  logo?: StaticImageData;
+  element?: JSX.Element;
   balance?: string;
   coinType?: string;
 };
@@ -37,23 +39,29 @@ export default function ListCard({
   className = 'p-3 tracking-wider rounded-lg sm:p-4',
   variant = 'small',
 }: CardProps) {
-  const { name, logo, balance, coinType } = item ?? {};
+  const { name, logo, balance, coinType, element } = item ?? {};
   return (
     <div
       className={cn(
-        'flex items-center justify-between text-sm font-medium shadow-card bg-light-dark',
+        'flex items-center justify-between bg-light-dark text-sm font-medium shadow-card',
         className
       )}
     >
       <div className="flex items-center">
-        <div className={cn('rounded-full', variants[variant])}>
-          <Image
-            src={logo}
-            alt={name}
-            width={handleImageSize(variant)}
-            height={handleImageSize(variant)}
-          />
-        </div>
+        {logo !== undefined && (
+          <div className={cn('rounded-full', variants[variant])}>
+            <Image
+              src={logo}
+              alt={name}
+              width={handleImageSize(variant)}
+              height={handleImageSize(variant)}
+              className="rounded-full"
+            />
+          </div>
+        )}
+        {element !== undefined && (
+          <div className={cn('rounded-full pl-1', variants[variant])}>{element}</div>
+        )}
 
         <div className="ml-2">
           {name}

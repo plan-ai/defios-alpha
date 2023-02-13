@@ -5,6 +5,7 @@ import Button from '@/components/ui/button/button';
 import Input from '@/components/ui/forms/input';
 import GithubTags from '../ui/tags/github-tags';
 import { detailsTabType } from '@/data/static/roadmap-list';
+import ListCard from '@/components/ui/list-card';
 
 interface RoadmapPopupDetailsProps {
   details: detailsTabType;
@@ -21,6 +22,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
     stakerIncentive,
     raisedAmount,
     toBeRaised,
+    topContributorImg
   } = details;
   return (
     <div className="space-y-6 ">
@@ -37,19 +39,18 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
           Top Contributor
         </h3>
         <div className="flex">
-          <div className="mr-2 rounded-full p-2 text-gray-400 hover:text-white">
-            {topContributor}
-          </div>
+          <ListCard
+            item={{ name: topContributor, logo: topContributorImg }}
+            className="rounded-full p-2 text-gray-400 hover:text-white"
+          />
         </div>
       </div>
       <div className="block">
         <h3 className="text-heading-style mb-2 uppercase text-white">Tag</h3>
         <div className="flex">
-            {tags.map((tag,idx)=>{
-              return(
-                <GithubTags tag={tag} key={idx} />
-              );
-            })}
+          {tags.map((tag, idx) => {
+            return <GithubTags tag={tag} key={idx} />;
+          })}
         </div>
       </div>
       <div className="block">

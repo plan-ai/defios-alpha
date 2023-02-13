@@ -25,6 +25,8 @@ export default function Feeds({ className }: { className?: string }) {
           totalStake={item.totalStake}
           creationDate={item.creationDate}
           details={item.details}
+          deliverable={item.deliverable}
+          status={item.status}
         />
       ))}
     </div>

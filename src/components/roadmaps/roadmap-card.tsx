@@ -26,6 +26,8 @@ export default function RoadmapCard({
   creationDate,
   totalStake,
   details,
+  deliverable,
+  status,
 }: RoadmapCardProps) {
   const [roadmap, setRoadmap] = useState('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
@@ -113,6 +115,8 @@ export default function RoadmapCard({
                   image={image}
                   totalStake={totalStake}
                   details={details || RoadmapList[0].details}
+                  deliverable={deliverable}
+                  status={status}
                 />
               </div>
             </motion.div>
