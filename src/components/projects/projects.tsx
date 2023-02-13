@@ -95,7 +95,7 @@ function StackedSwitch() {
     >
       <div
         className={cn(
-          isStacked ? 'bg-white' : 'bg-gray-500',
+          isStacked ? 'bg-blue-500' : 'bg-gray-500',
           'relative inline-flex h-[22px] w-10 items-center rounded-full transition-colors duration-300'
         )}
       >

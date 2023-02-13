@@ -14,6 +14,8 @@ import { YellowClock } from '../icons/yellow-clock';
 
 import { deliverableList } from '@/data/static/roadmap-list';
 
+import Dag from '@/components/dag/dag';
+
 type RoadmapDetailsProps = roadmapListType;
 
 const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
@@ -32,11 +34,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
       <div className="mr-10 flex h-full w-[55%] flex-col items-center justify-end">
         <div className="flex h-full max-h-full w-full items-center justify-center overflow-hidden">
           <div className="h-full w-full rounded-xl">
-            <Image
-              src={image}
-              alt={name}
-              className="h-full w-full rounded-xl bg-light-dark"
-            />
+            <Dag />
           </div>
         </div>
         {/* <NftFooter
