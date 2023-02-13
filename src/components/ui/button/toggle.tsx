@@ -7,6 +7,8 @@ interface ToggleBtnProps {
   option1: string;
   option2: string;
   className?: string;
+  stateChoosen?: string;
+  setStateChoosen?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ToggleBtn: React.FC<ToggleBtnProps> = ({
@@ -14,14 +16,24 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({
   option2,
   label,
   className,
+  stateChoosen,
+  setStateChoosen,
 }) => {
   const [status, setStatus] = useState(option1);
   return (
     <div className="flex flex-row items-center justify-start">
       {label && <div className="mr-2">{label}:</div>}
       <RadioGroup
-        value={status}
-        onChange={setStatus}
+        value={
+          stateChoosen !== undefined && setStateChoosen !== undefined
+            ? stateChoosen
+            : status
+        }
+        onChange={
+          stateChoosen !== undefined && setStateChoosen !== undefined
+            ? setStateChoosen
+            : setStatus
+        }
         className="flex items-center sm:gap-3"
       >
         <RadioGroup.Option value={option1}>

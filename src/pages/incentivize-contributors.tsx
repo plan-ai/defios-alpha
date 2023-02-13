@@ -1,19 +1,55 @@
+import { useState } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
-
-import RightSideIncentivize from '@/components/incentivize/right-side-incentivize';
+import CreateProject from '@/components/incentivize/createProject';
+import AttachRepo from '@/components/incentivize/attachRepo';
+import ConfigToken from '@/components/incentivize/configToken';
+import CreationProcess from '@/components/incentivize/creationProcess';
+import Button from '@/components/ui/button/button';
 
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
+  const [stepOfCreation, setStepOfCreation] = useState(3);
+  const [reset, setReset] = useState(0);
   return (
     <>
       <NextSeo
         title="Incentivize Contributors"
         description="Defios - Tokenize your Open Source Project."
       />
-      <div className="flex h-full w-full items-center justify-between px-5">
-        <div className="w-[65%]"></div>
-        <RightSideIncentivize />
+      <div className="flex h-full w-full flex-col items-center justify-between px-5">
+        <div className="mb-5 w-[80%]">
+          <Button
+            shape="rounded"
+            size="small"
+            onClick={() => {
+              setStepOfCreation(1);
+              setReset(reset + 1);
+            }}
+          >
+            Reset
+          </Button>
+        </div>
+        <CreateProject
+          setStepOfCreation={setStepOfCreation}
+          stepOfCreation={stepOfCreation}
+          reset={reset}
+        />
+        <AttachRepo
+          setStepOfCreation={setStepOfCreation}
+          stepOfCreation={stepOfCreation}
+          reset={reset}
+        />
+        <ConfigToken
+          setStepOfCreation={setStepOfCreation}
+          stepOfCreation={stepOfCreation}
+          reset={reset}
+        />
+        <CreationProcess
+          setStepOfCreation={setStepOfCreation}
+          stepOfCreation={stepOfCreation}
+          reset={reset}
+        />
       </div>
     </>
   );

@@ -34,8 +34,8 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
         ></iframe>
       </div>
       <div className="flex w-full items-center justify-center">
-        <Input className="w-[55%]" type="email" placeholder={inputPrompt} />
-        <Button shape="rounded">{submitPrompt}</Button>
+        <Input className="w-[55%]" inputClassName='!border-r-0' type="email" placeholder={inputPrompt} />
+        <Button shape="rounded" className='-ml-3'>{submitPrompt}</Button>
       </div>
     </div>
   );

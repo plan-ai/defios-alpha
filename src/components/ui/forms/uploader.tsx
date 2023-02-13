@@ -1,9 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Button from '@/components/ui/button';
+import cn from 'classnames';
+interface UploaderProps {
+  label?: string;
+  useUppercaseLabel?: boolean;
+}
 
-function Uploader() {
+const Uploader: React.FC<UploaderProps> = ({
+  label,
+  useUppercaseLabel = true,
+}) => {
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     // @ts-ignore
@@ -30,34 +38,40 @@ function Uploader() {
     </div>
   ));
 
-  useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks
-    files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  }, [files]);
-
-  console.log(files);
-
   return (
-    <div className="rounded-lg border border-solid p-4 border-gray-700 bg-light-dark sm:p-6">
-      <div
-        {...getRootProps({
-          className:
-            'border border-dashed relative border-gray-700 h-48 flex items-center justify-center rounded-lg',
-        })}
-      >
-        <input {...getInputProps()} />
-        {files.length > 0 ? (
-          thumbs
-        ) : (
-          <div className="text-center">
-            <p className="mb-6 text-sm tracking-tighter text-gray-400">
-              PNG, GIF, WEBP, MP4 or MP3. Max 100mb.
-            </p>
-            <Button>CHOOSE FILE</Button>
-          </div>
-        )}
+    <div className="flex w-3/4 flex-col text-xs sm:text-sm">
+      {label && (
+        <span
+          className={cn(
+            'block font-medium tracking-widest text-gray-100',
+            useUppercaseLabel ? 'mb-2 uppercase sm:mb-3' : 'mb-2'
+          )}
+        >
+          {label}
+        </span>
+      )}
+      <div className="h-12 w-full rounded-lg border border-solid border-gray-700 bg-light-dark">
+        <div
+          {...getRootProps({
+            className: 'h-full flex items-center justify-center rounded-lg',
+          })}
+        >
+          <input {...getInputProps()} />
+          {files.length > 0 ? (
+            thumbs
+          ) : (
+            <div className="flex h-full w-full items-center justify-between text-center">
+              <p className="pl-4 text-sm tracking-tighter text-gray-400">
+                PNG,JPG,SVG. Max 10MB.
+              </p>
+              <Button size="small" className="!h-full" shape="rounded">
+                Upload
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
-}
+};
 export default Uploader;
