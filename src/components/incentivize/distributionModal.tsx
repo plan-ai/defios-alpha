@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Input from '../ui/forms/input';
-import Button from '../ui/button/button';
+import Input from '@/components/ui/forms/input';
+import Button from '@/components/ui/button/button';
 
 interface DistributionModalProps {
   data: any;

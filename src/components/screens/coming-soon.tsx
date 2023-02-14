@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import Input from '@/components/ui/forms/input';
-import Button from '../ui/button/button';
+import Button from '@/components/ui/button/button';
 
 interface ComingSoonProps {
   header: string;

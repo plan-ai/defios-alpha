@@ -3,7 +3,7 @@ import cn from 'classnames';
 import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
 import Button from '@/components/ui/button/button';
 import Input from '@/components/ui/forms/input';
-import GithubTags from '../ui/tags/github-tags';
+import GithubTags from '@/components/ui/tags/github-tags';
 import { detailsTabType } from '@/data/static/roadmap-list';
 import ListCard from '@/components/ui/list-card';
 

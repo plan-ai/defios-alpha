@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
-import DistributionModal from './distributionModal';
+import DistributionModal from '@/components/incentivize/distributionModal';
 
 interface DistributionCardProps {
   username: string;

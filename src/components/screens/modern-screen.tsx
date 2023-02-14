@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { NextSeo } from 'next-seo';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import Button from '../ui/button/button';
+import Button from '@/components/ui/button/button';
 
 export default function ModernScreen() {
   const { data: session } = useSession();

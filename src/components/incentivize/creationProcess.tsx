@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from '../icons/chevron-down';
-import ProcessUI from './process-ui';
-import { Check } from '../icons/check';
+import { ChevronDown } from '@/components/icons/chevron-down';
+import ProcessUI from '@/components/incentivize/process-ui';
+import { Check } from '@/components/icons/check';
 
 interface CreationProcessProps {
   stepOfCreation: number;

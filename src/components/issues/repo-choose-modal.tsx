@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { coinList } from '@/data/static/coin-list';
 import { SearchIcon } from '@/components/icons/search';
-import Button from '../ui/button/button';
+import Button from '@/components/ui/button/button';
 import cn from 'classnames';
 
 interface RepoChooseModalProps {

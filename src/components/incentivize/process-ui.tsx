@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { Check } from '../icons/check';
+import { Check } from '@/components/icons/check';
 
 const Spinner = () => {
   return (

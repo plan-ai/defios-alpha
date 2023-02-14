@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SecurityStatus from '../custom/security-status';
+import SecurityStatus from '@/components/custom/security-status';
 import { coinListBig } from '@/data/static/coin-list';
 interface ProjectListTypes {
   name: string;

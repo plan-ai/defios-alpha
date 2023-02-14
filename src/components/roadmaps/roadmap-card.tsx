@@ -9,7 +9,7 @@ import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import routes from '@/config/routes';
 import { nftData } from '@/data/static/single-nft';
-import RoadmapDetails from './roadmap-details';
+import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import {
   detailsType,
   roadmapListType,

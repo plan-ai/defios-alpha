@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useState } from 'react';
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
-import Avatar from './avatar';
+import Avatar from '@/components/ui/avatar';
 
 const data = [
   {

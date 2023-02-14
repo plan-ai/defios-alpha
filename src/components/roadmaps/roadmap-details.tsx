@@ -9,8 +9,8 @@ import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
 import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
 
 import ListCard from '@/components/ui/list-card';
-import { LockIcon } from '../ui/icons/lock';
-import { YellowClock } from '../icons/yellow-clock';
+import { LockIcon } from '@/components/ui/icons/lock';
+import { YellowClock } from '@/components/icons/yellow-clock';
 
 import { deliverableList } from '@/data/static/roadmap-list';
 

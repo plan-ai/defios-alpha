@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
-import RepoModal from '../repo-choose/repo-modal';
+import RepoModal from '@/components/repo-choose/repo-modal';
 import Image from 'next/image';
 import GithubLogo from '@/assets/images/github-mark-white.svg';
-import { Check } from '../icons/check';
+import { Check } from '@/components/icons/check';
 
 interface AttachRepoProps {
   stepOfCreation: number;

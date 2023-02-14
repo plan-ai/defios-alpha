@@ -9,7 +9,7 @@ import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
 import TagsDropDown from '@/components/ui/tags/tags-dropdown';
 import GithubTags from '@/components/ui/tags/github-tags';
-import RepoChooseModal from './repo-choose-modal';
+import RepoChooseModal from '@/components/issues/repo-choose-modal';
 import GithubLogo from '@/assets/images/github-mark-white.svg';
 import Image from 'next/image';
 

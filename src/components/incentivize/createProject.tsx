@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Input from '../ui/forms/input';
-import Button from '../ui/button/button';
-import { ChevronDown } from '../icons/chevron-down';
-import { Check } from '../icons/check';
+import Input from '@/components/ui/forms/input';
+import Button from '@/components/ui/button/button';
+import { ChevronDown } from '@/components/icons/chevron-down';
+import { Check } from '@/components/icons/check';
 
 interface CreateProjectProps {
   stepOfCreation: number;
   setStepOfCreation: React.Dispatch<React.SetStateAction<number>>;
-  reset:number
+  reset: number;
 }
 
 const CreateProject: React.FC<CreateProjectProps> = ({
   stepOfCreation,
   setStepOfCreation,
-  reset
+  reset,
 }) => {
   const [isExpand, setIsExpand] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [ownerCut, setOwnerCut] = useState(0);
 
-  useEffect(()=>{
+  useEffect(() => {
     setIsExpand(false);
     setProjectName('');
-    setOwnerCut(0)
-  },[reset])
+    setOwnerCut(0);
+  }, [reset]);
   useEffect(() => {
     if (stepOfCreation === 1) {
       setIsExpand(true);
@@ -54,7 +54,7 @@ const CreateProject: React.FC<CreateProjectProps> = ({
           </div>
         )}
         {stepOfCreation > 1 && (
-          <div className='flex items-center rounded-full justify-center w-8 h-8 bg-blue-500' >
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
             <Check />
           </div>
         )}
@@ -96,7 +96,7 @@ const CreateProject: React.FC<CreateProjectProps> = ({
                   onClick={() => {
                     if (projectName !== '' && ownerCut !== 0) {
                       setIsExpand(!isExpand);
-                      setStepOfCreation(stepOfCreation+1);
+                      setStepOfCreation(stepOfCreation + 1);
                     }
                   }}
                   className="mt-4"

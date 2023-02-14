@@ -4,8 +4,8 @@ import { authorData } from '@/data/static/author';
 import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
 import ProfileTab from '@/components/profile/profile-tab';
-import ToggleBtn from '../ui/button/toggle';
-import PortfolioCreator from './portfolio-creator';
+import ToggleBtn from '@/components/ui/button/toggle';
+import PortfolioCreator from '@/components/profile/portfolio-creator';
 
 export default function Profile() {
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
@@ -86,7 +86,12 @@ export default function Profile() {
           <div className="mb-4 text-sm font-medium uppercase tracking-wider text-white">
             Portfolio
           </div>
-          <ToggleBtn label="Theme" option1={'Basic'} option2={'Advanced'} />
+          <ToggleBtn
+            className="w-24"
+            label="Theme"
+            option1={'Basic'}
+            option2={'Advanced'}
+          />
           <PortfolioCreator isGenerated={false} />
         </div>
       </div>

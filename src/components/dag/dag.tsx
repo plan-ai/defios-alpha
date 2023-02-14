@@ -9,7 +9,7 @@ import ReactFlow, {
 
 import 'reactflow/dist/base.css';
 
-import CustomNode from './custom-node';
+import CustomNode from '@/components/dag/custom-node';
 
 const nodeTypes = {
   custom: CustomNode,

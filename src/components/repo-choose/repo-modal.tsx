@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Input from '../ui/forms/input';
-import { SearchIcon } from '../icons/search';
-import ToggleBtn from '../ui/button/toggle';
-import RepoItem from './repo-item';
-import Button from '../ui/button/button';
+import Input from '@/components/ui/forms/input';
+import { SearchIcon } from '@/components/icons/search';
+import ToggleBtn from '@/components/ui/button/toggle';
+import RepoItem from '@/components/repo-choose/repo-item';
+import Button from '@/components/ui/button/button';
 
 interface RepoModalProps {
   repo: string;

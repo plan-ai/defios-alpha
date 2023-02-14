@@ -1,15 +1,15 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Input from '../ui/forms/input';
-import Button from '../ui/button/button';
-import { ChevronDown } from '../icons/chevron-down';
-import ToggleBtn from '../ui/button/toggle';
-import Uploader from '../ui/forms/uploader';
+import Input from '@/components/ui/forms/input';
+import Button from '@/components/ui/button/button';
+import { ChevronDown } from '@/components/icons/chevron-down';
+import ToggleBtn from '@/components/ui/button/toggle';
+import Uploader from '@/components/ui/forms/uploader';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import cn from 'classnames';
-import { Check } from '../icons/check';
-import DistributionSlider from './distribution-slider';
+import { Check } from '@/components/icons/check';
+import DistributionSlider from '@/components/incentivize/distribution-slider';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
