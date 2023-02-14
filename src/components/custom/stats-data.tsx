@@ -1,11 +1,11 @@
 import React from 'react';
 import { BriefcaseIcon } from '@/components/icons/briefcase';
-import { PoolIcon } from '@/components/ui/icons/pool';
-import { LockIcon } from '@/components/ui/icons/lock';
-import { WenchIcon } from '@/components/ui/icons/wench';
-import { BankNotesIcon } from '@/components/ui/icons/banknotes';
-import { StethoscopeIcon } from '@/components/ui/icons/stethoscope';
-import { HandshakeIcon } from '@/components/ui/icons/handshake';
+import { PoolIcon } from '@/components/icons/pool';
+import { LockIcon } from '@/components/icons/lock';
+import { WenchIcon } from '@/components/icons/wench';
+import { BankNotesIcon } from '@/components/icons/banknotes';
+import { StethoscopeIcon } from '@/components/icons/stethoscope';
+import { HandshakeIcon } from '@/components/icons/handshake';
 import cn from 'classnames';
 
 interface StatsDataProps {

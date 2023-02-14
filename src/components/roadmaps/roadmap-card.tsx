@@ -3,15 +3,12 @@ import { useState, useRef } from 'react';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { Verified } from '@/components/icons/verified';
 import Avatar from '@/components/ui/avatar';
-import { StaticImageData } from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import routes from '@/config/routes';
-import { nftData } from '@/data/static/single-nft';
 import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import {
-  detailsType,
   roadmapListType,
   RoadmapList,
 } from '@/data/static/roadmap-list';

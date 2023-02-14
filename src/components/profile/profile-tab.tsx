@@ -1,18 +1,12 @@
 import cn from 'classnames';
-import ListCard from '@/components/ui/list-card';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import TransactionSearchForm from '@/components/author/transaction-search-form';
-import ContributionsHistory from '@/components/contributions/contributions-history';
-import CollectionCard from '@/components/ui/collection-card';
+import ContributionsHistory from '@/components/profile/contributions-history';
+import ProfileProjectCard from '@/components/profile/profile-project-card';
 // static data
-import { collections } from '@/data/static/collections';
+import { profileProjects } from '@/data/static/profile-projects';
 import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
-import {
-  authorWallets,
-  authorNetworks,
-  authorProtocols,
-} from '@/data/static/author-profile';
 
 const tabMenu = [
   {
@@ -41,10 +35,10 @@ export default function ProfileTab() {
             'md:grid-cols-1'
           )}
         >
-          {collections?.map((collection) => (
-            <CollectionCard
-              item={collection}
-              key={`collection-key-${collection?.id}`}
+          {profileProjects?.map((project) => (
+            <ProfileProjectCard
+              item={project}
+              key={`project-key-${project?.id}`}
             />
           ))}
         </div>

@@ -1,4 +1,4 @@
-import ContributionsHistoryCard from '@/components/contributions/contributions-history-card';
+import ContributionsHistoryCard from '@/components/profile/contributions-history-card';
 // static data
 import { contributionsHistory } from '@/data/static/contributions';
 

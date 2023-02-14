@@ -8,7 +8,7 @@ export default function ModernScreen() {
   return (
     <>
       <NextSeo
-        title="Criptic"
+        title="DefiOS"
         description="Defios - Tokenize your Open Source Project."
       />
       <div className="mb-5 flex w-full items-center justify-center">

@@ -7,7 +7,8 @@ import Hamburger from '@/components/ui/hamburger';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
-import WalletConnect from '@/components/nft/wallet-connect';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 import routes from '@/config/routes';
 
 function NotificationButton() {
@@ -32,7 +33,7 @@ function HeaderRightArea() {
   return (
     <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
       <NotificationButton />
-      <WalletConnect />
+      <WalletMultiButton className="rounded-full bg-[#92A9FE]" />
     </div>
   );
 }

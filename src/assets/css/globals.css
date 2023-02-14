@@ -5,9 +5,10 @@
 @layer base {
   :root {
     --color-brand: 50 55 67;
+    color: white;
   }
   html {
-    @apply bg-body;
+    @apply bg-body text-white;
     -webkit-tap-highlight-color: transparent;
   }
   html.dark {

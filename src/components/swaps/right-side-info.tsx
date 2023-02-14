@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import Scrollbar from '@/components/ui/scrollbar';
 import Avatar from '@/components/ui/avatar';
-import WalletCard from '@/components/ui/wallet-card-two';
+import HoldersChart from '@/components/swaps/holders-chart';
 //images
 import AuthorImage from '@/assets/images/coin/binance.svg';
 import TransactionInfo from '@/components/ui/transaction-info';
@@ -30,11 +30,31 @@ export default function RightSideInfo({ className }: { className?: string }) {
                 label={'Coin Name'}
                 value={'Binance'}
               />
-              <TransactionInfo className="my-2" label={'Created By'} value={'never2average'} />
-              <TransactionInfo className="my-2" label={'Created At'}  value={'10 days ago'}/>
-              <TransactionInfo className="my-2" label={'Total Supply'} value={800}/>
-              <TransactionInfo className="my-2" label={'Circulating Supply'} value={500} />
-              <TransactionInfo className="my-2" label={'Source Code'} value={'github'} />
+              <TransactionInfo
+                className="my-2"
+                label={'Created By'}
+                value={'never2average'}
+              />
+              <TransactionInfo
+                className="my-2"
+                label={'Created At'}
+                value={'10 days ago'}
+              />
+              <TransactionInfo
+                className="my-2"
+                label={'Total Supply'}
+                value={800}
+              />
+              <TransactionInfo
+                className="my-2"
+                label={'Circulating Supply'}
+                value={500}
+              />
+              <TransactionInfo
+                className="my-2"
+                label={'Source Code'}
+                value={'github'}
+              />
               <div className="my-2">Last Traded Price:</div>
               <PriceChart />
               <div className="my-2">Repo Activity:</div>
@@ -45,7 +65,7 @@ export default function RightSideInfo({ className }: { className?: string }) {
               <span className="-mx-6 block border-t border-dashed border-t-gray-700 3xl:-mx-8" />
             </div>
             <div className="mt-10 w-full sm:mt-0 sm:w-[48%] lg:mt-8 lg:w-full">
-              <WalletCard />
+              <HoldersChart />
             </div>
           </div>
         </div>

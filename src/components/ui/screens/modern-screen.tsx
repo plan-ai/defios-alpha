@@ -18,7 +18,7 @@ export default function ModernScreen() {
   return (
     <>
       <NextSeo
-        title="Criptic"
+        title="DefiOS"
         description="Defios - Tokenize your Open Source Project."
       />
       <div className="flex flex-wrap">

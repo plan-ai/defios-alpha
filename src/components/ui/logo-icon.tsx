@@ -8,7 +8,7 @@ const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   return (
     <div className="flex cursor-pointer outline-none" {...props}>
       <span className="relative flex overflow-hidden">
-        {isMounted && <Image src={darkLogo} alt="Criptic" priority />}
+        {isMounted && <Image src={darkLogo} alt="DefiOS" priority />}
       </span>
     </div>
   );

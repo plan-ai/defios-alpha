@@ -1,12 +1,10 @@
 import type { AppProps } from 'next/app';
 import type { NextPageWithLayout } from '@/types';
 import Head from 'next/head';
-import { ThemeProvider } from 'next-themes';
 import ModalsContainer from '@/components/modal-views/container';
 import DrawersContainer from '@/components/drawer-views/container';
-import { WalletProvider } from '@/lib/hooks/use-connect';
+import WalletContextProvider from '@/components/wallet/WalletContextProvider';
 import { SessionProvider } from 'next-auth/react';
-// import 'overlayscrollbars/css/OverlayScrollbars.css';
 // base css file
 import 'swiper/css';
 import '@/assets/css/scrollbar.css';
@@ -34,17 +32,11 @@ function CustomApp({
         <title>Defios - Tokenize your Open Source Project.</title>
       </Head>
       <SessionProvider session={session}>
-        <ThemeProvider
-          attribute="class"
-          enableSystem={false}
-          defaultTheme="dark"
-        >
-          <WalletProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <ModalsContainer />
-            <DrawersContainer />
-          </WalletProvider>
-        </ThemeProvider>
+        <WalletContextProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <ModalsContainer />
+          <DrawersContainer />
+        </WalletContextProvider>
       </SessionProvider>
     </>
   );

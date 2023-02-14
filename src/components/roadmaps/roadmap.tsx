@@ -1,7 +1,7 @@
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
-import { Filters, GridSwitcher, SortList } from '@/components/roadmaps/filters';
+import { Filters, GridSwitcher } from '@/components/roadmaps/filters';
 import { OptionIcon } from '@/components/icons/option';
 import { SearchIcon } from '@/components/icons/search';
 

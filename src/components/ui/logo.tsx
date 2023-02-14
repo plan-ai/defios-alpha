@@ -14,7 +14,7 @@ export default function Logo() {
       className="flex w-28 outline-none sm:w-32 4xl:w-36"
     >
       <span className="relative flex overflow-hidden">
-        {isMounted && <Image src={darkLogo} alt="Criptic" priority />}
+        {isMounted && <Image src={darkLogo} alt="DefiOS" priority />}
       </span>
     </AnchorLink>
   );

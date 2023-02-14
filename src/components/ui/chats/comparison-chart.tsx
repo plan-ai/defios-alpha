@@ -202,7 +202,7 @@ export default function ComparisonChart() {
               content={<></>}
               cursor={{
                 strokeWidth: 0,
-                fill: theme === 'dark' ? '#1F2937' : '#f9fafb',
+                fill: '#1F2937',
               }}
             />
             <CartesianGrid

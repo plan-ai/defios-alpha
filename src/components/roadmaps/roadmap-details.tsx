@@ -1,6 +1,5 @@
 import React from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
-import Image from '@/components/ui/image';
 import NftFooter from '@/components/nft/nft-footer';
 import cn from 'classnames';
 import RoadmapPopupDetails from '@/components/roadmaps/roadmap-popup-details';
@@ -9,7 +8,7 @@ import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
 import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
 
 import ListCard from '@/components/ui/list-card';
-import { LockIcon } from '@/components/ui/icons/lock';
+import { LockIcon } from '@/components/icons/lock';
 import { YellowClock } from '@/components/icons/yellow-clock';
 
 import { deliverableList } from '@/data/static/roadmap-list';

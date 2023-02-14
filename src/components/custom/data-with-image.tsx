@@ -1,11 +1,11 @@
 import React from 'react';
 import { StaticImageData } from 'next/image';
-import { WenchIcon } from '@/components/ui/icons/wench';
+import { WenchIcon } from '@/components/icons/wench';
 import { BriefcaseIcon } from '@/components/icons/briefcase';
-import { HandshakeIcon } from '@/components/ui/icons/handshake';
-import { StethoscopeIcon } from '@/components/ui/icons/stethoscope';
+import { HandshakeIcon } from '@/components/icons/handshake';
+import { StethoscopeIcon } from '@/components/icons/stethoscope';
 import { LinkIcon } from '@/components/icons/link-icon';
-import { BankNotesIcon } from '@/components/ui/icons/banknotes';
+import { BankNotesIcon } from '@/components/icons/banknotes';
 import { TrophyIcon } from '@/components/icons/trophy';
 import { CodeIcon } from '@/components/icons/code';
 import { PresentationChartIcon } from '@/components/icons/presentation-chart';

@@ -3,7 +3,7 @@ import Button from '@/components/ui/button/button';
 import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
 import { useCopyToClipboard } from 'react-use';
-import { Refresh } from '@/components/ui/icons/refresh';
+import { Refresh } from '@/components/icons/refresh';
 
 interface PortfolioCreatorProps {
   isGenerated: boolean;

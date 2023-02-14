@@ -2,7 +2,7 @@ import React from 'react';
 import GithubLogo from '@/assets/images/github-mark-white.svg';
 import Image from 'next/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
-import { LockIcon } from '@/components/ui/icons/lock';
+import { LockIcon } from '@/components/icons/lock';
 import { StarIcon } from '@/components/icons/star';
 import { ForkIcon } from '@/components/icons/fork-icon';
 import { LinkIcon } from '@/components/icons/link-icon';
