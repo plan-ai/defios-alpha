@@ -1,27 +1,39 @@
 import cn from 'classnames';
 import { NextSeo } from 'next-seo';
-import CoinSlider from '@/components/ui/coin-card';
-import OverviewChart from '@/components/ui/chats/overview-chart';
-import LiquidityChart from '@/components/ui/chats/liquidity-chart';
-import VolumeChart from '@/components/ui/chats/volume-chart';
-import TopPools from '@/components/ui/top-pools';
-import TransactionTable from '@/components/transaction/transaction-table';
-import TopCurrencyTable from '@/components/top-currency/currency-table';
-import { coinSlideData } from '@/data/static/coin-slide-data';
-import Avatar from '@/components/ui/avatar';
-import TopupButton from '@/components/ui/topup-button';
-
-//images
-import AuthorImage from '@/assets/images/author.jpg';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import Button from '../ui/button/button';
 
 export default function ModernScreen() {
+  const { data: session } = useSession();
   return (
     <>
       <NextSeo
         title="Criptic"
         description="Defios - Tokenize your Open Source Project."
       />
-      <div>HomePage</div>
+      <div className="mb-5 flex w-full items-center justify-center">
+        HomePage
+      </div>
+      <div className="flex h-full w-full items-center justify-center gap-10">
+        {!session && (
+          <Button
+            onClick={() =>
+              signIn('github', {
+                callbackUrl: `${window.location.origin}`,
+              })
+            }
+            shape="rounded"
+            color="info"
+          >
+            Sign In
+          </Button>
+        )}
+        {session && (
+          <Button onClick={() => signOut()} shape="rounded">
+            Sign Out
+          </Button>
+        )}
+      </div>
     </>
   );
 }
