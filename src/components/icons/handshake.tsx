@@ -4,7 +4,7 @@ export function HandshakeIcon(props: React.SVGAttributes<{}>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 512"
       fill="#e5e7eb"
-      stroke-width="1"
+      strokeWidth="1"
       stroke="currentColor"
       className="h-5 w-5"
     >
