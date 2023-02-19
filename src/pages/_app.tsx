@@ -10,6 +10,8 @@ import 'swiper/css';
 import '@/assets/css/scrollbar.css';
 import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
+import { Provider } from 'react-redux';
+import store from '../store/store';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -31,13 +33,15 @@ function CustomApp({
         />
         <title>Defios - Tokenize your Open Source Project.</title>
       </Head>
-      <SessionProvider session={session}>
-        <WalletContextProvider>
-          {getLayout(<Component {...pageProps} />)}
-          <ModalsContainer />
-          <DrawersContainer />
-        </WalletContextProvider>
-      </SessionProvider>
+      <Provider store={store}>
+        <SessionProvider session={session}>
+          <WalletContextProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <ModalsContainer />
+            <DrawersContainer />
+          </WalletContextProvider>
+        </SessionProvider>
+      </Provider>
     </>
   );
 }

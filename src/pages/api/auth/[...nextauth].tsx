@@ -24,20 +24,18 @@ export default NextAuth({
     buttonText: 'Sign in with Github', // Text to display on the sign in button
   },
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       // Persist the OAuth access_token to the token right after signin
       if (account) {
         token.accessToken = account.access_token;
+        token.uid = user?.id;
       }
       return token;
     },
-    async session({
-      session,
-      token,
-      // user
-    }) {
+    async session({ session, token }) {
       // Send properties to the client, like an access_token from a provider.
       (session as any).accessToken = token.accessToken;
+      (session as any).user.id = token.uid;
       return session;
     },
   },
