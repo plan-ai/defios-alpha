@@ -7,7 +7,6 @@ import { DRAWER_VIEW, useDrawer } from '@/components/drawer-views/context';
 // dynamic imports
 const Sidebar = dynamic(() => import('@/layouts/sidebar/_default'));
 const DrawerFilters = dynamic(() => import('@/components/roadmaps/filters'));
-const DrawerMenu = dynamic(() => import('@/layouts/sidebar/_layout-menu'));
 const PreviewContent = dynamic(
   () => import('@/components/create-nft/nft-preview-content')
 );
@@ -21,7 +20,7 @@ function renderDrawerContent(view: DRAWER_VIEW | string) {
     case 'DRAWER_PREVIEW_NFT':
       return <PreviewContent />;
     default:
-      return <DrawerMenu />;
+      return <Sidebar />;
   }
 }
 

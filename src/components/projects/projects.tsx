@@ -116,30 +116,13 @@ function StackedSwitch() {
 }
 
 function Status() {
-  const [status, setStatus] = useState('my projects');
+  const [status, setStatus] = useState('global projects');
   return (
     <RadioGroup
       value={status}
       onChange={setStatus}
       className="flex items-center sm:gap-3"
     >
-      <RadioGroup.Option value="my projects">
-        {({ checked }) => (
-          <span
-            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
-              checked ? 'text-white' : 'text-white/50'
-            }`}
-          >
-            {checked && (
-              <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
-                layoutId="statusIndicator"
-              />
-            )}
-            <span className="relative">My Projects</span>
-          </span>
-        )}
-      </RadioGroup.Option>
       <RadioGroup.Option value="global projects">
         {({ checked }) => (
           <span
@@ -154,6 +137,23 @@ function Status() {
               />
             )}
             <span className="relative">Global Projects</span>
+          </span>
+        )}
+      </RadioGroup.Option>
+      <RadioGroup.Option value="my projects">
+        {({ checked }) => (
+          <span
+            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
+              checked ? 'text-white' : 'text-white/50'
+            }`}
+          >
+            {checked && (
+              <motion.span
+                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
+                layoutId="statusIndicator"
+              />
+            )}
+            <span className="relative">My Projects</span>
           </span>
         )}
       </RadioGroup.Option>
@@ -249,15 +249,20 @@ export default function Projects() {
               </div>
             </div>
           </div>
-          <div className="mb-6 grid grid-cols-2 gap-6 text-sm">
+          <div className="mb-6 grid grid-cols-3 gap-3 text-sm">
             <ActiveLink href={routes.projects}>
-              <Button shape="rounded" fullWidth size="large">
+              <Button shape="rounded" fullWidth size="medium">
                 Explore Related Roadmaps
               </Button>
             </ActiveLink>
             <ActiveLink href={routes.projects}>
-              <Button shape="rounded" color="info" fullWidth size="large">
+              <Button shape="rounded" color="info" fullWidth size="medium">
                 Explore Open Issues
+              </Button>
+            </ActiveLink>
+            <ActiveLink href={routes.projects}>
+              <Button shape="rounded" color="success" fullWidth size="medium">
+                Claim Pending Tokens
               </Button>
             </ActiveLink>
           </div>

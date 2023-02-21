@@ -13,6 +13,8 @@ import '@/assets/css/range-slider.css';
 import { Provider } from 'react-redux';
 import store from '../store/store';
 
+import '../utils/firebase';
+
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };

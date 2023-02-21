@@ -1,24 +1,21 @@
 import cn from 'classnames';
-import AnchorLink from '@/components/ui/links/anchor-link';
-import Image from '@/components/ui/image';
-import { StaticImageData } from 'next/image';
-
-type notificationType =
-  | 'issue-raised'
-  | 'issue-staked'
-  | 'issue-voting-open'
-  | 'issue-closed'
-  | 'new-obj-added-on-roadmap';
-type actor = {
-  name: string;
-  avatar: StaticImageData;
-};
-
+import Image from 'next/image';
 export interface NotificationCardProps {
-  type: notificationType;
-  actor: actor;
-  time: string;
-  url: string;
+  notif_action_api_params: {
+    first_item: string;
+  };
+  notif_action_path: string;
+  notif_action_state_params: {
+    first_expanded: boolean;
+  };
+  notif_content: string;
+  notif_post_time: string;
+  notif_read_status: boolean;
+  notif_type: string;
+  reciever: string;
+  sender_id: string;
+  sender_name: string;
+  sender_profile_pic: string;
 }
 
 const notifMessages = {
@@ -30,42 +27,61 @@ const notifMessages = {
 };
 
 export default function NotificationCard({
-  type,
-  actor,
-  time,
-  url,
+  notif_action_api_params,
+  notif_action_path,
+  notif_action_state_params,
+  notif_content,
+  notif_post_time,
+  notif_read_status,
+  notif_type,
+  reciever,
+  sender_id,
+  sender_name,
+  sender_profile_pic,
 }: NotificationCardProps) {
+  const dateFormatted = new Date(notif_post_time).toLocaleDateString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+  const timeFormatted = new Date(notif_post_time).toLocaleTimeString('en-US', {
+    timeStyle: 'short',
+  });
   return (
-    <AnchorLink
-      href={url}
-      className="mb-4 flex items-center rounded-lg bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5"
-    >
+    <div className="mb-4 flex items-start rounded-lg bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5">
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full sm:h-12 sm:w-12">
         <Image
-          src={actor.avatar}
-          alt={actor.name}
-          placeholder="blur"
+          src={sender_profile_pic || ''}
+          alt={sender_name || ''}
           layout="fill"
           objectFit="cover"
         />
       </div>
       <div className="ml-3 sm:ml-4">
-        <div
-          className={cn('text-xs tracking-tighter text-gray-400 sm:text-sm', {
-            'text-[#e34234]': type == 'issue-raised',
-            'text-[#009e60]': type == 'issue-staked',
-            'text-[#FFFF00]': type == 'issue-voting-open',
-            'text-[#2a52be]': type == 'issue-closed',
-            'text-[#ffa500]': type == 'new-obj-added-on-roadmap',
-          })}
-        >
-          <span className="mr-2 font-medium text-white">@{actor.name}</span>
-          {notifMessages[type]}
+        <div className="flex items-center justify-between text-xs tracking-tighter sm:text-sm">
+          <div
+            className={cn({
+              'text-red-500': notif_type == 'opened_new_issue',
+              'text-green-500': notif_type == 'staked_initial_amount',
+              'text-yellow-400': notif_type == 'voting_started',
+              'text-emerald-400': notif_type == 'vote_cast',
+              'text-orange-500': notif_type == 'voting_closed',
+              'text-blue-500': notif_type == 'issue_closed',
+            })}
+          >
+            <span className="mr-2 font-medium text-white">{sender_name}</span>
+            {notif_type}
+          </div>
+          <div className="text-xs tracking-tighter text-gray-400">
+            {dateFormatted} | {timeFormatted}
+          </div>
         </div>
-        <div className="mt-1 text-xs tracking-tighter text-gray-400 sm:text-sm">
-          {time}
+
+        <div className="mt-2 text-sm tracking-tighter text-gray-300">
+          {notif_content}
         </div>
       </div>
-    </AnchorLink>
+    </div>
   );
 }
