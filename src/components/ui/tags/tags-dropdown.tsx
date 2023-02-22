@@ -35,11 +35,11 @@ const TagsDropDown: React.FC<TagsDropDownProps> = ({ handleTagSet, tags }) => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-4"
         >
-          <Menu.Items className="absolute left-0 z-20 mt-2 w-52 origin-top-right rounded-lg bg-gray-800 py-3 shadow-large">
-            <div className="px-3">
+          <Menu.Items className="absolute left-0 z-20 mt-2 w-56 origin-top-right rounded-lg bg-gray-800 py-2 shadow-large">
+            <div className="px-2">
               {tagsToShow.map((tag, idx) => (
                 <Menu.Item key={idx}>
-                  <div className="py-1" onClick={() => handleTagSet(tag)}>
+                  <div className="pb-0.5" onClick={() => handleTagSet(tag)}>
                     <GithubTags tag={tag} />
                   </div>
                 </Menu.Item>

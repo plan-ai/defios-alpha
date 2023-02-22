@@ -1,8 +1,11 @@
 import cn from 'classnames';
 import Image from 'next/image';
+import { useAppDispatch } from '@/store/store';
+import { clicked } from '@/store/notifClickSlice';
+import { useRouter } from 'next/router';
 export interface NotificationCardProps {
   notif_action_api_params: {
-    first_item: string;
+    searched: string;
   };
   notif_action_path: string;
   notif_action_state_params: {
@@ -48,8 +51,32 @@ export default function NotificationCard({
   const timeFormatted = new Date(notif_post_time).toLocaleTimeString('en-US', {
     timeStyle: 'short',
   });
+
+  const notifType = notif_type
+    .split('_')
+    .map((word: string) => {
+      return word[0].toUpperCase() + word.substring(1);
+    })
+    .join(' ');
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const onClickHandler = () => {
+    const payload = {
+      searchQuery: notif_action_api_params.searched,
+      setSearchQuery: true,
+      expandFirst: notif_action_state_params.first_expanded,
+    };
+    dispatch(clicked(payload));
+    router.push(notif_action_path);
+  };
+
   return (
-    <div className="mb-4 flex items-start rounded-lg bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5">
+    <div
+      onClick={onClickHandler}
+      className="mb-4 flex items-start rounded-lg bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5"
+    >
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full sm:h-12 sm:w-12">
         <Image
           src={sender_profile_pic || ''}
@@ -71,7 +98,7 @@ export default function NotificationCard({
             })}
           >
             <span className="mr-2 font-medium text-white">{sender_name}</span>
-            {notif_type}
+            {notifType}
           </div>
           <div className="text-xs tracking-tighter text-gray-400">
             {dateFormatted} | {timeFormatted}

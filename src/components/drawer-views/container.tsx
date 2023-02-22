@@ -1,5 +1,6 @@
 import { Fragment, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import cn from 'classnames';
 import { useRouter } from 'next/router';
 import { Dialog } from '@/components/ui/dialog';
 import { Transition } from '@/components/ui/transition';
@@ -10,6 +11,9 @@ const DrawerFilters = dynamic(() => import('@/components/roadmaps/filters'));
 const PreviewContent = dynamic(
   () => import('@/components/create-nft/nft-preview-content')
 );
+const RightSideIssues = dynamic(
+  () => import('@/components/issues/right-side-issues')
+);
 
 function renderDrawerContent(view: DRAWER_VIEW | string) {
   switch (view) {
@@ -19,6 +23,8 @@ function renderDrawerContent(view: DRAWER_VIEW | string) {
       return <DrawerFilters />;
     case 'DRAWER_PREVIEW_NFT':
       return <PreviewContent />;
+    case 'ISSUE_CREATE':
+      return <RightSideIssues />;
     default:
       return <Sidebar />;
   }
@@ -26,7 +32,7 @@ function renderDrawerContent(view: DRAWER_VIEW | string) {
 
 export default function DrawersContainer() {
   const router = useRouter();
-  const { view, isOpen, closeDrawer } = useDrawer();
+  const { view, isOpen, closeDrawer, direction, blur } = useDrawer();
   useEffect(() => {
     // close search modal when route change
     router.events.on('routeChangeStart', closeDrawer);
@@ -51,18 +57,28 @@ export default function DrawersContainer() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Overlay className="fixed inset-0 bg-gray-700 bg-opacity-60 backdrop-blur" />
+          <Dialog.Overlay
+            className={cn('fixed inset-0', {
+              'bg-gray-700 bg-opacity-60 backdrop-blur': blur == 'glass',
+              'bg-gray-700 bg-opacity-30': blur == 'transparent-glass',
+              'bg-gray-700 bg-opacity-0': blur == 'transparent',
+            })}
+          />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
           enter="transform transition ease-out duration-300"
-          enterFrom="-translate-x-full"
+          enterFrom={
+            direction == 'right' ? 'translate-x-full' : '-translate-x-full'
+          }
           enterTo="translate-x-0"
           leave="transform transition ease-in duration-300"
           leaveFrom="translate-x-0"
-          leaveTo="-translate-x-full"
+          leaveTo={
+            direction == 'right' ? 'translate-x-full' : '-translate-x-full'
+          }
         >
-          <div className="fixed inset-y-0 left-0 flex w-full max-w-full xs:w-auto">
+          <div className="fixed inset-y-0 right-0 flex w-full max-w-full xs:w-auto">
             {view && renderDrawerContent(view)}
           </div>
         </Transition.Child>

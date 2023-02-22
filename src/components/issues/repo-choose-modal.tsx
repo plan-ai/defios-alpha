@@ -3,7 +3,7 @@ import { coinList } from '@/data/static/coin-list';
 import { SearchIcon } from '@/components/icons/search';
 import Button from '@/components/ui/button/button';
 import cn from 'classnames';
-
+import AnchorLink from '../ui/links/anchor-link';
 interface RepoChooseModalProps {
   repo: string;
   setRepo: React.Dispatch<React.SetStateAction<string>>;
@@ -54,14 +54,14 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
   return (
     <div className="w-full rounded-lg bg-dark text-sm shadow-large xs:w-[400px]">
       <h2 className="p-6 text-lg font-medium uppercase text-white">
-        Choose Repository
+        Choose Project
       </h2>
       <div className="relative">
         <SearchIcon className="absolute left-6 h-full text-gray-700" />
         <input
           type="search"
           autoFocus={true}
-          placeholder="Search Repository"
+          placeholder="Search Project"
           className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-sm focus:border-gray-600 focus:ring-0"
         />
       </div>
@@ -88,16 +88,29 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
             );
           })}
       </div>
-      <div className="w-full p-4">
+      <div className="w-full p-4 pb-0">
         <Button
           onClick={handleSubmit}
           shape="rounded"
           size="small"
-          color="info"
+          color="success"
           fullWidth
         >
-          Confirm Selected Repository
+          Confirm Selected Project
         </Button>
+      </div>
+      <div className="w-full p-4">
+        <AnchorLink href="/incentivize-contributors">
+          <Button
+            onClick={handleSubmit}
+            shape="rounded"
+            size="small"
+            color="info"
+            fullWidth
+          >
+            Can&rsquo;t find project? Create One
+          </Button>
+        </AnchorLink>
       </div>
     </div>
   );

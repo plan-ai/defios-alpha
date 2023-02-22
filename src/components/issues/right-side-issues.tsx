@@ -35,84 +35,84 @@ export default function RightSideIssues({ className }: { className?: string }) {
   useLockBodyScroll(modalOpen);
 
   return (
-    <aside
-      className={cn(
-        'fixed top-0 right-0 z-20 h-full w-1/5 border-dashed border-gray-700 lg:border-l xl:pt-20',
-        className
-      )}
-    >
-      <Scrollbar style={{ height: 'calc(100%)' }}>
-        <div className="relative z-20 h-screen pb-5">
-          <div className="flex h-full flex-col overflow-x-hidden px-5 pb-32">
-            <Button
-              onClick={() => setModalOpen(true)}
-              className="my-2 w-full"
-              shape="rounded"
-            >
-              {repo !== '' && (
-                <div className="flex">
-                  <Image
-                    src={GithubLogo}
-                    alt="github logo"
-                    className="mr-1 h-4 w-4"
-                  />
-                  <div className="text-xs">
-                    {repo.replace('https://github.com', '')}
+    <>
+      <div className="absolute top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
+        <Scrollbar style={{ height: 'calc(100%)' }}>
+          <div className="relative z-20 h-screen pb-5">
+            <div className="flex h-full flex-col overflow-x-hidden px-5 pb-32">
+              <Button
+                onClick={() => setModalOpen(true)}
+                className="my-2 w-full"
+                shape="rounded"
+              >
+                {repo !== '' && (
+                  <div className="flex">
+                    <Image
+                      src={GithubLogo}
+                      alt="github logo"
+                      className="mr-1 h-4 w-4"
+                    />
+                    <div className="text-xs">
+                      {repo.replace('https://github.com', '')}
+                    </div>
                   </div>
+                )}
+                {repo === '' && <div>Choose your Project</div>}
+              </Button>
+              <Input
+                placeholder="Issue Name"
+                type="text"
+                className="my-2 w-full"
+              />
+              <Textarea
+                className="my-2 w-full"
+                placeholder="Issue Description"
+              />
+              <div className="my-2 flex w-full">
+                <div className="mr-2">Tags: </div>
+                <TagsDropDown handleTagSet={handleTagSet} tags={tags} />
+              </div>
+              {tags.length !== 0 && (
+                <div className="my-2 flex w-full flex-wrap">
+                  {tags.map((tag, idx) => (
+                    <GithubTags
+                      tag={tag}
+                      assign={true}
+                      handleRemove={handleTagRemove}
+                      key={idx}
+                    />
+                  ))}
                 </div>
               )}
-              {repo === '' && <div>Search for Repository</div>}
-            </Button>
-            <Input
-              placeholder="Issue Name"
-              type="text"
-              className="my-2 w-full"
-            />
-            <Textarea className="my-2 w-full" placeholder="Issue Description" />
-            <div className="my-2 flex w-full">
-              <div className="mr-2">Tags: </div>
-              <TagsDropDown handleTagSet={handleTagSet} tags={tags} />
-            </div>
-            {tags.length !== 0 && (
-              <div className="my-2 flex w-full flex-wrap">
-                {tags.map((tag, idx) => (
-                  <GithubTags
-                    tag={tag}
-                    assign={true}
-                    handleRemove={handleTagRemove}
-                    key={idx}
-                  />
-                ))}
+              <Button className="my-2 mb-5 w-full" shape="rounded" color="info">
+                Create Issue
+              </Button>
+              <div className="flex w-full flex-row items-center ">
+                <Input
+                  placeholder="Amount"
+                  type="number"
+                  className="my-2 w-full"
+                  inputClassName="!h-10"
+                />
+                <div className="ml-2 flex h-full items-center gap-1">
+                  <Button size="mini" shape="rounded">
+                    50%
+                  </Button>
+                  <Button size="mini" shape="rounded">
+                    100%
+                  </Button>
+                </div>
               </div>
-            )}
-            <Button className="my-2 mb-5 w-full" shape="rounded" color="info">
-              Create Issue
-            </Button>
-            <div className="flex w-full flex-row items-center ">
-              <Input
-                placeholder="Amount"
-                type="number"
-                className="my-2 w-full"
-                inputClassName="!h-10"
-              />
-              <div className="ml-2 flex h-full items-center gap-1">
-                <Button size="mini" shape="rounded">
-                  50%
-                </Button>
-                <Button size="mini" shape="rounded">
-                  100%
-                </Button>
-              </div>
+              <Button className="my-2 w-full" shape="rounded">
+                Approve DIC Spend
+              </Button>
+              <Button className="my-2 w-full" shape="rounded" color="success">
+                Stake DIC
+              </Button>
             </div>
-            <Button className="my-2 w-full" shape="rounded">
-              Approve DIC Spend
-            </Button>
-            <Button className="my-2 w-full" shape="rounded" color="success">
-              Stake DIC
-            </Button>
           </div>
-        </div>
-      </Scrollbar>
+        </Scrollbar>
+      </div>
       <AnimatePresence>
         {modalOpen && (
           <motion.div
@@ -120,7 +120,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
+            className="relative inset-0 z-50 h-screen w-screen overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
           >
             <span
               className="inline-block h-full align-middle"
@@ -146,6 +146,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </aside>
+    </>
   );
 }

@@ -273,18 +273,14 @@ export default function DrawerFilters() {
         </h2>
         <Button
           shape="circle"
-          color="white"
           onClick={closeDrawer}
-          className="bg-light-dark"
         >
           <Close className="h-auto w-3" />
         </Button>
       </div>
-      <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
-        <div className="px-6 pb-20 pt-1">
-          <Filters />
-        </div>
-      </Scrollbar>
+      <div className="h-[75vh] overflow-y-scroll px-6 pb-20 pt-1">
+        <Filters />
+      </div>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
         <Button fullWidth onClick={closeDrawer}>
           DONE

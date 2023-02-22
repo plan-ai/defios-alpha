@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import IssueState from '@/components/ui/tags/issue-state';
 import GithubTags from '@/components/ui/tags/github-tags';
@@ -8,7 +8,8 @@ interface IssuesListTypes {
   tags: string[];
   projectName: string;
   totalStaked: string;
-  coin:string
+  coin: string;
+  initExpand?: boolean;
 }
 
 export default function IssuesList({
@@ -18,17 +19,26 @@ export default function IssuesList({
   totalStaked,
   tags,
   children,
-  coin
+  coin,
+  initExpand,
 }: React.PropsWithChildren<IssuesListTypes>) {
-  let [isExpand, setIsExpand] = useState(false);
+  let [isExpand, setIsExpand] = useState(initExpand || false);
+  useEffect(() => {
+    if (initExpand && initExpand !== undefined) {
+      setIsExpand(initExpand);
+    }
+  }, [initExpand]);
   return (
     <div className="relative mb-3 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
       <div
         className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start gap-6"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <span className="col-span-3 flex items-center px-6 text-sm font-medium tracking-wider text-white">
-          <div>{issueName}</div> <IssueState state={issueTags} />
+        <span className="col-span-2 flex items-center px-6 text-sm font-medium tracking-wider text-white">
+          {issueName}
+        </span>
+        <span className="flex items-center px-1 text-sm font-medium tracking-wider text-white">
+          <IssueState state={issueTags} />
         </span>
         <span className="px-6 text-sm font-medium tracking-wider text-white">
           {projectName}
@@ -36,7 +46,7 @@ export default function IssuesList({
         <span className="px-6 text-sm font-medium tracking-wider text-white">
           {totalStaked} {coin}
         </span>
-        <span className="col-span-2 flex items-center px-6 text-sm font-medium tracking-wider text-white flex-wrap">
+        <span className="col-span-2 flex flex-wrap items-center px-6 text-sm font-medium tracking-wider text-white">
           {tags.length !== 0 &&
             tags.map((tag, idx) => <GithubTags tag={tag} key={idx} />)}
         </span>

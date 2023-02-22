@@ -72,9 +72,6 @@ export default function ListCard({
           )}
         </div>
       </div>
-      <div className="overflow-hidden text-ellipsis pl-2 -tracking-wider">
-        {balance}
-      </div>
     </div>
   );
 }

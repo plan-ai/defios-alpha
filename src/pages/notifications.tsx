@@ -6,70 +6,12 @@ import NotificationCard, {
   NotificationCardProps,
 } from '@/components/ui/notification-card';
 import RootLayout from '@/layouts/_root-layout';
-//images
-import User1 from '@/assets/images/avatar/8.jpg';
-import User2 from '@/assets/images/avatar/9.jpg';
-import User3 from '@/assets/images/avatar/10.jpg';
-import User4 from '@/assets/images/avatar/11.jpg';
-import User5 from '@/assets/images/avatar/8.jpg';
-
-let notifications2 = [
-  {
-    id: 1,
-    type: 'issue-raised',
-    actor: {
-      name: 'dolcemariposa',
-      avatar: User1,
-    },
-    time: 'Just Now',
-    url: '#',
-  },
-  {
-    id: 2,
-    type: 'issue-staked',
-    actor: {
-      name: 'pimptronot',
-      avatar: User2,
-    },
-    time: '10 minutes ago',
-    url: '#',
-  },
-  {
-    id: 3,
-    type: 'issue-voting-open',
-    actor: {
-      name: 'centralgold',
-      avatar: User3,
-    },
-    time: '20 minutes ago',
-    url: '#',
-  },
-  {
-    id: 4,
-    type: 'issue-closed',
-    actor: {
-      name: 'theline',
-      avatar: User4,
-    },
-    time: '30 minutes ago',
-    url: '#',
-  },
-  {
-    id: 4,
-    type: 'new-obj-added-on-roadmap',
-    actor: {
-      name: 'bruhh',
-      avatar: User5,
-    },
-    time: '50 minutes ago',
-    url: '#',
-  },
-];
 
 let notifications = [
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:never2average,issue_project:DefiOSBackend',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
@@ -87,7 +29,8 @@ let notifications = [
   },
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:Rohitkk432,issue_project:DefiOSRust',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
@@ -105,7 +48,8 @@ let notifications = [
   },
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:Rohitkk432,issue_project:MusicProX',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
@@ -123,7 +67,8 @@ let notifications = [
   },
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:Rohitkk432,issue_project:MusicProX',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
@@ -141,7 +86,8 @@ let notifications = [
   },
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:Rohitkk432,issue_project:MusicProX',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
@@ -159,7 +105,8 @@ let notifications = [
   },
   {
     notif_action_api_params: {
-      first_item: '1248124812481248',
+      searched:
+        'issue_title:Create API Documentation,issue_creator:Rohitkk432,issue_project:MusicProX',
     },
     notif_action_path: '/issues',
     notif_action_state_params: {
