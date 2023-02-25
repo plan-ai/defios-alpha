@@ -66,11 +66,7 @@ function SortList() {
 
 function Search() {
   return (
-    <form
-      className="relative flex w-full rounded-full lg:w-auto lg:basis-72 xl:w-48"
-      noValidate
-      role="search"
-    >
+    <div className="relative flex w-full rounded-full ">
       <label className="flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-10 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
@@ -81,7 +77,14 @@ function Search() {
           <SearchIcon className="h-4 w-4" />
         </span>
       </label>
-    </form>
+      <Button
+        shape="rounded"
+        size="small"
+        className="mx-2 flex items-center justify-center"
+      >
+        <SearchIcon className="h-4 w-4" />
+      </Button>
+    </div>
   );
 }
 

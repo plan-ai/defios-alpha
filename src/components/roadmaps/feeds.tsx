@@ -27,6 +27,7 @@ export default function Feeds({ className }: { className?: string }) {
           details={item.details}
           deliverable={item.deliverable}
           status={item.status}
+          activeObjectives={item.activeObjectives}
         />
       ))}
     </div>

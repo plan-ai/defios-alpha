@@ -5,6 +5,7 @@ import RootLayout from '@/layouts/_root-layout';
 import ToggleBtn from '@/components/ui/button/toggle';
 import Button from '@/components/ui/button/button';
 import { SearchIcon } from '@/components/icons/search';
+import { PlusCircle } from '@/components/icons/plus-circle';
 import IssuesList from '@/components/issues/list';
 import { IssuesData } from '@/data/static/issues-data';
 
@@ -44,6 +45,13 @@ const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
           <SearchIcon className="h-4 w-4" />
         </span>
       </label>
+      <Button
+        shape="rounded"
+        size="small"
+        className="mx-2 flex items-center justify-center"
+      >
+        <SearchIcon className="h-4 w-4" />
+      </Button>
     </div>
   );
 };
@@ -126,23 +134,26 @@ const IssuesPage: NextPageWithLayout = () => {
               shape="rounded"
               size="small"
             >
-              Create New Issue
+              <div className="flex flex-row items-center justify-center gap-2">
+                <PlusCircle />
+                New Issue
+              </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 gap-6 rounded-lg bg-light-dark shadow-card">
-            <span className="col-span-2 px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+          <div className="my-3 grid grid-cols-7 gap-6 rounded-lg border-b-3 border-gray-600 bg-light-dark shadow-card">
+            <span className=" col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Issue Title
             </span>
-            <span className="px-1 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Issue State
             </span>
-            <span className="px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Project Name
             </span>
-            <span className="px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Staked Tokens
             </span>
-            <span className="col-span-2 px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Tags
             </span>
           </div>

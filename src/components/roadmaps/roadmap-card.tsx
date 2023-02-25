@@ -8,10 +8,8 @@ import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import routes from '@/config/routes';
 import RoadmapDetails from '@/components/roadmaps/roadmap-details';
-import {
-  roadmapListType,
-  RoadmapList,
-} from '@/data/static/roadmap-list';
+import ListCard from '../ui/list-card';
+import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
 
 type RoadmapCardProps = roadmapListType;
 
@@ -25,6 +23,7 @@ export default function RoadmapCard({
   details,
   deliverable,
   status,
+  activeObjectives,
 }: RoadmapCardProps) {
   const [roadmap, setRoadmap] = useState('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
@@ -33,25 +32,23 @@ export default function RoadmapCard({
   });
   useLockBodyScroll(roadmap !== '');
   return (
-    <div className="relative overflow-hidden rounded-lg bg-light-dark shadow-card transition-all duration-200 hover:shadow-large">
+    <div
+      className="relative overflow-hidden rounded-lg bg-light-dark shadow-card transition-all duration-200 hover:shadow-large"
+      onClick={() => setRoadmap(name)}
+    >
       <div className="p-4">
-        <AnchorLink
-          href={routes.roadmaps}
-          className="flex items-center text-sm font-medium text-gray-300 transition hover:text-white"
-        >
-          <Avatar
+        <div className="text-md font-medium text-white">
+          {/* <Avatar
             image={creatorImage}
             alt={name}
             size="sm"
             className="mr-3 text-ellipsis border-gray-500"
           />
-          <span className="overflow-hidden text-ellipsis">@{creator}</span>
-        </AnchorLink>
+          <span className="overflow-hidden text-ellipsis">@{creator}</span> */}
+          {name}
+        </div>
       </div>
-      <div
-        onClick={() => setRoadmap(name)}
-        className="relative block w-full pb-full"
-      >
+      <div className="relative block w-full pb-full">
         <Image
           src={image}
           placeholder="blur"
@@ -61,23 +58,26 @@ export default function RoadmapCard({
         />
       </div>
 
-      <div className="p-5">
-        <AnchorLink
-          href="/nft-details"
-          className="text-sm font-medium text-white"
-        >
-          {name}
-        </AnchorLink>
-        <div className="mt-1.5 flex">
-          <AnchorLink
-            href="/"
-            className="inline-flex items-center text-xs text-gray-400"
-          >
-            {creationDate}
-            <Verified className="ml-1" />
-          </AnchorLink>
+      <div className="p-5 pt-3">
+        <div className="flex items-center gap-2">
+          <div className="text-xs">Created by:</div>
+          <ListCard
+            item={{ name: creator, logo: creatorImage }}
+            className="rounded-full bg-dark px-3 py-2"
+          />
         </div>
-        <div className="mt-4 text-lg font-medium text-white">{totalStake}</div>
+        <div className=" mt-1.5 flex items-center gap-2">
+          <div className="text-xs">Total Staked:</div>
+          <div>{totalStake}</div>
+        </div>
+        <div className=" mt-1.5 flex items-center gap-2">
+          <div className="text-xs">Active Objectives:</div>
+          <div>{activeObjectives}</div>
+        </div>
+        <div className=" mt-1.5 flex items-center gap-2">
+          <div className="text-xs">Created</div>
+          <div>{creationDate}</div>
+        </div>
       </div>
       <AnimatePresence>
         {roadmap !== '' && (
@@ -114,6 +114,8 @@ export default function RoadmapCard({
                   details={details || RoadmapList[0].details}
                   deliverable={deliverable}
                   status={status}
+                  activeObjectives={activeObjectives}
+                  setRoadmap={setRoadmap}
                 />
               </div>
             </motion.div>

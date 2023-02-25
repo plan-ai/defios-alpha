@@ -27,6 +27,7 @@ export type roadmapListType = {
   deliverable: string;
   status: string;
   details: detailsType | undefined;
+  activeObjectives: string;
 };
 export type detailsType = {
   details: detailsTabType;
@@ -54,7 +55,7 @@ export type preRequisitesType = {
 
 export const deliverableList = [
   {
-    name: 'Protocol',
+    name: 'Infrastructure',
     element: <CogIcon />,
   },
   {
@@ -66,7 +67,7 @@ export const deliverableList = [
     element: <BookOpenIcon />,
   },
   {
-    name: 'SAAS',
+    name: 'Product',
     element: <CloudIcon />,
   },
   {
@@ -83,7 +84,8 @@ export const RoadmapList = [
     name: 'DefiOS',
     creationDate: '09-02-2023',
     totalStake: '250$',
-    deliverable: 'Protocol',
+    activeObjectives: '23',
+    deliverable: 'Infrastructure',
     status: 'lock',
     details: {
       details: {
@@ -134,6 +136,7 @@ export const RoadmapList = [
     name: 'OnFinance',
     creationDate: '09-02-2023',
     totalStake: '400$',
+    activeObjectives: '23',
     deliverable: 'Tooling',
     status: 'open',
     details: {
@@ -185,6 +188,7 @@ export const RoadmapList = [
     name: 'MusicProX',
     creationDate: '09-02-2023',
     totalStake: '200$',
+    activeObjectives: '23',
     deliverable: 'Publication',
     status: 'lock',
     details: {
@@ -236,7 +240,8 @@ export const RoadmapList = [
     name: 'DefiOS Core',
     creationDate: '09-02-2023',
     totalStake: '200$',
-    deliverable: 'SAAS',
+    activeObjectives: '23',
+    deliverable: 'Product',
     status: 'open',
     details: {
       details: {
@@ -287,6 +292,7 @@ export const RoadmapList = [
     name: 'DefiOS Rust',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    activeObjectives: '23',
     deliverable: 'Other',
     status: 'lock',
     details: {
@@ -338,7 +344,8 @@ export const RoadmapList = [
     name: 'FitBro',
     creationDate: '09-02-2023',
     totalStake: '100$',
-    deliverable: 'Protocol',
+    activeObjectives: '23',
+    deliverable: 'Infrastructure',
     status: 'open',
     details: {
       details: {
@@ -389,6 +396,7 @@ export const RoadmapList = [
     name: 'Anime NFTs',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    activeObjectives: '23',
     deliverable: 'Tooling',
     status: 'lock',
     details: {
@@ -440,6 +448,7 @@ export const RoadmapList = [
     name: 'Buildoor',
     creationDate: '09-02-2023',
     totalStake: '100$',
+    activeObjectives: '23',
     deliverable: 'Publication',
     status: 'open',
     details: {

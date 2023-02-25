@@ -4,18 +4,33 @@ import NftFooter from '@/components/nft/nft-footer';
 import cn from 'classnames';
 import RoadmapPopupDetails from '@/components/roadmaps/roadmap-popup-details';
 import PreReqCard from '@/components/roadmaps/pre-req-card';
-import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
+import { RoadmapList, detailsType } from '@/data/static/roadmap-list';
 import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
+import { StaticImageData } from 'next/image';
 
 import ListCard from '@/components/ui/list-card';
 import { LockIcon } from '@/components/icons/lock';
 import { YellowClock } from '@/components/icons/yellow-clock';
+import { Close } from '../icons/close';
 
 import { deliverableList } from '@/data/static/roadmap-list';
 
 import Dag from '@/components/dag/dag';
+import { SetState } from 'immer/dist/internal';
 
-type RoadmapDetailsProps = roadmapListType;
+type RoadmapDetailsProps = {
+  creator: string;
+  creatorImage: StaticImageData;
+  image: StaticImageData;
+  name: string;
+  creationDate: string;
+  totalStake: string;
+  deliverable: string;
+  status: string;
+  details: detailsType | undefined;
+  activeObjectives: string;
+  setRoadmap: any;
+};
 
 const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   creator,
@@ -27,6 +42,8 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   details,
   deliverable,
   status,
+  activeObjectives,
+  setRoadmap,
 }) => {
   return (
     <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-lg p-10 transition-all">
@@ -49,11 +66,12 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
         <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
           <div className="flex flex-col">
             <div className="flex justify-between">
-              <h2 className="text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
+              <h2 className="flex items-center gap-2 text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
                 {name}
+                {status === 'lock' && <LockIcon />}
+                {status === 'open' && <YellowClock />}
               </h2>
-              {status === 'lock' && <LockIcon />}
-              {status === 'open' && <YellowClock />}
+              <Close onClick={() => setRoadmap('')} className="h-6 w-6" />
             </div>
             <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
               created at {creationDate}

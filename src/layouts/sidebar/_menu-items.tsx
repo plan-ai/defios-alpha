@@ -36,7 +36,7 @@ export const menuItems = [
     href: routes.issues,
   },
   {
-    name: 'Incentivize Contributors',
+    name: 'Create a Project',
     icon: <PlusCircle />,
     href: routes.incentivizeContributors,
   },

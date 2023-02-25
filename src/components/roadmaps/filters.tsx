@@ -239,7 +239,13 @@ const OutlookValues = [
   'Next 5 yrs',
 ];
 
-const OutcomeValues = ['Protocol', 'Tooling', 'Publication', 'SAAS', 'Other'];
+const OutcomeValues = [
+  'Infrastructure',
+  'Tooling',
+  'Publication',
+  'Product',
+  'Other',
+];
 
 export function Filters() {
   return (
@@ -271,10 +277,7 @@ export default function DrawerFilters() {
         <h2 className="text-xl font-medium uppercase tracking-wider text-white">
           Filters
         </h2>
-        <Button
-          shape="circle"
-          onClick={closeDrawer}
-        >
+        <Button shape="circle" onClick={closeDrawer}>
           <Close className="h-auto w-3" />
         </Button>
       </div>

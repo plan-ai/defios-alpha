@@ -1,17 +1,16 @@
+import React, { useState } from 'react';
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
 import { Filters, GridSwitcher } from '@/components/roadmaps/filters';
 import { OptionIcon } from '@/components/icons/option';
 import { SearchIcon } from '@/components/icons/search';
+import { PlusCircle } from '../icons/plus-circle';
 
 function Search() {
+  const [search, setSearch] = useState('');
   return (
-    <form
-      className="relative flex w-full rounded-full"
-      noValidate
-      role="search"
-    >
+    <div className="relative flex w-full rounded-full">
       <label className="flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-10 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
@@ -22,7 +21,14 @@ function Search() {
           <SearchIcon className="h-4 w-4" />
         </span>
       </label>
-    </form>
+      <Button
+        shape="rounded"
+        size="small"
+        className="mx-2 flex items-center justify-center"
+      >
+        <SearchIcon className="h-4 w-4" />
+      </Button>
+    </div>
   );
 }
 
@@ -44,7 +50,10 @@ export default function Roadmap() {
             <div className="flex gap-6 3xl:gap-8">
               <div className="flex items-center justify-center">
                 <Button shape="rounded" disabled className="!bg-gray-800">
-                  + Create New Roadmap
+                  <div className="flex flex-row items-center justify-center gap-2">
+                    <PlusCircle />
+                    Create New Roadmap
+                  </div>
                 </Button>
                 <span className="relative z-[2] ml-2 rounded-full bg-gray-900 px-2 py-0.5 normal-case text-red-700">
                   Coming Soon

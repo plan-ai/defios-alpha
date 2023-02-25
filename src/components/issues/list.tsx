@@ -34,19 +34,19 @@ export default function IssuesList({
         className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start gap-6"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <span className="col-span-2 flex items-center px-6 text-sm font-medium tracking-wider text-white">
+        <span className="col-span-2 flex items-center justify-start px-6 text-sm font-medium tracking-wider text-white">
           {issueName}
         </span>
-        <span className="flex items-center px-1 text-sm font-medium tracking-wider text-white">
+        <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           <IssueState state={issueTags} />
         </span>
-        <span className="px-6 text-sm font-medium tracking-wider text-white">
+        <span className="text-center text-sm font-medium tracking-wider text-white">
           {projectName}
         </span>
-        <span className="px-6 text-sm font-medium tracking-wider text-white">
+        <span className="text-center text-sm font-medium tracking-wider text-white">
           {totalStaked} {coin}
         </span>
-        <span className="col-span-2 flex flex-wrap items-center px-6 text-sm font-medium tracking-wider text-white">
+        <span className="col-span-2 flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           {tags.length !== 0 &&
             tags.map((tag, idx) => <GithubTags tag={tag} key={idx} />)}
         </span>
