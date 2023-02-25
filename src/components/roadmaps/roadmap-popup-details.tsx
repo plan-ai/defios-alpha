@@ -22,7 +22,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
     stakerIncentive,
     raisedAmount,
     toBeRaised,
-    topContributorImg
+    topContributorImg,
   } = details;
   return (
     <div className="space-y-6 ">
@@ -41,7 +41,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         <div className="flex">
           <ListCard
             item={{ name: topContributor, logo: topContributorImg }}
-            className="rounded-full p-2 text-gray-400 hover:text-white"
+            className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
           />
         </div>
       </div>

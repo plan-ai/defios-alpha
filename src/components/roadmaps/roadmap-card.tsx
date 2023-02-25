@@ -32,23 +32,14 @@ export default function RoadmapCard({
   });
   useLockBodyScroll(roadmap !== '');
   return (
-    <div
-      className="relative overflow-hidden rounded-lg bg-light-dark shadow-card transition-all duration-200 hover:shadow-large"
-      onClick={() => setRoadmap(name)}
-    >
+    <div className="relative overflow-hidden rounded-lg bg-light-dark shadow-card transition-all duration-200 hover:shadow-large">
       <div className="p-4">
-        <div className="text-md font-medium text-white">
-          {/* <Avatar
-            image={creatorImage}
-            alt={name}
-            size="sm"
-            className="mr-3 text-ellipsis border-gray-500"
-          />
-          <span className="overflow-hidden text-ellipsis">@{creator}</span> */}
-          {name}
-        </div>
+        <div className="text-2xl font-semibold text-white ">{name}</div>
       </div>
-      <div className="relative block w-full pb-full">
+      <div
+        onClick={(e) => setRoadmap(name)}
+        className="relative block w-full pb-full"
+      >
         <Image
           src={image}
           placeholder="blur"
@@ -68,7 +59,7 @@ export default function RoadmapCard({
         </div>
         <div className=" mt-1.5 flex items-center gap-2">
           <div className="text-xs">Total Staked:</div>
-          <div>{totalStake}</div>
+          <div className='text-white text-xl font-semibold' >{totalStake}</div>
         </div>
         <div className=" mt-1.5 flex items-center gap-2">
           <div className="text-xs">Active Objectives:</div>
@@ -76,7 +67,7 @@ export default function RoadmapCard({
         </div>
         <div className=" mt-1.5 flex items-center gap-2">
           <div className="text-xs">Created</div>
-          <div>{creationDate}</div>
+          <div className='text-gray-500 text-sm'>{creationDate}</div>
         </div>
       </div>
       <AnimatePresence>

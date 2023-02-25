@@ -71,7 +71,13 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                 {status === 'lock' && <LockIcon />}
                 {status === 'open' && <YellowClock />}
               </h2>
-              <Close onClick={() => setRoadmap('')} className="h-6 w-6" />
+              <Close
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRoadmap('');
+                }}
+                className="h-6 w-6"
+              />
             </div>
             <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
               created at {creationDate}
@@ -83,7 +89,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                 </h3>
                 <ListCard
                   item={{ name: creator, logo: creatorImage }}
-                  className="rounded-full p-2 text-gray-400 hover:text-white"
+                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                 />
               </div>
               <div className="shrink-0 lg:px-6">
@@ -97,7 +103,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                       return item.name === deliverable;
                     })[0].element,
                   }}
-                  className="rounded-full p-2 text-gray-400 hover:text-white"
+                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                 />
               </div>
             </div>

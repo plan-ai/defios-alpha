@@ -40,11 +40,6 @@ export const getFirebaseJwt = createAsyncThunk(
     pub_key,
   }: firebaseJwtApi) => {
     return new Promise<FirebaseTokensType>((resolve, reject) => {
-      console.log('github_id: ' + github_id);
-      console.log('firebase_uid: ' + firebase_uid);
-      console.log('user_gh_access_token: ' + user_gh_access_token);
-      console.log('pub_key: ' + pub_key);
-
       axios
         .post('/api/firebase-token/notif', {
           github_id,

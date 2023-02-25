@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { getFirebaseJwt } from '@/store/firebaseTokensSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setGithub } from '@/store/userInfoSlice';
+import axios from 'axios';
 // dynamic imports
 const ModernLayout = dynamic(() => import('@/layouts/_modern'), {
   loading: () => <FallbackLoader />,
@@ -30,6 +32,7 @@ export default function RootLayout({
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
   useEffect(() => {
     if (
       firebase_jwt === null &&
@@ -55,6 +58,26 @@ export default function RootLayout({
       );
     }
   }, [session, wallet, dispatch, firebase_jwt]);
+
+  useEffect(() => {
+    if (
+      //@ts-ignore
+      session?.accessToken &&
+      (githubInfo === null ||
+        //@ts-ignore
+        session?.user?.id !== githubInfo.id)
+    ) {
+      axios
+        .get('https://api.github.com/user', {
+          headers: {
+            //@ts-ignore
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        })
+        .then((res) => dispatch(setGithub(res.data)))
+        .catch((err) => console.log(err));
+    }
+  }, [session, dispatch]);
 
   // fix the `Hydration failed because the initial UI does not match` issue
   if (!isMounted) return null;

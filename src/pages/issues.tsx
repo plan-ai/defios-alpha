@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
-import ToggleBtn from '@/components/ui/button/toggle';
 import Button from '@/components/ui/button/button';
+import StackedSwitch from '@/components/custom/stacked-switch';
 import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import IssuesList from '@/components/issues/list';
@@ -35,15 +35,12 @@ const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
     <div className="relative flex w-full rounded-full">
       <label className="flex w-full items-center">
         <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-10 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder={placeholder || 'Search'}
           autoComplete="off"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <span className="pointer-events-none absolute left-0 flex h-full w-8 cursor-pointer items-center justify-center pl-2 text-gray-600 text-gray-500 hover:text-gray-900 sm:pl-3">
-          <SearchIcon className="h-4 w-4" />
-        </span>
       </label>
       <Button
         shape="rounded"
@@ -123,9 +120,11 @@ const IssuesPage: NextPageWithLayout = () => {
       />
       <div className="flex items-center justify-start">
         <div className="flex h-full w-full flex-col">
-          <div className="mb-2 flex w-full gap-5">
+          <div className="mb-2 flex w-full items-center gap-5">
             <Search placeholder="Search Issues" initValue={initSearch} />
-            <ToggleBtn option1="All Issues" option2="My Issues" />
+            <div className="w-52">
+              <StackedSwitch label="My Issues" />
+            </div>
             <Button
               onClick={() =>
                 openDrawer('ISSUE_CREATE', 'right', 'transparent-glass')

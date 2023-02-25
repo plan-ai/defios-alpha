@@ -7,6 +7,7 @@ import Profile from '@/components/profile/profile';
 // static data
 import { authorData } from '@/data/static/author';
 import RootLayout from '@/layouts/_root-layout';
+import { useAppSelector } from '@/store/store';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
@@ -17,7 +18,7 @@ export const getStaticProps: GetStaticProps = async () => {
 const AuthorProfilePage: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  // render default profile
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
   return (
     <>
       <NextSeo
@@ -36,9 +37,11 @@ const AuthorProfilePage: NextPageWithLayout<
       <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
         <Avatar
           size="xl"
-          image={authorData?.avatar?.thumbnail}
-          alt="Author"
-          className="z-10 mx-auto -mt-12 border-gray-500 sm:-mt-14 md:mx-0 md:-mt-16 xl:mx-0 3xl:-mt-20"
+          image={githubInfo?.avatar_url || ''}
+          alt={githubInfo?.name || ''}
+          className="z-10 mx-0 -mt-16 flex items-center justify-center border-gray-500 "
+          width={120}
+          height={120}
         />
         <Profile />
       </div>

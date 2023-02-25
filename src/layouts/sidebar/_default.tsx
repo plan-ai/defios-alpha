@@ -8,10 +8,13 @@ import { useDrawer } from '@/components/drawer-views/context';
 import { Close } from '@/components/icons/close';
 import { menuItems } from '@/layouts/sidebar/_menu-items';
 //images
-import AuthorImage from '@/assets/images/author.jpg';
+import { useAppSelector } from '@/store/store';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 export default function Sidebar({ className }: { className?: string }) {
   const { closeDrawer } = useDrawer();
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
+  const wallet = useWallet();
   return (
     <aside
       className={cn(
@@ -38,9 +41,9 @@ export default function Sidebar({ className }: { className?: string }) {
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
           <AuthorCard
-            image={AuthorImage}
-            name="Cameron Williamson"
-            role="admin"
+            image={githubInfo?.avatar_url || ''}
+            name={githubInfo?.name || ''}
+            role={githubInfo?.login || ''}
           />
 
           <div className="mt-5">

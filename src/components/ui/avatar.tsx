@@ -3,7 +3,7 @@ import Image from '@/components/ui/image';
 import { StaticImageData } from 'next/image';
 
 interface AvatarProps {
-  image: StaticImageData;
+  image: string;
   alt: string;
   className?: string;
   size?: SizeNames;
@@ -36,8 +36,8 @@ function Avatar({
   className,
   size = 'md',
   shape = 'circle',
-  width,
-  height,
+  width = 40,
+  height = 40,
 }: AvatarProps) {
   const sizeClassNames = sizes[size];
   return (

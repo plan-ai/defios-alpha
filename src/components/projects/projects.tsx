@@ -2,19 +2,16 @@ import Button from '@/components/ui/button';
 import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ProjectsData } from '@/data/static/projects-data';
-import { Fragment, useState } from 'react';
-import { motion } from 'framer-motion';
-import cn from 'classnames';
+import React, { Fragment, useState } from 'react';
 import { Transition } from '@/components/ui/transition';
-import { RadioGroup } from '@/components/ui/radio-group';
 import { Listbox } from '@/components/ui/listbox';
-import { Switch } from '@/components/ui/switch';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { SearchIcon } from '@/components/icons/search';
 import routes from '@/config/routes';
 import PriceChart from '@/components/ui/chats/price-chart';
 import CoinTicker from '@/components/custom/coin-ticker';
 import DataWithImage from '@/components/custom/data-with-image';
+import StackedSwitch from '@/components/custom/stacked-switch';
 
 const sort = [
   { id: 1, name: 'Hot' },
@@ -69,13 +66,10 @@ function Search() {
     <div className="relative flex w-full rounded-full ">
       <label className="flex w-full items-center">
         <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-10 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
           autoComplete="off"
         />
-        <span className="pointer-events-none absolute left-0 flex h-full w-8 cursor-pointer items-center justify-center pl-2 text-gray-600 text-gray-500 hover:text-gray-900 sm:pl-3">
-          <SearchIcon className="h-4 w-4" />
-        </span>
       </label>
       <Button
         shape="rounded"
@@ -88,103 +82,20 @@ function Search() {
   );
 }
 
-function StackedSwitch() {
-  const [isStacked, setIsStacked] = useState(false);
-  return (
-    <Switch
-      checked={isStacked}
-      onChange={setIsStacked}
-      className="flex items-center gap-2 text-gray-400 sm:gap-3"
-    >
-      <div
-        className={cn(
-          isStacked ? 'bg-blue-500' : 'bg-gray-500',
-          'relative inline-flex h-[22px] w-10 items-center rounded-full transition-colors duration-300'
-        )}
-      >
-        <span
-          className={cn(
-            isStacked
-              ? 'translate-x-5 bg-light-dark'
-              : 'translate-x-0.5 bg-light-dark',
-            'inline-block h-[18px] w-[18px] transform rounded-full bg-white transition-transform duration-200'
-          )}
-        />
-      </div>
-      <span className="inline-flex text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
-        Native Tokens only
-      </span>
-    </Switch>
-  );
-}
-
-function Status() {
-  const [status, setStatus] = useState('global projects');
-  return (
-    <RadioGroup
-      value={status}
-      onChange={setStatus}
-      className="flex items-center sm:gap-3"
-    >
-      <RadioGroup.Option value="global projects">
-        {({ checked }) => (
-          <span
-            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
-              checked ? 'text-white' : 'text-white/50'
-            }`}
-          >
-            {checked && (
-              <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
-                layoutId="statusIndicator"
-              />
-            )}
-            <span className="relative">Global Projects</span>
-          </span>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="my projects">
-        {({ checked }) => (
-          <span
-            className={`relative flex h-11 w-40 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:w-40 sm:text-sm ${
-              checked ? 'text-white' : 'text-white/50'
-            }`}
-          >
-            {checked && (
-              <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
-                layoutId="statusIndicator"
-              />
-            )}
-            <span className="relative">My Projects</span>
-          </span>
-        )}
-      </RadioGroup.Option>
-    </RadioGroup>
-  );
-}
-
 export default function Projects() {
   return (
     <div className="mx-auto w-full">
-      <div
-        className={cn(
-          'mb-6 flex flex-col justify-between gap-4',
-          'md:flex-row md:items-center md:gap-6'
-        )}
-      >
-        <div className="flex items-center justify-between gap-4">
-          <Status />
-          <div className={cn('md:hidden')}>
-            <StackedSwitch />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between gap-4 lg:gap-8">
-          <div className={cn('hidden shrink-0 ', 'md:block')}>
-            <StackedSwitch />
-          </div>
+      <div className="mb-5 flex w-full items-center justify-between">
+        <div className="w-[50%]">
           <Search />
+        </div>
+        <div className="flex items-center justify-between gap-6">
+          <div>
+            <StackedSwitch label="My Projects" />
+          </div>
+          <div>
+            <StackedSwitch label="Native Tokens Only" />
+          </div>
           <SortList />
         </div>
       </div>

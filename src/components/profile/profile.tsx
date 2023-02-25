@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { authorData } from '@/data/static/author';
 import { Check } from '@/components/icons/check';
@@ -7,29 +7,38 @@ import ProfileTab from '@/components/profile/profile-tab';
 import ToggleBtn from '@/components/ui/button/toggle';
 import PortfolioCreator from '@/components/profile/portfolio-creator';
 
+import { useAppSelector } from '@/store/store';
+import { useWallet } from '@solana/wallet-adapter-react';
+import axios from 'axios';
+
 export default function Profile() {
+  const wallet = useWallet();
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
+
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
   function handleCopyToClipboard() {
-    copyToClipboard(authorData.wallet_key);
+    //@ts-ignore
+    copyToClipboard(wallet.publicKey?.toString());
     setCopyButtonStatus(true);
     setTimeout(() => {
       setCopyButtonStatus(copyButtonStatus);
     }, 2500);
   }
+
   return (
     <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row 3xl:pt-12">
       <div className="shrink-0 border-dashed border-gray-700 md:w-72 md:border-r md:pr-7 lg:pr-10 2xl:w-80 3xl:w-96 3xl:pr-14">
         <div className="text-center md:text-left">
           <h2 className="text-xl font-medium tracking-tighter text-white xl:text-2xl">
-            {authorData?.name}
+            {githubInfo?.name}
           </h2>
           <div className="mt-1 text-sm font-medium tracking-tighter text-gray-400 xl:mt-3">
-            @{authorData?.user_name}
+            @{githubInfo?.login}
           </div>
           <div className="md:max-w-auto mx-auto mt-5 flex h-9 max-w-sm items-center rounded-full bg-light-dark shadow-card md:mx-0 xl:mt-6">
             <div className="text truncate text-ellipsis bg-center pl-4 text-xs text-gray-300 sm:text-sm">
-              {authorData?.wallet_key}
+              {wallet.publicKey?.toString()}
             </div>
             <div
               title="Copy Address"
