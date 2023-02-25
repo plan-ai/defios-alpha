@@ -1,4 +1,3 @@
-// import { StaticImageData } from 'next/image';
 import Image from 'next/image';
 type AuthorCardProps = {
   image: string;
@@ -15,7 +14,7 @@ export default function AuthorCard({ image, name, role }: AuthorCardProps) {
     >
       <Image
         src={image}
-        alt={name ? name : ''}
+        alt={name || ''}
         className="rounded-full border-2 border-gray-400"
         width={42}
         height={42}

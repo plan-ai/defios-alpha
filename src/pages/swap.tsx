@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import cn from 'classnames';
 import { NextSeo } from 'next-seo';
@@ -11,8 +11,31 @@ import RootLayout from '@/layouts/_root-layout';
 
 import RightSideInfo from '@/components/swaps/right-side-info';
 
+import { useAppSelector } from '@/store/store';
+import axios from 'axios';
+
 const SwapPage: NextPageWithLayout = () => {
-  let [toggleCoin, setToggleCoin] = useState(false);
+  const [toggleCoin, setToggleCoin] = useState(false);
+  const [coinList, setCoinList] = useState<any>([]);
+  const [fromCoin, setFromCoin] = useState<any>(null);
+  const [toCoin, setToCoin] = useState<any>(null);
+
+  const auth_cred = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  useEffect(() => {
+    if (auth_cred === null) return;
+    axios
+      .get('https://api-v1.defi-os.com/swap/list', {
+        headers: {
+          Authorization: auth_cred,
+        },
+      })
+      .then((res) => setCoinList(res.data))
+      .catch((err) => console.log(err.message));
+  }, [auth_cred]);
+
   return (
     <>
       <NextSeo
@@ -33,6 +56,9 @@ const SwapPage: NextPageWithLayout = () => {
                 exchangeRate={0.0}
                 defaultCoinIndex={0}
                 getCoinValue={(data) => console.log('From coin value:', data)}
+                coinList={coinList}
+                selectedCoin={fromCoin}
+                setSelectedCoin={setFromCoin}
               />
               <div className="absolute top-1/2 left-1/2 z-[1] -mt-4 -ml-4 rounded-full bg-gray-600 shadow-large">
                 <Button
@@ -50,6 +76,9 @@ const SwapPage: NextPageWithLayout = () => {
                 exchangeRate={0.0}
                 defaultCoinIndex={1}
                 getCoinValue={(data) => console.log('To coin value:', data)}
+                coinList={coinList}
+                selectedCoin={toCoin}
+                setSelectedCoin={setToCoin}
               />
             </div>
           </div>
@@ -70,7 +99,7 @@ const SwapPage: NextPageWithLayout = () => {
             SWAP
           </Button>
         </Trade>
-        <RightSideInfo />
+        <RightSideInfo coin={toCoin} />
       </div>
     </>
   );

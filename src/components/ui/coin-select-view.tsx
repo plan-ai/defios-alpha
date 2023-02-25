@@ -1,33 +1,42 @@
-import type { CoinTypes } from '@/types';
-import { useState } from 'react';
-import { coinList } from '@/data/static/coin-list';
+import { useEffect, useState } from 'react';
 import { SearchIcon } from '@/components/icons/search';
 import { useModal } from '@/components/modal-views/context';
+import Image from 'next/image';
 
 interface CoinSelectViewTypes {
-  onSelect: (selectedCoin: CoinTypes) => void;
+  onSelect: (selectedCoin: any) => void;
+  coinList: any;
 }
 
-export default function CoinSelectView({ onSelect }: CoinSelectViewTypes) {
+export default function CoinSelectView({
+  onSelect,
+  coinList,
+}: CoinSelectViewTypes) {
   const { closeModal } = useModal();
-  let [searchKeyword, setSearchKeyword] = useState('');
-  let coinListData = coinList;
-  if (searchKeyword.length > 0) {
-    coinListData = coinList.filter(function (item) {
-      const name = item.name;
-      return (
-        name.match(searchKeyword) ||
-        (name.toLowerCase().match(searchKeyword) && name)
-      );
-    });
-  }
-  function handleSelectedCoin(item: CoinTypes) {
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [coinListData, setCoinListData] = useState<any>([]);
+  useEffect(() => {
+    if (searchKeyword.length > 0 && coinList.length > 0) {
+      const newData = coinList.filter((item: any) => {
+        const token_symbol = item.token_symbol;
+        return (
+          token_symbol.match(searchKeyword) ||
+          (token_symbol.toLowerCase().match(searchKeyword) && token_symbol)
+        );
+      });
+      setCoinListData(newData);
+    } else {
+      setCoinListData(coinList);
+    }
+  }, [coinList, searchKeyword]);
+
+  function handleSelectedCoin(item: any) {
     onSelect(item);
     closeModal();
   }
   function handleSelectedCoinOnKeyDown(
     event: React.KeyboardEvent<HTMLLIElement>,
-    item: CoinTypes
+    item: any
   ) {
     if (event.code === 'Enter') {
       onSelect(item);
@@ -35,10 +44,8 @@ export default function CoinSelectView({ onSelect }: CoinSelectViewTypes) {
     }
   }
   return (
-    <div className="w-full rounded-lg text-sm shadow-large bg-dark xs:w-[400px]">
-      <h2 className="p-6 text-lg font-medium uppercase text-white">
-        Pay with
-      </h2>
+    <div className="w-full rounded-lg bg-dark text-sm shadow-large xs:w-[400px]">
+      <h2 className="p-6 text-lg font-medium uppercase text-white">Pay with</h2>
       <div className="relative">
         <SearchIcon className="absolute left-6 h-full text-gray-700" />
         <input
@@ -46,22 +53,25 @@ export default function CoinSelectView({ onSelect }: CoinSelectViewTypes) {
           autoFocus={true}
           onChange={(e) => setSearchKeyword(e.target.value)}
           placeholder="Search Your Coin by Name"
-          className="w-full border-y border-x-0 border-dashed py-3.5 pl-14 pr-6 text-sm focus:ring-0 border-gray-700 bg-light-dark focus:border-gray-600"
+          className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-sm focus:border-gray-600 focus:ring-0"
         />
       </div>
-      <ul role="listbox" className="min-h-[200px] py-3">
+      <ul className="min-h-[200px] py-3">
         {coinListData.length > 0 ? (
-          coinListData.map((item, index) => (
+          coinListData.map((item: any, idx: number) => (
             <li
-              key={item.code}
-              role="listitem"
-              tabIndex={index}
+              key={idx}
               onClick={() => handleSelectedCoin(item)}
               onKeyDown={(event) => handleSelectedCoinOnKeyDown(event, item)}
               className="flex cursor-pointer items-center gap-2 py-3 px-6 outline-none hover:bg-gray-800 focus:bg-gray-900"
             >
-              {item.icon}
-              <span className="uppercase">{item.name}</span>
+              <Image
+                src={item.token_image_url || ''}
+                alt={item.token_symbol || ''}
+                width={20}
+                height={20}
+              />
+              <span className="uppercase">{item.token_symbol}</span>
             </li>
           ))
         ) : (
