@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import Button from '@/components/ui/button';
@@ -6,6 +7,7 @@ import NotificationCard, {
   NotificationCardProps,
 } from '@/components/ui/notification-card';
 import RootLayout from '@/layouts/_root-layout';
+import { useAppSelector } from '@/store/store';
 
 let notifications = [
   {
@@ -126,6 +128,22 @@ let notifications = [
 
 const NotificationPage: NextPageWithLayout = () => {
   const [notificationList, setNotificationList] = useState(notifications);
+
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  useEffect(() => {
+    if (firebase_jwt === null) return;
+    axios
+      .get('/api/notifications', {
+        headers: {
+          firebase_jwt,
+        },
+      })
+      .then((res) => setNotificationList(res.data))
+      .catch((err) => console.log(err.message));
+  }, [firebase_jwt]);
   return (
     <>
       <NextSeo

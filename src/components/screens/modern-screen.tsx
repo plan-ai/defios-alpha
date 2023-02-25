@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
 import { useEffect } from 'react';
 
-
 export default function ModernScreen() {
   const { data: session } = useSession();
   const wallet = useWallet();

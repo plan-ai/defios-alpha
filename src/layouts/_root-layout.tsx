@@ -4,7 +4,8 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import axios from 'axios';
+import { getFirebaseJwt } from '@/store/firebaseTokensSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 // dynamic imports
 const ModernLayout = dynamic(() => import('@/layouts/_modern'), {
   loading: () => <FallbackLoader />,
@@ -25,9 +26,13 @@ export default function RootLayout({
   const isMounted = useIsMounted();
   const wallet = useWallet();
   const { data: session } = useSession();
-
+  const dispatch = useAppDispatch();
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
   useEffect(() => {
     if (
+      firebase_jwt === null &&
       //@ts-ignore
       session?.user?.id &&
       wallet.publicKey &&
@@ -35,23 +40,21 @@ export default function RootLayout({
       session?.accessToken &&
       sessionStorage.getItem('browser-notif-token') !== undefined
     ) {
-      axios
-        .post('/api/firebase-token/notif', {
+      const notifToken = sessionStorage.getItem('browser-notif-token');
+      dispatch(
+        getFirebaseJwt({
           //@ts-ignore
-          github_id: session?.user?.id,
-          firebase_uid: sessionStorage.getItem('browser-notif-token'),
+          github_id: session.user.id,
           //@ts-ignore
-          user_gh_access_token: session?.accessToken,
+          firebase_uid: notifToken,
+          //@ts-ignore
+          user_gh_access_token: session.accessToken,
+          //@ts-ignore
           pub_key: wallet.publicKey,
         })
-        .then((response) => {
-          sessionStorage.setItem('firebase_jwt', response.data.auth_creds);
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      );
     }
-  }, [session, wallet]);
+  }, [session, wallet, dispatch, firebase_jwt]);
 
   // fix the `Hydration failed because the initial UI does not match` issue
   if (!isMounted) return null;
