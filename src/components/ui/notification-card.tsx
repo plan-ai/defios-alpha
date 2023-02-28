@@ -42,13 +42,13 @@ export default function NotificationCard({
   sender_name,
   sender_profile_pic,
 }: NotificationCardProps) {
-  const dateFormatted = new Date(notif_post_time).toLocaleDateString('en-US', {
+  const dateFormatted = new Date(notif_post_time).toLocaleDateString('en-IN', {
     weekday: 'short',
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
-  const timeFormatted = new Date(notif_post_time).toLocaleTimeString('en-US', {
+  const timeFormatted = new Date(notif_post_time).toLocaleTimeString('en-IN', {
     timeStyle: 'short',
   });
 

@@ -15,7 +15,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({ issueDesc }) => {
           {issueDesc.length === 0 && 'No Description available'}
           {issueDesc.length > 250 ? issueDesc.slice(0, 250) + '...' : issueDesc}
         </div>
-        <strong>view Discussion Thread on Github</strong>
+        <strong className='underline'>view Thread on Github</strong>
       </div>
       <div className="flex w-1/2 flex-col gap-3">
         <div className="flex-flex-col w-full">

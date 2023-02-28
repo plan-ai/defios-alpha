@@ -32,6 +32,7 @@ export type roadmapListType = {
 export type detailsType = {
   details: detailsTabType;
   preRequisites: preRequisitesType[];
+  contributions: contributionsType[];
 };
 export type detailsTabType = {
   description: string;
@@ -51,6 +52,13 @@ export type preRequisitesType = {
   amountOutOf: string;
   coin: string;
   status: string;
+};
+export type contributionsType = {
+  id: number;
+  username: string;
+  userImage: StaticImageData;
+  value: number;
+  color: string;
 };
 
 export const deliverableList = [
@@ -127,6 +135,36 @@ export const RoadmapList = [
           status: 'not started',
         },
       ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
+        },
+      ],
     },
   },
   {
@@ -177,6 +215,36 @@ export const RoadmapList = [
           amountOutOf: '42',
           coin: 'OFC',
           status: 'not started',
+        },
+      ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
         },
       ],
     },
@@ -231,6 +299,36 @@ export const RoadmapList = [
           status: 'not started',
         },
       ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
+        },
+      ],
     },
   },
   {
@@ -281,6 +379,36 @@ export const RoadmapList = [
           amountOutOf: '42',
           coin: 'DOS',
           status: 'not started',
+        },
+      ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
         },
       ],
     },
@@ -335,6 +463,36 @@ export const RoadmapList = [
           status: 'not started',
         },
       ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
+        },
+      ],
     },
   },
   {
@@ -385,6 +543,36 @@ export const RoadmapList = [
           amountOutOf: '42',
           coin: 'FTB',
           status: 'not started',
+        },
+      ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
         },
       ],
     },
@@ -439,6 +627,36 @@ export const RoadmapList = [
           status: 'not started',
         },
       ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
+        },
+      ],
     },
   },
   {
@@ -489,6 +707,36 @@ export const RoadmapList = [
           amountOutOf: '42',
           coin: 'BLDR',
           status: 'not started',
+        },
+      ],
+      contributions: [
+        {
+          id: 1,
+          username: 'Rohitkk432',
+          userImage: User1,
+          value: 40,
+          color: '#F79517',
+        },
+        {
+          id: 2,
+          username: 'never2average',
+          userImage: User2,
+          value: 30,
+          color: '#259C77',
+        },
+        {
+          id: 3,
+          username: 'AbhisekBasu1',
+          userImage: User3,
+          value: 20,
+          color: '#3468D1',
+        },
+        {
+          id: 4,
+          username: 'MayankMittal07',
+          userImage: User4,
+          value: 10,
+          color: '#F3BA2F',
         },
       ],
     },

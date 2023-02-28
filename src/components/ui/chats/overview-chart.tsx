@@ -50,11 +50,11 @@ export default function OverviewChart({ chartWrapperClass }: Props) {
         'rounded-lg bg-light-dark p-6 text-white shadow-card sm:p-8'
       )}
     >
-      <h3 className="text-xl font-medium tracking-tighter text-white sm:text-3xl">
-        74.8%
+      <h3 className="text-2xl font-medium tracking-tighter text-white">
+        Community Issue Solving Capacity
       </h3>
-      <p className="mt-2 mb-1 text-xs font-medium text-gray-400 sm:text-sm">
-        Compare to $1,812 last week
+      <p className="text-md mt-2 mb-1 font-medium text-gray-400">
+        Compare to 34% last week
       </p>
       <div className={cn('h-60 w-full', chartWrapperClass)}>
         <ResponsiveContainer width="100%" height="100%">

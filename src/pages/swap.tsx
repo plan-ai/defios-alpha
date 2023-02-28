@@ -10,7 +10,7 @@ import Trade from '@/components/ui/trade';
 import RootLayout from '@/layouts/_root-layout';
 
 import RightSideInfo from '@/components/swaps/right-side-info';
-
+import Spinner from '@/components/custom/spinner';
 import { useAppSelector } from '@/store/store';
 import axios from 'axios';
 
@@ -44,43 +44,47 @@ const SwapPage: NextPageWithLayout = () => {
       />
       <div className="flex h-full w-full items-center justify-between px-60">
         <Trade>
-          <div className="mb-5 border-b border-dashed border-gray-800 pb-5 xs:mb-7 xs:pb-6">
-            <div
-              className={cn(
-                'relative flex gap-3',
-                toggleCoin ? 'flex-col-reverse' : 'flex-col'
-              )}
-            >
-              <CoinInput
-                label={'From'}
-                exchangeRate={0.0}
-                defaultCoinIndex={0}
-                getCoinValue={(data) => console.log('From coin value:', data)}
-                coinList={coinList}
-                selectedCoin={fromCoin}
-                setSelectedCoin={setFromCoin}
-              />
-              <div className="absolute top-1/2 left-1/2 z-[1] -mt-4 -ml-4 rounded-full bg-gray-600 shadow-large">
-                <Button
-                  size="mini"
-                  color="gray"
-                  shape="circle"
-                  variant="transparent"
-                  onClick={() => setToggleCoin(!toggleCoin)}
-                >
-                  <SwapIcon className="h-auto w-3" />
-                </Button>
+          <div className="mb-5 w-[24.2rem] border-b border-dashed border-gray-800 pb-5 xs:mb-7 xs:pb-6">
+            {coinList.length !== 0 ? (
+              <div
+                className={cn(
+                  'relative flex gap-3',
+                  toggleCoin ? 'flex-col-reverse' : 'flex-col'
+                )}
+              >
+                <CoinInput
+                  label={'From'}
+                  exchangeRate={0.0}
+                  defaultCoinIndex={0}
+                  getCoinValue={(data) => console.log('From coin value:', data)}
+                  coinList={coinList}
+                  selectedCoin={fromCoin}
+                  setSelectedCoin={setFromCoin}
+                />
+                <div className="absolute top-1/2 left-1/2 z-[1] -mt-4 -ml-4 rounded-full bg-gray-600 shadow-large">
+                  <Button
+                    size="mini"
+                    color="gray"
+                    shape="circle"
+                    variant="transparent"
+                    onClick={() => setToggleCoin(!toggleCoin)}
+                  >
+                    <SwapIcon className="h-auto w-3" />
+                  </Button>
+                </div>
+                <CoinInput
+                  label={'To'}
+                  exchangeRate={0.0}
+                  defaultCoinIndex={1}
+                  getCoinValue={(data) => console.log('To coin value:', data)}
+                  coinList={coinList}
+                  selectedCoin={toCoin}
+                  setSelectedCoin={setToCoin}
+                />
               </div>
-              <CoinInput
-                label={'To'}
-                exchangeRate={0.0}
-                defaultCoinIndex={1}
-                getCoinValue={(data) => console.log('To coin value:', data)}
-                coinList={coinList}
-                selectedCoin={toCoin}
-                setSelectedCoin={setToCoin}
-              />
-            </div>
+            ) : (
+              <Spinner />
+            )}
           </div>
           <div className="flex flex-col gap-4 xs:gap-[18px]">
             <TransactionInfo label={'Min. Received'} />

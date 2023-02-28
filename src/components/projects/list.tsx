@@ -35,7 +35,7 @@ export default function ProjectList({
         <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
           {name}
         </div>
-        <div className="px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
+        <div className="text-center text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
           {openIssues}
         </div>
         <div className="px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">

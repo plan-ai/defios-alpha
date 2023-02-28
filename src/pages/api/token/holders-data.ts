@@ -26,14 +26,15 @@ export default async function handler(
       const data = resp.data.data;
       const newData = data.map((item: any) => {
         let volume = '';
-        if (item.amount > 10 ** 12) {
-          volume = Math.floor(item.amount / 10 ** 12).toString() + ' T';
-        } else if (item.amount > 10 ** 9) {
-          volume = Math.floor(item.amount / 10 ** 9).toString() + ' B';
-        } else if (item.amount > 10 ** 6) {
-          volume = Math.floor(item.amount / 10 ** 6).toString() + ' M';
+        let amt = item.amount / 10 ** item.decimals;
+        if (amt > 10 ** 12) {
+          volume = (Math.floor(amt / 10 ** 10) / 100).toString() + ' Tn';
+        } else if (amt > 10 ** 9) {
+          volume = (Math.floor(amt / 10 ** 7) / 100).toString() + ' Bn';
+        } else if (amt > 10 ** 6) {
+          volume = (Math.floor(amt / 10 ** 5) / 100).toString() + ' Mn';
         } else {
-          volume = Math.floor(item.amount / 10 ** 3).toString() + ' K';
+          volume = (Math.floor(amt / 10 ** 1) / 100).toString() + ' K';
         }
         return {
           address: item.address,

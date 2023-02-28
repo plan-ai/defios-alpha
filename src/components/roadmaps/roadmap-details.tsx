@@ -5,18 +5,18 @@ import cn from 'classnames';
 import RoadmapPopupDetails from '@/components/roadmaps/roadmap-popup-details';
 import PreReqCard from '@/components/roadmaps/pre-req-card';
 import { RoadmapList, detailsType } from '@/data/static/roadmap-list';
-import RoadmapPieChart from '@/components/roadmaps/roadmap-pie-chart';
+
+import RoadmapContributions from '@/components/roadmaps/roadmap-contributions';
 import { StaticImageData } from 'next/image';
 
 import ListCard from '@/components/ui/list-card';
 import { LockIcon } from '@/components/icons/lock';
 import { YellowClock } from '@/components/icons/yellow-clock';
-import { Close } from '../icons/close';
+import { Close } from '@/components/icons/close';
 
 import { deliverableList } from '@/data/static/roadmap-list';
 
 import Dag from '@/components/dag/dag';
-import { SetState } from 'immer/dist/internal';
 
 type RoadmapDetailsProps = {
   creator: string;
@@ -145,7 +145,12 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
               </TabPanel>
               <TabPanel className="focus:outline-none">
                 <div className="flex flex-col-reverse">
-                  <RoadmapPieChart />
+                  <RoadmapContributions
+                    contributions={
+                      details?.contributions ||
+                      RoadmapList[0].details.contributions
+                    }
+                  />
                 </div>
               </TabPanel>
             </ParamTab>

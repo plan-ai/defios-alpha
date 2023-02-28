@@ -2,6 +2,7 @@ import cn from 'classnames';
 import React, { useState } from 'react';
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
+import AnchorLink from '../ui/links/anchor-link';
 
 const dummyData = [
   {
@@ -90,9 +91,13 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
                 key={idx}
                 className="grid grid-cols-[150px_repeat(2,1fr)] items-center justify-between text-sm font-medium text-white 2xl:grid-cols-[140px_repeat(2,1fr)] 3xl:grid-cols-[150px_repeat(2,1fr)]"
               >
-                <span className="flex items-center gap-2.5 whitespace-nowrap">
+                <AnchorLink
+                  href={`https://solscan.io/account/${item.owner}`}
+                  target="_blank"
+                  className="flex items-center gap-2.5 whitespace-nowrap"
+                >
                   {item.owner.slice(0, 8) + '...' + item.owner.slice(36, 44)}
-                </span>
+                </AnchorLink>
                 <span className="text-center"></span>
                 <span className={cn('flex items-center justify-end')}>
                   {item.volume}

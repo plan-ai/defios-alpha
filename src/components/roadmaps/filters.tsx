@@ -224,7 +224,6 @@ const CheckBoxList: React.FC<CheckBoxListProps> = ({ list }) => {
 
 const OrderByValues = [
   'Newest',
-  'Oldest',
   'Public Goods',
   'Defi Protocols',
   'Web3 Infra',
@@ -250,10 +249,10 @@ const OutcomeValues = [
 export function Filters() {
   return (
     <>
-      <Collapse label="Order By" initialOpen>
+      <Collapse label="Filter By" initialOpen>
         <Status values={OrderByValues} />
       </Collapse>
-      <Collapse label="Amount Staked" initialOpen>
+      <Collapse label="Amount Staked (USD)" initialOpen>
         <PriceRange />
       </Collapse>
       <Collapse label="Creator" initialOpen>
