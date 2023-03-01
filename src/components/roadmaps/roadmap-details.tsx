@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import NftFooter from '@/components/nft/nft-footer';
 import cn from 'classnames';
@@ -45,12 +45,16 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   activeObjectives,
   setRoadmap,
 }) => {
+  const [nodeSelected, setNodeSelected] = useState<any>();
   return (
     <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-lg p-10 transition-all">
       <div className="mr-10 flex h-full w-[55%] flex-col items-center justify-end">
         <div className="flex h-full max-h-full w-full items-center justify-center overflow-hidden">
           <div className="h-full w-full rounded-xl">
-            <Dag />
+            <Dag
+              nodeSelected={nodeSelected}
+              setNodeSelected={setNodeSelected}
+            />
           </div>
         </div>
         {/* <NftFooter
@@ -63,99 +67,106 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
       </div>
 
       <div className="flex h-full w-[40%] flex-col justify-between">
-        <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
-          <div className="flex flex-col">
-            <div className="flex justify-between">
-              <h2 className="flex items-center gap-2 text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
-                {name}
-                {status === 'lock' && <LockIcon />}
-                {status === 'open' && <YellowClock />}
-              </h2>
-              <Close
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setRoadmap('');
-                }}
-                className="h-6 w-6"
-              />
-            </div>
-            <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
-              created at {creationDate}
-            </div>
-            <div className="mt-4 flex flex-wrap gap-6 pt-0.5 lg:-mx-6 lg:mt-6 lg:gap-0">
-              <div className="shrink-0 border-dashed border-gray-700 lg:border-r lg:px-6">
-                <h3 className="text-heading-style mb-2 uppercase text-white">
-                  Created By
-                </h3>
-                <ListCard
-                  item={{ name: creator, logo: creatorImage }}
-                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
-                />
-              </div>
-              <div className="shrink-0 lg:px-6">
-                <h3 className="text-heading-style mb-2.5 uppercase text-white">
-                  Deliverable
-                </h3>
-                <ListCard
-                  item={{
-                    name: deliverable,
-                    element: deliverableList.filter((item) => {
-                      return item.name === deliverable;
-                    })[0].element,
+        {nodeSelected !== null && nodeSelected !== undefined ? (
+          <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
+            <div className="flex flex-col">
+              <div className="flex justify-between">
+                <h2 className="flex items-center gap-2 text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
+                  {name}
+                  {status === 'lock' && <LockIcon />}
+                  {status === 'open' && <YellowClock />}
+                </h2>
+                <Close
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setRoadmap('');
                   }}
-                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                  className="h-6 w-6"
                 />
               </div>
-            </div>
-          </div>
-          <div className="mt-2 flex w-full flex-col pb-5 xl:mt-2">
-            <ParamTab
-              tabMenu={[
-                {
-                  title: 'Details',
-                  path: 'details',
-                },
-                {
-                  title: 'Pre-Requisites',
-                  path: 'pre-requisites',
-                },
-                {
-                  title: 'Contributions',
-                  path: 'contributions',
-                },
-              ]}
-            >
-              <TabPanel className="focus:outline-none">
-                <RoadmapPopupDetails
-                  details={details?.details || RoadmapList[0].details.details}
-                />
-              </TabPanel>
-              <TabPanel className="focus:outline-none">
-                <div className="flex flex-col-reverse">
-                  {details?.preRequisites &&
-                    details.preRequisites.length !== 0 &&
-                    details.preRequisites?.map((preReq: any, idx: number) => (
-                      <PreReqCard
-                        item={preReq}
-                        key={idx}
-                        className="mb-3 first:mb-0"
-                      />
-                    ))}
-                </div>
-              </TabPanel>
-              <TabPanel className="focus:outline-none">
-                <div className="flex flex-col-reverse">
-                  <RoadmapContributions
-                    contributions={
-                      details?.contributions ||
-                      RoadmapList[0].details.contributions
-                    }
+              <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
+                created at {creationDate}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-6 pt-0.5 lg:-mx-6 lg:mt-6 lg:gap-0">
+                <div className="shrink-0 border-dashed border-gray-700 lg:border-r lg:px-6">
+                  <h3 className="text-heading-style mb-2 uppercase text-white">
+                    Created By
+                  </h3>
+                  <ListCard
+                    item={{ name: creator, logo: creatorImage }}
+                    className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                   />
                 </div>
-              </TabPanel>
-            </ParamTab>
+                <div className="shrink-0 lg:px-6">
+                  <h3 className="text-heading-style mb-2.5 uppercase text-white">
+                    Deliverable
+                  </h3>
+                  <ListCard
+                    item={{
+                      name: deliverable,
+                      element: deliverableList.filter((item) => {
+                        return item.name === deliverable;
+                      })[0].element,
+                    }}
+                    className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-2 flex w-full flex-col pb-5 xl:mt-2">
+              <ParamTab
+                tabMenu={[
+                  {
+                    title: 'Details',
+                    path: 'details',
+                  },
+                  {
+                    title: 'Pre-Requisites',
+                    path: 'pre-requisites',
+                  },
+                  {
+                    title: 'Contributions',
+                    path: 'contributions',
+                  },
+                ]}
+              >
+                <TabPanel className="focus:outline-none">
+                  <RoadmapPopupDetails
+                    details={details?.details || RoadmapList[0].details.details}
+                  />
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="flex flex-col-reverse">
+                    {details?.preRequisites &&
+                      details.preRequisites.length !== 0 &&
+                      details.preRequisites?.map((preReq: any, idx: number) => (
+                        <PreReqCard
+                          item={preReq}
+                          key={idx}
+                          className="mb-3 first:mb-0"
+                        />
+                      ))}
+                  </div>
+                </TabPanel>
+                <TabPanel className="focus:outline-none">
+                  <div className="flex flex-col-reverse">
+                    <RoadmapContributions
+                      contributions={
+                        details?.contributions ||
+                        RoadmapList[0].details.contributions
+                      }
+                    />
+                  </div>
+                </TabPanel>
+              </ParamTab>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center text-2xl">
+            <div>Select a Node</div>
+            <div>to Continue</div>
+          </div>
+        )}
       </div>
     </div>
   );
