@@ -41,21 +41,23 @@ const data = [
 
 interface Props {
   chartWrapperClass?: string;
+  className?:string
 }
 
-export default function OverviewChart({ chartWrapperClass }: Props) {
+export default function OverviewChart({ chartWrapperClass,className }: Props) {
   return (
     <div
       className={cn(
-        'rounded-lg bg-light-dark p-6 text-white shadow-card sm:p-8'
+        'rounded-lg bg-light-dark p-6 text-white shadow-card sm:p-8',
+        className
       )}
     >
-      <h3 className="text-2xl font-medium tracking-tighter text-white">
+      <div className="text-xl font-medium tracking-tighter text-white">
         Community Issue Solving Capacity
-      </h3>
-      <p className="text-md mt-2 mb-1 font-medium text-gray-400">
-        Compare to 34% last week
-      </p>
+      </div>
+      <div className="text-2xl mt-5 font-medium tracking-tighter text-white">
+        72%
+      </div>
       <div className={cn('h-60 w-full', chartWrapperClass)}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
@@ -76,6 +78,9 @@ export default function OverviewChart({ chartWrapperClass }: Props) {
           </LineChart>
         </ResponsiveContainer>
       </div>
+      <p className="text-md mt-10 mb-1 font-medium text-gray-400">
+        Compare to 34% last week
+      </p>
     </div>
   );
 }

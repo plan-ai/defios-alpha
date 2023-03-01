@@ -145,7 +145,7 @@ export default function Projects() {
                   change={project.change}
                 />
                 <div className="w-full">
-                  <PriceChart />
+                  <PriceChart change={project.change[0]} />
                 </div>
               </div>
               <div className="flex w-[30%]">
@@ -166,7 +166,7 @@ export default function Projects() {
                   change={project.contributionChange}
                 />
                 <div className="w-full">
-                  <PriceChart />
+                  <PriceChart change={project.contributionChange[0]} />
                 </div>
               </div>
             </div>

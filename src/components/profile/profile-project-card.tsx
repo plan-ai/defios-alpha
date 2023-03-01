@@ -99,7 +99,7 @@ export default function ProfileProjectCard({
           <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
             <CoinTicker value={coinValue} coin={coin} change={change} />
             <div className="w-[50%]">
-              <PriceChart />
+              <PriceChart change={change.toString()[0] || ''} />
             </div>
           </div>
         </div>

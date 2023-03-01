@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import ListCard from '@/components/ui/list-card';
 
 interface IssuesTableListProps {
   issueTitle: string;
@@ -8,13 +8,12 @@ interface IssuesTableListProps {
   skillsetNeeded: string;
 }
 
-export const IssuesTableList = ({
+export const IssuesTableList: React.FC<IssuesTableListProps> = ({
   issueTitle,
   projectName,
   amountStaked,
   skillsetNeeded,
-  children,
-}: React.PropsWithChildren<IssuesTableListProps>) => {
+}) => {
   let [isExpand, setIsExpand] = useState(false);
 
   return (
@@ -33,28 +32,14 @@ export const IssuesTableList = ({
           {amountStaked}
         </div>
         <div className="text-center text-xs font-medium tracking-wider text-white sm:text-sm">
-          {skillsetNeeded}
+          <ListCard
+            item={{
+              name: skillsetNeeded,
+            }}
+            className="w-fit rounded-full bg-dark py-2 px-4 text-white"
+          />
         </div>
       </div>
-      <AnimatePresence initial={false}>
-        {isExpand && (
-          <motion.div
-            key="content"
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: { opacity: 1, height: 'auto' },
-              collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-          >
-            <div className="border-t border-dashed border-gray-700 px-6">
-              {children}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

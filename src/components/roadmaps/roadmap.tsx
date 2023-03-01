@@ -40,7 +40,7 @@ export default function Roadmap() {
 
         <div className="2xl:pl-8 4xl:pl-10">
           <div className="relative z-10 mb-6 flex items-center justify-between">
-            <span className="w-1/2 text-xs font-medium text-white sm:text-sm">
+            <span className="w-3/5 text-xs font-medium text-white sm:text-sm">
               <Search />
             </span>
 

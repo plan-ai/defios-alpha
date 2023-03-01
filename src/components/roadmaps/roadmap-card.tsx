@@ -9,9 +9,24 @@ import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import routes from '@/config/routes';
 import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import ListCard from '../ui/list-card';
-import { roadmapListType, RoadmapList } from '@/data/static/roadmap-list';
+import { detailsType, RoadmapList } from '@/data/static/roadmap-list';
+import cn from 'classnames';
 
-type RoadmapCardProps = roadmapListType;
+import { StaticImageData } from 'next/image';
+
+type RoadmapCardProps = {
+  creator: string;
+  creatorImage: StaticImageData;
+  image: StaticImageData;
+  name: string;
+  creationDate: string;
+  totalStake: string;
+  deliverable: string;
+  status: string;
+  details: detailsType | undefined;
+  activeObjectives: string;
+  className?: string;
+};
 
 export default function RoadmapCard({
   creator,
@@ -24,6 +39,7 @@ export default function RoadmapCard({
   deliverable,
   status,
   activeObjectives,
+  className,
 }: RoadmapCardProps) {
   const [roadmap, setRoadmap] = useState('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
@@ -32,42 +48,49 @@ export default function RoadmapCard({
   });
   useLockBodyScroll(roadmap !== '');
   return (
-    <div className="relative overflow-hidden rounded-lg bg-light-dark shadow-card transition-all duration-200 hover:shadow-large">
-      <div className="p-4">
-        <div className="text-2xl font-semibold text-white ">{name}</div>
-      </div>
+    <div className="relative overflow-hidden transition-all duration-200">
       <div
-        onClick={(e) => setRoadmap(name)}
-        className="relative block w-full pb-full"
+        className={cn(
+          'rounded-lg bg-light-dark shadow-card hover:shadow-large',
+          className
+        )}
       >
-        <Image
-          src={image}
-          placeholder="blur"
-          layout="fill"
-          objectFit="cover"
-          alt=""
-        />
-      </div>
-
-      <div className="p-5 pt-3">
-        <div className="flex items-center gap-2">
-          <div className="text-xs">Created by:</div>
-          <ListCard
-            item={{ name: creator, logo: creatorImage }}
-            className="rounded-full bg-dark px-3 py-2"
+        <div className="p-4">
+          <div className="text-2xl font-semibold text-white ">{name}</div>
+        </div>
+        <div
+          onClick={(e) => setRoadmap(name)}
+          className="relative block w-full pb-full"
+        >
+          <Image
+            src={image}
+            placeholder="blur"
+            layout="fill"
+            objectFit="cover"
+            alt=""
           />
         </div>
-        <div className=" mt-1.5 flex items-center gap-2">
-          <div className="text-xs">Total Staked:</div>
-          <div className='text-white text-xl font-semibold' >{totalStake}</div>
-        </div>
-        <div className=" mt-1.5 flex items-center gap-2">
-          <div className="text-xs">Active Objectives:</div>
-          <div>{activeObjectives}</div>
-        </div>
-        <div className=" mt-1.5 flex items-center gap-2">
-          <div className="text-xs">Created</div>
-          <div className='text-gray-500 text-sm'>{creationDate}</div>
+
+        <div className="p-5 pt-3">
+          <div className="flex items-center gap-2">
+            <div className="text-xs">Created by:</div>
+            <ListCard
+              item={{ name: creator, logo: creatorImage }}
+              className="rounded-full bg-dark px-3 py-2"
+            />
+          </div>
+          <div className=" mt-1.5 flex items-center gap-2">
+            <div className="text-xs">Total Staked:</div>
+            <div className="text-xl font-semibold text-white">{totalStake}</div>
+          </div>
+          <div className=" mt-1.5 flex items-center gap-2">
+            <div className="text-xs">Active Objectives:</div>
+            <div>{activeObjectives}</div>
+          </div>
+          <div className=" mt-1.5 flex items-center gap-2">
+            <div className="text-xs">Created</div>
+            <div className="text-sm text-gray-500">{creationDate}</div>
+          </div>
         </div>
       </div>
       <AnimatePresence>

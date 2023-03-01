@@ -14,8 +14,6 @@ type ItemType = {
   coin: string;
   coinValue: number;
   change: string;
-  communityScore: string;
-  rewarded: string;
 };
 
 interface TopProjectCardProps {
@@ -34,8 +32,6 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
     coin,
     coinValue,
     change,
-    communityScore,
-    rewarded,
   } = item;
   return (
     <div
@@ -45,6 +41,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
       )}
     >
       <div className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6">
+        <div className='text-xl uppercase' >Most Trending Project</div>
         <div className="flex justify-between gap-3">
           <AnchorLink
             href={repoURL || ''}
@@ -60,25 +57,12 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         </div>
         <div className="my-5 flex w-full flex-row items-center justify-center">
           <StatsData icon={'issues'} header={'Open Issues'} value={issues} />
-          <StatsData
-            icon={'health'}
-            header={'Community Score'}
-            value={communityScore}
-          />
-        </div>
-        <div className="my-5 flex w-full flex-row items-center justify-center">
           <StatsData icon={'lock'} header={'Staked Coins'} value={staked} />
-
-          <StatsData
-            icon={'banknotes'}
-            header={'Coins Rewarded'}
-            value={rewarded}
-          />
         </div>
         <div className="flex w-full flex-col gap-3 border-t border-dashed border-gray-800 pt-6">
           <CoinTicker value={coinValue} coin={coin} change={change} />
           <div className="w-full">
-            <PriceChart />
+            <PriceChart change={change.toString()[0] || ''} />
           </div>
         </div>
       </div>

@@ -6,6 +6,9 @@ import { Check } from '@/components/icons/check';
 import TopupButton from '../ui/topup-button';
 import ButtonImg from '../custom/ButtonImg';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { A11y } from 'swiper';
+
 interface CheckItemProps {
   label: string;
   checked: boolean;
@@ -100,11 +103,11 @@ const Journey: React.FC<JourneyProps> = ({ className }) => {
         <div className="w-full py-3 px-5">
           <div className="mb-2 flex w-full flex-col items-center gap-3 border-b border-dashed border-gray-700 pt-3 pb-8">
             <div className="flex flex-col items-center">
-              <div>Welcome to DefiOS!!</div>
               <div>Lets Supercharge Open</div>
               <div>Source Collaboration Now</div>
             </div>
             <TopupButton label="Support Existing Projects" />
+            <div>OR</div>
             <TopupButton
               label="Create New Project"
               className="border-white bg-blue-500"
@@ -112,26 +115,40 @@ const Journey: React.FC<JourneyProps> = ({ className }) => {
             />
           </div>
           <div className="flex w-full flex-col items-center px-1 py-2">
-            <div className="mb-4 text-lg">Chose Your Role</div>
-            <div className="flew-wrap mb-8 flex w-full items-center justify-between gap-2 overflow-x-scroll pb-4">
-              <ButtonImg
-                active={activeTab === 'Developer'}
-                onClick={() => setActiveTab('Developer')}
-                image="Developer"
-                label="Developer"
-              />
-              <ButtonImg
-                active={activeTab === 'Repository Owner'}
-                onClick={() => setActiveTab('Repository Owner')}
-                image="Repository Owner"
-                label="Repository Owner"
-              />
-              <ButtonImg
-                active={activeTab === 'Company'}
-                onClick={() => setActiveTab('Company')}
-                image="Company"
-                label="Company"
-              />
+            <div className="mb-4 text-lg">Choose Your Journey</div>
+            <div className="mb-8 w-full pb-4">
+              <Swiper
+                modules={[A11y]}
+                spaceBetween={5}
+                slidesPerView={2}
+                observer={true}
+                dir="ltr"
+              >
+                <SwiperSlide>
+                  <ButtonImg
+                    active={activeTab === 'Developer'}
+                    onClick={() => setActiveTab('Developer')}
+                    image="Developer"
+                    label="Developer"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ButtonImg
+                    active={activeTab === 'Repo Owner'}
+                    onClick={() => setActiveTab('Repo Owner')}
+                    image="Repo Owner"
+                    label="Repo Owner"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <ButtonImg
+                    active={activeTab === 'Company'}
+                    onClick={() => setActiveTab('Company')}
+                    image="Company"
+                    label="Company"
+                  />
+                </SwiperSlide>
+              </Swiper>
             </div>
             <JourneyChecklist items={dummyData} />
           </div>

@@ -63,6 +63,9 @@ export default function Header({ className }: { className?: string }) {
               className="text-white"
             />
           </div>
+          {router.pathname === '/' && (
+            <div className="text-2xl">Welcome to DefiOS!!</div>
+          )}
           <div
             onClick={() => router.push(routes.home)}
             className="flex items-center xl:hidden"

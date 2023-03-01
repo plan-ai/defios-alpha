@@ -14,6 +14,7 @@ import { priceFeedData } from '@/data/static/price-feed-retro';
 
 import RoadmapCard from '@/components/roadmaps/roadmap-card';
 import { RoadmapList } from '@/data/static/roadmap-list';
+import ListCard from '@/components/ui/list-card';
 
 import { profileProjects } from '@/data/static/profile-projects';
 import TopProjectCard from '@/components/homepage/top-project-card';
@@ -62,20 +63,29 @@ export default function ModernScreen() {
         </div>
         <OpenIssuesTable />
         <div className="grid w-full grid-cols-3 gap-3">
-          <TopProjectCard item={profileProjects[0]} />
-          <RoadmapCard
-            name={RoadmapList[0].name}
-            image={RoadmapList[0].image}
-            creator={RoadmapList[0].creator}
-            creatorImage={RoadmapList[0].creatorImage}
-            totalStake={RoadmapList[0].totalStake}
-            creationDate={RoadmapList[0].creationDate}
-            details={RoadmapList[0].details}
-            deliverable={RoadmapList[0].deliverable}
-            status={RoadmapList[0].status}
-            activeObjectives={RoadmapList[0].activeObjectives}
-          />
-          <OverviewChart />
+          <TopProjectCard item={profileProjects[0]} className="scale-y-90" />
+          <div className="relative">
+            <RoadmapCard
+              name={RoadmapList[0].name}
+              image={RoadmapList[0].image}
+              creator={RoadmapList[0].creator}
+              creatorImage={RoadmapList[0].creatorImage}
+              totalStake={RoadmapList[0].totalStake}
+              creationDate={RoadmapList[0].creationDate}
+              details={RoadmapList[0].details}
+              deliverable={RoadmapList[0].deliverable}
+              status={RoadmapList[0].status}
+              activeObjectives={RoadmapList[0].activeObjectives}
+              className="scale-y-90"
+            />
+            <ListCard
+              item={{
+                name: '🔥 Hot',
+              }}
+              className="absolute top-9 right-3 rounded-full bg-black p-2 pr-4 text-white"
+            />
+          </div>
+          <OverviewChart className="scale-y-90" />
         </div>
         <div className="flex h-full w-full flex-col items-center justify-center gap-10">
           {!session && (

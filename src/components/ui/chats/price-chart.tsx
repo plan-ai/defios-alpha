@@ -3,9 +3,10 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 interface PriceChartProps {
   chartData?: any;
+  change?: string;
 }
 
-const PriceChart: React.FC<PriceChartProps> = ({ chartData }) => {
+const PriceChart: React.FC<PriceChartProps> = ({ chartData, change }) => {
   const dummyData = [
     { name: 1, value: 9187.44 },
     { name: 2, value: 21356.99 },
@@ -26,13 +27,45 @@ const PriceChart: React.FC<PriceChartProps> = ({ chartData }) => {
               <stop offset="5%" stopColor="#bc9aff" stopOpacity={0.5} />
               <stop offset="100%" stopColor="#7645D9" stopOpacity={0} />
             </linearGradient>
+            <linearGradient
+              id="liquidity-gradient-green"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop offset="5%" stopColor="#16a34a" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient
+              id="liquidity-gradient-red"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop offset="5%" stopColor="#b91c1c" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="#dc2626" stopOpacity={0} />
+            </linearGradient>
           </defs>
           <Area
             type="natural"
             dataKey="value"
-            stroke="#7645D9"
+            stroke={
+              change === '+'
+                ? '#22c55e'
+                : change === '-'
+                ? '#dc2626'
+                : '#7645D9'
+            }
             strokeWidth={1.5}
-            fill="url(#liquidity-gradient)"
+            fill={
+              change === '+'
+                ? 'url(#liquidity-gradient-green)'
+                : change === '-'
+                ? 'url(#liquidity-gradient-red)'
+                : 'url(#liquidity-gradient)'
+            }
             dot={false}
           />
         </AreaChart>
