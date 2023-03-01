@@ -23,7 +23,16 @@ export default async function handler(
           value: data[item],
         };
       });
-      res.status(200).send(newData);
+      const change =
+        data[dataKeys[dataKeys.length - 1]] - data[dataKeys[0]] > 0
+          ? '+'
+          : data[dataKeys[dataKeys.length - 1]] - data[dataKeys[0]] < 0
+          ? '-'
+          : '';
+      res.status(200).send({
+        data: newData,
+        change: change,
+      });
     })
     .catch((error) => {
       res.status(400).send({ message: error.message });

@@ -124,7 +124,10 @@ export default function RightSideInfo({
                 />
                 <div className="my-5">Last Traded Price:</div>
                 {priceChartData !== null && (
-                  <PriceChart chartData={priceChartData} />
+                  <PriceChart
+                    chartData={priceChartData.data}
+                    change={priceChartData.change}
+                  />
                 )}
                 <div>
                   <span className="-mx-6 block border-t border-dashed border-t-gray-700 3xl:-mx-8" />
