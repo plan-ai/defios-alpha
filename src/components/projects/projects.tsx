@@ -13,6 +13,8 @@ import PriceChart from '@/components/ui/chats/price-chart';
 import CoinTicker from '@/components/custom/coin-ticker';
 import DataWithImage from '@/components/custom/data-with-image';
 import StackedSwitch from '@/components/custom/stacked-switch';
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import Image from 'next/image';
 
 import { ProjectsData } from '@/data/static/projects-data';
 
@@ -191,7 +193,10 @@ export default function Projects() {
         ))}
       {ProjectsData.length === 0 && (
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
-          <div className="text-xl">No Projects Found</div>
+          <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+          <div className="text-lg text-gray-500">
+            No projects found that match you filter and search settings
+          </div>
           <Button
             onClick={() => router.push('incentivize-contributors')}
             shape="rounded"
@@ -200,7 +205,7 @@ export default function Projects() {
           >
             <div className="flex items-center gap-2">
               <PlusCircle />
-              <div>Create one</div>
+              <div>Create New Project</div>
             </div>
           </Button>
         </div>

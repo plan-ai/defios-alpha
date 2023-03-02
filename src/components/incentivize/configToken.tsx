@@ -11,6 +11,9 @@ import cn from 'classnames';
 import { Check } from '@/components/icons/check';
 import DistributionSlider from '@/components/incentivize/distribution-slider';
 
+import { useAppDispatch } from '@/store/store';
+import { setAlgo, setStep3Data } from '@/store/creationSlice';
+
 const sort = [
   { id: 1, name: 'Repository creator' },
   { id: 2, name: 'By amount of code contributed (minified)' },
@@ -18,7 +21,12 @@ const sort = [
 ];
 
 function SortList() {
+  const dispatch = useAppDispatch();
   const [selectedItem, setSelectedItem] = useState(sort[0]);
+
+  useEffect(() => {
+    dispatch(setAlgo(selectedItem.name));
+  }, [selectedItem, dispatch]);
   return (
     <div className="relative w-full">
       <span className="text-gray-10 mb-3 block text-sm font-medium uppercase tracking-widest">
@@ -70,6 +78,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   setStepOfCreation,
   reset,
 }) => {
+  const dispatch = useAppDispatch();
   const [isExpand, setIsExpand] = useState(false);
   const [tokenType, setTokenType] = useState('Create New Token');
 
@@ -102,6 +111,14 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const CheckSubmit = () => {
     if (tokenType === 'Create New Token') {
       if (tokenSymbol !== '' && tokenName !== '' && totalSupply !== 0) {
+        dispatch(
+          setStep3Data({
+            tokenIcon: '',
+            tokenName: tokenName,
+            tokenSymbol: tokenSymbol,
+            totalSupply: totalSupply,
+          })
+        );
         setIsExpand(false);
         setIsSubmitted(true);
         setStepOfCreation(stepOfCreation + 1);

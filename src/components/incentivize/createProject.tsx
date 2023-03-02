@@ -4,6 +4,8 @@ import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { Check } from '@/components/icons/check';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setStep1Data } from '@/store/creationSlice';
 
 interface CreateProjectProps {
   stepOfCreation: number;
@@ -16,6 +18,8 @@ const CreateProject: React.FC<CreateProjectProps> = ({
   setStepOfCreation,
   reset,
 }) => {
+  const dispatch = useAppDispatch();
+
   const [isExpand, setIsExpand] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [ownerCut, setOwnerCut] = useState(0);
@@ -95,6 +99,12 @@ const CreateProject: React.FC<CreateProjectProps> = ({
                 <Button
                   onClick={() => {
                     if (projectName !== '' && ownerCut !== 0) {
+                      dispatch(
+                        setStep1Data({
+                          projectName: projectName,
+                          ownerCut: ownerCut,
+                        })
+                      );
                       setIsExpand(!isExpand);
                       setStepOfCreation(stepOfCreation + 1);
                     }

@@ -19,10 +19,14 @@ import { reset } from '@/store/notifClickSlice';
 
 import { useDrawer } from '@/components/drawer-views/context';
 
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import Image from 'next/image';
 interface searchProps {
   placeholder?: string;
   initValue?: string;
 }
+
+// const IssuesData:any = [];
 
 const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
   const [search, setSearch] = useState(initValue || '');
@@ -156,46 +160,68 @@ const IssuesPage: NextPageWithLayout = () => {
               Tags
             </span>
           </div>
-          {IssuesData.map((issue, idx) => (
-            <IssuesList
-              issueName={issue.issueName}
-              projectName={issue.projectName}
-              issueTags={issue.issueTags}
-              totalStaked={issue.totalStaked}
-              tags={issue.tags}
-              key={issue.id}
-              coin={issue.coin}
-              initExpand={idx == 0 ? initExapand : false}
-            >
-              {issue.issueTags === 'open' && (
-                <OpenIssueExpand issueDesc={issue.description} />
-              )}
-              {issue.issueTags === 'voting' && (
-                <VotingExpand PRData={sliderData} />
-              )}
-              {issue.issueTags === 'winner declared' && (
-                <WinnerDeclaredExpand
-                  winningPR={issue.winner.winningPR}
-                  winningAuthor={issue.winner.winningAuthor}
-                  winnerMargin={issue.winner.winnerMargin}
-                  originality={issue.winner.originality}
-                />
-              )}
-              {issue.issueTags === 'closed' && (
-                <ClosedIssueExpand
-                  winningPR={issue.winner.winningPR}
-                  winningAuthor={issue.winner.winningAuthor}
-                  totalPRs={issue.totalPRs}
-                  totalAmountStaked={issue.totalStaked}
-                  totalVotes={issue.winner.totalVotes}
-                  timeTakenToClose={issue.winner.timeTakenToClose}
-                  codeQuality={issue.winner.codeQuality}
-                  winnerMargin={issue.winner.winnerMargin}
-                  coin={issue.coin}
-                />
-              )}
-            </IssuesList>
-          ))}
+          {IssuesData.length !== 0 &&
+            IssuesData.map((issue:any, idx:number) => (
+              <IssuesList
+                issueName={issue.issueName}
+                projectName={issue.projectName}
+                issueTags={issue.issueTags}
+                totalStaked={issue.totalStaked}
+                tags={issue.tags}
+                key={issue.id}
+                coin={issue.coin}
+                initExpand={idx == 0 ? initExapand : false}
+              >
+                {issue.issueTags === 'open' && (
+                  <OpenIssueExpand issueDesc={issue.description} />
+                )}
+                {issue.issueTags === 'voting' && (
+                  <VotingExpand PRData={sliderData} />
+                )}
+                {issue.issueTags === 'winner declared' && (
+                  <WinnerDeclaredExpand
+                    winningPR={issue.winner.winningPR}
+                    winningAuthor={issue.winner.winningAuthor}
+                    winnerMargin={issue.winner.winnerMargin}
+                    originality={issue.winner.originality}
+                  />
+                )}
+                {issue.issueTags === 'closed' && (
+                  <ClosedIssueExpand
+                    winningPR={issue.winner.winningPR}
+                    winningAuthor={issue.winner.winningAuthor}
+                    totalPRs={issue.totalPRs}
+                    totalAmountStaked={issue.totalStaked}
+                    totalVotes={issue.winner.totalVotes}
+                    timeTakenToClose={issue.winner.timeTakenToClose}
+                    codeQuality={issue.winner.codeQuality}
+                    winnerMargin={issue.winner.winnerMargin}
+                    coin={issue.coin}
+                  />
+                )}
+              </IssuesList>
+            ))}
+          {IssuesData.length === 0 && (
+            <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
+              <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+              <div className="text-lg text-gray-500">
+                No Issues found that match you filter and search settings
+              </div>
+              <Button
+                onClick={() =>
+                  openDrawer('ISSUE_CREATE', 'right', 'transparent-glass')
+                }
+                color="info"
+                shape="rounded"
+                size="small"
+              >
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <PlusCircle />
+                  Create New Issue
+                </div>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </>

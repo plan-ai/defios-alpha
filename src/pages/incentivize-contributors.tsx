@@ -7,8 +7,12 @@ import AttachRepo from '@/components/incentivize/attachRepo';
 import ConfigToken from '@/components/incentivize/configToken';
 import CreationProcess from '@/components/incentivize/creationProcess';
 import Button from '@/components/ui/button/button';
+import { useAppDispatch } from '@/store/store';
+import { reset as resetCreation } from '@/store/creationSlice';
 
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
+  const dispatch = useAppDispatch();
+
   const [stepOfCreation, setStepOfCreation] = useState(1);
   const [reset, setReset] = useState(0);
   return (
@@ -25,6 +29,7 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
             onClick={() => {
               setStepOfCreation(1);
               setReset(reset + 1);
+              dispatch(resetCreation());
             }}
           >
             Reset

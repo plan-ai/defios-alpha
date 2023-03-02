@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import cn from 'classnames';
@@ -6,63 +6,66 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import DistributionModal from '@/components/incentivize/distributionModal';
+import Image from 'next/image';
+
+import { useSession } from 'next-auth/react';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setDistribution } from '@/store/creationSlice';
+
+import {
+  CodeContributorStats,
+  OptionRepoOwner,
+  CodeDurationStats,
+} from '@/utils/contributorStats';
 
 interface DistributionCardProps {
-  username: string;
-  address: string;
-  split: number;
+  data: any;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setEditData: React.Dispatch<React.SetStateAction<string>>;
+  setEditData: React.Dispatch<React.SetStateAction<any>>;
 }
-
-const distributionData = [
-  {
-    username: 'Rohitkk432',
-    address: '0xA7b933...090ed028',
-    split: 25,
-  },
-  {
-    username: 'never2average',
-    address: '0xA7b933...090ed028',
-    split: 25,
-  },
-  {
-    username: 'AbhisekBasu1',
-    address: '0xA7b933...090ed028',
-    split: 25,
-  },
-  {
-    username: 'Mayank',
-    address: '0xA7b933...090ed028',
-    split: 25,
-  },
-];
 
 export const DistributionCard: React.FC<DistributionCardProps> = ({
   setModalOpen,
   setEditData,
-  username,
-  address,
-  split,
+  data,
 }) => {
+  const [share, setShare] = useState('0%');
+  const Contributors = useAppSelector(
+    (state) => state.creation.step3.distribution
+  );
+
+  useEffect(() => {
+    if (Contributors === null) return;
+    setShare(
+      Math.round(parseFloat(Contributors[`${data.login}`]) * 100) / 100 + '%'
+    );
+  }, [Contributors, setShare]);
+
   return (
     <div
       className={cn(
         'flex h-20 w-full flex-row items-center justify-between rounded-lg border border-gray-800 bg-dark p-4 shadow-xl'
       )}
       onClick={() => {
-        setEditData(username);
+        setEditData(data);
         setModalOpen(true);
       }}
     >
       <div className="flex flex-row items-center">
-        <div className="mr-4 h-12 w-12 rounded-full bg-black"></div>
+        <div className="mr-4 h-12 w-12 rounded-full bg-black">
+          <Image
+            src={data.avatar_url || ''}
+            alt={data.login || ''}
+            width={48}
+            height={48}
+            className="rounded-full"
+          />
+        </div>
         <div className="flex flex-col gap-1 text-sm">
-          <div>{username}</div>
-          <div>{address}</div>
+          <div>{data.login}</div>
         </div>
       </div>
-      <div>{split}%</div>
+      <div>{share}</div>
     </div>
   );
 };
@@ -70,45 +73,161 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
 interface DistributionSliderProps {}
 
 const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
-  const [data, setData] = useState(distributionData);
-  const [editData, SetEditData] = useState('');
+  const { data: session } = useSession();
+
+  const dispatch = useAppDispatch();
+  const Algo = useAppSelector((state) => state.creation.step3.algorithm);
+  const repoFullName = useAppSelector((state) => state.creation.step2.repoName);
+  const Contributors = useAppSelector(
+    (state) => state.creation.step3.distribution
+  );
+  const [MainDistribution, setMainDistribution] = useState('100');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [fetchData, setFetchData] = useState<any>([]);
+  const [editData, SetEditData] = useState<any>();
 
   const [modalOpen, setModalOpen] = useState(false);
   const modalContainerRef = useRef<HTMLDivElement>(null);
+
+  const myInfo = useAppSelector((state) => state.userInfo.githubInfo);
+
   useClickAway(modalContainerRef, () => {
     setModalOpen(false);
   });
   useLockBodyScroll(modalOpen);
-  const sliderBreakPoints = {
-    640: {
-      slidesPerView: 3,
-      spaceBetween: 10,
-    },
+
+  const FetchContributors = async () => {
+    const resp = await fetch(
+      `https://api.github.com/repos/${repoFullName}/stats/contributors`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `token ${(session as any)?.accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      }
+    )
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
+
+    setFetchData(resp);
+
+    if (Object.keys(resp).length === 0) return;
+
+    let isContributor = false;
+    let isCollaborator = false;
+    for (let i = 0; i < resp.length; i++) {
+      if (myInfo.login === repoFullName.split('/')[0]) {
+        isCollaborator = true;
+        if (isContributor) {
+          break;
+        }
+      }
+      if (myInfo.login === myInfo.login) {
+        isContributor = true;
+        if (isCollaborator) {
+          break;
+        }
+      }
+    }
+    if (!isContributor) {
+      const weekData = [];
+      for (let i = 0; i < resp[0].weeks.length; i++) {
+        const _data = resp[0].weeks[i];
+        _data.c = 0;
+        _data.a = 0;
+        _data.d = 0;
+        weekData.push(_data);
+      }
+      resp.push({
+        total: 0,
+        weeks: weekData,
+        author: {
+          login: myInfo.login,
+          id: myInfo.id,
+          avatar_url: myInfo.avatar_url,
+        },
+      });
+    }
+
+    setFetchData(resp);
+    setIsLoading(false);
+
+    const distributionInit: any = {};
+    resp.forEach((el: any) => {
+      const contri = el?.author?.login;
+      distributionInit[`${contri}`] = '0%';
+    });
+    console.log(distributionInit);
+    dispatch(setDistribution(distributionInit));
   };
+
+  const AlgoOwner = () => {
+    const newData = OptionRepoOwner(
+      repoFullName,
+      fetchData,
+      MainDistribution,
+      myInfo.login
+    );
+    console.log('owner: ', newData);
+    dispatch(setDistribution(newData));
+  };
+
+  const AlgoCode = () => {
+    const newData = CodeContributorStats(fetchData, MainDistribution);
+    console.log('code: ', newData);
+    dispatch(setDistribution(newData));
+  };
+
+  const AlgoDuration = () => {
+    const newData = CodeDurationStats(fetchData, MainDistribution);
+    console.log('duration: ', newData);
+    dispatch(setDistribution(newData));
+  };
+
+  useEffect(() => {
+    if (session && Contributors === null && fetchData.length === 0) {
+      FetchContributors();
+    } else {
+      if (Algo === 'Repository creator') {
+        AlgoOwner();
+      } else if (Algo === 'By amount of code contributed (minified)') {
+        AlgoCode();
+      } else if (
+        Algo === 'By duration of project involvement (compute intensive)'
+      ) {
+        AlgoDuration();
+      }
+    }
+  }, [session, Algo, fetchData]);
+
   return (
     <div className="w-full">
       <Swiper
         modules={[Scrollbar, A11y]}
-        spaceBetween={24}
-        slidesPerView={1}
+        spaceBetween={10}
+        slidesPerView={3}
         scrollbar={{ draggable: true }}
-        breakpoints={sliderBreakPoints}
         observer={true}
         dir="ltr"
         className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
       >
-        {data.length !== 0 &&
-          data.map((item, idx) => (
-            <SwiperSlide key={idx}>
-              <DistributionCard
-                setModalOpen={setModalOpen}
-                setEditData={SetEditData}
-                username={item.username}
-                address={item.address}
-                split={item.split}
-              />
-            </SwiperSlide>
-          ))}
+        {fetchData !== null &&
+          Object.keys(fetchData).length !== 0 &&
+          fetchData.constructor !== Object &&
+          fetchData.length !== 0 &&
+          fetchData?.map((item: any, idx: number) => {
+            return (
+              <SwiperSlide key={idx}>
+                <DistributionCard
+                  setModalOpen={setModalOpen}
+                  setEditData={SetEditData}
+                  data={item.author}
+                />
+              </SwiperSlide>
+            );
+          })}
       </Swiper>
       <AnimatePresence>
         {modalOpen && (
@@ -138,8 +257,6 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
                 <DistributionModal
                   modalOpen={modalOpen}
                   setModalOpen={setModalOpen}
-                  data={data}
-                  setData={setData}
                   editData={editData}
                   setEditData={SetEditData}
                 />

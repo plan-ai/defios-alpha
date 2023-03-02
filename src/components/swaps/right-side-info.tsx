@@ -28,6 +28,7 @@ export default function RightSideInfo({
   );
 
   useEffect(() => {
+    setCoinInfo(null);
     if (auth_cred === null || coin === null) return;
     axios
       .get('https://api-v1.defi-os.com/swap/profile', {
@@ -45,6 +46,7 @@ export default function RightSideInfo({
   }, [coin, auth_cred]);
 
   useEffect(() => {
+    setPriceChartData(null);
     if (coinInfo === null) return;
     if (coinInfo?.token_price_feed && coinInfo.token_price_feed === '') return;
     axios
@@ -58,6 +60,7 @@ export default function RightSideInfo({
   }, [coinInfo]);
 
   useEffect(() => {
+    setPieChartData(null);
     if (coin === null) return;
     if (coin?.token_spl_addr && coin.token_spl_addr === '') return;
     axios

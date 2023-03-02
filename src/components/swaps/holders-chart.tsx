@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
 import AnchorLink from '../ui/links/anchor-link';
@@ -33,6 +33,9 @@ interface HoldersChartProps {
 
 const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
   const [percentage, setPercentage] = useState('Hover on Chart');
+  useEffect(()=>{
+    setPercentage('Hover on Chart');
+  },[chartData])
   return (
     <div className="rounded-lg bg-transparent  ">
       <h3 className="text-center text-base font-medium uppercase lg:text-left">
