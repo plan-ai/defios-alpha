@@ -103,7 +103,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
       {
         method: 'GET',
         headers: {
-          Authorization: `token ${(session as any)?.accessToken}`,
+          Authorization: `Bearer ${(session as any)?.accessToken}`,
           Accept: 'application/vnd.github.v3+json',
         },
       }
@@ -187,7 +187,12 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   };
 
   useEffect(() => {
-    if (session && Contributors === null && fetchData.length === 0) {
+    if (
+      session &&
+      (session as any)?.accessToken &&
+      Contributors === null &&
+      fetchData.length === 0
+    ) {
       FetchContributors();
     } else {
       if (Algo === 'Repository creator') {

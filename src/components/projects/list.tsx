@@ -1,31 +1,16 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SecurityStatus from '@/components/custom/security-status';
-import { coinListBig } from '@/data/static/coin-list';
+import Image from 'next/image';
 interface ProjectListTypes {
-  name: string;
-  openIssues: number;
-  repositoryStatus: string;
-  liquidityStaked: string;
-  liquidityRewarded: string;
-  topSupporter: string;
-  topBuilder: string;
-  coin: string;
+  data: any;
 }
 
 export default function ProjectList({
-  name,
-  openIssues,
-  repositoryStatus,
-  liquidityStaked,
-  liquidityRewarded,
-  topSupporter,
-  topBuilder,
+  data,
   children,
-  coin,
 }: React.PropsWithChildren<ProjectListTypes>) {
   let [isExpand, setIsExpand] = useState(false);
-  const data = coinListBig.find((el) => el.code === coin);
   return (
     <div className="relative mb-3 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
       <div
@@ -33,35 +18,43 @@ export default function ProjectList({
         onClick={() => setIsExpand(!isExpand)}
       >
         <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
-          {name}
+          {data?.project_name}
         </div>
         <div className="text-center text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
-          {openIssues}
+          {data?.num_open_issues}
         </div>
         <div className="px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
-          <SecurityStatus noIcon={true} security={repositoryStatus} />
+          <SecurityStatus noIcon={true} security={data?.project_status} />
         </div>
         <div className="col-span-2 px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
           <div className="flex items-center">
-            {data?.icon}
+            <Image
+              src={data?.project_token?.token_image_url || ''}
+              alt={data?.project_token?.token_symbol || ''}
+              width={48}
+              height={48}
+              className='rounded-full'
+            />
             <div className="ml-3">
               <div className="mb-1 flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Staked</div>
-                <div>{liquidityStaked}</div>
+                <div>{data?.num_open_issues}</div>
               </div>
               <div className="flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Rewarded</div>
-                <div>{liquidityRewarded}</div>
+                <div>{data?.num_open_issues}</div>
               </div>
             </div>
           </div>
         </div>
         <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
           <div>
-            {topBuilder} <span className="text-gray-500">(Builder🛠️)</span>
+            {data.top_builder_name}
+            <span className="text-gray-500">(Builder🛠️)</span>
           </div>
           <div>
-            {topSupporter} <span className="text-gray-500">(Supporter💰)</span>
+            {data.top_supporter_name}
+            <span className="text-gray-500">(Supporter💰)</span>
           </div>
         </div>
       </div>

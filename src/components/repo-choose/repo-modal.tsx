@@ -52,7 +52,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
         {
           method: 'GET',
           headers: {
-            Authorization: `token ${(session as any)?.accessToken}`,
+            Authorization: `Bearer ${(session as any)?.accessToken}`,
             Accept: 'application/vnd.github.v3+json',
           },
         }
@@ -132,6 +132,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
   useEffect(() => {
     if (
       session &&
+      (session as any)?.accessToken &&
       repos.length === 0 &&
       orgRepos.length === 0 &&
       collaboratorRepos.length === 0

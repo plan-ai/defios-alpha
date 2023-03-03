@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 import { walletCurrencies } from '@/data/static/wallet-currencies';
 import AnchorLink from '../ui/links/anchor-link';
@@ -33,9 +33,9 @@ interface HoldersChartProps {
 
 const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
   const [percentage, setPercentage] = useState('Hover on Chart');
-  useEffect(()=>{
+  useEffect(() => {
     setPercentage('Hover on Chart');
-  },[chartData])
+  }, [chartData]);
   return (
     <div className="rounded-lg bg-transparent  ">
       <h3 className="text-center text-base font-medium uppercase lg:text-left">
@@ -46,7 +46,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
         <ResponsiveContainer width={290} height="100%">
           <PieChart className="h-[290px] w-[290px] md:scale-[.90] xl:scale-100">
             <Pie
-              data={chartData || dummyData}
+              data={chartData.chartData || dummyData}
               cx={140}
               cy={140}
               innerRadius={78}
@@ -56,7 +56,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
               dataKey="value"
               onMouseMove={(data) => {
                 setPercentage(
-                  data.payload.payload && data.payload.payload.volume
+                  data.payload.payload && `${data.payload.payload.volume} ${chartData.coin.token_symbol}`
                 );
               }}
             >
@@ -88,11 +88,11 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
           <span>Supply Owned</span>
         </div>
         <ul className="grid gap-5">
-          {chartData &&
-            chartData.map((item: any, idx: number) => (
+          {chartData.chartData &&
+            chartData.chartData.map((item: any, idx: number) => (
               <li
                 key={idx}
-                className="grid grid-cols-[150px_repeat(2,1fr)] items-center justify-between text-sm font-medium text-white 2xl:grid-cols-[140px_repeat(2,1fr)] 3xl:grid-cols-[150px_repeat(2,1fr)]"
+                className="grid grid-cols-2 items-center justify-between text-sm font-medium text-white"
               >
                 <AnchorLink
                   href={`https://solscan.io/account/${item.owner}`}
@@ -101,9 +101,9 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
                 >
                   {item.owner.slice(0, 8) + '...' + item.owner.slice(36, 44)}
                 </AnchorLink>
-                <span className="text-center"></span>
-                <span className={cn('flex items-center justify-end')}>
-                  {item.volume}
+                <span className={cn('flex items-center justify-end gap-2')}>
+                  <div>{item.volume}</div>
+                  <div>{chartData.coin.token_symbol}</div>
                 </span>
               </li>
             ))}

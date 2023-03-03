@@ -68,7 +68,7 @@ export default function RightSideInfo({
         token_address: coin?.token_spl_addr,
       })
       .then((res) => {
-        setPieChartData(res.data);
+        setPieChartData({chartData:res.data,coin:coin});
       })
       .catch((err) => console.log(err));
   }, [coin]);
@@ -94,11 +94,9 @@ export default function RightSideInfo({
                     className="mx-auto mb-6"
                   />
                 )}
-                <TransactionInfo
-                  className="my-5"
-                  label={'Coin Name'}
-                  value={coinInfo?.token_name}
-                />
+                <div className="my-5 text-center">
+                  {coinInfo?.token_name} - {coinInfo?.token_symbol}
+                </div>
                 <TransactionInfo
                   className="my-5"
                   label={'Created By'}
@@ -125,7 +123,11 @@ export default function RightSideInfo({
                   label={'Circulating Supply'}
                   value={coinInfo?.token_circulating_supply}
                 />
-                <div className="my-5">Last Traded Price:</div>
+                <TransactionInfo
+                  className="my-5"
+                  label={'Last Traded Price'}
+                  value={(Math.round(coinInfo?.token_ltp *100)/100)+'$'}
+                />
                 {priceChartData !== null && (
                   <PriceChart
                     chartData={priceChartData.data}

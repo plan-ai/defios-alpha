@@ -19,9 +19,9 @@ const SecurityStatus: React.FC<SecurityStatusProps> = ({
       {(noIcon === undefined || noIcon === false) && (
         <Image
           src={
-            security === 'secure'
+            security?.toLowerCase() === 'secure'
               ? SecureLogo
-              : security === 'vulnerable'
+              : security?.toLowerCase() === 'vulnerable'
               ? VulnerableLogo
               : BrokenLogo
           }
@@ -31,9 +31,9 @@ const SecurityStatus: React.FC<SecurityStatusProps> = ({
       )}
       <div
         className={cn('text-sm uppercase', {
-          'text-green-600': security === 'secure',
-          'text-yellow-500': security === 'vulnerable',
-          'text-red-600': security === 'broken',
+          'text-green-600': security?.toLowerCase() === 'secure',
+          'text-yellow-500': security?.toLowerCase() === 'vulnerable',
+          'text-red-600': security?.toLowerCase() === 'broken',
         })}
       >
         {security}

@@ -1,7 +1,7 @@
 import Button from '@/components/ui/button';
 import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
@@ -16,7 +16,10 @@ import StackedSwitch from '@/components/custom/stacked-switch';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
 
-import { ProjectsData } from '@/data/static/projects-data';
+// import { ProjectsData } from '@/data/static/projects-data';
+
+import axios from 'axios';
+import { useAppSelector } from '@/store/store';
 
 const sort = [
   { id: 1, name: 'Hot' },
@@ -91,6 +94,64 @@ function Search() {
 
 export default function Projects() {
   const router = useRouter();
+
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  const [projectsData, setProjectsData] = useState<any>([]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    axios
+      .get('https://api-v1.defi-os.com/projects', {
+        params: {
+          'filter.pageno': '1',
+          'filter.pagesize': 30,
+        },
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => setProjectsData(res.data.projects))
+      .catch((err) => console.log(err.message));
+  }, [firebase_jwt]);
+
+  const getChartData = async () => {
+    const projects = projectsData;
+    const newProjects = await Promise.all(
+      await projects.map(async (item: any): Promise<any> => {
+        const priceData = await axios
+          .post('/api/chart', {
+            data_url: item?.project_token?.token_price_feed,
+          })
+          .then((res) => res.data)
+          .catch((err) => console.log(err.message));
+        const communityHealthData = await axios
+          .post('/api/chart', { data_url: item?.community_health_graph })
+          .then((res) => res.data)
+          .catch((err) => console.log(err.message));
+        const contributionsData = await axios
+          .post('/api/chart', {
+            data_url: item?.num_contributions_graph,
+          })
+          .then((res) => res.data)
+          .catch((err) => console.log(err.message));
+        item.project_token.token_price_feed = priceData;
+        item.community_health_graph = communityHealthData;
+        item.num_contributions_graph = contributionsData;
+        return item;
+      })
+    );
+    setProjectsData(newProjects);
+  };
+
+  useEffect(() => {
+    if (projectsData.length === 0) return;
+    if (typeof projectsData[0].community_health_graph !== 'string') return;
+    getChartData();
+  }, [projectsData]);
+
   return (
     <div className="mx-auto w-full">
       <div className="mb-5 flex w-full items-center justify-between">
@@ -126,49 +187,71 @@ export default function Projects() {
         </span>
       </div>
 
-      {ProjectsData.length !== 0 &&
-        ProjectsData.map((project: any) => (
-          <ProjectList
-            key={project.id}
-            name={project.name}
-            openIssues={project.openIssues}
-            repositoryStatus={project.repositoryStatus}
-            liquidityStaked={project.liquidityStaked}
-            liquidityRewarded={project.liquidityRewarded}
-            topBuilder={project.topBuilder}
-            topSupporter={project.topSupporter}
-            coin={project.coin}
-          >
+      {projectsData.length !== 0 &&
+        projectsData.map((project: any) => (
+          <ProjectList key={project.id} data={project}>
             <div className="mb-2 flex flex-row items-center justify-between text-sm">
               <div className="flex w-[30%]">
                 <CoinTicker
-                  value={project.coinValue}
-                  coin={project.coin}
-                  change={project.change}
+                  value={
+                    Math.round(project?.project_token?.token_ltp * 100) / 100
+                  }
+                  coin={project?.project_token}
+                  change={(
+                    Math.round(
+                      project?.project_token?.token_ltp_24h_change * 100
+                    ) / 100
+                  ).toString()}
                 />
                 <div className="w-full">
-                  <PriceChart change={project.change[0]} />
+                  <PriceChart
+                    chartData={
+                      typeof project?.project_token?.token_price_feed !==
+                      'string'
+                        ? project?.project_token?.token_price_feed?.data
+                        : null
+                    }
+                    change={
+                      project?.project_token?.token_price_feed?.change || '+'
+                    }
+                  />
                 </div>
               </div>
               <div className="flex w-[30%]">
                 <DataWithImage
                   image="health"
                   header="Community Health"
-                  value={project.healthValue}
+                  value={project?.community_health}
                 />
                 <div className="w-full">
-                  <PriceChart />
+                  <PriceChart
+                    chartData={
+                      typeof project?.community_health_graph !== 'string'
+                        ? project?.community_health_graph?.data
+                        : null
+                    }
+                    change={project?.community_health_graph?.change || '+'}
+                  />
                 </div>
               </div>
               <div className="flex w-[30%]">
                 <DataWithImage
                   image="handshake"
                   header="Contributions"
-                  value={project.contributionValue}
-                  change={project.contributionChange}
+                  value={project?.num_contributions?.toString()}
+                  change={(
+                    Math.round(project?.num_contributions_chg_perc * 100) / 100
+                  ).toString()}
                 />
                 <div className="w-full">
-                  <PriceChart change={project.contributionChange[0]} />
+                  <PriceChart
+                    chartData={
+                      typeof project?.num_contributions_graph !== 'string'
+                        ? project?.num_contributions_graph?.data
+                        : null
+                    }
+                    change={project?.num_contributions_graph?.change || '+'}
+                  />
                 </div>
               </div>
             </div>
@@ -191,7 +274,7 @@ export default function Projects() {
             </div>
           </ProjectList>
         ))}
-      {ProjectsData.length === 0 && (
+      {projectsData.length === 0 && (
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
           <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
           <div className="text-lg text-gray-500">
