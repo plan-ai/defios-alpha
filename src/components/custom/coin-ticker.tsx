@@ -31,7 +31,7 @@ const CoinTicker: React.FC<CoinTickerProps> = ({
           {coin?.token_name}
         </strong>
         <span className="mb-0.5 flex text-sm">
-          {value}$
+          ${value}
           <div
             className={cn('ml-2', {
               'text-green-500': change[0] !== '-',

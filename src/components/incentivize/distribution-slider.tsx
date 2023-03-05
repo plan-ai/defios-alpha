@@ -12,6 +12,8 @@ import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setDistribution } from '@/store/creationSlice';
 
+import Spinner from '@/components/custom/spinner';
+
 import {
   CodeContributorStats,
   OptionRepoOwner,
@@ -81,7 +83,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   const Contributors = useAppSelector(
     (state) => state.creation.step3.distribution
   );
-  const [MainDistribution, setMainDistribution] = useState('100');
+  const [MainDistribution, setMainDistribution] = useState('30');
   const [isLoading, setIsLoading] = useState(true);
 
   const [fetchData, setFetchData] = useState<any>([]);
@@ -98,6 +100,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   useLockBodyScroll(modalOpen);
 
   const FetchContributors = async () => {
+    setIsLoading(true);
     const resp = await fetch(
       `https://api.github.com/repos/${repoFullName}/stats/contributors`,
       {
@@ -159,7 +162,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
       const contri = el?.author?.login;
       distributionInit[`${contri}`] = '0%';
     });
-    console.log(distributionInit);
+    setIsLoading(false);
     dispatch(setDistribution(distributionInit));
   };
 
@@ -190,8 +193,8 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
     if (
       session &&
       (session as any)?.accessToken &&
-      Contributors === null &&
-      fetchData.length === 0
+      (Contributors === null || Object.keys(Contributors).length === 0) &&
+      (fetchData.length === 0 || Object.keys(fetchData).length === 0)
     ) {
       FetchContributors();
     } else {
@@ -209,31 +212,38 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
 
   return (
     <div className="w-full">
-      <Swiper
-        modules={[Scrollbar, A11y]}
-        spaceBetween={10}
-        slidesPerView={3}
-        scrollbar={{ draggable: true }}
-        observer={true}
-        dir="ltr"
-        className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
-      >
-        {fetchData !== null &&
-          Object.keys(fetchData).length !== 0 &&
-          fetchData.constructor !== Object &&
-          fetchData.length !== 0 &&
-          fetchData?.map((item: any, idx: number) => {
-            return (
-              <SwiperSlide key={idx}>
-                <DistributionCard
-                  setModalOpen={setModalOpen}
-                  setEditData={SetEditData}
-                  data={item.author}
-                />
-              </SwiperSlide>
-            );
-          })}
-      </Swiper>
+      {!isLoading && (
+        <Swiper
+          modules={[Scrollbar, A11y]}
+          spaceBetween={10}
+          slidesPerView={3}
+          scrollbar={{ draggable: true }}
+          observer={true}
+          dir="ltr"
+          className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
+        >
+          {fetchData !== null &&
+            Object.keys(fetchData).length !== 0 &&
+            fetchData.constructor !== Object &&
+            fetchData.length !== 0 &&
+            fetchData?.map((item: any, idx: number) => {
+              return (
+                <SwiperSlide key={idx}>
+                  <DistributionCard
+                    setModalOpen={setModalOpen}
+                    setEditData={SetEditData}
+                    data={item.author}
+                  />
+                </SwiperSlide>
+              );
+            })}
+        </Swiper>
+      )}
+      {isLoading && (
+        <div className="flex w-full items-center justify-center">
+          <Spinner />
+        </div>
+      )}
       <AnimatePresence>
         {modalOpen && (
           <motion.div

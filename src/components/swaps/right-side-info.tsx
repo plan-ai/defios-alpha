@@ -68,7 +68,7 @@ export default function RightSideInfo({
         token_address: coin?.token_spl_addr,
       })
       .then((res) => {
-        setPieChartData({chartData:res.data,coin:coin});
+        setPieChartData({ chartData: res.data, coin: coin });
       })
       .catch((err) => console.log(err));
   }, [coin]);
@@ -123,11 +123,22 @@ export default function RightSideInfo({
                   label={'Circulating Supply'}
                   value={coinInfo?.token_circulating_supply}
                 />
-                <TransactionInfo
-                  className="my-5"
-                  label={'Last Traded Price'}
-                  value={(Math.round(coinInfo?.token_ltp *100)/100)+'$'}
-                />
+                <div className="my-5 flex w-full items-center gap-2">
+                  <TransactionInfo
+                    className="w-full"
+                    label={'Last Traded Price'}
+                    value={'$' + Math.round(coinInfo?.token_ltp * 100) / 100}
+                  />
+                  <div
+                    className={cn({
+                      'text-red-500': coinInfo?.token_ltp_24h_change < 0,
+                      'text-green-500': coinInfo?.token_ltp_24h_change > 0,
+                    })}
+                  >{`(${coinInfo?.token_ltp_24h_change >= 0 ? '+' : ''}${
+                    Math.round(coinInfo?.token_ltp_24h_change * 100) / 100
+                  }%)`}</div>
+                </div>
+
                 {priceChartData !== null && (
                   <PriceChart
                     chartData={priceChartData.data}

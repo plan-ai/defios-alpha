@@ -33,21 +33,25 @@ export default function ProjectList({
               alt={data?.project_token?.token_symbol || ''}
               width={48}
               height={48}
-              className='rounded-full'
+              className="rounded-full"
             />
             <div className="ml-3">
               <div className="mb-1 flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Staked</div>
-                <div>{data?.num_open_issues}</div>
+                <div>
+                  {data?.coins_staked} {data?.project_token?.token_symbol}
+                </div>
               </div>
               <div className="flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Rewarded</div>
-                <div>{data?.num_open_issues}</div>
+                <div>
+                  {data?.coins_rewarded} {data?.project_token?.token_symbol}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="col-span-2 px-2 text-xs font-medium tracking-wider text-white sm:text-sm">
           <div>
             {data.top_builder_name}
             <span className="text-gray-500">(Builder🛠️)</span>

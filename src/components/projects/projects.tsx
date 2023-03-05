@@ -15,25 +15,30 @@ import DataWithImage from '@/components/custom/data-with-image';
 import StackedSwitch from '@/components/custom/stacked-switch';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
-
+import Spinner from '@/components/custom/spinner';
 // import { ProjectsData } from '@/data/static/projects-data';
 
 import axios from 'axios';
 import { useAppSelector } from '@/store/store';
 
 const sort = [
-  { id: 1, name: 'Hot' },
-  { id: 2, name: 'Urgent' },
-  { id: 3, name: 'Total Staked' },
-  { id: 4, name: 'Total Contributors' },
-  { id: 5, name: 'Latest' },
-  { id: 6, name: 'Beginners' },
+  { id: 0, name: 'Hot', order_by: '-num_open_issues' },
+  { id: 1, name: 'Urgent', order_by: '-num_open_issues' },
+  { id: 2, name: 'Total Staked', order_by: '-num_open_issues' },
+  { id: 3, name: 'Latest', order_by: '-num_open_issues' },
 ];
 
 // const ProjectsData: any = [];
 
-function SortList() {
-  const [selectedItem, setSelectedItem] = useState(sort[0]);
+interface SortListProps {
+  selectedItem: any;
+  setSelectedItem: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const SortList: React.FC<SortListProps> = ({
+  selectedItem,
+  setSelectedItem,
+}) => {
   return (
     <div className="relative w-full lg:w-auto">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
@@ -69,15 +74,27 @@ function SortList() {
       </Listbox>
     </div>
   );
+};
+
+interface SearchProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setTriggerSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Search() {
+const Search: React.FC<SearchProps> = ({
+  search,
+  setSearch,
+  setTriggerSearch,
+}) => {
   return (
     <div className="relative flex w-full rounded-full ">
       <label className="flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           autoComplete="off"
         />
       </label>
@@ -85,15 +102,25 @@ function Search() {
         shape="rounded"
         size="small"
         className="mx-2 flex items-center justify-center"
+        onClick={() => setTriggerSearch(true)}
       >
         <SearchIcon className="h-4 w-4" />
       </Button>
     </div>
   );
-}
+};
 
 export default function Projects() {
   const router = useRouter();
+
+  const [search, setSearch] = useState('');
+  const [orderBy, setOrderBy] = useState<any>(sort[0]);
+  const [isMine, setIsMine] = useState(false);
+  const [isNative, setIsNative] = useState(false);
+
+  const [triggerSearch, setTriggerSearch] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
@@ -103,6 +130,7 @@ export default function Projects() {
 
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
+    setIsLoading(true);
     axios
       .get('https://api-v1.defi-os.com/projects', {
         params: {
@@ -113,9 +141,114 @@ export default function Projects() {
           Authorization: firebase_jwt,
         },
       })
-      .then((res) => setProjectsData(res.data.projects))
+      .then((res) => {
+        setProjectsData(res.data.projects);
+        setIsLoading(false);
+      })
       .catch((err) => console.log(err.message));
   }, [firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    setIsLoading(true);
+    const searchParams: any = {
+      'filter.pageno': '1',
+      'filter.pagesize': 30,
+      'filter.order_by': orderBy.order_by,
+    };
+    if (isNative) {
+      searchParams['search.is_token_native'] = true;
+    }
+    if (isMine) {
+      searchParams['filter.mine'] = true;
+    }
+    axios
+      .get('https://api-v1.defi-os.com/projects', {
+        params: searchParams,
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        setProjectsData(res.data.projects);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err.message));
+  }, [isNative, isMine, orderBy, firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    if (triggerSearch === true) {
+      setIsLoading(true);
+      const searchParams: any = {
+        'filter.pageno': '1',
+        'filter.pagesize': 30,
+        'filter.order_by': orderBy.order_by,
+      };
+      if (isNative) {
+        searchParams['search.is_token_native'] = true;
+      }
+      if (isMine) {
+        searchParams['filter.mine'] = true;
+      }
+      if (search !== '') {
+        if (search.includes(';')) {
+          const searchArray = search.split(';');
+          searchArray.map((item) => {
+            const [key, value] = item.split(':');
+            if (key === 'num_open_issues') {
+              searchParams['search.num_open_issues'] = parseInt(value);
+            }
+            if (key === 'top_supporter_name') {
+              searchParams['search.top_supporter_name'] = value;
+            }
+            if (key === 'internal_tags') {
+              searchParams['search.internal_tags'] = value;
+            }
+            if (key === 'tokens_staked') {
+              searchParams['search.tokens_staked'] = parseInt(value);
+            }
+            if (key === 'project_owner_github') {
+              searchParams['search.project_owner_github'] = parseInt(value);
+            }
+          });
+        } else if (search.includes(':') && !search.includes(';')) {
+          const [key, value] = search.split(':');
+          if (key === 'num_open_issues') {
+            searchParams['search.num_open_issues'] = parseInt(value);
+          }
+          if (key === 'top_supporter_name') {
+            searchParams['search.top_supporter_name'] = value;
+          }
+          if (key === 'internal_tags') {
+            searchParams['search.internal_tags'] = value;
+          }
+          if (key === 'tokens_staked') {
+            searchParams['search.tokens_staked'] = parseInt(value);
+          }
+          if (key === 'project_owner_github') {
+            searchParams['search.project_owner_github'] = parseInt(value);
+          }
+        } else if (!search.includes(':') && !search.includes(';')) {
+          searchParams['search.project_name'] = search;
+        }
+      }
+
+      axios
+        .get('https://api-v1.defi-os.com/projects', {
+          params: searchParams,
+          headers: {
+            Authorization: firebase_jwt,
+          },
+        })
+        .then((res) => {
+          setProjectsData(res.data.projects);
+          setIsLoading(false);
+          setTriggerSearch(false);
+        })
+        .catch((err) => console.log(err.message));
+    }
+  }, [triggerSearch, firebase_jwt]);
 
   const getChartData = async () => {
     const projects = projectsData;
@@ -156,16 +289,28 @@ export default function Projects() {
     <div className="mx-auto w-full">
       <div className="mb-5 flex w-full items-center justify-between">
         <div className="w-[50%]">
-          <Search />
+          <Search
+            search={search}
+            setSearch={setSearch}
+            setTriggerSearch={setTriggerSearch}
+          />
         </div>
         <div className="flex items-center justify-between gap-6">
           <div>
-            <StackedSwitch label="My Projects" />
+            <StackedSwitch
+              isStacked={isMine}
+              setIsStacked={setIsMine}
+              label="My Projects"
+            />
           </div>
           <div>
-            <StackedSwitch label="Native Tokens Only" />
+            <StackedSwitch
+              isStacked={isNative}
+              setIsStacked={setIsNative}
+              label="Native Tokens Only"
+            />
           </div>
-          <SortList />
+          <SortList selectedItem={orderBy} setSelectedItem={setOrderBy} />
         </div>
       </div>
 
@@ -187,7 +332,8 @@ export default function Projects() {
         </span>
       </div>
 
-      {projectsData.length !== 0 &&
+      {!isLoading &&
+        projectsData.length !== 0 &&
         projectsData.map((project: any) => (
           <ProjectList key={project.id} data={project}>
             <div className="mb-2 flex flex-row items-center justify-between text-sm">
@@ -274,7 +420,7 @@ export default function Projects() {
             </div>
           </ProjectList>
         ))}
-      {projectsData.length === 0 && (
+      {!isLoading && projectsData.length === 0 && (
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
           <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
           <div className="text-lg text-gray-500">
@@ -291,6 +437,11 @@ export default function Projects() {
               <div>Create New Project</div>
             </div>
           </Button>
+        </div>
+      )}
+      {isLoading && (
+        <div className="mt-10 flex h-full w-full items-center justify-center">
+          <Spinner />
         </div>
       )}
     </div>
