@@ -3,24 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import IssueState from '@/components/ui/tags/issue-state';
 import GithubTags from '@/components/ui/tags/github-tags';
 interface IssuesListTypes {
-  issueName: string;
-  issueTags: string;
-  tags: string[];
-  projectName: string;
-  totalStaked: string;
-  coin: string;
+  data: any;
   initExpand?: boolean;
 }
 
 export default function IssuesList({
-  issueName,
-  issueTags,
-  projectName,
-  totalStaked,
-  tags,
-  children,
-  coin,
+  data,
   initExpand,
+  children,
 }: React.PropsWithChildren<IssuesListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
   useEffect(() => {
@@ -35,20 +25,23 @@ export default function IssuesList({
         onClick={() => setIsExpand(!isExpand)}
       >
         <span className="col-span-2 flex items-center justify-start px-6 text-sm font-medium tracking-wider text-white">
-          {issueName}
+          {data?.issue_title}
         </span>
         <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
-          <IssueState state={issueTags} />
+          <IssueState state={data?.issue_state} />
         </span>
         <span className="text-center text-sm font-medium tracking-wider text-white">
-          {projectName}
+          {data?.issue_project_name}
         </span>
         <span className="text-center text-sm font-medium tracking-wider text-white">
-          {totalStaked} {coin}
+          {Math.round(data?.issue_stake_amount * 100) / 100}{' '}
+          {data?.issue_stake_token_symbol}
         </span>
         <span className="col-span-2 flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
-          {tags.length !== 0 &&
-            tags.map((tag, idx) => <GithubTags tag={tag} key={idx} />)}
+          {data?.issue_tags?.length !== 0 &&
+            data?.issue_tags?.map((tag: string, idx: number) => (
+              <GithubTags tag={tag} key={idx} />
+            ))}
         </span>
       </div>
       <AnimatePresence initial={false}>

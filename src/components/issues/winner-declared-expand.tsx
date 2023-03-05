@@ -1,47 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/button/button';
 import DataWithImage from '@/components/custom/data-with-image';
+import AnchorLink from '../ui/links/anchor-link';
 
 interface WinnerDeclaredExpandProps {
-  winningPR: string;
-  winningAuthor: string;
-  winnerMargin: string;
-  originality: string;
+  data: any;
 }
 
 const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
-  winningPR,
-  winnerMargin,
-  winningAuthor,
-  originality,
+  data,
 }) => {
-  const prValSplit = winningPR.split('/');
-  const prValue =
-    prValSplit[prValSplit.length - 2] + '/' + prValSplit[prValSplit.length - 1];
+  const [winner, setWinner] = useState<any>();
+  const [winningMargin, setWinningMargin] = useState(0);
+  const [reducedLink, setReducedLink] = useState('');
+  useEffect(() => {
+    if (data === undefined || data === null) return;
+    const PrsList = data?.issue_prs;
+    const _winner = PrsList?.reduce((prev: any, current: any) => {
+      return prev?.issue_vote_amount > current?.issue_vote_amount
+        ? prev
+        : current;
+    });
+
+    const removeWinner = PrsList.filter((Pr: any) => {
+      return Pr !== _winner;
+    });
+
+    const _runnerup = removeWinner?.reduce((prev: any, current: any) => {
+      return prev?.issue_vote_amount > current?.issue_vote_amount
+        ? prev
+        : current;
+    });
+
+    setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
+    const prValSplit = _winner?.issue_pr_link?.split('/');
+    const prValue =
+      prValSplit[prValSplit.length - 2] +
+      '/' +
+      prValSplit[prValSplit.length - 1];
+
+    setWinner(_winner);
+    setReducedLink(prValue);
+  }, [data]);
+
   return (
     <div className="flex w-full flex-col justify-between gap-5 py-5">
       <div className="mb-3 flex w-full flex-row items-center justify-between">
-        <DataWithImage header="Winning PR" value={prValue} image="trophy" />
+        <DataWithImage header="Winning PR" value={reducedLink} image="trophy" />
         <DataWithImage
           header="Winning Author"
-          value={winningAuthor}
+          value={winner?.issue_pr_author || ''}
           image="wench"
         />
         <DataWithImage
           header="Winner Margin"
-          value={winnerMargin}
+          value={winningMargin.toString()}
           image="banknotes"
         />
         <DataWithImage
           header="Originality Score"
-          value={originality}
+          value={winner?.issue_originality_score || ''}
           image="wench"
         />
       </div>
       <div className="flex w-full flex-row items-center justify-between">
-        <Button color="info" className="w-1/2" size="small" shape="rounded">
-          View Merge on Github
-        </Button>
+        <AnchorLink
+          className="w-1/2"
+          href={winner ? winner?.issue_pr_link : '#'}
+          target="_blank"
+        >
+          <Button color="info" className="w-full" size="small" shape="rounded">
+            View Merge on Github
+          </Button>
+        </AnchorLink>
         <Button
           color="success"
           className="ml-2 w-1/2"

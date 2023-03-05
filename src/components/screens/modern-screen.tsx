@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import cn from 'classnames';
 import { NextSeo } from 'next-seo';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import Button from '@/components/ui/button/button';
+import { useSession } from 'next-auth/react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
@@ -88,24 +86,6 @@ export default function ModernScreen() {
           <OverviewChart className="scale-y-90" />
         </div>
         <div className="flex h-full w-full flex-col items-center justify-center gap-10">
-          {!session && (
-            <Button
-              onClick={() =>
-                signIn('github', {
-                  callbackUrl: `${window.location.origin}`,
-                })
-              }
-              shape="rounded"
-              color="info"
-            >
-              Sign In
-            </Button>
-          )}
-          {session && (
-            <Button onClick={() => signOut()} shape="rounded">
-              Sign Out
-            </Button>
-          )}
         </div>
       </div>
       <Journey />

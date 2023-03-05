@@ -27,7 +27,7 @@ const IssueState: React.FC<IssueStateProps> = ({
         {
           'text-blue-400': state === 'open',
           'text-orange-400': state === 'voting',
-          'text-green-400': state === 'winner declared',
+          'text-green-400': state === 'winner_declared',
           'text-red-400': state === 'closed',
         },
         className
@@ -42,10 +42,10 @@ const IssueState: React.FC<IssueStateProps> = ({
         >
           {state === 'open' && <CodeIcon />}
           {state === 'voting' && <ChartBarIcon />}
-          {state === 'winner declared' && <TrophyIcon />}
+          {state === 'winner_declared' && <TrophyIcon />}
           {state === 'closed' && <LockIcon />}
         </div>
-        <div>{state.replace(' declared', '')}</div>
+        <div>{state.replace('_declared', '')}</div>
       </div>
     </div>
   );

@@ -1,21 +1,28 @@
 import React from 'react';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
+import AnchorLink from '../ui/links/anchor-link';
 
 interface OpenIssueExpandProps {
   issueDesc: string;
+  link: string;
 }
 
-const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({ issueDesc }) => {
+const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
+  issueDesc,
+  link,
+}) => {
   return (
     <div className="flex w-full justify-between gap-5 py-5">
       <div className="flex w-1/2 flex-col gap-3">
         <strong>Description</strong>
-        <div>
+        <div className="tracking-wider">
           {issueDesc.length === 0 && 'No Description available'}
-          {issueDesc.length > 250 ? issueDesc.slice(0, 250) + '...' : issueDesc}
+          {issueDesc.length > 250 ? issueDesc.slice(0, 240) + '...' : issueDesc}
         </div>
-        <strong className='underline'>view Thread on Github</strong>
+        <AnchorLink href={link} target="_blank">
+          <strong className="underline">view Thread on Github</strong>
+        </AnchorLink>
       </div>
       <div className="flex w-1/2 flex-col gap-3">
         <div className="flex-flex-col w-full">

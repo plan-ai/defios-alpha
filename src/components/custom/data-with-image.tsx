@@ -13,10 +13,10 @@ import { ClockIcon } from '@/components/icons/clock';
 import { DollarCoinIcon } from '@/components/icons/dollar-coin';
 import { ChartBarIcon } from '@/components/icons/chartbar';
 import cn from 'classnames';
-import { coinListBig } from '@/data/static/coin-list';
+import Image from 'next/image';
 
 interface DataWithImageProps {
-  image: StaticImageData | string;
+  image?: StaticImageData | string;
   value: string;
   header: string;
   change?: string;
@@ -34,7 +34,6 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
   change,
   coin,
 }) => {
-  const data = coinListBig.find((el) => el.code === coin);
   return (
     <div className={cn('flex w-full items-center', className)}>
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200 md:h-9 md:w-9 xl:h-10 xl:w-10">
@@ -50,7 +49,15 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
         {image === 'clock' && <ClockIcon />}
         {image === 'dollar' && <DollarCoinIcon />}
         {image === 'number' && <ChartBarIcon />}
-        {coin !== undefined && data?.icon}
+        {coin !== undefined && (
+          <Image
+            src={coin || ''}
+            alt={'coin'}
+            width={48}
+            height={48}
+            className={'rounded-full'}
+          />
+        )}
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">{header}</span>
@@ -59,7 +66,6 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
             {value.length > (trunc || 12)
               ? value.slice(0, trunc || 12) + '...'
               : value}{' '}
-            {coin !== undefined && coin}
           </strong>
         )}
 
@@ -72,7 +78,7 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
                 'text-red-500': change[0] === '-',
               })}
             >
-              {change[0]==='-'?change:"+"+change}%
+              {change[0] === '-' ? change : '+' + change}%
             </div>
           </span>
         )}

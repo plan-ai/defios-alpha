@@ -14,27 +14,30 @@ import VotingExpand from '@/components/issues/voting-expand';
 import WinnerDeclaredExpand from '@/components/issues/winner-declared-expand';
 import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
 
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import Image from 'next/image';
+import Spinner from '@/components/custom/spinner';
+import axios from 'axios';
+
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 
 import { useDrawer } from '@/components/drawer-views/context';
-
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
-import Image from 'next/image';
 interface searchProps {
   placeholder?: string;
-  initValue?: string;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setTriggerSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // const IssuesData:any = [];
 
-const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
-  const [search, setSearch] = useState(initValue || '');
-  useEffect(() => {
-    if (initValue !== '' && initValue !== undefined) {
-      setSearch(initValue);
-    }
-  }, [initValue]);
+const Search: React.FC<searchProps> = ({
+  placeholder,
+  search,
+  setSearch,
+  setTriggerSearch,
+}) => {
   return (
     <div className="relative flex w-full rounded-full">
       <label className="flex w-full items-center">
@@ -50,6 +53,7 @@ const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
         shape="rounded"
         size="small"
         className="mx-2 flex items-center justify-center"
+        onClick={() => setTriggerSearch(true)}
       >
         <SearchIcon className="h-4 w-4" />
       </Button>
@@ -57,48 +61,14 @@ const Search: React.FC<searchProps> = ({ placeholder, initValue }) => {
   );
 };
 
-const sliderData = [
-  {
-    title: 'Pull Request1',
-    stakerConfidence: '50%',
-    originality: '75',
-    author: 'Rohitkk432',
-    link: 'https://github.com/AbhisekBasu1/DefiOS/pull/27',
-  },
-  {
-    title: 'Pull Request2',
-    stakerConfidence: '50%',
-    originality: '75',
-    author: 'Rohitkk432',
-    link: 'https://github.com/AbhisekBasu1/DefiOS/pull/27',
-  },
-  {
-    title: 'Pull Request3',
-    stakerConfidence: '50%',
-    originality: '75',
-    author: 'Rohitkk432',
-    link: 'https://github.com/AbhisekBasu1/DefiOS/pull/27',
-  },
-  {
-    title: 'Pull Request4',
-    stakerConfidence: '50%',
-    originality: '75',
-    author: 'Rohitkk432',
-    link: 'https://github.com/AbhisekBasu1/DefiOS/pull/27',
-  },
-  {
-    title: 'Pull Request5',
-    stakerConfidence: '50%',
-    originality: '75',
-    author: 'Rohitkk432',
-    link: 'https://github.com/AbhisekBasu1/DefiOS/pull/27',
-  },
-];
-
 const IssuesPage: NextPageWithLayout = () => {
   const { openDrawer } = useDrawer();
 
-  const [initSearch, setInitSearch] = useState('');
+  const [isMine, setIsMine] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [triggerSearch, setTriggerSearch] = useState(false);
+
   const [initExapand, setInitExpand] = useState(false);
   const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
   const setSearchQuery = useAppSelector(
@@ -108,9 +78,154 @@ const IssuesPage: NextPageWithLayout = () => {
 
   const dispatch = useAppDispatch();
 
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  const [issuesData, setIssuesData] = useState<any>([]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    setIsLoading(true);
+    axios
+      .get('https://api-v1.defi-os.com/issues', {
+        params: {
+          'filter.pageno': '1',
+          'filter.pagesize': 30,
+        },
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        setIssuesData(res.data.issues);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err.message));
+  }, [firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    setIsLoading(true);
+    const searchParams: any = {
+      'filter.pageno': '1',
+      'filter.pagesize': 30,
+    };
+    if (isMine) {
+      searchParams['filter.mine'] = true;
+    }
+    axios
+      .get('https://api-v1.defi-os.com/issues', {
+        params: searchParams,
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        setIssuesData(res.data.issues);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err.message));
+  }, [isMine, firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    if (triggerSearch === true) {
+      setIsLoading(true);
+      const searchParams: any = {
+        'filter.pageno': '1',
+        'filter.pagesize': 30,
+      };
+      if (isMine) {
+        searchParams['filter.mine'] = true;
+      }
+      if (search !== '') {
+        if (search.includes(';')) {
+          const searchArray = search.split(';');
+          searchArray.map((item) => {
+            const [key, value] = item.split(':');
+            if (key === 'issue_project_id') {
+              searchParams['search.issue_project_id'] = value;
+            }
+            if (key === 'issue_project_name') {
+              searchParams['search.issue_project_name'] = value;
+            }
+            if (key === 'issue_state') {
+              searchParams['search.issue_state'] = value;
+            }
+            if (key === 'issue_stake_amount') {
+              searchParams['search.issue_stake_amount'] = parseInt(value);
+            }
+            if (key === 'issue_stake_token_symbol') {
+              searchParams['search.issue_stake_token_symbol'] = value;
+            }
+            if (key === 'issue_num_prs') {
+              searchParams['search.issue_num_prs'] = parseInt(value);
+            }
+            if (key === 'issue_creator_gh') {
+              searchParams['search.issue_creator_gh'] = parseInt(value);
+            }
+            if (key === 'issue_tags') {
+              searchParams['search.issue_tags'] = value;
+            }
+            if (key === 'order_by') {
+              searchParams['filter.order_by'] = value;
+            }
+          });
+        } else if (search.includes(':') && !search.includes(';')) {
+          const [key, value] = search.split(':');
+          if (key === 'issue_project_id') {
+            searchParams['search.issue_project_id'] = value;
+          }
+          if (key === 'issue_project_name') {
+            searchParams['search.issue_project_name'] = value;
+          }
+          if (key === 'issue_state') {
+            searchParams['search.issue_state'] = value;
+          }
+          if (key === 'issue_stake_amount') {
+            searchParams['search.issue_stake_amount'] = parseInt(value);
+          }
+          if (key === 'issue_stake_token_symbol') {
+            searchParams['search.issue_stake_token_symbol'] = value;
+          }
+          if (key === 'issue_num_prs') {
+            searchParams['search.issue_num_prs'] = parseInt(value);
+          }
+          if (key === 'issue_creator_gh') {
+            searchParams['search.issue_creator_gh'] = parseInt(value);
+          }
+          if (key === 'issue_tags') {
+            searchParams['search.issue_tags'] = value;
+          }
+          if (key === 'order_by') {
+            searchParams['filter.order_by'] = value;
+          }
+        } else if (!search.includes(':') && !search.includes(';')) {
+          searchParams['search.issue_title'] = search;
+        }
+      }
+
+      axios
+        .get('https://api-v1.defi-os.com/issues', {
+          params: searchParams,
+          headers: {
+            Authorization: firebase_jwt,
+          },
+        })
+        .then((res) => {
+          setIssuesData(res.data.issues);
+          setIsLoading(false);
+          setTriggerSearch(false);
+        })
+        .catch((err) => console.log(err.message));
+    }
+  }, [triggerSearch, firebase_jwt]);
+
   useEffect(() => {
     if (searchQuery !== '' && setSearchQuery) {
-      setInitSearch(searchQuery);
+      setSearch(searchQuery);
+      setTriggerSearch(true);
       setInitExpand(expandFirst);
       dispatch(reset());
     }
@@ -125,9 +240,18 @@ const IssuesPage: NextPageWithLayout = () => {
       <div className="flex items-center justify-start">
         <div className="flex h-full w-full flex-col">
           <div className="mb-2 flex w-full items-center gap-5">
-            <Search placeholder="Search Issues" initValue={initSearch} />
+            <Search
+              placeholder="Search Issues"
+              search={search}
+              setSearch={setSearch}
+              setTriggerSearch={setTriggerSearch}
+            />
             <div className="w-52">
-              <StackedSwitch label="My Issues" />
+              <StackedSwitch
+                isStacked={isMine}
+                setIsStacked={setIsMine}
+                label="My Issues"
+              />
             </div>
             <Button
               onClick={() =>
@@ -160,48 +284,32 @@ const IssuesPage: NextPageWithLayout = () => {
               Tags
             </span>
           </div>
-          {IssuesData.length !== 0 &&
-            IssuesData.map((issue:any, idx:number) => (
+          {!isLoading &&
+            issuesData?.length !== 0 &&
+            issuesData.map((issue: any, idx: number) => (
               <IssuesList
-                issueName={issue.issueName}
-                projectName={issue.projectName}
-                issueTags={issue.issueTags}
-                totalStaked={issue.totalStaked}
-                tags={issue.tags}
-                key={issue.id}
-                coin={issue.coin}
+                data={issue}
+                key={idx}
                 initExpand={idx == 0 ? initExapand : false}
               >
-                {issue.issueTags === 'open' && (
-                  <OpenIssueExpand issueDesc={issue.description} />
-                )}
-                {issue.issueTags === 'voting' && (
-                  <VotingExpand PRData={sliderData} />
-                )}
-                {issue.issueTags === 'winner declared' && (
-                  <WinnerDeclaredExpand
-                    winningPR={issue.winner.winningPR}
-                    winningAuthor={issue.winner.winningAuthor}
-                    winnerMargin={issue.winner.winnerMargin}
-                    originality={issue.winner.originality}
+                {issue?.issue_state === 'open' && (
+                  <OpenIssueExpand
+                    issueDesc={issue?.issue_summary}
+                    link={issue?.issue_gh_url}
                   />
                 )}
-                {issue.issueTags === 'closed' && (
-                  <ClosedIssueExpand
-                    winningPR={issue.winner.winningPR}
-                    winningAuthor={issue.winner.winningAuthor}
-                    totalPRs={issue.totalPRs}
-                    totalAmountStaked={issue.totalStaked}
-                    totalVotes={issue.winner.totalVotes}
-                    timeTakenToClose={issue.winner.timeTakenToClose}
-                    codeQuality={issue.winner.codeQuality}
-                    winnerMargin={issue.winner.winnerMargin}
-                    coin={issue.coin}
-                  />
+                {issue?.issue_state === 'voting' && (
+                  <VotingExpand PRData={issue?.issue_prs} />
+                )}
+                {issue?.issue_state === 'winner_declared' && (
+                  <WinnerDeclaredExpand data={issue} />
+                )}
+                {issue?.issue_state === 'closed' && (
+                  <ClosedIssueExpand data={issue} />
                 )}
               </IssuesList>
             ))}
-          {IssuesData.length === 0 && (
+          {!isLoading && IssuesData.length === 0 && (
             <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
               <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
               <div className="text-lg text-gray-500">
@@ -220,6 +328,11 @@ const IssuesPage: NextPageWithLayout = () => {
                   Create New Issue
                 </div>
               </Button>
+            </div>
+          )}
+          {isLoading && (
+            <div className="mt-10 flex h-full w-full items-center justify-center">
+              <Spinner />
             </div>
           )}
         </div>
