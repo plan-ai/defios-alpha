@@ -126,6 +126,7 @@ const IssuesPage: NextPageWithLayout = () => {
         setIsLoading(false);
       })
       .catch((err) => console.log(err.message));
+    setInitExpand(false);
   }, [isMine, firebase_jwt]);
 
   useEffect(() => {
@@ -220,13 +221,14 @@ const IssuesPage: NextPageWithLayout = () => {
         })
         .catch((err) => console.log(err.message));
     }
+    setInitExpand(false);
   }, [triggerSearch, firebase_jwt]);
 
   useEffect(() => {
     if (searchQuery !== '' && setSearchQuery) {
       setSearch(searchQuery);
-      setTriggerSearch(true);
       setInitExpand(expandFirst);
+      setTriggerSearch(true);
       dispatch(reset());
     }
   }, [searchQuery, setSearchQuery, expandFirst, dispatch]);
