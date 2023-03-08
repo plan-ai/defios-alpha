@@ -122,7 +122,7 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
                   <ButtonImg
                     active={activeTab === 'Maintainer'}
                     onClick={() => setActiveTab('Maintainer')}
-                    image="Repo Owner"
+                    image="Maintainer"
                     label="Maintainer"
                   />
                 </SwiperSlide>
@@ -130,7 +130,7 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
                   <ButtonImg
                     active={activeTab === 'Enterprise'}
                     onClick={() => setActiveTab('Enterprise')}
-                    image="Company"
+                    image="Enterprise"
                     label="Enterprise"
                   />
                 </SwiperSlide>

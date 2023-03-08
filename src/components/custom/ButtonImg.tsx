@@ -17,20 +17,21 @@ export const ButtonImg: React.FC<ButtonImgProps> = ({
   onClick,
   active,
 }) => {
+  console.log(active);
   return (
     <button
       onClick={onClick}
       className={cn(
-        'flex h-10 w-full justify-center items-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-[14px]',
+        'flex h-10 w-full items-center justify-center gap-2 rounded-md bg-gray-700 px-3 py-2 text-[14px]',
         {
-          'bg-blue-500': active === true,
+          '!bg-blue-500': active === true,
         }
       )}
     >
       <div>
         {image === 'Developer' && <CodeIcon />}
-        {image === 'Repo Owner' && <BankNotesIcon />}
-        {image === 'Company' && <BuildingIcon />}
+        {image === 'Maintainer' && <BankNotesIcon />}
+        {image === 'Enterprise' && <BuildingIcon />}
       </div>
       <div className="whitespace-nowrap">{label}</div>
     </button>
