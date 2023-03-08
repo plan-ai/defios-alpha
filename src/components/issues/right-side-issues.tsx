@@ -10,11 +10,15 @@ import Textarea from '@/components/ui/forms/textarea';
 import TagsDropDown from '@/components/ui/tags/tags-dropdown';
 import GithubTags from '@/components/ui/tags/github-tags';
 import RepoChooseModal from '@/components/issues/repo-choose-modal';
-import GithubLogo from '@/assets/images/github-mark-white.svg';
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 export default function RightSideIssues({ className }: { className?: string }) {
   const [tags, setTags] = useState<string[]>([]);
+  const wallet = useWallet();
+
   const handleTagSet = (tag: string) => {
     const newTags = [...tags, tag];
     setTags(newTags);
@@ -36,7 +40,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
   return (
     <>
-      <div className="absolute top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
+      <div className="relative top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
         <Scrollbar style={{ height: 'calc(100%)' }}>
           <div className="relative z-20 h-screen pb-5">
             <div className="flex h-full flex-col overflow-x-hidden px-5 pb-32">
@@ -112,6 +116,15 @@ export default function RightSideIssues({ className }: { className?: string }) {
             </div>
           </div>
         </Scrollbar>
+        {wallet.publicKey === null && (
+          <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+            <div className="flex flex-col items-center justify-center gap-5 rounded-lg border-2 border-white bg-dark p-5 text-lg shadow-2xl">
+              <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
+              <div>Connect Wallet to Continue</div>
+              <WalletMultiButton className="rounded-full bg-blue-500" />
+            </div>
+          </div>
+        )}
       </div>
       <AnimatePresence>
         {modalOpen && (

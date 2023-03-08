@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import Scrollbar from '@/components/ui/scrollbar';
-import Button from '@/components/ui/button/button';
 import { Check } from '@/components/icons/check';
 import TopupButton from '../ui/topup-button';
 import ButtonImg from '../custom/ButtonImg';
-
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper';
 
@@ -88,13 +87,18 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
               <div>Lets Supercharge Open</div>
               <div>Source Collaboration Now</div>
             </div>
-            <TopupButton label="Support Existing Projects" />
+            <Link href="/projects" className="w-full">
+              <TopupButton label="Support Existing Projects" />
+            </Link>
+
             <div>OR</div>
-            <TopupButton
-              label="Create New Project"
-              className="border-white !bg-blue-500"
-              symbolClass="!bg-blue-900"
-            />
+            <Link href="/incentivize-contributors" className="w-full">
+              <TopupButton
+                label="Create New Project"
+                className="border-white !bg-blue-500"
+                symbolClass="!bg-blue-900"
+              />
+            </Link>
           </div>
           <div className="flex w-full flex-col items-center px-1 py-2 pb-32">
             <div className="mb-4 text-lg">Choose Your Journey</div>

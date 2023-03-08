@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import IssueState from '@/components/ui/tags/issue-state';
 import GithubTags from '@/components/ui/tags/github-tags';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 interface IssuesListTypes {
   data: any;
   initExpand?: boolean;
@@ -13,6 +16,8 @@ export default function IssuesList({
   children,
 }: React.PropsWithChildren<IssuesListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
+  const wallet = useWallet();
+
   useEffect(() => {
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
@@ -57,8 +62,16 @@ export default function IssuesList({
             }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           >
-            <div className="border-t border-dashed border-gray-700 px-6">
+            <div className="relative border-t border-dashed border-gray-700 px-6">
               {children}
+              {wallet.publicKey === null && (
+                <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+                  <div className="flex items-center justify-center gap-5 rounded-lg bg-dark border-2 border-white p-5 px-10  text-xl shadow-2xl">
+                    <div>Connect Wallet to Continue</div>
+                    <WalletMultiButton className="rounded-full bg-blue-500" />
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
