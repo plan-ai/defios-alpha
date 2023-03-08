@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { SearchIcon } from '@/components/icons/search';
 import Button from '@/components/ui/button/button';
 import cn from 'classnames';
@@ -53,6 +53,7 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
 }) => {
   const router = useRouter();
   const [choosenRepo, setChoosenRepo] = useState<any>(null);
+  const [search, setSearch] = useState('');
   const handleSubmit = () => {
     if (choosenRepo !== '' && choosenRepo !== repo) {
       setRepo(choosenRepo);
@@ -87,6 +88,18 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
       });
   }, [firebase_jwt]);
 
+  const repoSearch = useMemo(() => {
+    if (search === '') {
+      return reposData;
+    } else {
+      return reposData.filter((repo: any) => {
+        return repo?.project_name
+          ?.toLowerCase()
+          ?.includes(search.toLowerCase());
+      });
+    }
+  }, [search, reposData]);
+
   return (
     <div className="w-full rounded-lg bg-dark text-sm shadow-large xs:w-[400px]">
       <h2 className="p-6 text-lg font-medium uppercase text-white">
@@ -96,13 +109,15 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
         <SearchIcon className="absolute left-6 h-full text-gray-700" />
         <input
           type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           autoFocus={true}
           placeholder="Search Project"
           className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-sm focus:border-gray-600 focus:ring-0"
         />
       </div>
       <div className="h-[40vh] overflow-y-scroll py-3">
-        {!isLoading && reposData.length === 0 && (
+        {!isLoading && repoSearch.length === 0 && (
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-5">
             <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
             <div className="w-60 text-center text-sm text-gray-500">
@@ -111,8 +126,8 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
           </div>
         )}
         {!isLoading &&
-          reposData.length > 0 &&
-          reposData.map((item: any, idx: number) => (
+          repoSearch.length > 0 &&
+          repoSearch.map((item: any, idx: number) => (
             <RepoItem
               item={item}
               key={idx}

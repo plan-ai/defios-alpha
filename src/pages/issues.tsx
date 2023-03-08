@@ -114,6 +114,72 @@ const IssuesPage: NextPageWithLayout = () => {
     if (isMine) {
       searchParams['filter.mine'] = true;
     }
+    if (search !== '') {
+      if (search.includes(';')) {
+        const searchArray = search.trim().split(';');
+        searchArray.map((item) => {
+          const [key, value] = item.trim().split(':');
+          if (key === 'issue_project_id') {
+            searchParams['search.issue_project_id'] = value;
+          }
+          if (key === 'issue_project_name') {
+            searchParams['search.issue_project_name'] = value;
+          }
+          if (key === 'issue_state') {
+            searchParams['search.issue_state'] = value;
+          }
+          if (key === 'issue_stake_amount') {
+            searchParams['search.issue_stake_amount'] = parseInt(value);
+          }
+          if (key === 'issue_stake_token_symbol') {
+            searchParams['search.issue_stake_token_symbol'] = value;
+          }
+          if (key === 'issue_num_prs') {
+            searchParams['search.issue_num_prs'] = parseInt(value);
+          }
+          if (key === 'issue_creator_gh') {
+            searchParams['search.issue_creator_gh'] = parseInt(value);
+          }
+          if (key === 'issue_tags') {
+            searchParams['search.issue_tags'] = value;
+          }
+          if (key === 'order_by') {
+            searchParams['filter.order_by'] = value;
+          }
+        });
+      } else if (search.includes(':') && !search.includes(';')) {
+        const [key, value] = search.trim().split(':');
+        if (key === 'issue_project_id') {
+          searchParams['search.issue_project_id'] = value;
+        }
+        if (key === 'issue_project_name') {
+          searchParams['search.issue_project_name'] = value;
+        }
+        if (key === 'issue_state') {
+          searchParams['search.issue_state'] = value;
+        }
+        if (key === 'issue_stake_amount') {
+          searchParams['search.issue_stake_amount'] = parseInt(value);
+        }
+        if (key === 'issue_stake_token_symbol') {
+          searchParams['search.issue_stake_token_symbol'] = value;
+        }
+        if (key === 'issue_num_prs') {
+          searchParams['search.issue_num_prs'] = parseInt(value);
+        }
+        if (key === 'issue_creator_gh') {
+          searchParams['search.issue_creator_gh'] = parseInt(value);
+        }
+        if (key === 'issue_tags') {
+          searchParams['search.issue_tags'] = value;
+        }
+        if (key === 'order_by') {
+          searchParams['filter.order_by'] = value;
+        }
+      } else if (!search.includes(':') && !search.includes(';')) {
+        searchParams['search.issue_title'] = search.trim();
+      }
+    }
     axios
       .get('https://api-v1.defi-os.com/issues', {
         params: searchParams,
@@ -142,9 +208,9 @@ const IssuesPage: NextPageWithLayout = () => {
       }
       if (search !== '') {
         if (search.includes(';')) {
-          const searchArray = search.split(';');
+          const searchArray = search.trim().split(';');
           searchArray.map((item) => {
-            const [key, value] = item.split(':');
+            const [key, value] = item.trim().split(':');
             if (key === 'issue_project_id') {
               searchParams['search.issue_project_id'] = value;
             }
@@ -174,7 +240,7 @@ const IssuesPage: NextPageWithLayout = () => {
             }
           });
         } else if (search.includes(':') && !search.includes(';')) {
-          const [key, value] = search.split(':');
+          const [key, value] = search.trim().split(':');
           if (key === 'issue_project_id') {
             searchParams['search.issue_project_id'] = value;
           }
@@ -203,7 +269,7 @@ const IssuesPage: NextPageWithLayout = () => {
             searchParams['filter.order_by'] = value;
           }
         } else if (!search.includes(':') && !search.includes(';')) {
-          searchParams['search.issue_title'] = search;
+          searchParams['search.issue_title'] = search.trim();
         }
       }
 

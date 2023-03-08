@@ -40,7 +40,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
   return (
     <>
-      <div className="relative top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
+      <div className="fixed top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
         <Scrollbar style={{ height: 'calc(100%)' }}>
           <div className="relative z-20 h-screen pb-5">
             <div className="flex h-full flex-col overflow-x-hidden px-5 pb-32">

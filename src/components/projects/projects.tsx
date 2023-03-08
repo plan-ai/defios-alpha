@@ -162,6 +162,48 @@ export default function Projects() {
     if (isMine) {
       searchParams['filter.mine'] = true;
     }
+    if (search !== '') {
+      if (search.includes(';')) {
+        const searchArray = search.trim().split(';');
+        searchArray.map((item) => {
+          const [key, value] = item.trim().split(':');
+          if (key === 'num_open_issues') {
+            searchParams['search.num_open_issues'] = parseInt(value);
+          }
+          if (key === 'top_supporter_name') {
+            searchParams['search.top_supporter_name'] = value;
+          }
+          if (key === 'internal_tags') {
+            searchParams['search.internal_tags'] = value;
+          }
+          if (key === 'tokens_staked') {
+            searchParams['search.tokens_staked'] = parseInt(value);
+          }
+          if (key === 'project_owner_github') {
+            searchParams['search.project_owner_github'] = parseInt(value);
+          }
+        });
+      } else if (search.includes(':') && !search.includes(';')) {
+        const [key, value] = search.trim().split(':');
+        if (key === 'num_open_issues') {
+          searchParams['search.num_open_issues'] = parseInt(value);
+        }
+        if (key === 'top_supporter_name') {
+          searchParams['search.top_supporter_name'] = value;
+        }
+        if (key === 'internal_tags') {
+          searchParams['search.internal_tags'] = value;
+        }
+        if (key === 'tokens_staked') {
+          searchParams['search.tokens_staked'] = parseInt(value);
+        }
+        if (key === 'project_owner_github') {
+          searchParams['search.project_owner_github'] = parseInt(value);
+        }
+      } else if (!search.includes(':') && !search.includes(';')) {
+        searchParams['search.project_name'] = search.trim();
+      }
+    }
     axios
       .get('https://api-v1.defi-os.com/projects', {
         params: searchParams,
@@ -193,9 +235,9 @@ export default function Projects() {
       }
       if (search !== '') {
         if (search.includes(';')) {
-          const searchArray = search.split(';');
+          const searchArray = search.trim().split(';');
           searchArray.map((item) => {
-            const [key, value] = item.split(':');
+            const [key, value] = item.trim().split(':');
             if (key === 'num_open_issues') {
               searchParams['search.num_open_issues'] = parseInt(value);
             }
@@ -213,7 +255,7 @@ export default function Projects() {
             }
           });
         } else if (search.includes(':') && !search.includes(';')) {
-          const [key, value] = search.split(':');
+          const [key, value] = search.trim().split(':');
           if (key === 'num_open_issues') {
             searchParams['search.num_open_issues'] = parseInt(value);
           }
@@ -230,7 +272,7 @@ export default function Projects() {
             searchParams['search.project_owner_github'] = parseInt(value);
           }
         } else if (!search.includes(':') && !search.includes(';')) {
-          searchParams['search.project_name'] = search;
+          searchParams['search.project_name'] = search.trim();
         }
       }
 
