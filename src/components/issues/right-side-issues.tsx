@@ -27,7 +27,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [repo, setRepo] = useState('');
+  const [repo, setRepo] = useState<any>(null);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
     setModalOpen(false);
@@ -44,20 +44,20 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 onClick={() => setModalOpen(true)}
                 className="my-2 w-full"
                 shape="rounded"
+                color={repo !== null ? 'success' : 'primary'}
               >
-                {repo !== '' && (
-                  <div className="flex">
+                {repo !== null && (
+                  <div className="flex items-center">
                     <Image
-                      src={GithubLogo}
-                      alt="github logo"
-                      className="mr-1 h-4 w-4"
+                      src={repo?.token_url || ''}
+                      alt="token"
+                      width={24}
+                      height={24}
                     />
-                    <div className="text-xs">
-                      {repo.replace('https://github.com', '')}
-                    </div>
+                    <div className="ml-2 text-sm">{repo?.project_name}</div>
                   </div>
                 )}
-                {repo === '' && <div>Choose your Project</div>}
+                {repo === null && <div>Choose your Project</div>}
               </Button>
               <Input
                 placeholder="Issue Name"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -6,6 +6,9 @@ import { Filters, GridSwitcher } from '@/components/roadmaps/filters';
 import { OptionIcon } from '@/components/icons/option';
 import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '../icons/plus-circle';
+
+import axios from 'axios';
+import { useAppSelector } from '@/store/store';
 
 function Search() {
   const [search, setSearch] = useState('');
@@ -31,6 +34,31 @@ function Search() {
 
 export default function Roadmap() {
   const { openDrawer } = useDrawer();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [roadmapsData, setRoadmapsData] = useState<any>([]);
+
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    setIsLoading(true);
+    axios
+      .get('https://api-v1.defi-os.com/roadmaps', {
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setRoadmapsData(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err.message));
+  }, [firebase_jwt]);
+
   return (
     <>
       <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
@@ -73,7 +101,7 @@ export default function Roadmap() {
               </div>
             </div>
           </div>
-          <Feeds />
+          <Feeds isLoading={isLoading} data={roadmapsData} />
         </div>
 
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">

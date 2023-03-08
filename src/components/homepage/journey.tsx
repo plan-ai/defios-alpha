@@ -26,7 +26,7 @@ const CheckItem: React.FC<CheckItemProps> = ({ label, checked }) => {
         {checked && <Check />}
       </div>
       <div
-        className={cn({
+        className={cn('w-full', {
           'text-gray-500 line-through': checked,
         })}
       >
@@ -49,49 +49,31 @@ interface JourneyChecklistProps {
 const JourneyChecklist: React.FC<JourneyChecklistProps> = ({ items }) => {
   return (
     <div className="flex flex w-full flex-col gap-5">
-      {items.map((item) => {
-        return (
-          <CheckItem key={item.id} label={item.label} checked={item.checked} />
-        );
+      {items.map((item: any, idx: number) => {
+        return <CheckItem key={idx} label={item?.[0]} checked={item?.[1]} />;
       })}
     </div>
   );
 };
 
-const dummyData: listData[] = [
-  {
-    id: 1,
-    label: 'Login with Github.',
-    checked: true,
-  },
-  {
-    id: 2,
-    label: 'Connect Wallet.',
-    checked: false,
-  },
-  {
-    id: 3,
-    label: 'Create A Project.',
-    checked: false,
-  },
-  {
-    id: 4,
-    label: 'Stake on an issue.',
-    checked: false,
-  },
-  {
-    id: 5,
-    label: 'Solve an Issue and send PR.',
-    checked: false,
-  },
-];
-
 interface JourneyProps {
+  data: any;
   className?: string;
 }
 
-const Journey: React.FC<JourneyProps> = ({ className }) => {
+const Journey: React.FC<JourneyProps> = ({ className, data }) => {
   const [activeTab, setActiveTab] = useState('Developer');
+  const [dataToShow, setDataToShow] = useState<any>([]);
+  useEffect(() => {
+    if (data === null || data === undefined) return;
+    if (activeTab === 'Developer') {
+      setDataToShow(data?.developer);
+    } else if (activeTab === 'Maintainer') {
+      setDataToShow(data?.maintainer);
+    } else if (activeTab === 'Enterprise') {
+      setDataToShow(data?.enterprise);
+    }
+  }, [activeTab, data]);
   return (
     <div
       className={cn(
@@ -99,8 +81,8 @@ const Journey: React.FC<JourneyProps> = ({ className }) => {
         className
       )}
     >
-      <Scrollbar style={{ height: 'calc(100% - 20px)' }}>
-        <div className="w-full py-3 px-5">
+      <Scrollbar style={{ height: 'calc(100%)' }}>
+        <div className="h-screen w-full py-3 px-5">
           <div className="mb-2 flex w-full flex-col items-center gap-3 border-b border-dashed border-gray-700 pt-3 pb-8">
             <div className="flex flex-col items-center">
               <div>Lets Supercharge Open</div>
@@ -110,11 +92,11 @@ const Journey: React.FC<JourneyProps> = ({ className }) => {
             <div>OR</div>
             <TopupButton
               label="Create New Project"
-              className="border-white bg-blue-500"
-              symbolClass="!bg-blue-500"
+              className="border-white !bg-blue-500"
+              symbolClass="!bg-blue-900"
             />
           </div>
-          <div className="flex w-full flex-col items-center px-1 py-2">
+          <div className="flex w-full flex-col items-center px-1 py-2 pb-32">
             <div className="mb-4 text-lg">Choose Your Journey</div>
             <div className="mb-8 w-full pb-4">
               <Swiper
@@ -134,23 +116,23 @@ const Journey: React.FC<JourneyProps> = ({ className }) => {
                 </SwiperSlide>
                 <SwiperSlide>
                   <ButtonImg
-                    active={activeTab === 'Repo Owner'}
-                    onClick={() => setActiveTab('Repo Owner')}
+                    active={activeTab === 'Maintainer'}
+                    onClick={() => setActiveTab('Maintainer')}
                     image="Repo Owner"
-                    label="Repo Owner"
+                    label="Maintainer"
                   />
                 </SwiperSlide>
                 <SwiperSlide>
                   <ButtonImg
-                    active={activeTab === 'Company'}
-                    onClick={() => setActiveTab('Company')}
+                    active={activeTab === 'Enterprise'}
+                    onClick={() => setActiveTab('Enterprise')}
                     image="Company"
-                    label="Company"
+                    label="Enterprise"
                   />
                 </SwiperSlide>
               </Swiper>
             </div>
-            <JourneyChecklist items={dummyData} />
+            <JourneyChecklist items={dataToShow} />
           </div>
         </div>
       </Scrollbar>

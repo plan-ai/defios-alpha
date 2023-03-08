@@ -74,6 +74,7 @@ export default function ProfileTab() {
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [projectsData, setProjectsData] = useState<any>([]);
@@ -221,7 +222,7 @@ export default function ProfileTab() {
           <div className="mt-16 flex h-full w-full flex-col items-center justify-center gap-5">
             <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
             <div className="text-lg text-gray-500">
-              No projects found that match you filter and search settings
+              No projects found that match your filter and search settings
             </div>
             <Button
               onClick={() => router.push('incentivize-contributors')}
@@ -258,7 +259,7 @@ export default function ProfileTab() {
                 totalCount: '{{count}} contributions in {{year}}',
               }}
               showWeekdayLabels={true}
-              username="Rohitkk432"
+              username={githubInfo?.login || 'Rohitkk432'}
             >
               <ReactTooltip html />
             </GitHubCalendar>

@@ -424,7 +424,7 @@ export default function Projects() {
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
           <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
           <div className="text-lg text-gray-500">
-            No projects found that match you filter and search settings
+            No projects found that match your filter and search settings
           </div>
           <Button
             onClick={() => router.push('incentivize-contributors')}

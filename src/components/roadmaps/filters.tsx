@@ -255,9 +255,9 @@ export function Filters() {
       <Collapse label="Amount Staked (USD)" initialOpen>
         <PriceRange />
       </Collapse>
-      <Collapse label="Creator" initialOpen>
+      {/* <Collapse label="Creator" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} />
-      </Collapse>
+      </Collapse> */}
       <Collapse label="Outlook" initialOpen>
         <Status values={OutlookValues} />
       </Collapse>

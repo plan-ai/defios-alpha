@@ -1,8 +1,10 @@
 import React from 'react';
 
-interface SpinnerProps {}
+interface SpinnerProps {
+  label?: string;
+}
 
-export const Spinner: React.FC<SpinnerProps> = ({}) => {
+export const Spinner: React.FC<SpinnerProps> = ({ label }) => {
   return (
     <div
       role="status"
@@ -24,7 +26,7 @@ export const Spinner: React.FC<SpinnerProps> = ({}) => {
           fill="currentFill"
         />
       </svg>
-      <span className="mt-5">Loading...</span>
+      <span className="mt-5">{label ? label : 'Loading...'}</span>
     </div>
   );
 };

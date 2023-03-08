@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from '@/components/ui/image';
+import Image from 'next/image';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowUp } from '@/components/icons/long-arrow-up';
 import { VerifiedIcon } from '@/components/icons/verified-icon';
@@ -8,19 +8,10 @@ import { StaticImageData } from 'next/image';
 import { coinListBig } from '@/data/static/coin-list';
 import { ExportIcon } from '@/components/icons/export-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
-
-type CardProps = {
-  projectName: string;
-  projectImg: StaticImageData | string;
-  date: string;
-  time: string;
-  transactionType: string;
-  transactionUser: string;
-  transactionUserAvatar: StaticImageData | string;
-  transactionCoin: string;
-  transactionAmount: number;
-  PRLink: string;
-};
+import cn from 'classnames';
+interface CardProps {
+  item: any;
+}
 
 interface TransactionFromToProps {
   transactionUserAvatar: StaticImageData | string;
@@ -38,8 +29,8 @@ const TransactionFromTo: React.FC<TransactionFromToProps> = ({
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
         {transactionUserAvatar && (
           <Image
-            src={transactionUserAvatar}
-            alt={transactionUser}
+            src={transactionUserAvatar || ''}
+            alt={transactionUser || ''}
             width={40}
             height={40}
             className="rounded-full"
@@ -48,7 +39,7 @@ const TransactionFromTo: React.FC<TransactionFromToProps> = ({
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">
-          {transactionType === 'received' ? 'From' : 'To'}
+          {transactionType === 'inbound' ? 'From' : 'To'}
         </span>
         <strong className="font-medium -tracking-wider text-white">
           {transactionUser}
@@ -60,18 +51,25 @@ const TransactionFromTo: React.FC<TransactionFromToProps> = ({
 
 interface TrasactionAmountELProps {
   transactionCoin: string;
+  transactionCoinImg: string;
   transactionAmount: number;
 }
 
 export const TrasactionAmountEL: React.FC<TrasactionAmountELProps> = ({
   transactionAmount,
   transactionCoin,
+  transactionCoinImg,
 }) => {
-  const data = coinListBig.find((el) => el.code === transactionCoin);
   return (
     <div className="flex items-center lg:w-1/2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
-        {data?.icon}
+        <Image
+          src={transactionCoinImg || ''}
+          alt={transactionCoin || ''}
+          width={48}
+          height={48}
+          className="rounded-full"
+        />
       </div>
       <div className="ml-2.5 flex flex-col  xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">
@@ -85,52 +83,60 @@ export const TrasactionAmountEL: React.FC<TrasactionAmountELProps> = ({
   );
 };
 
-export default function ContributionsHistoryCard({
-  item,
-}: {
-  item: CardProps;
-}) {
-  const {
-    projectName,
-    projectImg,
-    date,
-    time,
-    transactionCoin,
-    transactionUserAvatar,
-    transactionUser,
-    transactionAmount,
-    transactionType,
-    PRLink,
-  } = item ?? {};
-  const bgColor = transactionType === 'received' ? '#D2D786' : '#F2C672';
+const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
+  const dateStr = new Date(item?.contribution_timestamp).toLocaleDateString(
+    'en-IN',
+    {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }
+  );
+  const timeStr = new Date(item?.contribution_timestamp).toLocaleTimeString(
+    'en-IN',
+    {
+      hour: 'numeric',
+      minute: '2-digit',
+    }
+  );
+
   return (
     <div className="rounded-lg bg-light-dark p-4 text-sm shadow-card sm:p-5 md:p-6">
       <div className="flex items-center justify-between border-b border-dashed border-gray-700 pb-3.5 sm:pb-5">
         <div className="flex items-center font-medium ">
-          <Image
+          {/* <Image
             src={projectImg}
             alt="wallet"
             width={24}
             height={24}
             placeholder="blur"
             className="rounded-full"
-          />
-          <div className="ml-2  -tracking-wider text-white">{projectName}</div>
+          /> */}
+          <div className="ml-2  -tracking-wider text-white">
+            {item?.contributor_project_name}
+          </div>
         </div>
         <div className=" pl-2 text-xs -tracking-wide text-gray-400 xs:text-sm ">
-          {date}
+          {dateStr}
         </div>
       </div>
       <div className="grid grid-cols-9 gap-x-3 pt-4 md:gap-x-5 md:pt-6">
         <div className="col-span-4 flex flex-col gap-2.5 sm:flex-row sm:gap-x-4 md:flex-col 2xl:flex-row">
           <div className="flex items-center lg:w-1/2">
             <div
-              className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white md:h-9 md:w-9 xl:h-10 xl:w-10"
-              style={{ backgroundColor: bgColor }}
+              className={cn(
+                'relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white md:h-9 md:w-9 xl:h-10 xl:w-10',
+                {
+                  'bg-[#D2D786]': item?.contribution_type === 'inbound',
+                  'bg-[#F2C672]': item?.contribution_type === 'outbound',
+                }
+              )}
             >
               <LongArrowUp
                 className={`h-5 w-5 xl:h-6 xl:w-6 ${
-                  transactionType === 'received' ? 'rotate-180' : 'rotate-0'
+                  item?.contribution_type === 'inbound'
+                    ? 'rotate-180'
+                    : 'rotate-0'
                 }`}
               />
               {/* <div className="absolute top-0 -right-1.5 ">
@@ -139,21 +145,22 @@ export default function ContributionsHistoryCard({
             </div>
             <div className="ml-2.5 flex flex-col  xl:ml-4">
               <strong className="mb-0.5 font-medium -tracking-wider text-white">
-                {transactionType === 'received' ? 'Receive' : 'Send'}
+                {item?.contribution_type === 'inbound' ? 'Receive' : 'Send'}
               </strong>
-              <span className="text-xs text-gray-400">{time}</span>
+              <span className="text-xs text-gray-400">{timeStr}</span>
             </div>
           </div>
-          {transactionType === 'received' ? (
+          {item?.contribution_type === 'inbound' ? (
             <TransactionFromTo
-              transactionType={transactionType}
-              transactionUser={transactionUser}
-              transactionUserAvatar={transactionUserAvatar}
+              transactionType={item?.contribution_type}
+              transactionUser={item?.contributor_name}
+              transactionUserAvatar={item?.contributor_profile_pic}
             />
           ) : (
             <TrasactionAmountEL
-              transactionAmount={transactionAmount}
-              transactionCoin={transactionCoin}
+              transactionAmount={Math.round(item?.contribution_amt * 100) / 100}
+              transactionCoin={item?.contribution_token_symbol}
+              transactionCoinImg={item?.contribution_token_icon}
             />
           )}
         </div>
@@ -161,16 +168,17 @@ export default function ContributionsHistoryCard({
           <LongArrowRight className="h-5 w-5 md:h-6 md:w-6 lg:h-5 lg:w-5 xl:h-7 xl:w-7" />
         </div>
         <div className="col-span-4  flex flex-col gap-2.5 sm:flex-row sm:gap-x-4 md:flex-col 2xl:flex-row">
-          {transactionType === 'received' ? (
+          {item?.contribution_type === 'inbound' ? (
             <TrasactionAmountEL
-              transactionAmount={transactionAmount}
-              transactionCoin={transactionCoin}
+              transactionAmount={Math.round(item?.contribution_amt * 100) / 100}
+              transactionCoin={item?.contribution_token_symbol}
+              transactionCoinImg={item?.contribution_token_icon}
             />
           ) : (
             <TransactionFromTo
-              transactionType={transactionType}
-              transactionUser={transactionUser}
-              transactionUserAvatar={transactionUserAvatar}
+              transactionType={item?.contribution_type}
+              transactionUser={item?.contributor_name}
+              transactionUserAvatar={item?.contributor_profile_pic}
             />
           )}
           <div className="flex items-center lg:w-2/3">
@@ -180,7 +188,10 @@ export default function ContributionsHistoryCard({
             <div className="ml-2.5 flex flex-col  xl:ml-4">
               <span className="mb-0.5 text-xs text-gray-400">For Solving</span>
               <strong className="font-medium -tracking-wider text-white">
-                <AnchorLink href={PRLink} target="_blank">
+                <AnchorLink
+                  href={item?.contribution_link || '#'}
+                  target="_blank"
+                >
                   <div className="flex items-center justify-center">
                     <div>Pull Request</div>
                     <ExportIcon className="ml-2 h-3 w-3" />
@@ -193,4 +204,6 @@ export default function ContributionsHistoryCard({
       </div>
     </div>
   );
-}
+};
+
+export default ContributionsHistoryCard;

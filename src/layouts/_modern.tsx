@@ -12,7 +12,7 @@ export default function ModernLayout({
       <Sidebar className="hidden xl:block" />
       <main
         className={cn(
-          ' px-4 pt-4 pb-12 sm:px-6 sm:pb-12 lg:px-8 xl:pb-16 3xl:px-10 3xl:pt-0.5',
+          'pt-4 pb-5 px-6 ',
           contentClassName
         )}
       >

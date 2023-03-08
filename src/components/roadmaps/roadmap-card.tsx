@@ -15,38 +15,22 @@ import cn from 'classnames';
 import { StaticImageData } from 'next/image';
 
 type RoadmapCardProps = {
-  creator: string;
-  creatorImage: StaticImageData;
-  image: StaticImageData;
-  name: string;
-  creationDate: string;
-  totalStake: string;
-  deliverable: string;
-  status: string;
-  details: detailsType | undefined;
-  activeObjectives: string;
+  item: any;
   className?: string;
 };
 
-export default function RoadmapCard({
-  creator,
-  creatorImage,
-  image,
-  name,
-  creationDate,
-  totalStake,
-  details,
-  deliverable,
-  status,
-  activeObjectives,
-  className,
-}: RoadmapCardProps) {
+export default function RoadmapCard({ item, className }: RoadmapCardProps) {
   const [roadmap, setRoadmap] = useState('');
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
     setRoadmap('');
   });
   useLockBodyScroll(roadmap !== '');
+  const datestr = new Date(item?.creation_date).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    year: 'numeric',
+    month: 'long',
+  });
   return (
     <div className="relative overflow-hidden transition-all duration-200">
       <div
@@ -55,19 +39,23 @@ export default function RoadmapCard({
           className
         )}
       >
-        <div className="p-4">
-          <div className="text-2xl font-semibold text-white ">{name}</div>
+        <div className="h-20 p-4">
+          <div className="text-xl font-semibold text-white ">
+            {item?.title?.length > 45
+              ? item?.title.slice(0, 45) + '...'
+              : item?.title}
+          </div>
         </div>
         <div
-          onClick={(e) => setRoadmap(name)}
-          className="relative block w-full pb-full"
+          // onClick={(e) => setRoadmap(item?.title)}
+          className="relative block"
         >
           <Image
-            src={image}
-            placeholder="blur"
-            layout="fill"
-            objectFit="cover"
+            src={item?.cover_image || ''}
             alt=""
+            width={320}
+            height={320}
+            className="h-80 w-80 object-cover object-center"
           />
         </div>
 
@@ -75,21 +63,26 @@ export default function RoadmapCard({
           <div className="flex items-center gap-2">
             <div className="text-xs">Created by:</div>
             <ListCard
-              item={{ name: creator, logo: creatorImage }}
+              item={{
+                name: item?.creator_name,
+                logo: item?.creator_profile_pic,
+              }}
               className="rounded-full bg-dark px-3 py-2"
             />
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
             <div className="text-xs">Total Staked:</div>
-            <div className="text-xl font-semibold text-white">{totalStake}</div>
+            <div className="text-xl font-semibold text-white">
+              {'$' + Math.round(item?.total_stake * 100) / 100}
+            </div>
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
             <div className="text-xs">Active Objectives:</div>
-            <div>{activeObjectives}</div>
+            <div>{item?.active_objectives}</div>
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
             <div className="text-xs">Created</div>
-            <div className="text-sm text-gray-500">{creationDate}</div>
+            <div className="text-sm text-gray-500">{datestr}</div>
           </div>
         </div>
       </div>
@@ -118,7 +111,7 @@ export default function RoadmapCard({
               className="inline-block text-left align-middle"
             >
               <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
-                <RoadmapDetails
+                {/* <RoadmapDetails
                   name={name}
                   creationDate={creationDate}
                   creator={creator}
@@ -130,7 +123,7 @@ export default function RoadmapCard({
                   status={status}
                   activeObjectives={activeObjectives}
                   setRoadmap={setRoadmap}
-                />
+                /> */}
               </div>
             </motion.div>
           </motion.div>
