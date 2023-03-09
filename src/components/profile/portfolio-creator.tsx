@@ -37,7 +37,7 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
     if (firebase_jwt === null || firebase_jwt === '' || generateTrigger === 0)
       return;
     axios
-      .put(
+      .post(
         `https://api-v1.defi-os.com/profile/portfolio?website_type=${portfolioType.toLowerCase()}`,
         {
           headers: {

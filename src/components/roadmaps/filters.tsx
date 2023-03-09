@@ -3,9 +3,7 @@ import { motion } from 'framer-motion';
 import Slider from 'rc-slider';
 import { RadioGroup } from '@/components/ui/radio-group';
 import Collapse from '@/components/ui/collapse';
-import CollectionSelect from '@/components/ui/collection-select-list';
 import { useDrawer } from '@/components/drawer-views/context';
-import Scrollbar from '@/components/ui/scrollbar';
 import Button from '@/components/ui/button';
 import { NormalGridIcon } from '@/components/icons/normal-grid';
 import { CompactGridIcon } from '@/components/icons/compact-grid';
@@ -99,8 +97,27 @@ export function SortList() {
   );
 }
 
-export function PriceRange() {
-  let [range, setRange] = useState({ min: 0, max: 1000 });
+interface RangeFilterProps {
+  min: number;
+  max: number;
+  range: {
+    min: number;
+    max: number;
+  };
+  setRange: React.Dispatch<
+    React.SetStateAction<{
+      min: number;
+      max: number;
+    }>
+  >;
+}
+
+export const RangeFilter: React.FC<RangeFilterProps> = ({
+  range,
+  min,
+  max,
+  setRange,
+}) => {
   function handleRangeChange(value: any) {
     setRange({
       min: value[0],
@@ -142,22 +159,22 @@ export function PriceRange() {
       </div>
       <Slider
         range
-        min={0}
-        max={1000}
+        min={min}
+        max={max}
         value={[range.min, range.max]}
         allowCross={false}
         onChange={(value: any) => handleRangeChange(value)}
       />
     </div>
   );
-}
+};
 
 interface StatusProps {
   values: string[];
 }
 
 export const Status: React.FC<StatusProps> = ({ values }) => {
-  let [plan, setPlan] = useState('buy-now');
+  let [plan, setPlan] = useState(values[0]);
   return (
     <RadioGroup
       value={plan}
@@ -247,13 +264,29 @@ const OutcomeValues = [
 ];
 
 export function Filters() {
+  let [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  let [activeObjectivesRange, setActiveObjectivesRange] = useState({
+    min: 0,
+    max: 100,
+  });
+
   return (
     <>
-      <Collapse label="Filter By" initialOpen>
-        <Status values={OrderByValues} />
+      <Collapse label="Active Objectives" initialOpen>
+        <RangeFilter
+          min={0}
+          max={100}
+          range={activeObjectivesRange}
+          setRange={setActiveObjectivesRange}
+        />
       </Collapse>
       <Collapse label="Amount Staked (USD)" initialOpen>
-        <PriceRange />
+        <RangeFilter
+          min={0}
+          max={1000}
+          range={priceRange}
+          setRange={setPriceRange}
+        />
       </Collapse>
       {/* <Collapse label="Creator" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} />

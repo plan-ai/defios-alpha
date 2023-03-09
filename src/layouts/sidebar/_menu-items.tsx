@@ -51,10 +51,10 @@ export const menuItems = [
     href: routes.jobs,
     comingSoon: true,
   },
-  {
-    name: 'Enterprise',
-    icon: <BuildingIcon />,
-    href: routes.enterprise,
-    comingSoon: true,
-  },
+  // {
+  //   name: 'Enterprise',
+  //   icon: <BuildingIcon />,
+  //   href: routes.enterprise,
+  //   comingSoon: true,
+  // },
 ];

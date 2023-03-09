@@ -26,7 +26,9 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
     setRoadmap('');
   });
   useLockBodyScroll(roadmap !== '');
-  const datestr = new Date(item?.creation_date).toLocaleDateString('en-IN', {
+  const datestr = new Date(
+    item?.creation_date?.split(':').slice(0, 2).join(':')
+  ).toLocaleDateString('en-IN', {
     day: 'numeric',
     year: 'numeric',
     month: 'long',
