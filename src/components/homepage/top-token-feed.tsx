@@ -1,5 +1,5 @@
 import { ArrowUp } from '@/components/icons/arrow-up';
-import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import AnchorLink from '../ui/links/anchor-link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
@@ -32,18 +32,23 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
       )}
     >
       <div className="w-full flex-col">
-        <div className="flex items-center">
-          <Image
-            src={data?.token_image_url || ''}
-            alt={data?.token_symbol || ''}
-            width={24}
-            height={24}
-            className="rounded-full"
-          />
-          <h4 className="ml-3 text-sm font-medium text-white">
-            {data?.token_name}
-          </h4>
-        </div>
+        <AnchorLink
+          href={`https://solscan.io/token/${data?.token_spl_addr}`}
+          target="_blank"
+        >
+          <div className="flex items-center">
+            <Image
+              src={data?.token_image_url || ''}
+              alt={data?.token_symbol || ''}
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
+            <h4 className="ml-3 text-sm font-medium text-white">
+              {data?.token_name}
+            </h4>
+          </div>
+        </AnchorLink>
 
         <div className="flex items-center gap-4">
           <div className="w-full flex-col">

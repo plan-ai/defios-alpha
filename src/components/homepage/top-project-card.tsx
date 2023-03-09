@@ -7,6 +7,9 @@ import CoinTicker from '@/components/custom/coin-ticker';
 import PriceChart from '@/components/ui/chats/price-chart';
 import StatsData from '@/components/custom/stats-data';
 import axios from 'axios';
+import { useAppDispatch } from '@/store/store';
+import { clicked } from '@/store/notifClickSlice';
+import { useRouter } from 'next/router';
 
 interface TopProjectCardProps {
   item: any;
@@ -28,6 +31,20 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         .catch((err) => console.log(err));
     }
   }, [item]);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const onClickHandler = () => {
+    const payload = {
+      searchQuery: `id:${item?._id}`,
+      setSearchQuery: true,
+      expandFirst: true,
+    };
+    dispatch(clicked(payload));
+    router.push('/projects');
+  };
+
   return (
     <div
       className={cn(
@@ -35,7 +52,10 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         className
       )}
     >
-      <div className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6">
+      <div
+        className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6"
+        onClick={onClickHandler}
+      >
         <div className="text-xl uppercase">Most Trending Project</div>
         <div className="flex justify-between gap-3">
           <AnchorLink

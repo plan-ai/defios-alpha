@@ -7,7 +7,7 @@ import StackedSwitch from '@/components/custom/stacked-switch';
 import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import IssuesList from '@/components/issues/list';
-import { IssuesData } from '@/data/static/issues-data';
+import { Close } from '@/components/icons/close';
 
 import OpenIssueExpand from '@/components/issues/open-issues-expand';
 import VotingExpand from '@/components/issues/voting-expand';
@@ -30,8 +30,6 @@ interface searchProps {
   setTriggerSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// const IssuesData:any = [];
-
 const Search: React.FC<searchProps> = ({
   placeholder,
   search,
@@ -40,13 +38,17 @@ const Search: React.FC<searchProps> = ({
 }) => {
   return (
     <div className="relative flex w-full rounded-full">
-      <label className="flex w-full items-center">
+      <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder={placeholder || 'Search'}
           autoComplete="off"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+        />
+        <Close
+          onClick={() => setSearch('')}
+          className="absolute right-3 h-4 w-4"
         />
       </label>
       <Button
@@ -119,6 +121,9 @@ const IssuesPage: NextPageWithLayout = () => {
         const searchArray = search.trim().split(';');
         searchArray.map((item) => {
           const [key, value] = item.trim().split(':');
+          if (key === 'id') {
+            searchParams['first_id'] = value;
+          }
           if (key === 'issue_project_id') {
             searchParams['search.issue_project_id'] = value;
           }
@@ -149,6 +154,9 @@ const IssuesPage: NextPageWithLayout = () => {
         });
       } else if (search.includes(':') && !search.includes(';')) {
         const [key, value] = search.trim().split(':');
+        if (key === 'id') {
+          searchParams['first_id'] = value;
+        }
         if (key === 'issue_project_id') {
           searchParams['search.issue_project_id'] = value;
         }
@@ -211,6 +219,9 @@ const IssuesPage: NextPageWithLayout = () => {
           const searchArray = search.trim().split(';');
           searchArray.map((item) => {
             const [key, value] = item.trim().split(':');
+            if (key === 'id') {
+              searchParams['first_id'] = value;
+            }
             if (key === 'issue_project_id') {
               searchParams['search.issue_project_id'] = value;
             }
@@ -241,6 +252,9 @@ const IssuesPage: NextPageWithLayout = () => {
           });
         } else if (search.includes(':') && !search.includes(';')) {
           const [key, value] = search.trim().split(':');
+          if (key === 'id') {
+            searchParams['first_id'] = value;
+          }
           if (key === 'issue_project_id') {
             searchParams['search.issue_project_id'] = value;
           }
@@ -291,13 +305,14 @@ const IssuesPage: NextPageWithLayout = () => {
   }, [triggerSearch, firebase_jwt]);
 
   useEffect(() => {
+    if (issuesData.length === 0) return;
     if (searchQuery !== '' && setSearchQuery) {
       setSearch(searchQuery);
       setInitExpand(expandFirst);
       setTriggerSearch(true);
       dispatch(reset());
     }
-  }, [searchQuery, setSearchQuery, expandFirst, dispatch]);
+  }, [issuesData, searchQuery, setSearchQuery, expandFirst, dispatch]);
 
   return (
     <>
@@ -377,7 +392,7 @@ const IssuesPage: NextPageWithLayout = () => {
                 )}
               </IssuesList>
             ))}
-          {!isLoading && IssuesData.length === 0 && (
+          {!isLoading && issuesData.length === 0 && (
             <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
               <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
               <div className="text-lg text-gray-500">

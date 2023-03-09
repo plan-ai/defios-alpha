@@ -16,10 +16,11 @@ import StackedSwitch from '@/components/custom/stacked-switch';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
 import Spinner from '@/components/custom/spinner';
-// import { ProjectsData } from '@/data/static/projects-data';
+import { Close } from '@/components/icons/close';
 
 import axios from 'axios';
-import { useAppSelector } from '@/store/store';
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { reset } from '@/store/notifClickSlice';
 
 const sort = [
   { id: 0, name: 'Hot', order_by: '-num_open_issues' },
@@ -27,8 +28,6 @@ const sort = [
   { id: 2, name: 'Total Staked', order_by: '-num_open_issues' },
   { id: 3, name: 'Latest', order_by: '-num_open_issues' },
 ];
-
-// const ProjectsData: any = [];
 
 interface SortListProps {
   selectedItem: any;
@@ -89,13 +88,17 @@ const Search: React.FC<SearchProps> = ({
 }) => {
   return (
     <div className="relative flex w-full rounded-full ">
-      <label className="flex w-full items-center">
+      <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           autoComplete="off"
+        />
+        <Close
+          onClick={() => setSearch('')}
+          className="absolute right-3 h-4 w-4"
         />
       </label>
       <Button
@@ -121,6 +124,15 @@ export default function Projects() {
   const [triggerSearch, setTriggerSearch] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const [initExapand, setInitExpand] = useState(false);
+  const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
+  const setSearchQuery = useAppSelector(
+    (state) => state.notifClick.setSearchQuery
+  );
+  const expandFirst = useAppSelector((state) => state.notifClick.expandFirst);
+
+  const dispatch = useAppDispatch();
 
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
@@ -167,6 +179,9 @@ export default function Projects() {
         const searchArray = search.trim().split(';');
         searchArray.map((item) => {
           const [key, value] = item.trim().split(':');
+          if (key === 'id') {
+            searchParams['first_id'] = value;
+          }
           if (key === 'num_open_issues') {
             searchParams['search.num_open_issues'] = parseInt(value);
           }
@@ -185,6 +200,9 @@ export default function Projects() {
         });
       } else if (search.includes(':') && !search.includes(';')) {
         const [key, value] = search.trim().split(':');
+        if (key === 'id') {
+          searchParams['first_id'] = value;
+        }
         if (key === 'num_open_issues') {
           searchParams['search.num_open_issues'] = parseInt(value);
         }
@@ -216,6 +234,7 @@ export default function Projects() {
         setIsLoading(false);
       })
       .catch((err) => console.log(err.message));
+    setInitExpand(false);
   }, [isNative, isMine, orderBy, firebase_jwt]);
 
   useEffect(() => {
@@ -238,6 +257,9 @@ export default function Projects() {
           const searchArray = search.trim().split(';');
           searchArray.map((item) => {
             const [key, value] = item.trim().split(':');
+            if (key === 'id') {
+              searchParams['first_id'] = value;
+            }
             if (key === 'num_open_issues') {
               searchParams['search.num_open_issues'] = parseInt(value);
             }
@@ -256,6 +278,9 @@ export default function Projects() {
           });
         } else if (search.includes(':') && !search.includes(';')) {
           const [key, value] = search.trim().split(':');
+          if (key === 'id') {
+            searchParams['first_id'] = value;
+          }
           if (key === 'num_open_issues') {
             searchParams['search.num_open_issues'] = parseInt(value);
           }
@@ -290,6 +315,7 @@ export default function Projects() {
         })
         .catch((err) => console.log(err.message));
     }
+    setInitExpand(false);
   }, [triggerSearch, firebase_jwt]);
 
   const getChartData = async () => {
@@ -326,6 +352,16 @@ export default function Projects() {
     if (typeof projectsData[0].community_health_graph !== 'string') return;
     getChartData();
   }, [projectsData]);
+
+  useEffect(() => {
+    if (projectsData.length === 0) return;
+    if (searchQuery !== '' && setSearchQuery) {
+      setSearch(searchQuery);
+      setInitExpand(expandFirst);
+      setTriggerSearch(true);
+      dispatch(reset());
+    }
+  }, [projectsData, searchQuery, setSearchQuery, expandFirst, dispatch]);
 
   return (
     <div className="mx-auto w-full">
@@ -376,8 +412,12 @@ export default function Projects() {
 
       {!isLoading &&
         projectsData.length !== 0 &&
-        projectsData.map((project: any) => (
-          <ProjectList key={project.id} data={project}>
+        projectsData.map((project: any, idx: number) => (
+          <ProjectList
+            initExpand={idx == 0 ? initExapand : false}
+            key={idx}
+            data={project}
+          >
             <div className="mb-2 flex flex-row items-center justify-between text-sm">
               <div className="flex w-[30%]">
                 <CoinTicker

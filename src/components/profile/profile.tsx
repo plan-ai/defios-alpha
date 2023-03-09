@@ -26,6 +26,8 @@ export default function Profile() {
     }, 2500);
   }
 
+  const [portfolioType, setPortfolioType] = useState('Basic');
+
   const [sidebarData, setSidebarData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -135,8 +137,10 @@ export default function Profile() {
             label="Theme"
             option1={'Basic'}
             option2={'Advanced'}
+            stateChoosen={portfolioType}
+            setStateChoosen={setPortfolioType}
           />
-          <PortfolioCreator isGenerated={false} />
+          <PortfolioCreator portfolioType={portfolioType} isGenerated={false} />
         </div>
       </div>
       <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 3xl:pl-14">

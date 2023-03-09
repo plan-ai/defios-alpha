@@ -4,13 +4,15 @@ import SecurityStatus from '@/components/custom/security-status';
 import Image from 'next/image';
 interface ProjectListTypes {
   data: any;
+  initExpand?: boolean;
 }
 
 export default function ProjectList({
   data,
+  initExpand,
   children,
 }: React.PropsWithChildren<ProjectListTypes>) {
-  let [isExpand, setIsExpand] = useState(false);
+  let [isExpand, setIsExpand] = useState(initExpand || false);
   return (
     <div className="relative mb-3 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
       <div

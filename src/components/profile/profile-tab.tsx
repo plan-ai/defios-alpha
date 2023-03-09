@@ -18,6 +18,7 @@ import ReactTooltip from 'react-tooltip';
 
 import axios from 'axios';
 import { useAppSelector } from '@/store/store';
+import { Close } from '@/components/icons/close';
 
 interface SearchProps {
   search: string;
@@ -32,13 +33,17 @@ const Search: React.FC<SearchProps> = ({
 }) => {
   return (
     <div className="relative mb-5 flex w-full rounded-full">
-      <label className="flex w-full items-center">
+      <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           autoComplete="off"
+        />
+        <Close
+          onClick={() => setSearch('')}
+          className="absolute right-3 h-4 w-4"
         />
       </label>
       <Button
