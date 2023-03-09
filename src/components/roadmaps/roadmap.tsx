@@ -8,38 +8,66 @@ import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '../icons/plus-circle';
 
 import axios from 'axios';
-import { useAppSelector } from '@/store/store';
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { triggerFilter, searchDone } from '@/store/roadmapFilterSlice';
+import { Close } from '@/components/icons/close';
 
-function Search() {
-  const [search, setSearch] = useState('');
+interface SearchProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setTriggerSearch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Search: React.FC<SearchProps> = ({
+  search,
+  setSearch,
+  setTriggerSearch,
+}) => {
   return (
-    <div className="relative flex w-full rounded-full">
-      <label className="flex w-full items-center">
+    <div className="relative flex w-full rounded-full ">
+      <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Roadmaps"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           autoComplete="off"
+        />
+        <Close
+          onClick={() => setSearch('')}
+          className="absolute right-3 h-4 w-4"
         />
       </label>
       <Button
         shape="rounded"
         size="small"
         className="mx-2 flex items-center justify-center"
+        onClick={() => setTriggerSearch(true)}
       >
         <SearchIcon className="h-4 w-4" />
       </Button>
     </div>
   );
-}
+};
 
 export default function Roadmap() {
   const { openDrawer } = useDrawer();
+
+  const [search, setSearch] = useState('');
+  const [triggerSearch, setTriggerSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [roadmapsData, setRoadmapsData] = useState<any>([]);
 
+  const dispatch = useAppDispatch();
+
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  const filterData = useAppSelector((state) => state.roadmapFilter.filter);
+  const searchTrigger = useAppSelector(
+    (state) => state.roadmapFilter.searchTrigger
   );
 
   useEffect(() => {
@@ -52,12 +80,59 @@ export default function Roadmap() {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setRoadmapsData(res.data);
         setIsLoading(false);
       })
       .catch((err) => console.log(err.message));
   }, [firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    if (triggerSearch === true) {
+      setIsLoading(true);
+      dispatch(triggerFilter());
+    }
+  }, [triggerSearch, firebase_jwt]);
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    if (triggerSearch === true && searchTrigger === true) {
+      const searchParams: any = { ...filterData };
+      if (search !== '') {
+        if (search.includes(';')) {
+          const searchArray = search.trim().split(';');
+          searchArray.map((item) => {
+            const [key, value] = item.trim().split(':');
+            if (key === 'creator') {
+              searchParams['search.roadmap_creator_gh_name'] = value;
+            }
+          });
+        } else if (search.includes(':') && !search.includes(';')) {
+          const [key, value] = search.trim().split(':');
+          if (key === 'creator') {
+            searchParams['search.roadmap_creator_gh_name'] = value;
+          }
+        } else if (!search.includes(':') && !search.includes(';')) {
+          searchParams['search.roadmap_title'] = search.trim();
+        }
+      }
+
+      axios
+        .get('https://api-v1.defi-os.com/roadmaps', {
+          params: searchParams,
+          headers: {
+            Authorization: firebase_jwt,
+          },
+        })
+        .then((res) => {
+          setRoadmapsData(res.data);
+          setIsLoading(false);
+          setTriggerSearch(false);
+          dispatch(searchDone());
+        })
+        .catch((err) => console.log(err.message));
+    }
+  }, [triggerSearch, searchTrigger, firebase_jwt]);
 
   return (
     <>
@@ -69,7 +144,11 @@ export default function Roadmap() {
         <div className="2xl:pl-8 4xl:pl-10">
           <div className="relative z-10 mb-6 flex items-center justify-between">
             <span className="w-3/5 text-xs font-medium text-white sm:text-sm">
-              <Search />
+              <Search
+                search={search}
+                setSearch={setSearch}
+                setTriggerSearch={setTriggerSearch}
+              />
             </span>
 
             <div className="flex gap-6 3xl:gap-8">

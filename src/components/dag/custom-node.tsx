@@ -10,9 +10,6 @@ interface CustomNodeProps {
 }
 
 const CustomNode: React.FC<CustomNodeProps> = ({ data, selected }) => {
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
   return (
     <div
       className={cn(

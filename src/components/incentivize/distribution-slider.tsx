@@ -173,19 +173,16 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
       MainDistribution,
       myInfo.login
     );
-    console.log('owner: ', newData);
     dispatch(setDistribution(newData));
   };
 
   const AlgoCode = () => {
     const newData = CodeContributorStats(fetchData, MainDistribution);
-    console.log('code: ', newData);
     dispatch(setDistribution(newData));
   };
 
   const AlgoDuration = () => {
     const newData = CodeDurationStats(fetchData, MainDistribution);
-    console.log('duration: ', newData);
     dispatch(setDistribution(newData));
   };
 

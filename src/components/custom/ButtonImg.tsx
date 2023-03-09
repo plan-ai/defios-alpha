@@ -17,7 +17,6 @@ export const ButtonImg: React.FC<ButtonImgProps> = ({
   onClick,
   active,
 }) => {
-  console.log(active);
   return (
     <button
       onClick={onClick}
