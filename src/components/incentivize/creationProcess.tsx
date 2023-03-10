@@ -44,7 +44,8 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
         creationState.step3.tokenSpecs.tokenSymbol,
         creationState.step2.repoName,
         creationState.step2.repoLink,
-        creationState.step3.tokenSpecs.totalSupply
+        creationState.step3.tokenSpecs.totalSupply,
+        creationState.step3.distribution
       );
   }, [isExpand]);
 
