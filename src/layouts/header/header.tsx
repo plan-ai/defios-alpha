@@ -9,6 +9,12 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import routes from '@/config/routes';
+import { setSigner, setConnection } from '@/lib/helpers/wallet';
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 function NotificationButton() {
   const router = useRouter();
@@ -29,6 +35,45 @@ function NotificationButton() {
 }
 
 function HeaderRightArea() {
+  const { data: session } = useSession();
+  const wallet = useWallet();
+  const { connection } = useConnection();
+  const userMappingState = useAppSelector(selectUserMapping);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    //@ts-ignore
+    if (
+      //@ts-ignore
+      session?.user?.id &&
+      wallet.publicKey &&
+      //@ts-ignore
+      session?.accessToken &&
+      !userMappingState.isLoading
+    ) {
+      dispatch(
+        getUserMapping({
+          //@ts-ignore
+          userID: session?.user.id,
+          //@ts-ignore
+          accessToken: session?.accessToken,
+          userPubkey: wallet.publicKey.toBase58(),
+        })
+      );
+    }
+    //@ts-ignore
+  }, [wallet.publicKey, session?.accessToken, session?.user.id]);
+
+  useEffect(() => {
+    if (wallet.publicKey)
+      setSigner(
+        wallet.publicKey,
+        wallet.signTransaction,
+        wallet.signAllTransactions
+      );
+    if (connection) setConnection(connection);
+  }, [wallet.publicKey, connection]);
+
   return (
     <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
       <NotificationButton />

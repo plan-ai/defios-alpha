@@ -12,7 +12,7 @@ import { setStep2Data } from '@/store/creationSlice';
 
 interface RepoModalProps {
   repo: string;
-  setRepo: React.Dispatch<React.SetStateAction<string>>;
+  setRepo: (repo:string) => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   stepOfCreation?: number;

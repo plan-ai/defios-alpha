@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import ProcessUI from '@/components/incentivize/process-ui';
 import { Check } from '@/components/icons/check';
+import { useAppSelector } from '@/store/store';
+import { selectCreation } from '@/store/creationSlice';
+import { createRepository } from '@/lib/helpers/contractInteract';
+import { PublicKey } from '@solana/web3.js';
+import { selectUserMapping } from '@/store/userMappingSlice';
 
 interface CreationProcessProps {
   stepOfCreation: number;
@@ -17,7 +22,8 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
 }) => {
   const [isExpand, setIsExpand] = useState(false);
   const [step, setStep] = useState(2);
-
+  const creationState = useAppSelector(selectCreation);
+  const userMappingState = useAppSelector(selectUserMapping);
   useEffect(() => {
     setIsExpand(false);
   }, [reset]);
@@ -26,6 +32,21 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
       setIsExpand(true);
     }
   }, [stepOfCreation]);
+
+  useEffect(() => {
+    if (isExpand)
+      createRepository(
+        new PublicKey(
+          userMappingState.userMapping?.verifiedUserAccount as string
+        ),
+        creationState.step3.tokenSpecs.tokenIcon as File,
+        creationState.step3.tokenSpecs.tokenName,
+        creationState.step3.tokenSpecs.tokenSymbol,
+        creationState.step2.repoName,
+        creationState.step2.repoLink,
+        creationState.step3.tokenSpecs.totalSupply
+      );
+  }, [isExpand]);
 
   return (
     <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">

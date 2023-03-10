@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo';
-import { useSession } from 'next-auth/react';
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import Button from '@/components/ui/button/button';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
 import { useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ import OverviewChart from '@/components/ui/chats/overview-chart';
 import axios from 'axios';
 import Spinner from '../custom/spinner';
 import Journey from '@/components/homepage/journey';
+import { setConnection, setSigner } from '@/lib/helpers/wallet';
 
 export default function ModernScreen() {
   const { data: session } = useSession();
@@ -50,29 +52,6 @@ export default function ModernScreen() {
         setIsLoading(false);
       });
   }, [firebase_jwt]);
-
-  useEffect(() => {
-    //@ts-ignore
-    if (
-      //@ts-ignore
-      session?.user?.id &&
-      wallet.publicKey &&
-      //@ts-ignore
-      session?.accessToken &&
-      !userMappingState.isLoading
-    ) {
-      dispatch(
-        getUserMapping({
-          //@ts-ignore
-          userID: session?.user.id,
-          //@ts-ignore
-          accessToken: session?.accessToken,
-          userPubkey: wallet.publicKey.toBase58(),
-        })
-      );
-    }
-    //@ts-ignore
-  }, [wallet.publicKey, session?.accessToken, session?.user.id]);
   return (
     <>
       <NextSeo

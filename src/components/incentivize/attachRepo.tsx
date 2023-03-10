@@ -11,12 +11,14 @@ interface AttachRepoProps {
   stepOfCreation: number;
   setStepOfCreation: React.Dispatch<React.SetStateAction<number>>;
   reset: number;
+  setRepoCallback?: (repo: string) => void;
 }
 
 const AttachRepo: React.FC<AttachRepoProps> = ({
   stepOfCreation,
   setStepOfCreation,
   reset,
+  setRepoCallback,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [repo, setRepo] = useState('');
@@ -91,7 +93,10 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
               <div className="h-[90vh] w-[35vw] rounded-2xl bg-dark">
                 <RepoModal
                   repo={repo}
-                  setRepo={setRepo}
+                  setRepo={(repo)=>{
+                    setRepo(repo);
+                    if (setRepoCallback) setRepoCallback(repo);
+                  }}
                   setModalOpen={setModalOpen}
                   setStepOfCreation={setStepOfCreation}
                   stepOfCreation={stepOfCreation}
