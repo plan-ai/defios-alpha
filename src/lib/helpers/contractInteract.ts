@@ -1,5 +1,5 @@
 import { contractAddresses } from '@/config/addresses';
-import { Defios } from '@/types/defios';
+import { Defios, IDL } from '../../types/defios';
 import { TokenVesting } from '@/types/token_vesting';
 import {
   Program,
@@ -10,7 +10,6 @@ import {
   BN,
 } from '@project-serum/anchor';
 import { clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js';
-import { DefiOsIDL } from '../../types/idl/defios';
 import { TokenVestingIDL } from '../../types/idl/token_vesting';
 import * as mpl from "@metaplex-foundation/mpl-token-metadata"
 import { Metaplex, keypairIdentity, bundlrStorage, compareAmounts, walletAdapterIdentity } from "@metaplex-foundation/js";
@@ -41,7 +40,7 @@ export const getProvider = async (
 
 export const getDefiOsProgram = async (provider: AnchorProvider) => {
   const program: Program<Defios> = new Program(
-    DefiOsIDL,
+    IDL,
     contractAddresses.defios,
     provider
   );
@@ -57,7 +56,7 @@ export const getTokenVestingProgram = async (provider: AnchorProvider) => {
   return program;
 };
 
-export const createRepository = (repositoryVerifiedUser: PublicKey, image: File, tokenName: string, tokenSymbol: string, repoName: string, repoLink: string, mintAmount: number) => {
+export const createRepository = (repositoryVerifiedUser: PublicKey, image: File, tokenName: string, tokenSymbol: string, repoName: string, repoLink: string, mintAmount: number, owners: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       const provider = await getProvider(Connection, Signer)
@@ -143,13 +142,24 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
         []
       );
 
+      let usernames: Array<string> = []
+      let amounts: Array<BN> = []
+
+      Object.keys(owners).forEach((key) => {
+        usernames.push(key)
+        let percentageString = owners[key].replace('%', '')
+        let percentage = parseFloat(percentageString)
+        let amount = (percentage / 100) * mintAmount
+        amounts.push(new BN(amount * 10 ** 9))
+      })
+
       const res = await program.methods
         .createRepository(
           repoName,
           'Open source revolution',
           repoLink,
-          [],
-          []
+          usernames,
+          amounts
         )
         .accounts({
           nameRouterAccount,
