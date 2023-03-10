@@ -20,7 +20,12 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
 
   const [stepOfCreation, setStepOfCreation] = useState(1);
   const [reset, setReset] = useState(0);
-
+  const [repo, setRepo] = useState('');
+  const [tokenName, setTokenName] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tokenDecimals, setTokenDecimals] = useState(18);
+  const [tokenSupply, setTokenSupply] = useState(1000000);
+  const [tokenLogo, setTokenLogo] = useState('');
   return (
     <>
       <NextSeo
@@ -50,6 +55,7 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
           setStepOfCreation={setStepOfCreation}
           stepOfCreation={stepOfCreation}
           reset={reset}
+          setRepoCallback={setRepo}
         />
         <ConfigToken
           setStepOfCreation={setStepOfCreation}

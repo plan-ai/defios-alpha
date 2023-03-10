@@ -6,11 +6,13 @@ import cn from 'classnames';
 interface UploaderProps {
   label?: string;
   useUppercaseLabel?: boolean;
+  setFile?: (file: any) => void;
 }
 
 const Uploader: React.FC<UploaderProps> = ({
   label,
   useUppercaseLabel = true,
+  setFile = () => {},
 }) => {
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
@@ -18,6 +20,7 @@ const Uploader: React.FC<UploaderProps> = ({
     accept: 'image/*',
     multiple: false,
     onDrop: (acceptedFiles: any) => {
+      setFile(acceptedFiles[0]);
       setFiles(
         acceptedFiles.map((file: any) =>
           Object.assign(file, {

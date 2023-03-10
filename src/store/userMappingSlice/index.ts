@@ -8,6 +8,7 @@ export interface UserMappingType {
   nameRouter: string;
   userName: string;
   userPubkey: string;
+  verifiedUserAccount: string;
 }
 
 export interface UserMappingState {
