@@ -69,7 +69,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
                 name: item?.creator_name,
                 logo: item?.creator_profile_pic,
               }}
-              className="rounded-full bg-dark px-3 py-2"
+              className="rounded-full bg-black px-3 py-2"
             />
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
