@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from '@/components/ui/button/button';
-import PRSlider, { PRCardProps } from '@/components/issues/pr-slider';
+import PRSlider from '@/components/issues/pr-slider';
 
 interface VotingExpandProps {
-  PRData: PRCardProps[];
+  PRData: any;
 }
 
 const VotingExpand: React.FC<VotingExpandProps> = ({ PRData }) => {

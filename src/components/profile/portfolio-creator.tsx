@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/button/button';
 import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
 import { useCopyToClipboard } from 'react-use';
 import { Refresh } from '@/components/icons/refresh';
+import axios from 'axios';
+import { useAppSelector } from '@/store/store';
 
 interface PortfolioCreatorProps {
   isGenerated: boolean;
+  portfolioType: string;
 }
 
-const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
+const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
+  isGenerated,
+  portfolioType,
+}) => {
   const [generatedLink, setGeneratedLink] = useState('');
   const [copyButtonStatus, setCopyButtonStatus] = useState(false);
   const [_, copyToClipboard] = useCopyToClipboard();
@@ -21,14 +27,36 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
     }, 2500);
   }
   const [status, setStatus] = useState(isGenerated);
+  const [generateTrigger, setGenerateTrigger] = useState(0);
+
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  useEffect(() => {
+    if (firebase_jwt === null || firebase_jwt === '' || generateTrigger === 0)
+      return;
+    axios
+      .post(
+        `https://api-v1.defi-os.com/profile/portfolio?website_type=${portfolioType.toLowerCase()}`,
+        {
+          headers: {
+            Authorization: firebase_jwt,
+          },
+        }
+      )
+      .then((res) => {
+        setGeneratedLink(res.data.link);
+        setStatus(true);
+      })
+      .catch((err) => console.log(err));
+  }, [generateTrigger, firebase_jwt, portfolioType]);
+
   return (
     <>
       {!status && (
         <Button
-          onClick={() => {
-            setGeneratedLink('https://defi-os.com');
-            setStatus(true);
-          }}
+          onClick={() => setGenerateTrigger((state) => state + 1)}
           shape="rounded"
           size="small"
           className="mt-5 w-full"
@@ -55,14 +83,7 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({ isGenerated }) => {
             </div>
           </div>
           <Refresh
-            onClick={() => {
-              setGeneratedLink(
-                generatedLink === 'https://github.com/AbhisekBasu1/DefiOS'
-                  ? 'https://defi-os.com'
-                  : 'https://github.com/AbhisekBasu1/DefiOS'
-              );
-              setStatus(true);
-            }}
+            onClick={() => setGenerateTrigger((state) => state + 1)}
             className="ml-2 h-5 w-5"
           />
         </div>

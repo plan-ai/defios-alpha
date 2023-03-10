@@ -1,39 +1,23 @@
 import React from 'react';
 import IssuesTableList from '@/components/homepage/issues-table-list';
 
-interface OpenIssuesTableProps {}
+interface OpenIssuesTableProps {
+  data: any;
+}
 
-const dummyData = [
-  {
-    issueTitle: 'Issue Title 1',
-    projectName: 'project name 1',
-    amountStaked: 'amountStaked 1',
-    skillsetNeeded: 'skillset 1',
-  },
-  {
-    issueTitle: 'Issue Title 2',
-    projectName: 'project name 2',
-    amountStaked: 'amountStaked 2',
-    skillsetNeeded: 'skillset 2',
-  },
-  {
-    issueTitle: 'Issue Title 2',
-    projectName: 'project name 2',
-    amountStaked: 'amountStaked 2',
-    skillsetNeeded: 'skillset 2',
-  },
-];
-
-export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({}) => {
+export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({ data }) => {
   return (
     <div className="mx-auto w-full">
       <div className="mb-3 flex flex-col rounded-lg border-b-2 border-gray-500 bg-light-dark shadow-card">
         <div className="flex w-full items-center py-4 px-6 text-xl uppercase text-gray-300">
           Open Issues For You
         </div>
-        <div className="grid grid-cols-4 gap-6 border-t border-dashed border-gray-600 text-gray-300">
-          <span className="py-4 px-6 text-xs tracking-wider sm:text-sm">
+        <div className="grid grid-cols-5 gap-6 border-t border-dashed border-gray-600 text-gray-300">
+          <span className="col-span-2 py-4 px-6 text-xs tracking-wider sm:text-sm">
             Issue Title
+          </span>
+          <span className="py-4 text-center text-xs tracking-wider sm:text-sm ">
+            Issue state
           </span>
           <span className="py-4 text-center text-xs tracking-wider sm:text-sm">
             Project Name
@@ -41,22 +25,11 @@ export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({}) => {
           <span className="py-4 text-center text-xs tracking-wider sm:text-sm ">
             Amount Staked
           </span>
-          <span className="py-4 text-center text-xs tracking-wider sm:text-sm ">
-            Skillset Needed
-          </span>
         </div>
       </div>
-      {dummyData.length !== 0 &&
-        dummyData.map((item, idx) => {
-          return (
-            <IssuesTableList
-              issueTitle={item.issueTitle}
-              projectName={item.projectName}
-              amountStaked={item.amountStaked}
-              skillsetNeeded={item.skillsetNeeded}
-              key={idx}
-            />
-          );
+      {data.length !== 0 &&
+        data.map((item: any, idx: number) => {
+          return <IssuesTableList item={item} key={idx} />;
         })}
     </div>
   );

@@ -9,9 +9,14 @@ import CreationProcess from '@/components/incentivize/creationProcess';
 import Button from '@/components/ui/button/button';
 import { useAppDispatch } from '@/store/store';
 import { reset as resetCreation } from '@/store/creationSlice';
+import { useWallet } from '@solana/wallet-adapter-react';
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import Image from 'next/image';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
+  const wallet = useWallet();
 
   const [stepOfCreation, setStepOfCreation] = useState(1);
   const [reset, setReset] = useState(0);
@@ -27,7 +32,7 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
         title="Incentivize Contributors"
         description="Defios - Tokenize your Open Source Project."
       />
-      <div className="flex h-full w-full flex-col items-center justify-between px-5">
+      <div className="relative flex h-full w-full flex-col items-center justify-between py-10 px-5">
         <div className="mb-5 w-[80%]">
           <Button
             shape="rounded"
@@ -62,6 +67,15 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
           stepOfCreation={stepOfCreation}
           reset={reset}
         />
+        {wallet.publicKey === null && (
+          <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+            <div className="flex flex-col items-center justify-center gap-5 rounded-lg border-2 border-white bg-dark p-10 text-xl shadow-2xl">
+              <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+              <div>Connect Wallet to Continue</div>
+              <WalletMultiButton className="rounded-full bg-blue-500" />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

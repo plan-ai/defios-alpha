@@ -13,7 +13,7 @@ const EnterprisePage: NextPageWithLayout = () => {
       <ComingSoon
         header="Secure your open source dependencies"
         discription="Code now is more internetworked than ever, open source dependency maintenance does not scale-in-house, Deploy capital intelligently to make sure your open source dependencies never break. Simply connect your enterprise VCS account and JIRA and leave the rest to us."
-        videoLink="https://www.youtube.com/embed/5C_HPTJg5ek"
+        videoLink="https://www.youtube.com/embed/Wjrw7DriybM"
         inputPrompt="Enter your business email"
         submitPrompt="Request a Quote"
       />

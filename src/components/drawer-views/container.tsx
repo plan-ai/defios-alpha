@@ -8,9 +8,6 @@ import { DRAWER_VIEW, useDrawer } from '@/components/drawer-views/context';
 // dynamic imports
 const Sidebar = dynamic(() => import('@/layouts/sidebar/_default'));
 const DrawerFilters = dynamic(() => import('@/components/roadmaps/filters'));
-const PreviewContent = dynamic(
-  () => import('@/components/create-nft/nft-preview-content')
-);
 const RightSideIssues = dynamic(
   () => import('@/components/issues/right-side-issues')
 );
@@ -21,8 +18,6 @@ function renderDrawerContent(view: DRAWER_VIEW | string) {
       return <Sidebar />;
     case 'DRAWER_SEARCH':
       return <DrawerFilters />;
-    case 'DRAWER_PREVIEW_NFT':
-      return <PreviewContent />;
     case 'ISSUE_CREATE':
       return <RightSideIssues />;
     default:

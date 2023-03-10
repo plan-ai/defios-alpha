@@ -7,23 +7,10 @@ import PriceChart from '@/components/ui/chats/price-chart';
 import DataWithImage from '@/components/custom/data-with-image';
 import StatsData from '@/components/custom/stats-data';
 import SecurityStatus from '@/components/custom/security-status';
+import { iteratorSymbol } from 'immer/dist/internal';
 
-type ItemType = {
-  id?: string | number;
-  repoURL: string;
-  coin: string;
-  coinValue: number;
-  change: string;
-  communityScore: string;
-  Security: string;
-  topSupporter: string;
-  topBuilder: string;
-  issues: string;
-  staked: string;
-  rewarded: string;
-};
 type CardProps = {
-  item: ItemType;
+  item: any;
   className?: string;
 };
 
@@ -31,19 +18,6 @@ export default function ProfileProjectCard({
   item,
   className = '',
 }: CardProps) {
-  const {
-    repoURL,
-    coin,
-    coinValue,
-    change,
-    communityScore,
-    Security,
-    topBuilder,
-    topSupporter,
-    issues,
-    rewarded,
-    staked,
-  } = item ?? {};
   return (
     <div
       className={cn(
@@ -54,52 +28,81 @@ export default function ProfileProjectCard({
       <div className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6">
         <div className="flex justify-between gap-3">
           <AnchorLink
-            href={repoURL || ''}
+            href={item?.project_repo_link || ''}
             target="_blank"
             className="inline-flex h-10 shrink-0 items-center rounded-full bg-black px-4 text-sm font-medium uppercase normal-case -tracking-wide
           text-white backdrop-blur-[40px]"
           >
             <Image src={GithubLogo} alt={'github'} className="mr-1 h-5 w-5" />
-            {repoURL.replace('https://github.com', '').length > 27
-              ? repoURL.replace('https://github.com', '').slice(0, 27) + '...'
-              : repoURL.replace('https://github.com', '')}
+            {item?.project_repo_link?.replace('https://github.com', '')
+              ?.length > 27
+              ? item?.project_repo_link
+                  ?.replace('https://github.com', '')
+                  ?.slice(0, 27) + '...'
+              : item?.project_repo_link?.replace('https://github.com', '')}
           </AnchorLink>
-          <SecurityStatus security={Security} />
+          <SecurityStatus security={item?.project_status} />
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <div className="my-5 flex w-full flex-row items-center justify-center">
-            <StatsData icon={'issues'} header={'Open Issues'} value={issues} />
+            <StatsData
+              icon={'issues'}
+              header={'Open Issues'}
+              value={item?.num_open_issues}
+            />
             <StatsData
               icon={'health'}
               header={'Community Score'}
-              value={communityScore}
+              value={item?.community_health}
             />
           </div>
           <div className="my-5 flex w-full flex-row items-center justify-center">
-            <StatsData icon={'lock'} header={'Staked Coins'} value={staked} />
+            <StatsData
+              icon={'lock'}
+              header={'Staked Coins'}
+              value={
+                item?.coins_staked + ' ' + item?.project_token?.token_symbol
+              }
+            />
 
             <StatsData
               icon={'banknotes'}
               header={'Coins Rewarded'}
-              value={rewarded}
+              value={
+                item?.coins_rewarded + ' ' + item?.project_token?.token_symbol
+              }
             />
           </div>
           <div className="my-5 flex w-full flex-row items-center justify-between">
             <DataWithImage
               image={'briefcase'}
               header={'Top Supporter'}
-              value={topSupporter}
+              value={item?.top_supporter_address}
             />
             <DataWithImage
               image={'wench'}
               header={'Top Builder'}
-              value={topBuilder}
+              value={item?.top_builder_address}
             />
           </div>
           <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
-            <CoinTicker value={coinValue} coin={coin} change={change} />
+            <CoinTicker
+              value={Math.round(item?.project_token?.token_ltp * 100) / 100}
+              coin={item?.project_token}
+              change={(
+                Math.round(item?.project_token?.token_ltp_24h_change * 100) /
+                100
+              ).toString()}
+            />
             <div className="w-[50%]">
-              <PriceChart change={change.toString()[0] || ''} />
+              <PriceChart
+                chartData={
+                  typeof item?.project_token?.token_price_feed !== 'string'
+                    ? item?.project_token?.token_price_feed?.data
+                    : null
+                }
+                change={item?.project_token?.token_price_feed?.change || '+'}
+              />
             </div>
           </div>
         </div>

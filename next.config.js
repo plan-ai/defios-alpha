@@ -9,18 +9,20 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = withPWA({
   reactStrictMode: true,
-  ...(process.env.NODE_ENV === 'production' && {
-    typescript: {
-      ignoreBuildErrors: true,
-    },
-    eslint: {
-      ignoreDuringBuilds: true,
-    },
-  }),
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 });
 module.exports = nextConfig;
 module.exports = {
   images: {
-    domains: ['avatars.githubusercontent.com', 'raw.githubusercontent.com'],
+    domains: [
+      'avatars.githubusercontent.com',
+      'raw.githubusercontent.com',
+      'foresight.org',
+    ],
   },
 };

@@ -26,6 +26,43 @@ export default function Profile() {
     }, 2500);
   }
 
+  const [portfolioType, setPortfolioType] = useState('Basic');
+
+  const [sidebarData, setSidebarData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
+  useEffect(() => {
+    if (firebase_jwt === null || firebase_jwt === '') return;
+    setIsLoading(true);
+    axios
+      .get('https://api-v1.defi-os.com/profile/contributions', {
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        const issues_solved = res.data.filter(
+          (item: any) => item?.contribution_type === 'inbound'
+        ).length;
+        const issues_rewarded = res.data.filter(
+          (item: any) => item?.contribution_type === 'outbound'
+        ).length;
+        setSidebarData({
+          issues_solved,
+          issues_rewarded,
+        });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
+  }, [firebase_jwt]);
+
   return (
     <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row 3xl:pt-12">
       <div className="shrink-0 border-dashed border-gray-700 md:w-72 md:border-r md:pr-7 lg:pr-10 2xl:w-80 3xl:w-96 3xl:pr-14">
@@ -56,7 +93,7 @@ export default function Profile() {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-12 xl:gap-8 xl:py-6">
           <div>
             <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
-              {authorData?.issuesSolved}
+              {sidebarData?.issues_solved}
             </div>
             <div className="text-sm tracking-tighter text-gray-400">
               # issues solved
@@ -64,10 +101,10 @@ export default function Profile() {
           </div>
           <div>
             <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
-              {authorData?.issuesCreated}
+              {sidebarData?.issues_rewarded}
             </div>
             <div className="text-sm tracking-tighter text-gray-400">
-              # issues created
+              # issues rewarded
             </div>
           </div>
         </div>
@@ -100,8 +137,10 @@ export default function Profile() {
             label="Theme"
             option1={'Basic'}
             option2={'Advanced'}
+            stateChoosen={portfolioType}
+            setStateChoosen={setPortfolioType}
           />
-          <PortfolioCreator isGenerated={false} />
+          <PortfolioCreator portfolioType={portfolioType} isGenerated={false} />
         </div>
       </div>
       <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 3xl:pl-14">

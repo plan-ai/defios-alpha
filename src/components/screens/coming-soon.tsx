@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
+import axios from 'axios';
 
 interface ComingSoonProps {
   header: string;
@@ -18,11 +19,24 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
   inputPrompt,
   submitPrompt,
 }) => {
+  const [email, setEmail] = useState('');
+  const onSubmitHandler = () => {
+    if (email === '' || !email.includes('@')) return;
+    axios
+      .post(
+        `https://api-v1.defi-os.com/waitlist/jobs?email=${email}&wl_type=jobs`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setEmail('');
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
         <div className="mb-3 text-3xl">{header}</div>
-        <div className="w-[75%] text-center text-md">{discription}</div>
+        <div className="text-md w-[75%] text-center">{discription}</div>
       </div>
       <div className="m-5 h-[24rem] w-[40rem] bg-body">
         <iframe
@@ -33,9 +47,17 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
       </div>
-      <div className="flex w-full items-center justify-center">
-        <Input className="w-[55%]" inputClassName='!border-r-0' type="email" placeholder={inputPrompt} />
-        <Button shape="rounded" className='-ml-3'>{submitPrompt}</Button>
+      <div className="flex w-full items-center justify-center gap-2">
+        <Input
+          className="w-[55%]"
+          type="email"
+          placeholder={inputPrompt}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Button onClick={onSubmitHandler} shape="rounded">
+          {submitPrompt}
+        </Button>
       </div>
     </div>
   );

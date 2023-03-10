@@ -11,12 +11,6 @@ import Followers from '@/components/profile/followers-view';
 // dynamic imports
 const SearchView = dynamic(() => import('@/components/roadmaps/view'));
 const ShareView = dynamic(() => import('@/components/nft/share-view'));
-const ProfileInfo = dynamic(
-  () => import('@/components/profile/profile-info-view')
-);
-const PreviewContent = dynamic(
-  () => import('@/components/create-nft/nft-preview-content')
-);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
@@ -24,14 +18,10 @@ function renderModalContent(view: MODAL_VIEW | string) {
       return <SearchView />;
     case 'SHARE_VIEW':
       return <ShareView />;
-    case 'PROFILE_INFO_VIEW':
-      return <ProfileInfo />;
     case 'FOLLOWING_VIEW':
       return <Followers />;
     case 'FOLLOWERS_VIEW':
       return <Followers />;
-    case 'NFT_PREVIEW':
-      return <PreviewContent />;
     default:
       return null;
   }

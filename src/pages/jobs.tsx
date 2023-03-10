@@ -15,7 +15,7 @@ const JobsPage: NextPageWithLayout = () => {
         discription="Stop creating, uploading and maintaining your resume.pdf on multiple
           portals. Focus on building your proof of work, apply to jobs with
           customized resume from your wallet."
-        videoLink="https://www.youtube.com/embed/5C_HPTJg5ek"
+        videoLink="https://www.youtube.com/embed/Wjrw7DriybM"
         inputPrompt="Enter your email"
         submitPrompt="Get Notified"
       />

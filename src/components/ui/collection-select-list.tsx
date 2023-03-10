@@ -75,7 +75,7 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
               onClick={() => handleSelectedCoin(item.value)}
               className="mb-1 flex cursor-pointer items-center gap-3 py-1.5 px-6 outline-none hover:bg-gray-700 focus:bg-gray-600"
             >
-              <Avatar image={item.icon} size="xs" alt={item.name} />
+              {/* <Avatar image={item.icon} size="xs" alt={item.name} /> */}
               <span className="text-sm tracking-tight text-white">
                 {item.name}
               </span>

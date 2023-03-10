@@ -5,7 +5,7 @@ import { StaticImageData } from 'next/image';
 type ItemType = {
   id?: string | number;
   name: string;
-  logo?: StaticImageData;
+  logo?: StaticImageData | string;
   element?: JSX.Element;
   balance?: string;
   coinType?: string;
@@ -51,8 +51,8 @@ export default function ListCard({
         {logo !== undefined && (
           <div className={cn('rounded-full', variants[variant])}>
             <Image
-              src={logo}
-              alt={name}
+              src={logo || ''}
+              alt={name || ''}
               width={handleImageSize(variant)}
               height={handleImageSize(variant)}
               className="rounded-full"
@@ -60,7 +60,9 @@ export default function ListCard({
           </div>
         )}
         {element !== undefined && (
-          <div className={cn('rounded-full pl-1', variants[variant])}>{element}</div>
+          <div className={cn('rounded-full pl-1', variants[variant])}>
+            {element}
+          </div>
         )}
 
         <div className="ml-2">

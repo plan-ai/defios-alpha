@@ -8,7 +8,6 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
-
 import routes from '@/config/routes';
 import { setSigner, setConnection } from '@/lib/helpers/wallet';
 import { useAppSelector, useAppDispatch } from '@/store/store';
@@ -108,7 +107,7 @@ export default function Header({ className }: { className?: string }) {
               className="text-white"
             />
           </div>
-          {router.pathname === '/' && (
+          {router.pathname === '/home' && (
             <div className="text-2xl">Welcome to DefiOS!!</div>
           )}
           <div

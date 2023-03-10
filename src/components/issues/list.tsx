@@ -2,27 +2,22 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import IssueState from '@/components/ui/tags/issue-state';
 import GithubTags from '@/components/ui/tags/github-tags';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 interface IssuesListTypes {
-  issueName: string;
-  issueTags: string;
-  tags: string[];
-  projectName: string;
-  totalStaked: string;
-  coin: string;
+  data: any;
   initExpand?: boolean;
 }
 
 export default function IssuesList({
-  issueName,
-  issueTags,
-  projectName,
-  totalStaked,
-  tags,
-  children,
-  coin,
+  data,
   initExpand,
+  children,
 }: React.PropsWithChildren<IssuesListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
+  const wallet = useWallet();
+
   useEffect(() => {
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
@@ -35,20 +30,23 @@ export default function IssuesList({
         onClick={() => setIsExpand(!isExpand)}
       >
         <span className="col-span-2 flex items-center justify-start px-6 text-sm font-medium tracking-wider text-white">
-          {issueName}
+          {data?.issue_title}
         </span>
         <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
-          <IssueState state={issueTags} />
+          <IssueState state={data?.issue_state} />
         </span>
         <span className="text-center text-sm font-medium tracking-wider text-white">
-          {projectName}
+          {data?.issue_project_name}
         </span>
         <span className="text-center text-sm font-medium tracking-wider text-white">
-          {totalStaked} {coin}
+          {Math.round(data?.issue_stake_amount * 100) / 100}{' '}
+          {data?.issue_stake_token_symbol}
         </span>
         <span className="col-span-2 flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
-          {tags.length !== 0 &&
-            tags.map((tag, idx) => <GithubTags tag={tag} key={idx} />)}
+          {data?.issue_tags?.length !== 0 &&
+            data?.issue_tags?.map((tag: string, idx: number) => (
+              <GithubTags tag={tag} key={idx} />
+            ))}
         </span>
       </div>
       <AnimatePresence initial={false}>
@@ -64,8 +62,16 @@ export default function IssuesList({
             }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
           >
-            <div className="border-t border-dashed border-gray-700 px-6">
+            <div className="relative border-t border-dashed border-gray-700 px-6">
               {children}
+              {wallet.publicKey === null && (
+                <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+                  <div className="flex items-center justify-center gap-5 rounded-lg bg-dark border-2 border-white p-5 px-10  text-xl shadow-2xl">
+                    <div>Connect Wallet to Continue</div>
+                    <WalletMultiButton className="rounded-full bg-blue-500" />
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

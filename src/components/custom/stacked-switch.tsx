@@ -4,9 +4,10 @@ import cn from 'classnames';
 
 interface StackedSwitchProps {
   label: string;
+  isStacked: boolean;
+  setIsStacked: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const StackedSwitch: React.FC<StackedSwitchProps> = ({ label }) => {
-  const [isStacked, setIsStacked] = useState(false);
+const StackedSwitch: React.FC<StackedSwitchProps> = ({ label,isStacked,setIsStacked }) => {
   return (
     <Switch
       checked={isStacked}

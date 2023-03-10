@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Slider from 'rc-slider';
 import { RadioGroup } from '@/components/ui/radio-group';
 import Collapse from '@/components/ui/collapse';
-import CollectionSelect from '@/components/ui/collection-select-list';
 import { useDrawer } from '@/components/drawer-views/context';
-import Scrollbar from '@/components/ui/scrollbar';
 import Button from '@/components/ui/button';
 import { NormalGridIcon } from '@/components/icons/normal-grid';
 import { CompactGridIcon } from '@/components/icons/compact-grid';
@@ -15,6 +13,9 @@ import { Transition } from '@headlessui/react';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
 import { Check } from '@/components/icons/check';
+
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setFilters, reset } from '@/store/roadmapFilterSlice';
 
 export function GridSwitcher() {
   const { isGridCompact, setIsGridCompact } = useGridSwitcher();
@@ -99,8 +100,27 @@ export function SortList() {
   );
 }
 
-export function PriceRange() {
-  let [range, setRange] = useState({ min: 0, max: 1000 });
+interface RangeFilterProps {
+  min: number;
+  max: number;
+  range: {
+    min: number;
+    max: number;
+  };
+  setRange: React.Dispatch<
+    React.SetStateAction<{
+      min: number;
+      max: number;
+    }>
+  >;
+}
+
+export const RangeFilter: React.FC<RangeFilterProps> = ({
+  range,
+  min,
+  max,
+  setRange,
+}) => {
   function handleRangeChange(value: any) {
     setRange({
       min: value[0],
@@ -142,22 +162,23 @@ export function PriceRange() {
       </div>
       <Slider
         range
-        min={0}
-        max={1000}
+        min={min}
+        max={max}
         value={[range.min, range.max]}
         allowCross={false}
         onChange={(value: any) => handleRangeChange(value)}
       />
     </div>
   );
-}
+};
 
 interface StatusProps {
   values: string[];
+  plan: string;
+  setPlan: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export const Status: React.FC<StatusProps> = ({ values }) => {
-  let [plan, setPlan] = useState('buy-now');
+export const Status: React.FC<StatusProps> = ({ values, plan, setPlan }) => {
   return (
     <RadioGroup
       value={plan}
@@ -187,10 +208,15 @@ export const Status: React.FC<StatusProps> = ({ values }) => {
 
 interface CheckBoxListProps {
   list: string[];
+  selectedValues: string[];
+  setSelectedValues: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const CheckBoxList: React.FC<CheckBoxListProps> = ({ list }) => {
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+const CheckBoxList: React.FC<CheckBoxListProps> = ({
+  list,
+  selectedValues,
+  setSelectedValues,
+}) => {
   const handleCheck = (value: string) => {
     if (selectedValues.includes(value)) {
       const newValues = selectedValues.filter((val) => {
@@ -247,22 +273,65 @@ const OutcomeValues = [
 ];
 
 export function Filters() {
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  const [activeObjectivesRange, setActiveObjectivesRange] = useState({
+    min: 0,
+    max: 100,
+  });
+  const [outlook, setOutlook] = useState('');
+  const [outcome, setOutcome] = useState<string[]>([]);
+
+  const dispatch = useAppDispatch();
+  const triggerSet = useAppSelector((state) => state.roadmapFilter.triggerSet);
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log('in');
+    if (triggerSet) {
+      const data = {
+        'filter.roadmap_outlook': outlook,
+        'filter.roadmap_outcome_types':
+          outcome.length > 0 ? outcome.join(',') : '',
+        'filter.roadmap_total_stake': `${priceRange.min},${priceRange.max}`,
+        'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
+      };
+      dispatch(setFilters(data));
+    }
+  }, [triggerSet, dispatch]);
+
   return (
     <>
-      <Collapse label="Filter By" initialOpen>
-        <Status values={OrderByValues} />
+      <Collapse label="Active Objectives" initialOpen>
+        <RangeFilter
+          min={0}
+          max={100}
+          range={activeObjectivesRange}
+          setRange={setActiveObjectivesRange}
+        />
       </Collapse>
       <Collapse label="Amount Staked (USD)" initialOpen>
-        <PriceRange />
+        <RangeFilter
+          min={0}
+          max={1000}
+          range={priceRange}
+          setRange={setPriceRange}
+        />
       </Collapse>
-      <Collapse label="Creator" initialOpen>
+      {/* <Collapse label="Creator" initialOpen>
         <CollectionSelect onSelect={(value) => console.log(value)} />
-      </Collapse>
+      </Collapse> */}
       <Collapse label="Outlook" initialOpen>
-        <Status values={OutlookValues} />
+        <Status plan={outlook} setPlan={setOutlook} values={OutlookValues} />
       </Collapse>
       <Collapse label="Outcome" initialOpen>
-        <CheckBoxList list={OutcomeValues} />
+        <CheckBoxList
+          selectedValues={outcome}
+          setSelectedValues={setOutcome}
+          list={OutcomeValues}
+        />
       </Collapse>
     </>
   );

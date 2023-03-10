@@ -38,7 +38,6 @@ export default function RootLayout({
       firebase_jwt === null &&
       //@ts-ignore
       session?.user?.id &&
-      wallet.publicKey &&
       //@ts-ignore
       session?.accessToken &&
       sessionStorage.getItem('browser-notif-token') !== undefined
@@ -53,7 +52,7 @@ export default function RootLayout({
           //@ts-ignore
           user_gh_access_token: session.accessToken,
           //@ts-ignore
-          pub_key: wallet.publicKey,
+          pub_key: wallet.publicKey || '',
         })
       );
     }
