@@ -100,7 +100,6 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   useLockBodyScroll(modalOpen);
 
   const FetchContributors = async () => {
-    setIsLoading(true);
     const resp = await fetch(
       `https://api.github.com/repos/${repoFullName}/stats/contributors`,
       {
@@ -191,8 +190,11 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
       session &&
       (session as any)?.accessToken &&
       (Contributors === null || Object.keys(Contributors).length === 0) &&
-      (fetchData.length === 0 || Object.keys(fetchData).length === 0)
+      (fetchData === null ||
+        Object.keys(fetchData).length === 0 ||
+        fetchData.length === 0)
     ) {
+      setIsLoading(true);
       FetchContributors();
     } else {
       if (Algo === 'Repository creator') {

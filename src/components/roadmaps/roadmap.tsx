@@ -12,6 +12,9 @@ import { useAppSelector, useAppDispatch } from '@/store/store';
 import { triggerFilter, searchDone } from '@/store/roadmapFilterSlice';
 import { Close } from '@/components/icons/close';
 
+import { Tooltip } from 'flowbite-react';
+import { InfoCircle } from '@/components/icons/info-circle';
+
 interface SearchProps {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -23,8 +26,10 @@ const Search: React.FC<SearchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+  const tooltipVal =
+    'direct roadmap title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\n creator\n====filters==>\nchoose from side panel.';
   return (
-    <div className="relative flex w-full rounded-full ">
+    <div className="relative flex w-full items-center rounded-full ">
       <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
@@ -41,11 +46,20 @@ const Search: React.FC<SearchProps> = ({
       <Button
         shape="rounded"
         size="small"
-        className="mx-2 flex items-center justify-center"
+        className="mx-2 mr-5 flex items-center justify-center"
         onClick={() => setTriggerSearch(true)}
       >
         <SearchIcon className="h-4 w-4" />
       </Button>
+      <Tooltip
+        content={tooltipVal}
+        placement="right-start"
+        style="light"
+        className="!whitespace-pre-wrap"
+        arrow={false}
+      >
+        <InfoCircle />
+      </Tooltip>
     </div>
   );
 };

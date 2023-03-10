@@ -22,6 +22,9 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 
+import { Tooltip } from 'flowbite-react';
+import { InfoCircle } from '@/components/icons/info-circle';
+
 import { useDrawer } from '@/components/drawer-views/context';
 interface searchProps {
   placeholder?: string;
@@ -36,8 +39,10 @@ const Search: React.FC<searchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+  const tooltipVal =
+    'direct issue title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid,\nissue_project_id,\nissue_project_name,\nstate,\nstake_amount,\nstake_token_symbol,\nnum_prs,\ncreator_gh,\nissue_tags, order_by';
   return (
-    <div className="relative flex w-full rounded-full">
+    <div className="relative flex w-full items-center rounded-full">
       <label className="relative flex w-full items-center">
         <input
           className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
@@ -54,11 +59,20 @@ const Search: React.FC<searchProps> = ({
       <Button
         shape="rounded"
         size="small"
-        className="mx-2 flex items-center justify-center"
+        className="mx-2 mr-5 flex items-center justify-center"
         onClick={() => setTriggerSearch(true)}
       >
         <SearchIcon className="h-4 w-4" />
       </Button>
+      <Tooltip
+        content={tooltipVal}
+        placement="right-start"
+        style="light"
+        className="!whitespace-pre-wrap"
+        arrow={false}
+      >
+        <InfoCircle />
+      </Tooltip>
     </div>
   );
 };
@@ -130,19 +144,19 @@ const IssuesPage: NextPageWithLayout = () => {
           if (key === 'issue_project_name') {
             searchParams['search.issue_project_name'] = value;
           }
-          if (key === 'issue_state') {
+          if (key === 'state') {
             searchParams['search.issue_state'] = value;
           }
-          if (key === 'issue_stake_amount') {
+          if (key === 'stake_amount') {
             searchParams['search.issue_stake_amount'] = parseInt(value);
           }
-          if (key === 'issue_stake_token_symbol') {
+          if (key === 'stake_token_symbol') {
             searchParams['search.issue_stake_token_symbol'] = value;
           }
-          if (key === 'issue_num_prs') {
+          if (key === 'num_prs') {
             searchParams['search.issue_num_prs'] = parseInt(value);
           }
-          if (key === 'issue_creator_gh') {
+          if (key === 'creator_gh') {
             searchParams['search.issue_creator_gh'] = parseInt(value);
           }
           if (key === 'issue_tags') {
@@ -163,19 +177,19 @@ const IssuesPage: NextPageWithLayout = () => {
         if (key === 'issue_project_name') {
           searchParams['search.issue_project_name'] = value;
         }
-        if (key === 'issue_state') {
+        if (key === 'state') {
           searchParams['search.issue_state'] = value;
         }
-        if (key === 'issue_stake_amount') {
+        if (key === 'stake_amount') {
           searchParams['search.issue_stake_amount'] = parseInt(value);
         }
-        if (key === 'issue_stake_token_symbol') {
+        if (key === 'stake_token_symbol') {
           searchParams['search.issue_stake_token_symbol'] = value;
         }
-        if (key === 'issue_num_prs') {
+        if (key === 'num_prs') {
           searchParams['search.issue_num_prs'] = parseInt(value);
         }
-        if (key === 'issue_creator_gh') {
+        if (key === 'creator_gh') {
           searchParams['search.issue_creator_gh'] = parseInt(value);
         }
         if (key === 'issue_tags') {
@@ -228,19 +242,19 @@ const IssuesPage: NextPageWithLayout = () => {
             if (key === 'issue_project_name') {
               searchParams['search.issue_project_name'] = value;
             }
-            if (key === 'issue_state') {
+            if (key === 'state') {
               searchParams['search.issue_state'] = value;
             }
-            if (key === 'issue_stake_amount') {
+            if (key === 'stake_amount') {
               searchParams['search.issue_stake_amount'] = parseInt(value);
             }
-            if (key === 'issue_stake_token_symbol') {
+            if (key === 'stake_token_symbol') {
               searchParams['search.issue_stake_token_symbol'] = value;
             }
-            if (key === 'issue_num_prs') {
+            if (key === 'num_prs') {
               searchParams['search.issue_num_prs'] = parseInt(value);
             }
-            if (key === 'issue_creator_gh') {
+            if (key === 'creator_gh') {
               searchParams['search.issue_creator_gh'] = parseInt(value);
             }
             if (key === 'issue_tags') {
@@ -261,19 +275,19 @@ const IssuesPage: NextPageWithLayout = () => {
           if (key === 'issue_project_name') {
             searchParams['search.issue_project_name'] = value;
           }
-          if (key === 'issue_state') {
+          if (key === 'state') {
             searchParams['search.issue_state'] = value;
           }
-          if (key === 'issue_stake_amount') {
+          if (key === 'stake_amount') {
             searchParams['search.issue_stake_amount'] = parseInt(value);
           }
-          if (key === 'issue_stake_token_symbol') {
+          if (key === 'stake_token_symbol') {
             searchParams['search.issue_stake_token_symbol'] = value;
           }
-          if (key === 'issue_num_prs') {
+          if (key === 'num_prs') {
             searchParams['search.issue_num_prs'] = parseInt(value);
           }
-          if (key === 'issue_creator_gh') {
+          if (key === 'creator_gh') {
             searchParams['search.issue_creator_gh'] = parseInt(value);
           }
           if (key === 'issue_tags') {
