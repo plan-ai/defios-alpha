@@ -114,6 +114,11 @@ export type Defios = {
           "isSigner": false
         },
         {
+          "name": "repositoryTokenPoolAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "rewardsMint",
           "isMut": false,
           "isSigner": false
@@ -135,6 +140,139 @@ export type Defios = {
         },
         {
           "name": "uri",
+          "type": "string"
+        },
+        {
+          "name": "ghUsernames",
+          "type": {
+            "vec": "string"
+          }
+        },
+        {
+          "name": "claimAmounts",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "addUserClaim",
+      "accounts": [
+        {
+          "name": "routerCreator",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "nameRouterAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userClaimAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "userName",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "claimUserTokens",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userRewardTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "verifiedUser",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "routerCreator",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userClaimAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryCreator",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryTokenPoolAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "userName",
           "type": "string"
         }
       ]
@@ -582,6 +720,10 @@ export type Defios = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "repositoryTokenPoolAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -703,6 +845,249 @@ export type Defios = {
           }
         ]
       }
+    },
+    {
+      "name": "userClaim",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "tokenAmount",
+            "type": "u64"
+          },
+          {
+            "name": "repositoryAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "nameRouterAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "ghUser",
+            "type": "string"
+          },
+          {
+            "name": "isClaimed",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "NameRouterCreated",
+      "fields": [
+        {
+          "name": "routerCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "VerifiedUserAdded",
+      "fields": [
+        {
+          "name": "routerCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "verifiedUserAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "CommitAdded",
+      "fields": [
+        {
+          "name": "commitCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "commitAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "metadataUri",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueCreated",
+      "fields": [
+        {
+          "name": "issueCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "repositoryAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueTokenPoolAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "uri",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "RepositoryCreated",
+      "fields": [
+        {
+          "name": "repositoryCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "repositoryAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "uri",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "ghUsernames",
+          "type": {
+            "vec": "string"
+          },
+          "index": false
+        },
+        {
+          "name": "claimAmounts",
+          "type": {
+            "vec": "u64"
+          },
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueStaked",
+      "fields": [
+        {
+          "name": "issueStaker",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueStakerTokenAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "stakedAmount",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueUnstaked",
+      "fields": [
+        {
+          "name": "issueStaker",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueStakerTokenAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "unstakedAmount",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
     }
   ],
   "errors": [
@@ -740,6 +1125,11 @@ export type Defios = {
       "code": 6006,
       "name": "HashesMismatch",
       "msg": "Commit hashes do not match for reward eligibility"
+    },
+    {
+      "code": 6007,
+      "name": "AlreadyClaimed",
+      "msg": "Tokens Already Claimed"
     }
   ]
 };
@@ -860,6 +1250,11 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
+          "name": "repositoryTokenPoolAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "rewardsMint",
           "isMut": false,
           "isSigner": false
@@ -881,6 +1276,139 @@ export const IDL: Defios = {
         },
         {
           "name": "uri",
+          "type": "string"
+        },
+        {
+          "name": "ghUsernames",
+          "type": {
+            "vec": "string"
+          }
+        },
+        {
+          "name": "claimAmounts",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "addUserClaim",
+      "accounts": [
+        {
+          "name": "routerCreator",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "nameRouterAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userClaimAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "userName",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "claimUserTokens",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "userRewardTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "verifiedUser",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "routerCreator",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "userClaimAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryCreator",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryTokenPoolAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "userName",
           "type": "string"
         }
       ]
@@ -1328,6 +1856,10 @@ export const IDL: Defios = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "repositoryTokenPoolAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -1449,6 +1981,249 @@ export const IDL: Defios = {
           }
         ]
       }
+    },
+    {
+      "name": "userClaim",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "tokenAmount",
+            "type": "u64"
+          },
+          {
+            "name": "repositoryAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "nameRouterAccount",
+            "type": "publicKey"
+          },
+          {
+            "name": "ghUser",
+            "type": "string"
+          },
+          {
+            "name": "isClaimed",
+            "type": "bool"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "NameRouterCreated",
+      "fields": [
+        {
+          "name": "routerCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "VerifiedUserAdded",
+      "fields": [
+        {
+          "name": "routerCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "nameRouterAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "verifiedUserAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "CommitAdded",
+      "fields": [
+        {
+          "name": "commitCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "commitAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "metadataUri",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueCreated",
+      "fields": [
+        {
+          "name": "issueCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "repositoryAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueTokenPoolAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "uri",
+          "type": "string",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "RepositoryCreated",
+      "fields": [
+        {
+          "name": "repositoryCreator",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "repositoryAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "uri",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "ghUsernames",
+          "type": {
+            "vec": "string"
+          },
+          "index": false
+        },
+        {
+          "name": "claimAmounts",
+          "type": {
+            "vec": "u64"
+          },
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueStaked",
+      "fields": [
+        {
+          "name": "issueStaker",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueStakerTokenAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "stakedAmount",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "IssueUnstaked",
+      "fields": [
+        {
+          "name": "issueStaker",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueStakerTokenAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "issueAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "unstakedAmount",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "rewardsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
     }
   ],
   "errors": [
@@ -1486,6 +2261,11 @@ export const IDL: Defios = {
       "code": 6006,
       "name": "HashesMismatch",
       "msg": "Commit hashes do not match for reward eligibility"
+    },
+    {
+      "code": 6007,
+      "name": "AlreadyClaimed",
+      "msg": "Tokens Already Claimed"
     }
   ]
 };

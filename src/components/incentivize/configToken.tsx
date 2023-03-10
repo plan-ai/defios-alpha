@@ -11,8 +11,10 @@ import cn from 'classnames';
 import { Check } from '@/components/icons/check';
 import DistributionSlider from '@/components/incentivize/distribution-slider';
 
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setAlgo, setStep3Data } from '@/store/creationSlice';
+import userMappingSlice, { selectUserMapping } from '@/store/userMappingSlice';
+import { PublicKey } from '@solana/web3.js';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -23,7 +25,6 @@ const sort = [
 function SortList() {
   const dispatch = useAppDispatch();
   const [selectedItem, setSelectedItem] = useState(sort[0]);
-
   useEffect(() => {
     dispatch(setAlgo(selectedItem.name));
   }, [selectedItem, dispatch]);
@@ -81,9 +82,9 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const dispatch = useAppDispatch();
   const [isExpand, setIsExpand] = useState(false);
   const [tokenType, setTokenType] = useState('Create New Token');
-
+  const userMappingState = useAppSelector(selectUserMapping);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [imageFile, setImageFile] = useState<File | null>(null);
   //Create New Token
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [tokenName, setTokenName] = useState('');
@@ -113,7 +114,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
       if (tokenSymbol !== '' && tokenName !== '' && totalSupply !== 0) {
         dispatch(
           setStep3Data({
-            tokenIcon: '',
+            tokenIcon: imageFile as File,
             tokenName: tokenName,
             tokenSymbol: tokenSymbol,
             totalSupply: totalSupply,
@@ -222,7 +223,12 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                       />
                     </div>
                     <div className="flex w-full gap-3">
-                      <Uploader label="Token Icon" />
+                      <Uploader
+                        label="Token Icon"
+                        setFile={(file) => {
+                          setImageFile(file);
+                        }}
+                      />
                       <SortList />
                     </div>
 

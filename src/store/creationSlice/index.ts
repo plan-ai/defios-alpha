@@ -14,7 +14,7 @@ export interface tokenSpecsProps {
   tokenSymbol: string;
   tokenName: string;
   totalSupply: number;
-  tokenIcon: string;
+  tokenIcon: File | undefined;
 }
 
 export interface step3Props {
@@ -40,7 +40,7 @@ const initialState: creationState = {
   },
   step3: {
     tokenSpecs: {
-      tokenIcon: '',
+      tokenIcon: undefined,
       tokenName: '',
       totalSupply: 0,
       tokenSymbol: '',
@@ -65,6 +65,7 @@ export const creationSlice = createSlice({
     },
     setDistribution: (state, action: PayloadAction<any>) => {
       state.step3.distribution = action.payload;
+      console.log(state.step3.distribution);
     },
     setStep3Data: (state, action: PayloadAction<tokenSpecsProps>) => {
       state.step3.tokenSpecs = action.payload;
@@ -80,7 +81,7 @@ export const creationSlice = createSlice({
       };
       state.step3 = {
         tokenSpecs: {
-          tokenIcon: '',
+          tokenIcon: undefined,
           tokenName: '',
           totalSupply: 0,
           tokenSymbol: '',
