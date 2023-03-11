@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@headlessui/react": "^1.7.9",
+        "@heroicons/react": "^2.0.16",
         "@hookform/resolvers": "^2.9.10",
         "@metaplex-foundation/js": "^0.18.3",
         "@next/font": "13.1.6",

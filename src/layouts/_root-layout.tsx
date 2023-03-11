@@ -8,6 +8,8 @@ import { getFirebaseJwt } from '@/store/firebaseTokensSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setGithub } from '@/store/userInfoSlice';
 import axios from 'axios';
+
+import ContractProcess from '@/components/contract-overlay/contract-process';
 // dynamic imports
 const ModernLayout = dynamic(() => import('@/layouts/_modern'), {
   loading: () => <FallbackLoader />,
@@ -83,6 +85,11 @@ export default function RootLayout({
 
   // render default layout which is modern
   return (
-    <ModernLayout contentClassName={contentClassName}>{children}</ModernLayout>
+    <>
+      <ModernLayout contentClassName={contentClassName}>
+        {children}
+      </ModernLayout>
+      <ContractProcess/>
+    </>
   );
 }
