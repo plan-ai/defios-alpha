@@ -14,8 +14,7 @@ import VotingExpand from '@/components/issues/voting-expand';
 import WinnerDeclaredExpand from '@/components/issues/winner-declared-expand';
 import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
 
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
-import Image from 'next/image';
+import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 import axios from 'axios';
 
@@ -117,7 +116,10 @@ const IssuesPage: NextPageWithLayout = () => {
         setIssuesData(res.data.issues);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
   }, [firebase_jwt]);
 
   useEffect(() => {
@@ -213,7 +215,10 @@ const IssuesPage: NextPageWithLayout = () => {
         setIssuesData(res.data.issues);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
     setInitExpand(false);
   }, [isMine, firebase_jwt]);
 
@@ -313,7 +318,11 @@ const IssuesPage: NextPageWithLayout = () => {
           setIsLoading(false);
           setTriggerSearch(false);
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => {
+          console.log(err.message);
+          setIsLoading(false);
+          setTriggerSearch(false);
+        });
     }
     setInitExpand(false);
   }, [triggerSearch, firebase_jwt]);
@@ -408,7 +417,7 @@ const IssuesPage: NextPageWithLayout = () => {
             ))}
           {!isLoading && issuesData.length === 0 && (
             <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
-              <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+              <EmptyList />
               <div className="text-lg text-gray-500">
                 No Issues found that match your filter and search settings
               </div>

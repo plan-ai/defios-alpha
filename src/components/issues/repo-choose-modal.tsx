@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useAppSelector } from '@/store/store';
 import Image from 'next/image';
 import { PlusCircle } from '../icons/plus-circle';
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 
 interface RepoChooseModalProps {
@@ -119,7 +119,7 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
       <div className="h-[40vh] overflow-y-scroll py-3">
         {!isLoading && repoSearch.length === 0 && (
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-5">
-            <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
+            <EmptyList />
             <div className="w-60 text-center text-sm text-gray-500">
               No projects found that match your search.
             </div>

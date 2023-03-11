@@ -1,9 +1,7 @@
 import cn from 'classnames';
-import { RoadmapList } from '@/data/static/roadmap-list';
 import RoadmapCard from '@/components/roadmaps/roadmap-card';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
-import Image from 'next/image';
+import EmptyList from '../icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 
 export default function Feeds({
@@ -36,7 +34,7 @@ export default function Feeds({
       )}
       {!isLoading && data.length === 0 && (
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
-          <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+          <EmptyList />
           <div className="text-lg text-gray-500">
             No roadmaps found that match your filter and search settings
           </div>

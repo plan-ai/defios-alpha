@@ -1,11 +1,9 @@
 import cn from 'classnames';
 import React, { useState, useEffect } from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
-import TransactionSearchForm from '@/components/author/transaction-search-form';
 import ContributionsHistory from '@/components/profile/contributions-history';
 import ProfileProjectCard from '@/components/profile/profile-project-card';
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
-import Image from 'next/image';
+import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 import Button from '../ui/button/button';
 import { PlusCircle } from '../icons/plus-circle';
@@ -119,7 +117,10 @@ export default function ProfileTab() {
         setProjectsData(res.data.projects);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
   }, [firebase_jwt]);
 
   useEffect(() => {
@@ -192,7 +193,11 @@ export default function ProfileTab() {
           setIsLoading(false);
           setTriggerSearch(false);
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => {
+          console.log(err.message);
+          setIsLoading(false);
+          setTriggerSearch(false);
+        });
     }
   }, [triggerSearch, firebase_jwt]);
 
@@ -245,7 +250,7 @@ export default function ProfileTab() {
           )}
         {!isLoading && projectsData.length === 0 && (
           <div className="mt-16 flex h-full w-full flex-col items-center justify-center gap-5">
-            <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+            <EmptyList />
             <div className="text-lg text-gray-500">
               No projects found that match your filter and search settings
             </div>

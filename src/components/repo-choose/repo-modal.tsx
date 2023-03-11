@@ -4,7 +4,7 @@ import { SearchIcon } from '@/components/icons/search';
 import RepoItem from '@/components/repo-choose/repo-item';
 import Button from '@/components/ui/button/button';
 import { useSession } from 'next-auth/react';
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import EmptyList from '@/components/icons/EmptyList';
 import Image from 'next/image';
 import Spinner from '../custom/spinner';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -12,7 +12,7 @@ import { setStep2Data } from '@/store/creationSlice';
 
 interface RepoModalProps {
   repo: string;
-  setRepo: (repo:string) => void;
+  setRepo: (repo: string) => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
   stepOfCreation?: number;
@@ -198,7 +198,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
           ))}
         {!isLoading && reposToShow.length === 0 && (
           <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-            <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
+            <EmptyList />
             <div className="text-lg text-gray-500">No Repos Available</div>
           </div>
         )}

@@ -13,8 +13,8 @@ import DistributionSlider from '@/components/incentivize/distribution-slider';
 
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setAlgo, setStep3Data } from '@/store/creationSlice';
-import userMappingSlice, { selectUserMapping } from '@/store/userMappingSlice';
-import { PublicKey } from '@solana/web3.js';
+import { selectUserMapping } from '@/store/userMappingSlice';
+import axios from 'axios';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -86,12 +86,17 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   //Create New Token
+  const [importError, setImportError] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [totalSupply, setTotalSupply] = useState(0);
 
   //Import Existing
   const [splTokenAddress, setSplTokenAddress] = useState('');
+  const [splTokenAddressConfirm, setSplTokenAddressConfirm] = useState('');
+  const [splTokenName, setSplTokenName] = useState('');
+  const [splTokenSymbol, setSplTokenSymbol] = useState('');
+  const [splTokenDecimals, setSplTokenDecimals] = useState(0);
 
   useEffect(() => {
     setIsExpand(false);
@@ -125,12 +130,50 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
         setStepOfCreation(stepOfCreation + 1);
       }
     } else if (tokenType === 'Import Existing') {
-      if (splTokenAddress !== '') {
+      if (
+        splTokenAddressConfirm !== '' &&
+        splTokenName !== '' &&
+        splTokenDecimals !== 0 &&
+        splTokenSymbol !== ''
+      ) {
         setIsExpand(false);
         setIsSubmitted(true);
         setStepOfCreation(stepOfCreation + 1);
       }
     }
+  };
+
+  const importTokenHandler = () => {
+    if (splTokenAddress === '') return;
+    axios
+      .get('/api/token/import-spl-token', {
+        params: {
+          address: splTokenAddress,
+        },
+      })
+      .then((res) => {
+        if (res.data?.type && res.data.type === 'token_account') {
+          setSplTokenName(res.data?.tokenInfo?.name);
+          setSplTokenSymbol(res.data?.tokenInfo?.symbol);
+          setSplTokenDecimals(res.data?.tokenInfo?.decimals);
+          setSplTokenAddressConfirm(res.data?.account);
+          setImportError('');
+        } else {
+          setImportError('Not a valid SPL Token Address try again.');
+          setSplTokenName('');
+          setSplTokenSymbol('');
+          setSplTokenDecimals(0);
+          setSplTokenAddressConfirm('');
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setImportError('Import request failed try again.');
+        setSplTokenName('');
+        setSplTokenSymbol('');
+        setSplTokenDecimals(0);
+        setSplTokenAddressConfirm('');
+      });
   };
 
   return (
@@ -249,18 +292,18 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                 {tokenType === 'Import Existing' && (
                   <>
                     <div className="mb-3 flex w-full gap-3">
-                      <div className="flex w-full items-end">
+                      <div className="flex w-full gap-2">
                         <Input
                           id="splTokenAddress"
                           label="Enter Token SPL Address"
                           placeholder="SPL Token Address"
                           className="w-full"
                           type="text"
+                          error={importError}
                           value={splTokenAddress}
                           onChange={(e) => setSplTokenAddress(e.target.value)}
-                          inputClassName="!border-r-0"
                         />
-                        <Button shape="rounded" className="-ml-3">
+                        <Button onClick={importTokenHandler} className='mt-8' shape="rounded">
                           Import
                         </Button>
                       </div>
@@ -269,8 +312,8 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                         placeholder="Token Name"
                         className="w-full"
                         type="text"
-                        value={'DefiOS'}
-                        inputClassName="!bg-transparent !border-blue-900"
+                        value={splTokenName}
+                        inputClassName="!bg-transparent !border-gray-800"
                         disabled
                       />
                     </div>
@@ -280,17 +323,17 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                         placeholder="Token Symbol"
                         className="w-full"
                         type="text"
-                        value={'DOS'}
-                        inputClassName="!bg-transparent !border-blue-900"
+                        value={splTokenSymbol}
+                        inputClassName="!bg-transparent !border-gray-800"
                         disabled
                       />
                       <Input
                         label="Token Decimal Places"
                         placeholder="Token Decimal Places"
                         className="w-full"
-                        type="text"
-                        value={'5'}
-                        inputClassName="!bg-transparent !border-blue-900"
+                        type="number"
+                        value={splTokenDecimals}
+                        inputClassName="!bg-transparent !border-gray-800"
                         disabled
                       />
                     </div>

@@ -97,7 +97,10 @@ export default function Roadmap() {
         setRoadmapsData(res.data);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message);
+        setIsLoading(false);
+      });
   }, [firebase_jwt]);
 
   useEffect(() => {
@@ -144,7 +147,12 @@ export default function Roadmap() {
           setTriggerSearch(false);
           dispatch(searchDone());
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => {
+          console.log(err.message);
+          setIsLoading(false);
+          setTriggerSearch(false);
+          dispatch(searchDone());
+        });
     }
   }, [triggerSearch, searchTrigger, firebase_jwt]);
 

@@ -13,11 +13,7 @@ import PriceChart from '@/components/ui/chats/price-chart';
 import CoinTicker from '@/components/custom/coin-ticker';
 import DataWithImage from '@/components/custom/data-with-image';
 import StackedSwitch from '@/components/custom/stacked-switch';
-
-import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import EmptyList from '@/components/icons/EmptyList';
-
-import Image from 'next/image';
 import Spinner from '@/components/custom/spinner';
 import { Close } from '@/components/icons/close';
 
@@ -339,6 +335,7 @@ export default function Projects() {
         .catch((err) => {
           console.log(err.message);
           setIsLoading(false);
+          setTriggerSearch(false);
         });
     }
     setInitExpand(false);
@@ -530,8 +527,7 @@ export default function Projects() {
         ))}
       {!isLoading && projectsData.length === 0 && (
         <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
-          <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
-          {/* <EmptyList /> */}
+          <EmptyList />
           <div className="text-lg text-gray-500">
             No projects found that match your filter and search settings
           </div>
