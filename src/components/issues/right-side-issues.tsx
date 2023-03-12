@@ -51,22 +51,32 @@ export default function RightSideIssues({ className }: { className?: string }) {
   useLockBodyScroll(modalOpen);
 
   const handleCreateIssue = async () => {
-    if (repo === null || issueTitle === '' || repo?.project_url !== '') return;
+    console.log('in1');
+    if (repo === null || issueTitle === '' || repo?.project_url === '') return;
+    console.log('in2');
     if ((session as any).accessToken) {
+      console.log('in3');
       const ownerRepo = repo?.project_url.replace('https://github.com/', '');
       dispatch(onLoading('Creating the Issue on Github...'));
-      await axios
-        .post(`https://api.github.com/repos/${ownerRepo}issues`, {
-          body: {
-            title: issueTitle,
-            body: issueDescription,
-            labels: tags,
-          },
-          headers: {
-            Authorization: `Bearer ${(session as any).accessToken}`,
-            Accept: 'application/vnd.github+json',
-          },
-        })
+
+      const data = JSON.stringify({
+        title: issueTitle,
+        body: issueDescription,
+        labels: tags,
+      });
+
+      var config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://api.github.com/repos/${ownerRepo}/issues`,
+        headers: {
+          Authorization: `Bearer ${(session as any).accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      };
+
+      axios(config)
         .then((res) => {
           dispatch(
             onSuccess({
