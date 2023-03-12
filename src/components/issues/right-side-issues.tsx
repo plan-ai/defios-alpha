@@ -15,8 +15,20 @@ import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
+import axios from 'axios';
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { onLoading, onSuccess, onFailure } from '@/store/callLoaderSlice';
+import { useSession } from 'next-auth/react';
+import { useDrawer } from '@/components/drawer-views/context';
+
 export default function RightSideIssues({ className }: { className?: string }) {
+  const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+  const { closeDrawer } = useDrawer();
+
   const [tags, setTags] = useState<string[]>([]);
+  const [issueTitle, setIssueTitle] = useState('');
+  const [issueDescription, setIssueDescription] = useState('');
   const wallet = useWallet();
 
   const handleTagSet = (tag: string) => {
@@ -37,6 +49,50 @@ export default function RightSideIssues({ className }: { className?: string }) {
     setModalOpen(false);
   });
   useLockBodyScroll(modalOpen);
+
+  const handleCreateIssue = async () => {
+    if (repo === null || issueTitle === '' || repo?.project_url !== '') return;
+    if ((session as any).accessToken) {
+      const ownerRepo = repo?.project_url.replace('https://github.com/', '');
+      dispatch(onLoading('Creating the Issue on Github...'));
+      await axios
+        .post(`https://api.github.com/repos/${ownerRepo}issues`, {
+          body: {
+            title: issueTitle,
+            body: issueDescription,
+            labels: tags,
+          },
+          headers: {
+            Authorization: `Bearer ${(session as any).accessToken}`,
+            Accept: 'application/vnd.github+json',
+          },
+        })
+        .then((res) => {
+          dispatch(
+            onSuccess({
+              label: 'Issue Creation Successful',
+              description: 'Check out the Issue you created',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: res.data?.html_url,
+            })
+          );
+          closeDrawer();
+        })
+        .catch((err) => {
+          dispatch(
+            onFailure({
+              label: 'Issue Creation Failed',
+              description: err.message,
+              redirect: null,
+              buttonText: 'Continue',
+              link: '',
+            })
+          );
+          closeDrawer();
+        });
+    }
+  };
 
   return (
     <>
@@ -64,13 +120,17 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 {repo === null && <div>Choose your Project</div>}
               </Button>
               <Input
-                placeholder="Issue Name"
+                placeholder="Issue Title"
                 type="text"
                 className="my-2 w-full"
+                value={issueTitle}
+                onChange={(e) => setIssueTitle(e.target.value)}
               />
               <Textarea
                 className="my-2 w-full"
                 placeholder="Issue Description"
+                value={issueDescription}
+                onChange={(e) => setIssueDescription(e.target.value)}
               />
               <div className="my-2 flex w-full">
                 <div className="mr-2">Tags: </div>
@@ -88,7 +148,12 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   ))}
                 </div>
               )}
-              <Button className="my-2 mb-5 w-full" shape="rounded" color="info">
+              <Button
+                onClick={handleCreateIssue}
+                className="my-2 mb-5 w-full"
+                shape="rounded"
+                color="info"
+              >
                 Create Issue
               </Button>
               <div className="flex w-full flex-row items-center ">
