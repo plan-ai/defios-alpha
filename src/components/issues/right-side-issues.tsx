@@ -51,11 +51,8 @@ export default function RightSideIssues({ className }: { className?: string }) {
   useLockBodyScroll(modalOpen);
 
   const handleCreateIssue = async () => {
-    console.log('in1');
     if (repo === null || issueTitle === '' || repo?.project_url === '') return;
-    console.log('in2');
     if ((session as any).accessToken) {
-      console.log('in3');
       const ownerRepo = repo?.project_url.replace('https://github.com/', '');
       dispatch(onLoading('Creating the Issue on Github...'));
 

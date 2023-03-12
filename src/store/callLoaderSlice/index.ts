@@ -48,8 +48,8 @@ export const callLoaderSlice = createSlice({
       state.success = action.payload;
     },
     onFailure: (state, action: PayloadAction<messageType>) => {
-      state.callState = 'success';
-      state.success = action.payload;
+      state.callState = 'failure';
+      state.failure = action.payload;
     },
     resetLoader: (state) => {
       state.callState = 'none';
