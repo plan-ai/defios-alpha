@@ -428,10 +428,10 @@ export const claimReward = (commitCreator: PublicKey, commitVerifiedUser: Public
         nameRouterAccount,
         issueTokenPoolAccount,
         issueCreator,
-        firstCommitAccount: commitAccounts[0],
-        secondCommitAccount: commitAccounts[1],
-        thirdCommitAccount: commitAccounts[2],
-        fourthCommitAccount: commitAccounts[3],
+        // firstCommitAccount: commitAccounts[0],
+        // secondCommitAccount: commitAccounts[1],
+        // thirdCommitAccount: commitAccounts[2],
+        // fourthCommitAccount: commitAccounts[3],
       })
       .rpc({ skipPreflight: true })
       .then((res) => {
