@@ -23,7 +23,7 @@ module.exports = {
       'avatars.githubusercontent.com',
       'raw.githubusercontent.com',
       'foresight.org',
-      'gateway.pinata.cloud'
+      'gateway.pinata.cloud',
     ],
   },
 };
