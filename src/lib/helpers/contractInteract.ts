@@ -26,6 +26,8 @@ import {
   MintLayout,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
+import sha1 from 'sha1';
+import { rectToBox } from 'reactflow';
 
 const nameRouterAccount = new PublicKey("8kMWVDtNrGDwVcv57FFS64VmLdBjaqwV4FjR8EUKvojz")
 const routerCreator = new PublicKey("Au5UxjuuLLD9AQuE4QWQ1ucUqKPjaXQ8EkSBokUPCiB6")
@@ -153,7 +155,7 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
         amounts.push(new BN(amount * 10 ** 9))
       })
 
-      const res = await program.methods
+      program.methods
         .createRepository(
           repoName,
           'Open source revolution',
@@ -176,13 +178,267 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
           createAssociatedTokenIx,
           mintTokensIx
         ])
-        .rpc();
-
-      console.log(res)
-      resolve(repositoryAccount)
+        .rpc({ skipPreflight: true })
+        .then(() => {
+          resolve(repositoryAccount)
+        })
+        .catch((e) => {
+          reject(e)
+        })
     }
     catch (e) {
       reject(e)
     }
+  })
+}
+
+export const createIssue = (issueCreator: PublicKey, issueURI: string, repositoryAccount: PublicKey, issueVerifiedUser: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const { issueIndex, repositoryCreator, rewardsMint } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+    const [issueAccount] = await web3.PublicKey.findProgramAddress(
+      [
+        Buffer.from('issue'),
+        Buffer.from(issueIndex.toString()),
+        repositoryAccount.toBuffer(),
+        issueCreator.toBuffer(),
+      ],
+      program.programId
+    );
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueAccount,
+      true
+    );
+    program.methods
+      .addIssue(issueURI)
+      .accounts({
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        issueAccount,
+        issueCreator: issueCreator,
+        issueTokenPoolAccount,
+        issueVerifiedUser,
+        nameRouterAccount,
+        repositoryAccount,
+        rewardsMint: rewardsMint,
+        routerCreator: routerCreator,
+        repositoryCreator: repositoryCreator,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(issueAccount)
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+}
+
+export const stakeIssue = (issueStaker: PublicKey, issueAccount: PublicKey, amount: number) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
+
+    const transferAmount = amount * 10 ** 9;
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueStaker
+    );
+
+    const createIssueStakerTokenAccountIx =
+      createAssociatedTokenAccountInstruction(
+        issueStaker,
+        issueStakerTokenAccount,
+        issueStaker,
+        rewardsMint
+      );
+
+    const [issueStakerAccount] = await web3.PublicKey.findProgramAddress(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueStaker.toBuffer(),
+      ],
+      program.programId
+    );
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueAccount,
+      true
+    );
+
+    program.methods
+      .stakeIssue(new BN(transferAmount))
+      .accounts({
+        issueAccount,
+        repositoryAccount: repository,
+        issueTokenPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount,
+        rewardsMint: rewardsMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .preInstructions([createIssueStakerTokenAccountIx])
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+}
+
+export const unstakeIssue = (issueStaker: PublicKey, issueAccount: PublicKey, amount: number) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
+
+    const [issueStakerAccount] = await web3.PublicKey.findProgramAddress(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueStaker.toBuffer(),
+      ],
+      program.programId
+    );
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueAccount,
+      true
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueStaker
+    );
+
+    await program.methods
+      .unstakeIssue()
+      .accounts({
+        issueAccount,
+        repositoryAccount: repository,
+        issueTokenPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount,
+        rewardsMint: rewardsMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+}
+
+export const addCommit = (commitCreator: PublicKey, issueAccount: PublicKey, commitVerifiedUser: PublicKey, treeHashUnsliced: string, commitHashUnsliced: string, metadataURI: string) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const treeHash = treeHashUnsliced.slice(0, 8);
+    const commitHash = commitHashUnsliced.slice(0, 8);
+    const { repository, issueCreator } = await program.account.issue.fetch(issueAccount);
+    const { repositoryCreator } = await program.account.repository.fetch(repository);
+    const [commitAccount] = await web3.PublicKey.findProgramAddress(
+      [
+        Buffer.from('commit'),
+        Buffer.from(commitHash),
+        commitCreator.toBuffer(),
+        issueAccount.toBuffer(),
+      ],
+      program.programId
+    );
+
+    program.methods
+      .addCommit(commitHash, treeHash, metadataURI)
+      .accounts({
+        commitAccount,
+        commitCreator: commitCreator,
+        commitVerifiedUser,
+        issueAccount,
+        issueCreator,
+        nameRouterAccount,
+        repositoryCreator,
+        repositoryAccount: repository,
+        routerCreator: routerCreator,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+}
+
+export const claimReward = (commitCreator: PublicKey, commitVerifiedUser: PublicKey, issueAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const { repository, issueCreator } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint, repositoryCreator } = await program.account.repository.fetch(repository);
+
+    const commitCreatorRewardTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      commitCreator
+    );
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      issueAccount,
+      true
+    );
+
+    program.methods
+      .claimReward()
+      .accounts({
+        commitCreatorRewardTokenAccount,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        commitCreator: commitCreator,
+        commitVerifiedUser,
+        issueAccount,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+        rewardsMint: rewardsMint,
+        repositoryAccount: repository,
+        repositoryCreator: repositoryCreator,
+        systemProgram: web3.SystemProgram.programId,
+        routerCreator: routerCreator,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        nameRouterAccount,
+        issueTokenPoolAccount,
+        issueCreator,
+        firstCommitAccount: commitAccounts[0],
+        secondCommitAccount: commitAccounts[1],
+        thirdCommitAccount: commitAccounts[2],
+        fourthCommitAccount: commitAccounts[3],
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((e) => {
+        reject(e)
+      })  
   })
 }
