@@ -49,7 +49,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
           </div>
         </div>
         <div
-          // onClick={(e) => setRoadmap(item?.title)}
+          onClick={(e) => setRoadmap(item?.title)}
           className="relative block"
         >
           <Image
@@ -113,19 +113,19 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
               className="inline-block text-left align-middle"
             >
               <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
-                {/* <RoadmapDetails
-                  name={name}
-                  creationDate={creationDate}
-                  creator={creator}
-                  creatorImage={creatorImage}
-                  image={image}
-                  totalStake={totalStake}
-                  details={details || RoadmapList[0].details}
-                  deliverable={deliverable}
-                  status={status}
-                  activeObjectives={activeObjectives}
+                <RoadmapDetails
+                  name={RoadmapList[0].name}
+                  creationDate={RoadmapList[0].creationDate}
+                  creator={RoadmapList[0].creator}
+                  creatorImage={RoadmapList[0].creatorImage}
+                  image={RoadmapList[0].image}
+                  totalStake={RoadmapList[0].totalStake}
+                  details={RoadmapList[0].details || RoadmapList[0].details}
+                  deliverable={RoadmapList[0].deliverable}
+                  status={RoadmapList[0].status}
+                  activeObjectives={RoadmapList[0].activeObjectives}
                   setRoadmap={setRoadmap}
-                /> */}
+                />
               </div>
             </motion.div>
           </motion.div>
