@@ -8,7 +8,7 @@ const JobsPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Jobs"
-        description="Defios - Tokenize your Open Source Project."
+        description="DefiOS - Scaling Layer for Open Source Collaborations."
       />
       <ComingSoon
         header="2-click job application"

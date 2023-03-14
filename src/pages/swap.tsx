@@ -40,7 +40,7 @@ const SwapPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Swaps"
-        description="Defios - Tokenize your Open Source Project."
+        description="DefiOS - Scaling Layer for Open Source Collaborations."
       />
       <div className="flex h-full w-full items-center justify-between px-60">
         <Trade>

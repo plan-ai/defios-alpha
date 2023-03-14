@@ -33,7 +33,7 @@ function CustomApp({
           name="viewport"
           content="width=device-width, initial-scale=1 maximum-scale=1"
         />
-        <title>Defios - Tokenize your Open Source Project.</title>
+        <title>DefiOS - Scaling Layer for Open Source Collaborations.</title>
       </Head>
       <Provider store={store}>
         <SessionProvider session={session}>

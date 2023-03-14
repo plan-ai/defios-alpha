@@ -8,7 +8,7 @@ const EnterprisePage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Enterprise"
-        description="Defios - Tokenize your Open Source Project."
+        description="DefiOS - Scaling Layer for Open Source Collaborations."
       />
       <ComingSoon
         header="Secure your open source dependencies"

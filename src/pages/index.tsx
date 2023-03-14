@@ -18,7 +18,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
     <div className="h-screen">
       <div className="homepageGradient flex h-full w-full flex-col items-center justify-start px-[6%] text-white">
         <Head>
-          <title>Defios - Tokenize your Open Source Project.</title>
+          <title>DefiOS - Scaling Layer for Open Source Collaborations.</title>
         </Head>
 
         {/* navbar */}
