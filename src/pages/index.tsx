@@ -83,15 +83,15 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                     })
                   }
                   shape="rounded"
-                  className="bg-[#90A9FC] text-black"
+                  className="!bg-[#90A9FC] !text-black"
                 >
                   Continue with GitHub{' '}
                   <ArrowRightIcon className=" inline-block h-5 w-5 text-black" />
-                </Button> 
+                </Button>
               )}
               {session && (
                 <Link href="/home">
-                  <Button shape="rounded" className="bg-[#90A9FC] text-black">
+                  <Button shape="rounded" className="!bg-[#90A9FC] !text-black">
                     Continue with GitHub{' '}
                     <ArrowRightIcon className=" inline-block h-5 w-5 text-black" />
                   </Button>
