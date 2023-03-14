@@ -9,7 +9,7 @@ const ProjectsPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Projects"
-        description="DefiOS - Scaling Layer for Open Source Collaborations."
+        description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
       <Projects />
     </>

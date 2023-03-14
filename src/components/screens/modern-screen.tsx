@@ -56,7 +56,7 @@ export default function ModernScreen() {
     <>
       <NextSeo
         title="DefiOS"
-        description="DefiOS - Scaling Layer for Open Source Collaborations."
+        description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
       {!isLoading && homeData !== null && (
         <>

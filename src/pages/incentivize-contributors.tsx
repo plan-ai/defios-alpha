@@ -30,7 +30,7 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Incentivize Contributors"
-        description="DefiOS - Scaling Layer for Open Source Collaborations."
+        description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
       <div className="relative flex h-full w-full flex-col items-center justify-between py-10 px-5">
         <div className="mb-5 w-[80%]">

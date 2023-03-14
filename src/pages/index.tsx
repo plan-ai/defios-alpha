@@ -18,7 +18,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
     <div className="h-screen">
       <div className="homepageGradient flex h-full w-full flex-col items-center justify-start px-[6%] text-white">
         <Head>
-          <title>DefiOS - Scaling Layer for Open Source Collaborations.</title>
+          <title>DefiOS - Scaling Layer for Open Source Collaboration.</title>
         </Head>
 
         {/* navbar */}
@@ -54,23 +54,29 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
           <Globe />
         </div>
 
-        <div className="z-20 flex h-full w-full items-center justify-start px-[6%] pt-[2%]">
+        <div className="z-20 flex h-full w-full items-center justify-start px-[6%]">
           <div className="">
             <div className="workSansFont flex w-full flex-col items-start justify-center text-[10vh] font-semibold leading-[12vh]">
               <div>Scaling Layer for</div>
               <div>Open Source</div>
-              <div>Collaborations</div>
+              <div>Collaboration</div>
             </div>
-            <div className="m-auto my-[8%] flex w-[100%] flex-col items-center justify-center text-[2.3vh]">
+            <div className="m-auto my-4 flex w-[100%] flex-col items-center justify-center text-[2.3vh]">
               <div className="flex w-full flex-col items-start justify-center">
-                <div className="text-[#9D9AA7]">
-                  Tokenize your project in 4 clicks and onboard incentivized
+                <div className="my-2 text-[#9D9AA7]">
+                  Tokenize your open source project in just 4 clicks!
+                  <br />
+                  With defiOS, you can incentivize contributors to compete for
+                  <br />
+                  rewards by staking tokens on specific issues.
                 </div>
-                <div className="text-[#9D9AA7]">
-                  contributors. Stake tokens on issues to allow devs to compete
-                </div>
-                <div className="text-[#9D9AA7]">
-                  for the reward and discover the price of closing your issue.
+                <div className="my-2 text-[#9D9AA7]">
+                  Say goodbye to thankless traditional open source software and
+                  <br />
+                  hello to a more efficient, collaborative, and rewarding
+                  process.
+                  <br />
+                  Try defiOS today!
                 </div>
               </div>
             </div>

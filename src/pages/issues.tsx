@@ -341,7 +341,7 @@ const IssuesPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Issues"
-        description="DefiOS - Scaling Layer for Open Source Collaborations."
+        description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
       <div className="flex items-center justify-start">
         <div className="flex h-full w-full flex-col">
