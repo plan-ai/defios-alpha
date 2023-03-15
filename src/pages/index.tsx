@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -6,7 +7,10 @@ import Image from 'next/image';
 import LogoFull from '@/assets/images/logo-full.png';
 import React from 'react';
 import Button from '@/components/ui/button/button';
+import Input from '@/components/ui/forms/input';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+
+import axios from 'axios';
 
 const Globe = dynamic(import('../components/Globe'), { ssr: false });
 
@@ -14,6 +18,20 @@ interface HomepageProps {}
 
 const Homepage: React.FC<HomepageProps> = ({}) => {
   const { data: session } = useSession();
+
+  const [email, setEmail] = useState('');
+  const onSubmitHandler = () => {
+    if (email === '' || !email.includes('@')) return;
+    axios
+      .post(
+        `https://api-v1.defi-os.com/waitlist/jobs?email=${email}&wl_type=jobs`
+      )
+      .then((res) => {
+        setEmail('');
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="h-screen">
       <div className="homepageGradient flex h-full w-full flex-col items-center justify-start px-[6%] text-white">
@@ -80,8 +98,8 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                 </div>
               </div>
             </div>
-            <div className="flex w-full flex-row items-center justify-start gap-4 text-[2vh] font-semibold text-white">
-              {!session && (
+            <div className="flex w-full items-end justify-start gap-4 text-[2vh] font-semibold text-white">
+              {/* {!session && (
                 <Button
                   onClick={() =>
                     signIn('github', {
@@ -102,7 +120,24 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                     <ArrowRightIcon className=" inline-block h-5 w-5 text-black" />
                   </Button>
                 </Link>
-              )}
+              )} */}
+              <div className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  label="Join our Waitlist"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Button
+                  className="mt-8"
+                  onClick={onSubmitHandler}
+                  shape="rounded"
+                  color="info"
+                >
+                  Join
+                </Button>
+              </div>
               <Button shape="rounded">View Documentation</Button>
             </div>
           </div>
