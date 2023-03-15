@@ -11,7 +11,7 @@ export default NextAuth({
       authorization: {
         params: {
           // I wish to request additional permission scopes.
-          scope: 'repo read:user user:email',
+          scope: 'repo read:user user:email notifications',
         },
       },
     }),

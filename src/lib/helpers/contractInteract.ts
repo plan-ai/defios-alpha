@@ -144,6 +144,27 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
         []
       );
 
+      const selfTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair.publicKey,
+        new PublicKey('9HhPBSikrvS1J6e8uDWUQgJ4VMXrcPyq3qhcENBqSoTg'),
+      );
+
+      const createAssociatedTokenIx2 = createAssociatedTokenAccountInstruction(
+        Signer.publicKey,
+        selfTokenAccount,
+        new PublicKey('9HhPBSikrvS1J6e8uDWUQgJ4VMXrcPyq3qhcENBqSoTg'),
+        mintKeypair.publicKey
+      );
+
+      const mintTokensIx2 = createMintToCheckedInstruction(
+        mintKeypair.publicKey,
+        selfTokenAccount,
+        Signer.publicKey,
+        20000 * 10 ** 9,
+        9,
+        []
+      );
+
       let usernames: Array<string> = []
       let amounts: Array<BN> = []
 
@@ -176,7 +197,9 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
         .preInstructions([
           ix,
           createAssociatedTokenIx,
-          mintTokensIx
+          createAssociatedTokenIx2,
+          mintTokensIx,
+          mintTokensIx2
         ])
         .rpc({ skipPreflight: true })
         .then(() => {
@@ -193,12 +216,13 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
 }
 
 export const createIssue = (issueCreator: PublicKey, issueURI: string, repositoryAccount: PublicKey, issueVerifiedUser: PublicKey) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise<PublicKey>(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer)
     const program = await getDefiOsProgram(provider)
     const { issueIndex, repositoryCreator, rewardsMint } = await program.account.repository.fetch(
       repositoryAccount
     );
+    console.log('issueIndex', repositoryCreator)
     const [issueAccount] = await web3.PublicKey.findProgramAddress(
       [
         Buffer.from('issue'),
@@ -208,11 +232,14 @@ export const createIssue = (issueCreator: PublicKey, issueURI: string, repositor
       ],
       program.programId
     );
+
+    console.log('issueAccount', issueAccount.toBase58())
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       rewardsMint,
       issueAccount,
       true
     );
+    console.log('issueTokenPoolAccount', issueTokenPoolAccount.toBase58())
     program.methods
       .addIssue(issueURI)
       .accounts({
@@ -439,6 +466,6 @@ export const claimReward = (commitCreator: PublicKey, commitVerifiedUser: Public
       })
       .catch((e) => {
         reject(e)
-      })  
+      })
   })
 }

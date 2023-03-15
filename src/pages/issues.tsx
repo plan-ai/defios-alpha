@@ -402,13 +402,17 @@ const IssuesPage: NextPageWithLayout = () => {
                   <OpenIssueExpand
                     issueDesc={issue?.issue_summary}
                     link={issue?.issue_gh_url}
+                    account={issue?.issue_account}
                   />
                 )}
                 {issue?.issue_state === 'voting' && (
                   <VotingExpand PRData={issue?.issue_prs} />
                 )}
                 {issue?.issue_state === 'winner_declared' && (
-                  <WinnerDeclaredExpand data={issue} />
+                  <WinnerDeclaredExpand
+                    data={issue}
+                    issueAccount={issue?.issue_account}
+                  />
                 )}
                 {issue?.issue_state === 'closed' && (
                   <ClosedIssueExpand data={issue} />

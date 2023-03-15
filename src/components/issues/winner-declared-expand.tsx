@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/button/button';
 import DataWithImage from '@/components/custom/data-with-image';
 import AnchorLink from '../ui/links/anchor-link';
+import { claimReward } from '@/lib/helpers/contractInteract';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { useAppSelector } from '@/store/store';
+import { selectUserMapping } from '@/store/userMappingSlice';
 
 interface WinnerDeclaredExpandProps {
   data: any;
+  issueAccount: string;
 }
 
 const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
   data,
+  issueAccount,
 }) => {
+  const wallet = useWallet();
+  const userMappingState = useAppSelector(selectUserMapping);
   const [winner, setWinner] = useState<any>();
   const [winningMargin, setWinningMargin] = useState(0);
   const [reducedLink, setReducedLink] = useState('');
@@ -43,6 +52,15 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
     setReducedLink(prValue);
   }, [data]);
 
+  const handleClaim = () => {
+    claimReward(
+      wallet.publicKey as PublicKey,
+      new PublicKey(
+        userMappingState.userMapping?.verifiedUserAccount as string
+      ),
+      new PublicKey(issueAccount)
+    );
+  };
   return (
     <div className="flex w-full flex-col justify-between gap-5 py-5">
       <div className="mb-3 flex w-full flex-row items-center justify-between">
@@ -78,6 +96,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
           className="ml-2 w-1/2"
           size="small"
           shape="rounded"
+          onClick={handleClaim}
         >
           Claim Reward
         </Button>

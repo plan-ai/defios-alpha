@@ -20,11 +20,15 @@ import { useAppSelector, useAppDispatch } from '@/store/store';
 import { onLoading, onSuccess, onFailure } from '@/store/callLoaderSlice';
 import { useSession } from 'next-auth/react';
 import { useDrawer } from '@/components/drawer-views/context';
+import { createIssue } from '@/lib/helpers/contractInteract';
+import { selectUserMapping } from '@/store/userMappingSlice';
+import { PublicKey } from '@solana/web3.js';
 
 export default function RightSideIssues({ className }: { className?: string }) {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const { closeDrawer } = useDrawer();
+  const userMappingState = useAppSelector(selectUserMapping);
 
   const [tags, setTags] = useState<string[]>([]);
   const [issueTitle, setIssueTitle] = useState('');
@@ -53,7 +57,8 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const handleCreateIssue = async () => {
     if (repo === null || issueTitle === '' || repo?.project_url === '') return;
     if ((session as any).accessToken) {
-      const ownerRepo = repo?.project_url.replace('https://github.com/', '');
+      console.log(repo)
+      const ownerRepo = repo?.project_name
       dispatch(onLoading('Creating the Issue on Github...'));
 
       const data = JSON.stringify({
@@ -75,16 +80,36 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
       axios(config)
         .then((res) => {
-          dispatch(
-            onSuccess({
-              label: 'Issue Creation Successful',
-              description: 'Check out the Issue you created',
-              buttonText: 'Browse Issues',
-              redirect: null,
-              link: res.data?.html_url,
+          createIssue(
+            wallet.publicKey as PublicKey,
+            res.data?.html_url,
+            new PublicKey(repo.account),
+            new PublicKey(userMappingState.userMapping?.verifiedUserAccount as string)
+          )
+            .then((res) => {
+              dispatch(
+                onSuccess({
+                  label: 'Issue Creation Successful',
+                  description: 'Check out the Issue you created',
+                  buttonText: 'Browse Issues',
+                  redirect: null,
+                  link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
+                })
+              );
+              closeDrawer();
             })
-          );
-          closeDrawer();
+            .catch((err) => {
+              dispatch(
+                onFailure({
+                  label: 'Issue Creation Failed',
+                  description: err.message,
+                  redirect: null,
+                  buttonText: 'Continue',
+                  link: '',
+                })
+              );
+              closeDrawer();
+            });
         })
         .catch((err) => {
           dispatch(
