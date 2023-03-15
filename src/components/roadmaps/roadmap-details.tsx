@@ -93,7 +93,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     Created By
                   </h3>
                   <ListCard
-                    item={{ name: creator, logo: creatorImage }}
+                    item={{ name: creator, logo: "https://avatars.githubusercontent.com/u/40645221?v=4" }}
                     className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                   />
                 </div>
