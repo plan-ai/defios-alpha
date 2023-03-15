@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiInstance = axios.create({
-    baseURL: 'https://defios.msqu4re.me'
+    baseURL: 'https://namespaces.defi-os.com'
 });
 
 export const createUserMappingAPI = async (userPublicKey: string, accessToken: string, githubID: string) => {
