@@ -48,7 +48,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
               target="_blank"
               className="mx-[2%] text-[2vh] font-bold text-[#90A9FC]"
             >
-              Alpha 🚀
+              View Documentation
             </a>
             <a href="#" target="_blank" className="mx-[2%] text-[2vh]">
               For Projects 👨‍💻
@@ -98,7 +98,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                 </div>
               </div>
             </div>
-            <div className="flex w-full items-end justify-start gap-4 text-[2vh] font-semibold text-white">
+            <div className="flex w-full gap-4 text-[2vh] font-semibold text-white">
               {/* {!session && (
                 <Button
                   onClick={() =>
@@ -125,20 +125,14 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  label="Join our Waitlist"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className='w-[25rem]'
                 />
-                <Button
-                  className="mt-8"
-                  onClick={onSubmitHandler}
-                  shape="rounded"
-                  color="info"
-                >
-                  Join
+                <Button onClick={onSubmitHandler} shape="rounded" color="info">
+                  Join Waitlist
                 </Button>
               </div>
-              <Button shape="rounded">View Documentation</Button>
             </div>
           </div>
         </div>
