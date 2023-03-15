@@ -51,15 +51,23 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
     setWinner(_winner);
     setReducedLink(prValue);
   }, [data]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleClaim = () => {
+    setIsLoading(true);
     claimReward(
       wallet.publicKey as PublicKey,
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
       new PublicKey(issueAccount)
-    );
+    )
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
   return (
     <div className="flex w-full flex-col justify-between gap-5 py-5">
@@ -97,6 +105,8 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
           size="small"
           shape="rounded"
           onClick={handleClaim}
+          disabled={isLoading}
+          isLoading={isLoading}
         >
           Claim Reward
         </Button>
