@@ -1,38 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<img src="https://raw.githubusercontent.com/defi-os/defios-alpha/main/src/assets/images/logo-full.png" alt="defiOS" height="70"  />
 
-## Getting Started
+# defiOS - Scaling Layer for Open Source Collaboration
 
-First, run the development server:
+- Tokenize your open source project in just 4 clicks! With defiOS, you can incentivize contributors to compete for
+rewards by staking tokens on specific issues.
 
-```bash
+- Gain valuable insights into the priorities of your project and community by discovering the true value of closing an issue. 
+
+- Say goodbye to thankless traditional open source software and hello to a more efficient, collaborative, and rewarding process. Try defiOS today!
+
+Ecosystem
+---
+
+[`defios-rust-core`](https://github.com/defi-os/defios-rust-core) [`defios-roadmap-rust`](https://github.com/defi-os/defios-roadmap-rust) [`defios-python-apis`](https://github.com/defi-os/defios-python-apis)  
+
+
+
+Newcomers may feel free to look into and contribute to any part of the project
+---
+
+#### Installation
+
+```
+# install dependencies
+npm install
+
+# start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Contribution Guidelines
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. **Fork** the repo on GitHub.
+2. **Clone** the project to your own machine.
+3. **Commit** changes to your own branch.
+4. **Push** your work back up to your fork.
+5. **Submit** a pull request.
+(Make sure you *merge* before you make a pull request!)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+#### Pull Request Guidelines
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. The subject should be a short one line summary of the change you've made.
+2. The extended description should include a detailed description of the changes you've made and also a list of all the files you've made changes in.
+3. One pull request should cater to only one change. *A change may include multiple file changes that are essential to solving the issue/change.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---
 
-## Learn More
+#### Code Formatting
 
-To learn more about Next.js, take a look at the following resources:
+The project uses NextJS + Typescript with Functional Components with props as interface, it uses a ReduxToolkit for Global State Management, please format any pull requests you make in the same formatting style and do proper indentation using Prettier.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Issue Reporting
 
-## Deploy on Vercel
+Please mention all steps to reproduce the issue, link any custom code that led to the issue, and mention any CLI errors you got within the issue itself.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
