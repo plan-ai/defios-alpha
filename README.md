@@ -48,7 +48,7 @@ npm run dev
 
 #### Code Formatting
 
-The project uses NextJS + Typescript with Functional Components with props as interface, it uses a ReduxToolkit for Global State Management, please format any pull requests you make in the same formatting style and do proper indentation using Prettier.
+The project uses NextJS + Typescript with Functional Components with props as interface, it uses a ReduxToolkit for Global State Management and TailwindCSS for styling , please format any pull requests you make in the same formatting style and do proper indentation using Prettier.
 
 ---
 
