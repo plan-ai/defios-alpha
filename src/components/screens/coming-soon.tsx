@@ -27,7 +27,6 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
         `https://api-v1.defi-os.com/waitlist/jobs?email=${email}&wl_type=jobs`
       )
       .then((res) => {
-        console.log(res.data);
         setEmail('');
       })
       .catch((err) => console.log(err));

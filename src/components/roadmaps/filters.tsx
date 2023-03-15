@@ -289,7 +289,6 @@ export function Filters() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('in');
     if (triggerSet) {
       const data = {
         'filter.roadmap_outlook': outlook,

@@ -44,9 +44,6 @@ export default function RootLayout({
       session?.accessToken
     ) {
       const notifToken = sessionStorage.getItem('browser-notif-token');
-      console.log('notifToken: '+ notifToken );
-      console.log('notifToken condition: ' + notifToken !== null);
-      console.log('type notifToken: ' + typeof notifToken);
       dispatch(
         getFirebaseJwt({
           //@ts-ignore

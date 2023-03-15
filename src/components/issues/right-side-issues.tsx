@@ -57,7 +57,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const handleCreateIssue = async () => {
     if (repo === null || issueTitle === '' || repo?.project_url === '') return;
     if ((session as any).accessToken) {
-      console.log(repo)
       const ownerRepo = repo?.project_name
       dispatch(onLoading('Creating the Issue on Github...'));
 
