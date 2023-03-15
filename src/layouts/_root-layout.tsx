@@ -41,16 +41,18 @@ export default function RootLayout({
       //@ts-ignore
       session?.user?.id &&
       //@ts-ignore
-      session?.accessToken &&
-      sessionStorage.getItem('browser-notif-token') !== undefined
+      session?.accessToken
     ) {
       const notifToken = sessionStorage.getItem('browser-notif-token');
+      console.log('notifToken: '+ notifToken );
+      console.log('notifToken condition: ' + notifToken !== null);
+      console.log('type notifToken: ' + typeof notifToken);
       dispatch(
         getFirebaseJwt({
           //@ts-ignore
           github_id: session.user.id,
           //@ts-ignore
-          firebase_uid: notifToken,
+          firebase_uid: notifToken !== null ? notifToken : session.user.id,
           //@ts-ignore
           user_gh_access_token: session.accessToken,
           //@ts-ignore
@@ -89,7 +91,7 @@ export default function RootLayout({
       <ModernLayout contentClassName={contentClassName}>
         {children}
       </ModernLayout>
-      <ContractProcess/>
+      <ContractProcess />
     </>
   );
 }
