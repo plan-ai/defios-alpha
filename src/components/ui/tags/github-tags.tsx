@@ -9,6 +9,8 @@ import { DuplicateIcon } from '@/components/icons/duplicate';
 import { CautionIcon } from '@/components/icons/caution';
 import { GearIcon } from '@/components/icons/gear';
 import { WenchIcon } from '@/components/icons/wench';
+import { CogIcon } from '@/components/icons/cog';
+
 interface GithubTagsProps {
   tag: string;
   assign?: true;
@@ -74,6 +76,7 @@ const GithubTags: React.FC<GithubTagsProps> = ({
           {tag === 'question' && <QuestionIcon />}
           {tag === 'invalid' && <CautionIcon />}
           {tag === 'urgent' && <ClockIcon />}
+          {!tagsList.includes(tag) && <CogIcon />}
         </div>
         <div>{tag}</div>
       </div>

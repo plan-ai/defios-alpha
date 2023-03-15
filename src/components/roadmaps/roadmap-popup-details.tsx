@@ -30,7 +30,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         <h3 className="text-heading-style mb-2 uppercase text-white">
           Description
         </h3>
-        <div className="text-sm leading-6 -tracking-wider text-gray-400">
+        <div className="whitespace-pre-wrap text-sm leading-6 -tracking-wider text-gray-400">
           {description}
         </div>
       </div>
@@ -40,7 +40,10 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         </h3>
         <div className="flex">
           <ListCard
-            item={{ name: topContributor, logo: topContributorImg }}
+            item={{
+              name: topContributor,
+              logo: 'https://avatars.githubusercontent.com/u/74586376?v=4',
+            }}
             className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
           />
         </div>

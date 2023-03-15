@@ -89,7 +89,7 @@ export const RoadmapList = [
     creator: 'AbhisekBasu1',
     creatorImage: User1,
     image: NFT1,
-    name: 'DefiOS',
+    name: 'Create 1729 DashBoard V2',
     creationDate: '09-02-2023',
     totalStake: '250$',
     activeObjectives: '23',
@@ -97,10 +97,11 @@ export const RoadmapList = [
     status: 'lock',
     details: {
       details: {
-        description: 'Roadmap states the working tree of DefiOS',
+        description:
+          '\u2022 Add more community progress indicators and allow for tunable dashboard metrics using on-chain activity and facilitate on-chain collaboration using crypto university credential NFTs.\n\u2022 Completely migrate the community to a web3 platform for complete censorship resistance',
         topContributor: 'Rohitkk432',
         topContributorImg: User3,
-        tags: ['urgent', 'help wanted'],
+        tags: ['enhancement', 'help wanted', 'new feature'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
         raisedAmount: 20,

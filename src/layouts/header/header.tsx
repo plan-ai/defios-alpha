@@ -108,7 +108,7 @@ export default function Header({ className }: { className?: string }) {
             />
           </div>
           {router.pathname === '/home' && (
-            <div className="text-2xl">Welcome to DefiOS!!</div>
+            <div className="text-2xl">Welcome to defiOS</div>
           )}
           <div
             onClick={() => router.push(routes.home)}

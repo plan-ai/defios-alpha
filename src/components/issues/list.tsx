@@ -18,6 +18,10 @@ export default function IssuesList({
   let [isExpand, setIsExpand] = useState(initExpand || false);
   const wallet = useWallet();
 
+  const removeDuplicates = (arr:string[]) => {
+    return arr.filter((item, index) => arr.indexOf(item) === index);
+  };
+
   useEffect(() => {
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
@@ -44,9 +48,9 @@ export default function IssuesList({
         </span>
         <span className="col-span-2 flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           {data?.issue_tags?.length !== 0 &&
-            data?.issue_tags?.map((tag: string, idx: number) => (
-              <GithubTags tag={tag} key={idx} />
-            ))}
+            removeDuplicates(data?.issue_tags)?.map(
+              (tag: string, idx: number) => <GithubTags tag={tag} key={idx} />
+            )}
         </span>
       </div>
       <AnimatePresence initial={false}>
@@ -66,7 +70,7 @@ export default function IssuesList({
               {children}
               {wallet.publicKey === null && (
                 <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                  <div className="flex items-center justify-center gap-5 rounded-lg bg-dark border-2 border-white p-5 px-10  text-xl shadow-2xl">
+                  <div className="flex items-center justify-center gap-5 rounded-lg border-2 border-white bg-dark p-5 px-10  text-xl shadow-2xl">
                     <div>Connect Wallet to Continue</div>
                     <WalletMultiButton className="rounded-full bg-blue-500" />
                   </div>

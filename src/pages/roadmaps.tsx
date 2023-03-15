@@ -8,7 +8,7 @@ const RoadmapsPage: NextPageWithLayout = () => {
     <>
       <NextSeo
         title="Roadmaps"
-        description="Defios - Tokenize your Open Source Project."
+        description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
       <Roadmap />
     </>
