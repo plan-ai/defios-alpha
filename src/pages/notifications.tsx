@@ -46,8 +46,7 @@ const NotificationPage: NextPageWithLayout = () => {
       maxBodyLength: Infinity,
       url: 'https://api-v1.defi-os.com/notifications/read',
       headers: {
-        Authorization:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnaXRodWIiOiI3NDU4NjM3NiIsImZpcmViYXNlIjoiY1p5dDBrdC1oVlNXZGEycWVFUDlLNzpBUEE5MWJFa3k0SDcyWnAtRGt6WE1OVjZibEtWQ2JGVG8zUjhBb3J1S0E1cUhPbWRKRWZtWGtabEhScVJxMVNza3pUVW9MdFhpdHg0OWdvNzl0RXN6a2NmMUloTW5IVkN5V0VFT0ZGbTBaLWhiR1hucXNNMVFCeWZZWHY1MU56R1djb0hoTDhGdFY2YyJ9.6E-UeJlv2XsUvjtT3rlNDI5yyUDqHhujUfb6-dkPzZk',
+        Authorization:firebase_jwt,
       },
     };
     await axios(config).catch((err) => console.log(err));
