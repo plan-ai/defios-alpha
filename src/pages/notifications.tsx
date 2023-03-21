@@ -42,11 +42,11 @@ const NotificationPage: NextPageWithLayout = () => {
   const markAllRead = async () => {
     if (firebase_jwt === null || firebase_jwt === '') return;
     const config = {
-      method: 'put',
+      method: 'post',
       maxBodyLength: Infinity,
       url: 'https://api-v1.defi-os.com/notifications/read',
       headers: {
-        Authorization:firebase_jwt,
+        Authorization: firebase_jwt,
       },
     };
     await axios(config).catch((err) => console.log(err));

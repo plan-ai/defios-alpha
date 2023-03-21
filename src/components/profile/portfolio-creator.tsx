@@ -39,9 +39,12 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://api-v1.defi-os.com/profile/portfolio?website_type=${portfolioType.toLowerCase()}`,
+      url: 'https://api-v1.defi-os.com/profile/portfolio',
       headers: {
         Authorization: firebase_jwt,
+      },
+      params: {
+        website_type: portfolioType.toLowerCase(),
       },
     };
     axios(config)
