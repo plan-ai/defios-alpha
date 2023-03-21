@@ -5,10 +5,11 @@ import AnchorLink from '../ui/links/anchor-link';
 import { addCommit, stakeIssue } from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { useAppSelector } from '@/store/store';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
 interface OpenIssueExpandProps {
   issueDesc: string;
@@ -21,6 +22,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   link,
   account,
 }) => {
+  const dispatch = useAppDispatch();
+  const stateLoading = useAppSelector((state) => state.callLoader.callState);
   const wallet = useWallet();
   const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const { data: session } = useSession();
@@ -30,23 +33,42 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const [prLoading, setPrLoading] = React.useState<boolean>(false);
 
   const handleStake = () => {
-    setIsLoading(true);
+    if (stakeAmount <= 0) return;
+    dispatch(onLoading('Staking tokens on the issue...'));
     stakeIssue(
       wallet.publicKey as PublicKey,
       new PublicKey(account),
       stakeAmount
     )
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        dispatch(
+          onSuccess({
+            label: 'Issue Staking Successful',
+            description: 'Check out your staking at',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
       })
-      .finally(() => {
-        setIsLoading(false);
+      .catch((err) => {
+        dispatch(
+          onFailure({
+            label: 'Issue Staking Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
       });
   };
 
   const handleCommitSubmit = () => {
-    setPrLoading(true);
-
+    if (prUrl === '' || !prUrl.includes('https://github.com/')) return;
+    dispatch(onLoading('Submitting your commit on the issue...'));
     const pullApiUrl = prUrl
       .replace('https://github.com/', '')
       .replace('pull', 'pulls');
@@ -76,7 +98,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         };
 
         axios(commitsConfig).then((commitRes) => {
-          const latestCommit = commitRes.data[commitRes.data.length];
+          const latestCommit = commitRes.data[commitRes.data.length - 1];
           addCommit(
             wallet.publicKey as PublicKey,
             new PublicKey(account),
@@ -87,17 +109,41 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             latestCommit.sha,
             res.data.html_url
           )
-            .then(() => {
-              setPrLoading(false);
+            .then((res: any) => {
+              console.log(res);
+              onSuccess({
+                label: 'Issue Submit Commit Successful',
+                description: 'Check out your commit submit at',
+                buttonText: 'Browse Issues',
+                redirect: null,
+                link: res
+                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                  : '',
+              });
             })
-            .catch((e) => {
-              console.log(e);
-              setPrLoading(false);
+            .catch((err) => {
+              dispatch(
+                onFailure({
+                  label: 'Issue Submit Commit Failed',
+                  description: err.message,
+                  redirect: null,
+                  buttonText: 'Continue',
+                  link: '',
+                })
+              );
             });
         });
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        dispatch(
+          onFailure({
+            label: 'Issue Submit Commit Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
       });
   };
 
@@ -132,8 +178,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               size="small"
               shape="rounded"
               onClick={handleCommitSubmit}
-              isLoading={prLoading}
-              disabled={prLoading || isLoading || prUrl === ''}
+              isLoading={stateLoading === 'loading'}
             >
               Submit
             </Button>
@@ -157,8 +202,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               size="small"
               shape="rounded"
               onClick={handleStake}
-              isLoading={isLoading}
-              disabled={prLoading || isLoading || stakeAmount === 0}
+              isLoading={stateLoading === 'loading'}
             >
               Stake
             </Button>

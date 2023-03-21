@@ -7,6 +7,7 @@ import {
 import { ExportIcon } from '@/components/icons/export-icon';
 import Button from '@/components/ui/button/button';
 import AnchorLink from '@/components/ui/links/anchor-link';
+import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { resetLoader } from '@/store/callLoaderSlice';
@@ -21,6 +22,8 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
   const callStatus = useAppSelector((state) => state.callLoader.callState);
   const loadingLabel = useAppSelector((state) => state.callLoader.loadingLabel);
+
+  useLockBodyScroll(callStatus !== 'none');
 
   // success
   const successLabel = useAppSelector(
@@ -54,7 +57,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
   if (callStatus !== 'none') {
     return (
-      <div className="absolute top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30">
+      <div className="fixed top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30">
         {/* loading */}
         {callStatus === 'loading' && <Spinner label={loadingLabel} />}
 

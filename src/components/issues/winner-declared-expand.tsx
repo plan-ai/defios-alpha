@@ -5,7 +5,8 @@ import AnchorLink from '../ui/links/anchor-link';
 import { claimReward } from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { useAppSelector } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 
 interface WinnerDeclaredExpandProps {
@@ -17,6 +18,9 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
   data,
   issueAccount,
 }) => {
+  const dispatch = useAppDispatch();
+  const stateLoading = useAppSelector((state) => state.callLoader.callState);
+
   const wallet = useWallet();
   const userMappingState = useAppSelector(selectUserMapping);
   const [winner, setWinner] = useState<any>();
@@ -51,9 +55,8 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
     setWinner(_winner);
     setReducedLink(prValue);
   }, [data]);
-  const [isLoading, setIsLoading] = useState(false);
   const handleClaim = () => {
-    setIsLoading(true);
+    dispatch(onLoading('Claiming tokens for solving the issue...'));
     claimReward(
       wallet.publicKey as PublicKey,
       new PublicKey(
@@ -62,11 +65,24 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
       new PublicKey(issueAccount)
     )
       .then(() => {
-        setIsLoading(false);
+        onSuccess({
+          label: 'Issue Reward Claiming Successful',
+          description: '',
+          buttonText: 'Browse Issues',
+          redirect: null,
+          link: '',
+        });
       })
       .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
+        dispatch(
+          onFailure({
+            label: 'Issue Reward Claiming Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
       });
   };
   return (
@@ -105,8 +121,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
           size="small"
           shape="rounded"
           onClick={handleClaim}
-          disabled={isLoading}
-          isLoading={isLoading}
+          isLoading={stateLoading==='loading'}
         >
           Claim Reward
         </Button>
