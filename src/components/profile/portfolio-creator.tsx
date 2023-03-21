@@ -36,15 +36,15 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === '' || generateTrigger === 0)
       return;
-    axios
-      .post(
-        `https://api-v1.defi-os.com/profile/portfolio?website_type=${portfolioType.toLowerCase()}`,
-        {
-          headers: {
-            Authorization: firebase_jwt,
-          },
-        }
-      )
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://api-v1.defi-os.com/profile/portfolio?website_type=${portfolioType.toLowerCase()}`,
+      headers: {
+        Authorization: firebase_jwt,
+      },
+    };
+    axios(config)
       .then((res) => {
         setGeneratedLink(res.data.link);
         setStatus(true);
