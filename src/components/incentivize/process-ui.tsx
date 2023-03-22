@@ -86,16 +86,7 @@ const ProcessUI: React.FC<ProcessUIProps> = ({ step }) => {
         step={step}
         stepNumber={1}
         isStart={true}
-        label="Request Submitted"
-      />
-      <StepOfProcess step={step} stepNumber={2} label="Received Responses" />
-      <StepOfProcess step={step} stepNumber={3} label="Negotiation Done" />
-      <StepOfProcess step={step} stepNumber={4} label="Hired Professionals" />
-      <StepOfProcess
-        step={step}
-        stepNumber={5}
-        isEnd={true}
-        label="Service Completed"
+        label="Creating Project Repository"
       />
     </div>
   );

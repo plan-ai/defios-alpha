@@ -23,7 +23,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const [isExpand, setIsExpand] = useState(false);
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(0);
   const creationState = useAppSelector(selectCreation);
   const userMappingState = useAppSelector(selectUserMapping);
   useEffect(() => {
@@ -38,6 +38,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   useEffect(() => {
     if (isExpand) {
       dispatch(onLoading('Creating Project Repository...'));
+      setStep(1);
       let resCalled = false;
       createRepository(
         new PublicKey(
@@ -64,6 +65,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
               buttonText: 'Browse Projects',
             })
           );
+          setStep(2);
         })
         .catch((err) => {
           resCalled = true;
@@ -88,6 +90,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                 buttonText: 'Browse Projects',
               })
             );
+            setStep(2);
           }
         });
     }
