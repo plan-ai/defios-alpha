@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import ProcessUI from '@/components/incentivize/process-ui';
 import { Check } from '@/components/icons/check';
-import { useAppSelector } from '@/store/store';
 import { selectCreation } from '@/store/creationSlice';
 import { createRepository } from '@/lib/helpers/contractInteract';
 import { PublicKey } from '@solana/web3.js';
 import { selectUserMapping } from '@/store/userMappingSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
 interface CreationProcessProps {
   stepOfCreation: number;
@@ -20,6 +21,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   setStepOfCreation,
   reset,
 }) => {
+  const dispatch = useAppDispatch();
   const [isExpand, setIsExpand] = useState(false);
   const [step, setStep] = useState(2);
   const creationState = useAppSelector(selectCreation);
@@ -34,7 +36,9 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   }, [stepOfCreation]);
 
   useEffect(() => {
-    if (isExpand)
+    if (isExpand) {
+      dispatch(onLoading('Creating Project Repository...'));
+      let resCalled = false;
       createRepository(
         new PublicKey(
           userMappingState.userMapping?.verifiedUserAccount as string
@@ -46,7 +50,47 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
         creationState.step2.repoLink,
         creationState.step3.tokenSpecs.totalSupply,
         creationState.step3.distribution
-      );
+      )
+        .then((res) => {
+          resCalled = true;
+          dispatch(
+            onSuccess({
+              label: 'Project Repository Creation Success',
+              description: 'check out created project repository at',
+              link: res
+                ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                : '',
+              redirect: '/projects',
+              buttonText: 'Browse Projects',
+            })
+          );
+        })
+        .catch((err) => {
+          resCalled = true;
+          dispatch(
+            onFailure({
+              label: 'Project Repository Creation Failed',
+              description: err.message,
+              link: '',
+              redirect: '/projects',
+              buttonText: 'Browse Other Projects',
+            })
+          );
+        })
+        .finally(() => {
+          if (!resCalled) {
+            dispatch(
+              onSuccess({
+                label: 'Project Repository Creation Success',
+                description: '',
+                link: '',
+                redirect: '/projects',
+                buttonText: 'Browse Projects',
+              })
+            );
+          }
+        });
+    }
   }, [isExpand]);
 
   return (

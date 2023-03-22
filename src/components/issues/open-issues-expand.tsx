@@ -34,6 +34,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
 
   const handleStake = () => {
     if (stakeAmount <= 0) return;
+    let resCalled = false;
     dispatch(onLoading('Staking tokens on the issue...'));
     stakeIssue(
       wallet.publicKey as PublicKey,
@@ -41,6 +42,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       stakeAmount
     )
       .then((res) => {
+        resCalled = true;
         dispatch(
           onSuccess({
             label: 'Issue Staking Successful',
@@ -54,6 +56,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         );
       })
       .catch((err) => {
+        resCalled = true;
         dispatch(
           onFailure({
             label: 'Issue Staking Failed',
@@ -63,6 +66,19 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Issue Staking Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
+        }
       });
   };
 
@@ -99,6 +115,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
 
         axios(commitsConfig).then((commitRes) => {
           const latestCommit = commitRes.data[commitRes.data.length - 1];
+          let resCalled = false;
           addCommit(
             wallet.publicKey as PublicKey,
             new PublicKey(account),
@@ -110,7 +127,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             res.data.html_url
           )
             .then((res: any) => {
-              console.log(res);
+              resCalled = true;
               onSuccess({
                 label: 'Issue Submit Commit Successful',
                 description: 'Check out your commit submit at',
@@ -122,6 +139,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               });
             })
             .catch((err) => {
+              resCalled = true;
               dispatch(
                 onFailure({
                   label: 'Issue Submit Commit Failed',
@@ -131,6 +149,17 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   link: '',
                 })
               );
+            })
+            .finally(() => {
+              if (!resCalled) {
+                onSuccess({
+                  label: 'Issue Submit Commit Successful',
+                  description: '',
+                  buttonText: 'Browse Issues',
+                  redirect: null,
+                  link: '',
+                });
+              }
             });
         });
       })

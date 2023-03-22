@@ -57,7 +57,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const handleCreateIssue = async () => {
     if (repo === null || issueTitle === '' || repo?.project_url === '') return;
     if ((session as any).accessToken) {
-      const ownerRepo = repo?.project_name
+      const ownerRepo = repo?.project_name;
       dispatch(onLoading('Creating the Issue on Github...'));
 
       const data = JSON.stringify({
@@ -79,13 +79,17 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
       axios(config)
         .then((res) => {
+          let resCalled = false;
           createIssue(
             wallet.publicKey as PublicKey,
             res.data?.html_url,
             new PublicKey(repo.account),
-            new PublicKey(userMappingState.userMapping?.verifiedUserAccount as string)
+            new PublicKey(
+              userMappingState.userMapping?.verifiedUserAccount as string
+            )
           )
             .then((res) => {
+              resCalled = true;
               dispatch(
                 onSuccess({
                   label: 'Issue Creation Successful',
@@ -98,6 +102,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
               closeDrawer();
             })
             .catch((err) => {
+              resCalled = true;
               dispatch(
                 onFailure({
                   label: 'Issue Creation Failed',
@@ -108,6 +113,20 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 })
               );
               closeDrawer();
+            })
+            .finally(() => {
+              if (!resCalled) {
+                dispatch(
+                  onSuccess({
+                    label: 'Issue Creation Successful',
+                    description: '',
+                    buttonText: 'Browse Issues',
+                    redirect: null,
+                    link: '',
+                  })
+                );
+                closeDrawer();
+              }
             });
         })
         .catch((err) => {

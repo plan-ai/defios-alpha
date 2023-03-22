@@ -57,6 +57,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
   }, [data]);
   const handleClaim = () => {
     dispatch(onLoading('Claiming tokens for solving the issue...'));
+    let resCalled = false;
     claimReward(
       wallet.publicKey as PublicKey,
       new PublicKey(
@@ -65,6 +66,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
       new PublicKey(issueAccount)
     )
       .then(() => {
+        resCalled = true;
         onSuccess({
           label: 'Issue Reward Claiming Successful',
           description: '',
@@ -74,6 +76,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
         });
       })
       .catch((err) => {
+        resCalled = true;
         dispatch(
           onFailure({
             label: 'Issue Reward Claiming Failed',
@@ -83,6 +86,17 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
             link: '',
           })
         );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          onSuccess({
+            label: 'Issue Reward Claiming Successful',
+            description: '',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: '',
+          });
+        }
       });
   };
   return (
@@ -121,7 +135,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
           size="small"
           shape="rounded"
           onClick={handleClaim}
-          isLoading={stateLoading==='loading'}
+          isLoading={stateLoading === 'loading'}
         >
           Claim Reward
         </Button>
