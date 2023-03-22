@@ -65,7 +65,6 @@ export const creationSlice = createSlice({
     },
     setDistribution: (state, action: PayloadAction<any>) => {
       state.step3.distribution = action.payload;
-      console.log(state.step3.distribution);
     },
     setStep3Data: (state, action: PayloadAction<tokenSpecsProps>) => {
       state.step3.tokenSpecs = action.payload;
