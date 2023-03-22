@@ -86,6 +86,7 @@ const ProcessUI: React.FC<ProcessUIProps> = ({ step }) => {
         step={step}
         stepNumber={1}
         isStart={true}
+        isEnd={true}
         label="Creating Project Repository"
       />
     </div>
