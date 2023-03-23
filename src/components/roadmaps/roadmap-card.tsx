@@ -2,7 +2,6 @@ import Image from '@/components/ui/image';
 import { useState, useRef } from 'react';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { Verified } from '@/components/icons/verified';
-import Avatar from '@/components/ui/avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
@@ -13,6 +12,7 @@ import { detailsType, RoadmapList } from '@/data/static/roadmap-list';
 import cn from 'classnames';
 
 import { StaticImageData } from 'next/image';
+import Avatar from 'react-avatar';
 
 type RoadmapCardProps = {
   item: any;
@@ -67,7 +67,14 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             <ListCard
               item={{
                 name: item?.creator_name,
-                logo: item?.creator_profile_pic,
+                element: (
+                  <Avatar
+                    name={item?.creator_name}
+                    src={item?.creator_profile_pic}
+                    className="rounded-full"
+                    size="24"
+                  />
+                ),
               }}
               className="rounded-full bg-black px-3 py-2"
             />

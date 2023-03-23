@@ -65,7 +65,7 @@ export default function ListCard({
           </div>
         )}
 
-        <div className="ml-2">
+        <div className="ml-3">
           {name}
           {coinType && (
             <span className="block pt-0.5 text-xs font-normal capitalize text-gray-400">

@@ -2,19 +2,19 @@ import React from 'react';
 import Image from 'next/image';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowUp } from '@/components/icons/long-arrow-up';
-import { VerifiedIcon } from '@/components/icons/verified-icon';
 import { PoolIcon } from '@/components/icons/pool';
 import { StaticImageData } from 'next/image';
-import { coinListBig } from '@/data/static/coin-list';
 import { ExportIcon } from '@/components/icons/export-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
+import Avatar from 'react-avatar';
+
 interface CardProps {
   item: any;
 }
 
 interface TransactionFromToProps {
-  transactionUserAvatar: StaticImageData | string;
+  transactionUserAvatar: string;
   transactionUser: string;
   transactionType: string;
 }
@@ -27,17 +27,16 @@ const TransactionFromTo: React.FC<TransactionFromToProps> = ({
   return (
     <div className="flex items-center lg:w-1/2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
-        {transactionUserAvatar && (
-          <Image
-            src={transactionUserAvatar || ''}
-            alt={transactionUser || ''}
-            width={40}
-            height={40}
+        {transactionUser && (
+          <Avatar
+            name={transactionUser}
+            src={transactionUserAvatar}
             className="rounded-full"
+            size="40"
           />
         )}
       </div>
-      <div className="ml-2.5 flex flex-col xl:ml-4">
+      <div className="ml-2 flex flex-col">
         <span className="mb-0.5 text-xs text-gray-400">
           {transactionType === 'inbound' ? 'From' : 'To'}
         </span>

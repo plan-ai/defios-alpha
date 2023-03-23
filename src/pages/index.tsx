@@ -127,7 +127,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className='w-[25rem]'
+                  className="w-[25rem]"
                 />
                 <Button onClick={onSubmitHandler} shape="rounded" color="info">
                   Join Waitlist

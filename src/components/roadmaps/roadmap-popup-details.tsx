@@ -6,6 +6,7 @@ import Input from '@/components/ui/forms/input';
 import GithubTags from '@/components/ui/tags/github-tags';
 import { detailsTabType } from '@/data/static/roadmap-list';
 import ListCard from '@/components/ui/list-card';
+import Avatar from 'react-avatar';
 
 interface RoadmapPopupDetailsProps {
   details: detailsTabType;
@@ -42,7 +43,15 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
           <ListCard
             item={{
               name: topContributor,
-              logo: 'https://avatars.githubusercontent.com/u/74586376?v=4',
+              element: (
+                <Avatar
+                  name={topContributor}
+                  src={topContributor}
+                  githubHandle={topContributor}
+                  className="rounded-full"
+                  size="24"
+                />
+              ),
             }}
             className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
           />

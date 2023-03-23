@@ -15,6 +15,7 @@ import { YellowClock } from '@/components/icons/yellow-clock';
 import { Close } from '@/components/icons/close';
 
 import { deliverableList } from '@/data/static/roadmap-list';
+import Avatar from 'react-avatar';
 
 import Dag from '@/components/dag/dag';
 
@@ -93,7 +94,18 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     Created By
                   </h3>
                   <ListCard
-                    item={{ name: creator, logo: "https://avatars.githubusercontent.com/u/40645221?v=4" }}
+                    item={{
+                      name: creator,
+                      element: (
+                        <Avatar
+                          name={creator}
+                          src={creator}
+                          githubHandle={creator}
+                          className="rounded-full"
+                          size="24"
+                        />
+                      ),
+                    }}
                     className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                   />
                 </div>
