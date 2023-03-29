@@ -88,7 +88,7 @@ export default function RightSideInfo({
                 {coinInfo?.token_image_url && (
                   <Image
                     src={coinInfo?.token_image_url || ''}
-                    alt="Author"
+                    alt={coinInfo?.token_symbol|| ''}
                     width={80}
                     height={80}
                     className="mx-auto mb-6"
@@ -101,9 +101,9 @@ export default function RightSideInfo({
                   className="my-5"
                   label={'Created By'}
                   value={
-                    coinInfo?.token_creator_name.slice(0, 8) +
+                    coinInfo?.token_creator_name?.slice(0, 8) +
                     '...' +
-                    coinInfo?.token_creator_name.slice(36, 44)
+                    coinInfo?.token_creator_name?.slice(36, 44)
                   }
                 />
                 <TransactionInfo
