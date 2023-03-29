@@ -116,7 +116,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
     setFetchData(resp);
 
     if (Object.keys(resp).length === 0) return;
-
+    console.log('emptyReturn');
     let isContributor = false;
     let isCollaborator = false;
     for (let i = 0; i < resp.length; i++) {
@@ -186,16 +186,15 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   };
 
   useEffect(() => {
+    console.log('in');
     if (
       session &&
       (session as any)?.accessToken &&
-      (Contributors === null ||
-        Contributors === undefined ||
-        Object.keys(Contributors).length === 0) &&
       (fetchData === null ||
         fetchData === undefined ||
         Object.keys(fetchData).length === 0)
     ) {
+      console.log('in1');
       setIsLoading(true);
       FetchContributors();
     } else {
