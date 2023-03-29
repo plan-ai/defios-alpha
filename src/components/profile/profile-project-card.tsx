@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Image from '@/components/ui/image';
 import cn from 'classnames';
 import AnchorLink from '@/components/ui/links/anchor-link';
@@ -7,7 +8,7 @@ import PriceChart from '@/components/ui/chats/price-chart';
 import DataWithImage from '@/components/custom/data-with-image';
 import StatsData from '@/components/custom/stats-data';
 import SecurityStatus from '@/components/custom/security-status';
-import { iteratorSymbol } from 'immer/dist/internal';
+import axios from 'axios';
 
 type CardProps = {
   item: any;
@@ -18,6 +19,30 @@ export default function ProfileProjectCard({
   item,
   className = '',
 }: CardProps) {
+  const [tokenImgUrl, setTokenImgUrl] = useState('');
+
+  useEffect(() => {
+    const _url = item?.project_token?.token_image_url;
+    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+    axios
+      .get(IpfsNewGateway)
+      .then((res) => {
+        if (typeof res.data === 'object') {
+          if (res.data.image) {
+            setTokenImgUrl(res.data.image);
+          } else {
+            setTokenImgUrl(item?.project_token?.token_image_url);
+          }
+        } else {
+          setTokenImgUrl(item?.project_token?.token_image_url);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setTokenImgUrl(item?.project_token?.token_image_url);
+      });
+  }, [item]);
+
   return (
     <div
       className={cn(
@@ -88,7 +113,7 @@ export default function ProfileProjectCard({
           <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
             <CoinTicker
               value={Math.round(item?.project_token?.token_ltp * 100) / 100}
-              coin={item?.project_token}
+              coin={{ ...item?.project_token, token_image_url: tokenImgUrl }}
               change={(
                 Math.round(item?.project_token?.token_ltp_24h_change * 100) /
                 100

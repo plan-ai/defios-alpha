@@ -15,6 +15,30 @@ type TopTokenFeedProps = {
 
 export function TopTokenFeed({ data }: TopTokenFeedProps) {
   const [chartData, setChartData] = useState<any>(null);
+  const [tokenImgUrl, setTokenImgUrl] = useState('');
+
+  useEffect(() => {
+    const _url = data?.token_image_url;
+    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+    axios
+      .get(IpfsNewGateway)
+      .then((res) => {
+        if (typeof res.data === 'object') {
+          if (res.data.image) {
+            setTokenImgUrl(res.data.image);
+          } else {
+            setTokenImgUrl(data?.token_image_url);
+          }
+        } else {
+          setTokenImgUrl(data?.token_image_url);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setTokenImgUrl(data?.token_image_url);
+      });
+  }, [data]);
+
   useEffect(() => {
     if (typeof data?.token_price_feed === 'string') {
       axios
@@ -36,12 +60,12 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
           href={`https://solscan.io/token/${data?.token_spl_addr}`}
           target="_blank"
         >
-          <div className="flex items-center">
+          <div className="flex items-center mb-2">
             <Image
-              src={data?.token_image_url || ''}
+              src={tokenImgUrl || ''}
               alt={data?.token_symbol || ''}
-              width={24}
-              height={24}
+              width={36}
+              height={36}
               className="rounded-full"
             />
             <h4 className="ml-3 text-sm font-medium text-white">

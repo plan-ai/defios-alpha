@@ -70,6 +70,7 @@ export default function CoinSelectView({
                 alt={item.token_symbol || ''}
                 width={20}
                 height={20}
+                className="rounded-full"
               />
               <span className="uppercase">{item.token_symbol}</span>
             </li>

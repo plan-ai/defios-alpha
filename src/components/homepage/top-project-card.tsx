@@ -21,6 +21,30 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
   item,
 }) => {
   const [chartData, setChartData] = useState<any>(null);
+  const [tokenImgUrl, setTokenImgUrl] = useState('');
+
+  useEffect(() => {
+    const _url = item?.project_token?.token_image_url;
+    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+    axios
+      .get(IpfsNewGateway)
+      .then((res) => {
+        if (typeof res.data === 'object') {
+          if (res.data.image) {
+            setTokenImgUrl(res.data.image);
+          } else {
+            setTokenImgUrl(item?.project_token?.token_image_url);
+          }
+        } else {
+          setTokenImgUrl(item?.project_token?.token_image_url);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setTokenImgUrl(item?.project_token?.token_image_url);
+      });
+  }, [item]);
+
   useEffect(() => {
     if (typeof item?.project_token?.token_price_feed === 'string') {
       axios
@@ -88,7 +112,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         <div className="flex w-full flex-col gap-3 border-t border-dashed border-gray-800 pt-6">
           <CoinTicker
             value={Math.round(item?.project_token?.token_ltp * 100) / 100}
-            coin={item?.project_token}
+            coin={{ ...item?.project_token, token_image_url: tokenImgUrl }}
             change={(
               Math.round(item?.project_token?.token_ltp_24h_change * 100) / 100
             ).toString()}

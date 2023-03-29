@@ -24,6 +24,31 @@ const SwapPage: NextPageWithLayout = () => {
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
 
+  const getAllImgUrls = async (data: any) => {
+    const tokens = data;
+    const newTokens = await Promise.all(
+      await tokens.map(async (token: any): Promise<any> => {
+        const _token = token;
+        const _url = _token?.token_image_url;
+        const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+        await axios
+          .get(IpfsNewGateway)
+          .then((res) => {
+            if (typeof res.data === 'object') {
+              if (res.data.image) {
+                _token.token_image_url = res.data.image;
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return _token;
+      })
+    );
+    setCoinList(newTokens);
+  };
+
   useEffect(() => {
     if (auth_cred === null) return;
     axios
@@ -32,7 +57,9 @@ const SwapPage: NextPageWithLayout = () => {
           Authorization: auth_cred,
         },
       })
-      .then((res) => setCoinList(res.data))
+      .then((res) => {
+        getAllImgUrls(res.data);
+      })
       .catch((err) => console.log(err.message));
   }, [auth_cred]);
 

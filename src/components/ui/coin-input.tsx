@@ -84,6 +84,7 @@ export default function CoinInput({
               alt={selectedCoin?.token_symbol || ''}
               width={20}
               height={20}
+              className="rounded-full"
             />
             <span className="ml-2">{selectedCoin?.token_symbol} </span>
             <ChevronDown className="ml-1.5" />

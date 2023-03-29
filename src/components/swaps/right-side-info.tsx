@@ -23,6 +23,8 @@ export default function RightSideInfo({
   const [coinInfo, setCoinInfo] = useState<any>(null);
   const [priceChartData, setPriceChartData] = useState<any>(null);
   const [pieChartData, setPieChartData] = useState<any>(null);
+  const [tokenImgUrl, setTokenImgUrl] = useState('');
+
   const auth_cred = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
@@ -60,6 +62,30 @@ export default function RightSideInfo({
   }, [coinInfo]);
 
   useEffect(() => {
+    if (coinInfo === undefined || typeof coinInfo?.token_image_url !== 'string')
+      return;
+    const _url = coinInfo?.token_image_url;
+    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+    axios
+      .get(IpfsNewGateway)
+      .then((res) => {
+        if (typeof res.data === 'object') {
+          if (res.data.image) {
+            setTokenImgUrl(res.data.image);
+          } else {
+            setTokenImgUrl(coinInfo?.token_image_url);
+          }
+        } else {
+          setTokenImgUrl(coinInfo?.token_image_url);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setTokenImgUrl(coinInfo?.token_image_url);
+      });
+  }, [coinInfo]);
+
+  useEffect(() => {
     setPieChartData(null);
     if (coin === null) return;
     if (coin?.token_spl_addr && coin.token_spl_addr === '') return;
@@ -87,11 +113,11 @@ export default function RightSideInfo({
               <div className="w-full sm:w-[48%] lg:w-full">
                 {coinInfo?.token_image_url && (
                   <Image
-                    src={coinInfo?.token_image_url || ''}
-                    alt={coinInfo?.token_symbol|| ''}
+                    src={tokenImgUrl || ''}
+                    alt={coinInfo?.token_symbol || ''}
                     width={80}
                     height={80}
-                    className="mx-auto mb-6"
+                    className="mx-auto mb-6 rounded-full"
                   />
                 )}
                 <div className="my-5 text-center">
