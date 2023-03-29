@@ -189,8 +189,12 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
     if (
       session &&
       (session as any)?.accessToken &&
-      (Contributors === null || Object.keys(Contributors).length === 0) &&
-      (fetchData === null || Object.keys(fetchData).length === 0)
+      (Contributors === null ||
+        Contributors === undefined ||
+        Object.keys(Contributors).length === 0) &&
+      (fetchData === null ||
+        fetchData === undefined ||
+        Object.keys(fetchData).length === 0)
     ) {
       setIsLoading(true);
       FetchContributors();
