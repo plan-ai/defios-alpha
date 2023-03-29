@@ -186,7 +186,6 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   };
 
   useEffect(() => {
-    console.log('in');
     if (
       session &&
       (session as any)?.accessToken &&
@@ -194,7 +193,6 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
         fetchData === undefined ||
         Object.keys(fetchData).length === 0)
     ) {
-      console.log('in1');
       setIsLoading(true);
       FetchContributors();
     } else {
@@ -223,9 +221,8 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
           className="[&_.swiper-scrollbar_>_.swiper-scrollbar-drag]:bg-body/50"
         >
           {fetchData !== null &&
+            fetchData !== undefined &&
             Object.keys(fetchData).length !== 0 &&
-            fetchData.constructor !== Object &&
-            fetchData.length !== 0 &&
             fetchData?.map((item: any, idx: number) => {
               return (
                 <SwiperSlide key={idx}>

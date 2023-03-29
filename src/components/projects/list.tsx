@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SecurityStatus from '@/components/custom/security-status';
 import Image from 'next/image';
@@ -14,6 +14,29 @@ export default function ProjectList({
   children,
 }: React.PropsWithChildren<ProjectListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
+  const [tokenImgUrl, setTokenImgUrl] = useState('');
+
+  useEffect(() => {
+    const _url = data?.project_token?.token_image_url;
+    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+    axios
+      .get(IpfsNewGateway)
+      .then((res) => {
+        if (typeof res.data === 'object') {
+          if (res.data.image) {
+            setTokenImgUrl(res.data.image);
+          } else {
+            setTokenImgUrl(data?.project_token?.token_image_url);
+          }
+        } else {
+          setTokenImgUrl(data?.project_token?.token_image_url);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setTokenImgUrl(data?.project_token?.token_image_url);
+      });
+  }, [data]);
   return (
     <div className="relative mb-3 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
       <div
@@ -32,7 +55,7 @@ export default function ProjectList({
         <div className="col-span-2 px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
           <div className="flex items-center">
             <Image
-              src={data?.project_token?.token_image_url || ''}
+              src={tokenImgUrl || ''}
               alt={data?.project_token?.token_symbol || ''}
               width={48}
               height={48}
