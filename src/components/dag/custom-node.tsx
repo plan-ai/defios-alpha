@@ -20,7 +20,11 @@ const CustomNode: React.FC<CustomNodeProps> = ({ data, selected }) => {
       )}
     >
       <div className="flex">
-        <div className="text-center text-xs">{data?.name}</div>
+        <div className="text-center text-xs">
+          {data?.name.length < 60
+            ? data?.name
+            : data?.name.slice(0, 57) + '...'}
+        </div>
       </div>
 
       <Handle

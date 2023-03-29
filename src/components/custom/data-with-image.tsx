@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 interface DataWithImageProps {
   image?: StaticImageData | string;
-  value: string;
+  value?: string;
   header: string;
   change?: string;
   trunc?: number;
@@ -61,13 +61,13 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">{header}</span>
-        {/* {change == undefined && (
-          // <strong className="text-sm font-medium -tracking-wider text-white">
-          //   {value.length > (trunc || 12)
-          //     ? value.slice(0, trunc || 12) + '...'
-          //     : value}{' '}
-          // </strong>
-        )} */}
+        {change == undefined && value!==undefined  && (
+          <strong className="text-sm font-medium -tracking-wider text-white">
+            {value.length > (trunc || 12)
+              ? value.slice(0, trunc || 12) + '...'
+              : value}{' '}
+          </strong>
+        )}
 
         {change !== undefined && (
           <span className="mb-0.5 flex text-sm">

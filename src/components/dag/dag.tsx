@@ -42,7 +42,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       id: '3',
       type: 'custom',
       data: {
-        name: 'Curate curriculum from carious online ...',
+        name: 'Curate curriculum from carious online sources and map it to various levels of expertise',
       },
       position: { x: 100, y: 500 },
       selectable: true,
@@ -60,7 +60,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       id: '5',
       type: 'custom',
       data: {
-        name: 'Extend Dashboard v1 to allow for manual edits in ech feild',
+        name: 'Extend Dashboard v1 to allow for manual edits in each feild',
       },
       position: { x: 200, y: 100 },
       selectable: true,

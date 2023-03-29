@@ -34,17 +34,22 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
         ? prev
         : current;
     });
-
     const removeWinner = PrsList.filter((Pr: any) => {
       return Pr !== _winner;
     });
 
-    const _runnerup = removeWinner?.reduce((prev: any, current: any) => {
-      return prev?.issue_vote_amount > current?.issue_vote_amount
-        ? prev
-        : current;
-    });
+    const _runnerup =
+      removeWinner.length === 0
+        ? { issue_vote_amount: 0 }
+        : removeWinner?.reduce((prev: any, current: any) => {
+            return prev?.issue_vote_amount > current?.issue_vote_amount
+              ? prev
+              : current;
+          });
 
+    console.log(
+      'margin: ' + (_winner?.issue_vote_amount - _runnerup?.issue_vote_amount)
+    );
     setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
     const prValSplit = _winner?.issue_pr_link?.split('/');
     const prValue =
@@ -53,6 +58,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
       prValSplit[prValSplit.length - 1];
 
     setWinner(_winner);
+    console.log(_winner);
     setReducedLink(prValue);
   }, [data]);
   const handleClaim = () => {
@@ -105,7 +111,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
         <DataWithImage header="Winning PR" value={reducedLink} image="trophy" />
         <DataWithImage
           header="Winning Author"
-          value={winner?.issue_pr_author || ''}
+          value={winner?.issue_pr_author}
           image="wench"
         />
         <DataWithImage
@@ -115,7 +121,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
         />
         <DataWithImage
           header="Originality Score"
-          value={winner?.issue_originality_score || ''}
+          value={winner?.issue_originality_score}
           image="wench"
         />
       </div>

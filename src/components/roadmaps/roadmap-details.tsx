@@ -72,17 +72,18 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
           <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <h2 className="flex items-center gap-2 text-xl font-medium leading-[1.45em] -tracking-wider text-white md:text-2xl xl:text-3xl">
-                  {name}
-                  {status === 'lock' && <LockIcon />}
-                  {status === 'open' && <YellowClock />}
+                <h2 className="flex w-[90%] items-center gap-2 font-medium leading-[1.45em] -tracking-wider text-white text-2xl">
+                  {/* {name} */}
+                  {nodeSelected?.data?.name}
                 </h2>
+                {status === 'lock' && <LockIcon />}
+                {status === 'open' && <YellowClock />}
                 <Close
                   onClick={(e) => {
                     e.stopPropagation();
                     setRoadmap('');
                   }}
-                  className="h-6 w-6"
+                  className="h-6 w-6 ml-2"
                 />
               </div>
               <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
