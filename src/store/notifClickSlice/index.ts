@@ -5,12 +5,14 @@ export interface notifClickState {
   searchQuery: string;
   setSearchQuery: boolean;
   expandFirst: boolean;
+  pathname: string | null;
 }
 
 const initialState: notifClickState = {
   searchQuery: '',
   setSearchQuery: false,
   expandFirst: false,
+  pathname: null,
 };
 
 export const notifClickSlice = createSlice({
@@ -21,11 +23,13 @@ export const notifClickSlice = createSlice({
       state.searchQuery = action.payload.searchQuery;
       state.setSearchQuery = action.payload.setSearchQuery;
       state.expandFirst = action.payload.expandFirst;
+      state.pathname = action.payload.pathname;
     },
     reset: (state) => {
       state.searchQuery = '';
       state.setSearchQuery = false;
       state.expandFirst = false;
+      state.pathname = null;
     },
   },
 });

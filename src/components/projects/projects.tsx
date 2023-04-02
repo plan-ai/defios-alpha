@@ -20,6 +20,7 @@ import { Close } from '@/components/icons/close';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
+import { clicked } from '@/store/notifClickSlice';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
@@ -144,6 +145,7 @@ export default function Projects() {
     (state) => state.notifClick.setSearchQuery
   );
   const expandFirst = useAppSelector((state) => state.notifClick.expandFirst);
+  const clickPathname = useAppSelector((state) => state.notifClick.pathname);
 
   const dispatch = useAppDispatch();
 
@@ -403,7 +405,7 @@ export default function Projects() {
 
   useEffect(() => {
     if (projectsData.length === 0) return;
-    if (searchQuery !== '' && setSearchQuery) {
+    if (searchQuery !== '' && setSearchQuery && clickPathname === '/projects') {
       setSearch(searchQuery);
       setInitExpand(expandFirst);
       setTriggerSearch(true);
@@ -537,11 +539,26 @@ export default function Projects() {
                   Explore Related Roadmaps
                 </Button>
               </ActiveLink>
-              <ActiveLink href={routes.projects}>
-                <Button shape="rounded" color="info" fullWidth size="medium">
-                  Explore Open Issues
-                </Button>
-              </ActiveLink>
+              <Button
+                onClick={() => {
+                  if (project?._id) {
+                    const payload = {
+                      searchQuery: `issue_project_id:${project?._id};state:open`,
+                      setSearchQuery: true,
+                      expandFirst: false,
+                      pathname: '/issues',
+                    };
+                    dispatch(clicked(payload));
+                  }
+                  router.push('/issues');
+                }}
+                shape="rounded"
+                color="info"
+                fullWidth
+                size="medium"
+              >
+                Explore Open Issues
+              </Button>
               <ActiveLink href={routes.projects}>
                 <Button shape="rounded" color="success" fullWidth size="medium">
                   Claim Pending Tokens

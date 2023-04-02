@@ -92,6 +92,7 @@ const IssuesPage: NextPageWithLayout = () => {
     (state) => state.notifClick.setSearchQuery
   );
   const expandFirst = useAppSelector((state) => state.notifClick.expandFirst);
+  const clickPathname = useAppSelector((state) => state.notifClick.pathname);
 
   const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
 
@@ -333,7 +334,7 @@ const IssuesPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (issuesData.length === 0) return;
-    if (searchQuery !== '' && setSearchQuery) {
+    if (searchQuery !== '' && setSearchQuery && clickPathname === '/issues') {
       setSearch(searchQuery);
       setInitExpand(expandFirst);
       setTriggerSearch(true);

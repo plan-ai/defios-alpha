@@ -67,6 +67,7 @@ export default function NotificationCard({
       searchQuery: notif_action_api_params.searched,
       setSearchQuery: true,
       expandFirst: notif_action_state_params.first_expanded,
+      pathname: notif_action_path,
     };
     dispatch(clicked(payload));
     router.push(notif_action_path);
