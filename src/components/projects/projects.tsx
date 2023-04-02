@@ -167,7 +167,7 @@ export default function Projects() {
         },
       })
       .then((res) => {
-        setProjectsData(res.data.projects);
+        getAllImgUrls(res.data.projects);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -246,7 +246,7 @@ export default function Projects() {
         },
       })
       .then((res) => {
-        setProjectsData(res.data.projects);
+        getAllImgUrls(res.data.projects);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -328,7 +328,7 @@ export default function Projects() {
           },
         })
         .then((res) => {
-          setProjectsData(res.data.projects);
+          getAllImgUrls(res.data.projects);
           setIsLoading(false);
           setTriggerSearch(false);
         })
@@ -340,6 +340,31 @@ export default function Projects() {
     }
     setInitExpand(false);
   }, [triggerSearch, firebase_jwt]);
+
+  const getAllImgUrls = async (data: any) => {
+    const projects = data;
+    const newProjects = await Promise.all(
+      await projects.map(async (project: any): Promise<any> => {
+        const _project = project;
+        const _url = _project?.project_token?.token_image_url;
+        const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+        await axios
+          .get(IpfsNewGateway)
+          .then((res) => {
+            if (typeof res.data === 'object') {
+              if (res.data.image) {
+                _project.project_token.token_image_url = res.data.image;
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        return _project;
+      })
+    );
+    setProjectsData(newProjects);
+  };
 
   const getChartData = async () => {
     const projects = projectsData;

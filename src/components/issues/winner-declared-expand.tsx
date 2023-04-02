@@ -47,9 +47,6 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
               : current;
           });
 
-    console.log(
-      'margin: ' + (_winner?.issue_vote_amount - _runnerup?.issue_vote_amount)
-    );
     setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
     const prValSplit = _winner?.issue_pr_link?.split('/');
     const prValue =
@@ -58,7 +55,6 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
       prValSplit[prValSplit.length - 1];
 
     setWinner(_winner);
-    console.log(_winner);
     setReducedLink(prValue);
   }, [data]);
   const handleClaim = () => {

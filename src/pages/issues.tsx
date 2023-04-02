@@ -20,11 +20,13 @@ import axios from 'axios';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
+import { resetRefetch } from '@/store/refetchSlice';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
 
 import { useDrawer } from '@/components/drawer-views/context';
+
 interface searchProps {
   placeholder?: string;
   search: string;
@@ -90,6 +92,8 @@ const IssuesPage: NextPageWithLayout = () => {
     (state) => state.notifClick.setSearchQuery
   );
   const expandFirst = useAppSelector((state) => state.notifClick.expandFirst);
+
+  const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
 
   const dispatch = useAppDispatch();
 
@@ -335,7 +339,18 @@ const IssuesPage: NextPageWithLayout = () => {
       setTriggerSearch(true);
       dispatch(reset());
     }
-  }, [issuesData, searchQuery, setSearchQuery, expandFirst, dispatch]);
+    if (refetchPart === 'issue') {
+      setTriggerSearch(true);
+      dispatch(resetRefetch());
+    }
+  }, [
+    issuesData,
+    searchQuery,
+    setSearchQuery,
+    expandFirst,
+    dispatch,
+    refetchPart,
+  ]);
 
   return (
     <>

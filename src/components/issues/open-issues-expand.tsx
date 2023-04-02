@@ -9,6 +9,7 @@ import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
 interface OpenIssueExpandProps {
@@ -54,6 +55,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               : '',
           })
         );
+        dispatch(setRefetch('issue'));
       })
       .catch((err) => {
         resCalled = true;
@@ -78,6 +80,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               link: '',
             })
           );
+          dispatch(setRefetch('issue'));
         }
       });
   };
@@ -128,15 +131,18 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           )
             .then((res: any) => {
               resCalled = true;
-              onSuccess({
-                label: 'Issue Submit Commit Successful',
-                description: 'Check out your commit submit at',
-                buttonText: 'Browse Issues',
-                redirect: null,
-                link: res
-                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
-                  : '',
-              });
+              dispatch(
+                onSuccess({
+                  label: 'Issue Submit Commit Successful',
+                  description: 'Check out your commit submit at',
+                  buttonText: 'Browse Issues',
+                  redirect: null,
+                  link: res
+                    ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                    : '',
+                })
+              );
+              dispatch(setRefetch('issue'));
             })
             .catch((err) => {
               resCalled = true;
@@ -152,13 +158,16 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             })
             .finally(() => {
               if (!resCalled) {
-                onSuccess({
-                  label: 'Issue Submit Commit Successful',
-                  description: '',
-                  buttonText: 'Browse Issues',
-                  redirect: null,
-                  link: '',
-                });
+                dispatch(
+                  onSuccess({
+                    label: 'Issue Submit Commit Successful',
+                    description: '',
+                    buttonText: 'Browse Issues',
+                    redirect: null,
+                    link: '',
+                  })
+                );
+                dispatch(setRefetch('issue'));
               }
             });
         });

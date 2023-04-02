@@ -17,6 +17,7 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
+import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onSuccess, onFailure } from '@/store/callLoaderSlice';
 import { useSession } from 'next-auth/react';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -90,6 +91,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
           )
             .then((res) => {
               resCalled = true;
+              dispatch(setRefetch('issue'));
               dispatch(
                 onSuccess({
                   label: 'Issue Creation Successful',
@@ -116,6 +118,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
             })
             .finally(() => {
               if (!resCalled) {
+                dispatch(setRefetch('issue'));
                 dispatch(
                   onSuccess({
                     label: 'Issue Creation Successful',
@@ -163,6 +166,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                       alt="token"
                       width={24}
                       height={24}
+                      className="rounded-full"
                     />
                     <div className="ml-2 text-sm">{repo?.project_name}</div>
                   </div>
