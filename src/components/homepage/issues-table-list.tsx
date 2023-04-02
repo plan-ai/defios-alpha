@@ -19,6 +19,7 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({ item }) => {
       searchQuery: `id:${item?._id}`,
       setSearchQuery: true,
       expandFirst: true,
+      pathname: '/issues',
     };
     dispatch(clicked(payload));
     router.push('/issues');

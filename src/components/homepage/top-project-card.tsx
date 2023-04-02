@@ -64,6 +64,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
       searchQuery: `id:${item?._id}`,
       setSearchQuery: true,
       expandFirst: true,
+      pathname: '/projects',
     };
     dispatch(clicked(payload));
     router.push('/projects');
