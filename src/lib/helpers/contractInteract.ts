@@ -14,7 +14,7 @@ import { TokenVestingIDL } from '../../types/idl/token_vesting';
 import * as mpl from "@metaplex-foundation/mpl-token-metadata"
 import { Metaplex, keypairIdentity, bundlrStorage, compareAmounts, walletAdapterIdentity } from "@metaplex-foundation/js";
 import { Signer, Connection } from './wallet';
-import { uploadFileToIPFS, uploadMetadataToIPFS } from './metadata';
+import { fetchTokenMetadata, uploadFileToIPFS, uploadMetadataToIPFS } from './metadata';
 import { uploadToIPFS } from '@pinata/sdk';
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -29,7 +29,7 @@ import {
 import sha1 from 'sha1';
 import { rectToBox } from 'reactflow';
 
-const nameRouterAccount = new PublicKey("8kMWVDtNrGDwVcv57FFS64VmLdBjaqwV4FjR8EUKvojz")
+const nameRouterAccount = new PublicKey("zNjz5kM2GTgAbYuoQ576D9QKEp2D4xTB3khVH57rWLr")
 const routerCreator = new PublicKey("Au5UxjuuLLD9AQuE4QWQ1ucUqKPjaXQ8EkSBokUPCiB6")
 
 export const getProvider = async (
@@ -57,6 +57,75 @@ export const getTokenVestingProgram = async (provider: AnchorProvider) => {
   );
   return program;
 };
+
+export const createRepositoryImported = (repositoryVerifiedUser: PublicKey, tokenAddress: PublicKey, tokenName: string, tokenSymbol: string, repoName: string, repoLink: string) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer)
+      const program = await getDefiOsProgram(provider)
+
+      const [repositoryAccount] = await web3.PublicKey.findProgramAddress(
+        [
+          Buffer.from('repository'),
+          Buffer.from(repoName),
+          Signer.publicKey.toBuffer(),
+        ],
+        program.programId
+      );
+      const repositoryTokenPoolAccount = await getAssociatedTokenAddress(
+        tokenAddress,
+        repositoryAccount,
+        true
+      );
+
+      const createAssociatedTokenIx = createAssociatedTokenAccountInstruction(
+        Signer.publicKey,
+        repositoryTokenPoolAccount,
+        repositoryAccount,
+        tokenAddress
+      );
+
+      let usernames: Array<string> = []
+      let amounts: Array<BN> = []
+
+      const tokenInfo = await fetchTokenMetadata(tokenAddress.toBase58())
+      program.methods
+        .createRepository(
+          repoName,
+          'Open source revolution',
+          repoLink,
+          usernames,
+          amounts,
+          tokenName,
+          tokenSymbol,
+          tokenInfo.uri
+        )
+        .accounts({
+          nameRouterAccount,
+          repositoryAccount,
+          repositoryCreator: Signer.publicKey,
+          repositoryVerifiedUser: repositoryVerifiedUser,
+          rewardsMint: tokenAddress,
+          routerCreator: routerCreator,
+          systemProgram: web3.SystemProgram.programId,
+          repositoryTokenPoolAccount
+        })
+        .preInstructions([
+          createAssociatedTokenIx,
+        ])
+        .rpc({ skipPreflight: true })
+        .then(() => {
+          resolve(repositoryAccount)
+        })
+        .catch((e) => {
+          reject(e)
+        })
+    }
+    catch (e) {
+      reject(e)
+    }
+  })
+}
 
 export const createRepository = (repositoryVerifiedUser: PublicKey, image: File, tokenName: string, tokenSymbol: string, repoName: string, repoLink: string, mintAmount: number, owners: any) => {
   return new Promise(async (resolve, reject) => {
@@ -167,7 +236,6 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
 
       let usernames: Array<string> = []
       let amounts: Array<BN> = []
-
       Object.keys(owners).forEach((key) => {
         usernames.push(key)
         let percentageString = owners[key].replace('%', '')
@@ -175,6 +243,7 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
         let amount = (percentage / 100) * mintAmount
         amounts.push(new BN(amount * 10 ** 9))
       })
+      console.log(owners, usernames, amounts)
 
       program.methods
         .createRepository(
@@ -182,7 +251,10 @@ export const createRepository = (repositoryVerifiedUser: PublicKey, image: File,
           'Open source revolution',
           repoLink,
           usernames,
-          amounts
+          amounts,
+          tokenName,
+          tokenSymbol,
+          `https://gateway.pinata.cloud/ipfs/${metadataCID}`
         )
         .accounts({
           nameRouterAccount,
@@ -411,7 +483,7 @@ export const addCommit = (commitCreator: PublicKey, issueAccount: PublicKey, com
       })
       .rpc({ skipPreflight: true })
       .then((res) => {
-        resolve(res)
+        resolve(commitAccount)
       })
       .catch((e) => {
         reject(e)

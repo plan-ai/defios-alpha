@@ -4,7 +4,10 @@ import { ChevronDown } from '@/components/icons/chevron-down';
 import ProcessUI from '@/components/incentivize/process-ui';
 import { Check } from '@/components/icons/check';
 import { selectCreation } from '@/store/creationSlice';
-import { createRepository } from '@/lib/helpers/contractInteract';
+import {
+  createRepository,
+  createRepositoryImported,
+} from '@/lib/helpers/contractInteract';
 import { PublicKey } from '@solana/web3.js';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -40,59 +43,115 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
       dispatch(onLoading('Creating Project Repository...'));
       setStep(1);
       let resCalled = false;
-      createRepository(
-        new PublicKey(
-          userMappingState.userMapping?.verifiedUserAccount as string
-        ),
-        creationState.step3.tokenSpecs.tokenIcon as File,
-        creationState.step3.tokenSpecs.tokenName,
-        creationState.step3.tokenSpecs.tokenSymbol,
-        creationState.step2.repoName,
-        creationState.step2.repoLink,
-        creationState.step3.tokenSpecs.totalSupply,
-        creationState.step3.distribution
-      )
-        .then((res) => {
-          resCalled = true;
-          dispatch(
-            onSuccess({
-              label: 'Project Repository Creation Success',
-              description: 'check out created project repository at',
-              link: res
-                ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
-                : '',
-              redirect: '/projects',
-              buttonText: 'Browse Projects',
-            })
-          );
-          setStep(2);
-        })
-        .catch((err) => {
-          resCalled = true;
-          dispatch(
-            onFailure({
-              label: 'Project Repository Creation Failed',
-              description: err.message,
-              link: '',
-              redirect: '/projects',
-              buttonText: 'Browse Other Projects',
-            })
-          );
-        })
-        .finally(() => {
-          if (!resCalled) {
+
+      if (!creationState.step3.tokenSpecs.address) {
+        createRepository(
+          new PublicKey(
+            userMappingState.userMapping?.verifiedUserAccount as string
+          ),
+          creationState.step3.tokenSpecs.tokenIcon as File,
+          creationState.step3.tokenSpecs.tokenName,
+          creationState.step3.tokenSpecs.tokenSymbol,
+          creationState.step2.repoName,
+          creationState.step2.repoLink,
+          creationState.step3.tokenSpecs.totalSupply,
+          creationState.step3.distribution
+        )
+          .then((res) => {
+            resCalled = true;
             dispatch(
               onSuccess({
                 label: 'Project Repository Creation Success',
-                description: '',
-                link: '',
+                description: 'check out created project repository at',
+                link: res
+                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                  : '',
                 redirect: '/projects',
                 buttonText: 'Browse Projects',
               })
             );
             setStep(2);
-          }
-        });
+          })
+          .catch((err) => {
+            console.log(err);
+            resCalled = true;
+            dispatch(
+              onFailure({
+                label: 'Project Repository Creation Failed',
+                description: err.message,
+                link: '',
+                redirect: '/projects',
+                buttonText: 'Browse Other Projects',
+              })
+            );
+          })
+          .finally(() => {
+            if (!resCalled) {
+              dispatch(
+                onSuccess({
+                  label: 'Project Repository Creation Success',
+                  description: '',
+                  link: '',
+                  redirect: '/projects',
+                  buttonText: 'Browse Projects',
+                })
+              );
+              setStep(2);
+            }
+          });
+      } else {
+        createRepositoryImported(
+          new PublicKey(
+            userMappingState.userMapping?.verifiedUserAccount as string
+          ),
+          new PublicKey(creationState.step3.tokenSpecs.address as string),
+          creationState.step3.tokenSpecs.tokenName,
+          creationState.step3.tokenSpecs.tokenSymbol,
+          creationState.step2.repoName,
+          creationState.step2.repoLink
+        )
+          .then((res) => {
+            resCalled = true;
+            dispatch(
+              onSuccess({
+                label: 'Project Repository Creation Success',
+                description: 'check out created project repository at',
+                link: res
+                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                  : '',
+                redirect: '/projects',
+                buttonText: 'Browse Projects',
+              })
+            );
+            setStep(2);
+          })
+          .catch((err) => {
+            resCalled = true;
+            dispatch(
+              onFailure({
+                label: 'Project Repository Creation Failed',
+                description: err.message,
+                link: '',
+                redirect: '/projects',
+                buttonText: 'Browse Other Projects',
+              })
+            );
+          })
+          .finally(() => {
+            if (!resCalled) {
+              dispatch(
+                onSuccess({
+                  label: 'Project Repository Creation Success',
+                  description: '',
+                  link: '',
+                  redirect: '/projects',
+                  buttonText: 'Browse Projects',
+                })
+              );
+              setStep(2);
+            }
+          });
+      }
     }
   }, [isExpand]);
 

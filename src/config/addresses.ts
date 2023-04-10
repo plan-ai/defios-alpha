@@ -1,5 +1,5 @@
 export const contractAddresses = {
-  defios: '6wAiR6rasR2eQrjWTuVQLUQ7PKVofRDQr9qxeMcj1M9W',
+  defios: 'EhC876RKxVh3MNHsy5XBAYWvfwdSKZLuZcW2VUN7W5oD',
   tokenVesting: '8gaPh52mnkicpXMF7sKVoeiDjga5kbEuPDSGb1uL2mJm',
 };
 

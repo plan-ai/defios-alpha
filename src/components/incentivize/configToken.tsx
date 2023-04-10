@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setAlgo, setStep3Data } from '@/store/creationSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from 'axios';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -123,6 +124,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
             tokenName: tokenName,
             tokenSymbol: tokenSymbol,
             totalSupply: totalSupply,
+            address: undefined
           })
         );
         setIsExpand(false);
@@ -136,6 +138,15 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
         splTokenDecimals !== 0 &&
         splTokenSymbol !== ''
       ) {
+        dispatch(
+          setStep3Data({
+            tokenIcon: undefined,
+            tokenName: splTokenName,
+            tokenSymbol: splTokenSymbol,
+            totalSupply: 0,
+            address: splTokenAddressConfirm,
+          })
+        );
         setIsExpand(false);
         setIsSubmitted(true);
         setStepOfCreation(stepOfCreation + 1);
@@ -145,35 +156,21 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
   const importTokenHandler = () => {
     if (splTokenAddress === '') return;
-    axios
-      .get('/api/token/import-spl-token', {
-        params: {
-          address: splTokenAddress,
-        },
-      })
-      .then((res) => {
-        if (res.data?.type && res.data.type === 'token_account') {
-          setSplTokenName(res.data?.tokenInfo?.name);
-          setSplTokenSymbol(res.data?.tokenInfo?.symbol);
-          setSplTokenDecimals(res.data?.tokenInfo?.decimals);
-          setSplTokenAddressConfirm(res.data?.account);
-          setImportError('');
-        } else {
-          setImportError('Not a valid SPL Token Address try again.');
-          setSplTokenName('');
-          setSplTokenSymbol('');
-          setSplTokenDecimals(0);
-          setSplTokenAddressConfirm('');
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setImportError('Import request failed try again.');
+    fetchTokenMetadata(splTokenAddress).then((res)=>{
+      if(res){
+        setSplTokenName(res.name);
+        setSplTokenSymbol(res.symbol);
+        setSplTokenDecimals(res.decimals);
+        setSplTokenAddressConfirm(res.address.toBase58());
+        setImportError('');
+      }else{
+        setImportError('Not a valid SPL Token Address try again.');
         setSplTokenName('');
         setSplTokenSymbol('');
         setSplTokenDecimals(0);
         setSplTokenAddressConfirm('');
-      });
+      }
+    })
   };
 
   return (

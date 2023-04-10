@@ -153,6 +153,18 @@ export type Defios = {
           "type": {
             "vec": "u64"
           }
+        },
+        {
+          "name": "tokenName",
+          "type": "string"
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string"
+        },
+        {
+          "name": "tokenUri",
+          "type": "string"
         }
       ]
     },
@@ -588,26 +600,6 @@ export type Defios = {
           "isSigner": false
         },
         {
-          "name": "firstCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "secondCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "thirdCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "fourthCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -917,6 +909,11 @@ export type Defios = {
           "name": "userName",
           "type": "string",
           "index": false
+        },
+        {
+          "name": "userPubkey",
+          "type": "publicKey",
+          "index": false
         }
       ]
     },
@@ -1025,6 +1022,21 @@ export type Defios = {
           "type": {
             "vec": "u64"
           },
+          "index": false
+        },
+        {
+          "name": "tokenName",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "tokenUri",
+          "type": "string",
           "index": false
         }
       ]
@@ -1289,6 +1301,18 @@ export const IDL: Defios = {
           "type": {
             "vec": "u64"
           }
+        },
+        {
+          "name": "tokenName",
+          "type": "string"
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string"
+        },
+        {
+          "name": "tokenUri",
+          "type": "string"
         }
       ]
     },
@@ -1724,26 +1748,6 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
-          "name": "firstCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "secondCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "thirdCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "fourthCommitAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -2053,6 +2057,11 @@ export const IDL: Defios = {
           "name": "userName",
           "type": "string",
           "index": false
+        },
+        {
+          "name": "userPubkey",
+          "type": "publicKey",
+          "index": false
         }
       ]
     },
@@ -2161,6 +2170,21 @@ export const IDL: Defios = {
           "type": {
             "vec": "u64"
           },
+          "index": false
+        },
+        {
+          "name": "tokenName",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "tokenSymbol",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "tokenUri",
+          "type": "string",
           "index": false
         }
       ]

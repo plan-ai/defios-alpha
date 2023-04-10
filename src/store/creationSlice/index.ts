@@ -15,6 +15,7 @@ export interface tokenSpecsProps {
   tokenName: string;
   totalSupply: number;
   tokenIcon: File | undefined;
+  address: string | undefined;
 }
 
 export interface step3Props {
@@ -44,6 +45,7 @@ const initialState: creationState = {
       tokenName: '',
       totalSupply: 0,
       tokenSymbol: '',
+      address: undefined,
     },
     algorithm: 'Repository creator',
     distribution: null,
@@ -84,6 +86,7 @@ export const creationSlice = createSlice({
           tokenName: '',
           totalSupply: 0,
           tokenSymbol: '',
+          address: undefined,
         },
         algorithm: 'Repository creator',
         distribution: null,
