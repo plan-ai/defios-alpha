@@ -516,6 +516,13 @@ export const claimTokens = (username: string, user: PublicKey, verifiedUserAccou
       ],
       program.programId
     );
+    const createUserTokenAccountIx =
+    createAssociatedTokenAccountInstruction(
+      user,
+      userRewardTokenAccount,
+      user,
+      rewardsMint
+    );
     await program.methods.claimUserTokens(username).accounts({
       user: user,
       userRewardTokenAccount: userRewardTokenAccount,
@@ -531,7 +538,7 @@ export const claimTokens = (username: string, user: PublicKey, verifiedUserAccou
       verifiedUser: verifiedUserAccount,
       rewardsMint: rewardsMint,
       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    })
+    }).preInstructions([createUserTokenAccountIx])
       .rpc()
       .then((res) => {
         resolve(res)
