@@ -138,7 +138,7 @@ export default function Projects() {
   const { data: session } = useSession();
   const wallet = useWallet();
   const userMappingState = useAppSelector(selectUserMapping);
-
+  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
   const [search, setSearch] = useState('');
   const [orderBy, setOrderBy] = useState<any>(sort[0]);
   const [isMine, setIsMine] = useState(false);
@@ -438,7 +438,7 @@ export default function Projects() {
     dispatch(onLoading('Claiming Pending Tokens on the Project...'));
     claimTokens(
       //@ts-ignore
-      session?.user.id,
+      githubInfo?.login,
       wallet.publicKey as PublicKey,
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
