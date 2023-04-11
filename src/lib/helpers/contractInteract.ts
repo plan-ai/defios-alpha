@@ -491,6 +491,58 @@ export const addCommit = (commitCreator: PublicKey, issueAccount: PublicKey, com
   })
 }
 
+export const claimTokens = (username: string, user: PublicKey, verifiedUserAccount: PublicKey, repositoryAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer)
+    const program = await getDefiOsProgram(provider)
+    const { repositoryCreator, rewardsMint } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+    const repositoryTokenPoolAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      repositoryAccount,
+      true
+    );
+    const userRewardTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      user
+    );
+    const [userClaimAccount] = await web3.PublicKey.findProgramAddress(
+      [
+        Buffer.from("user_claim"),
+        Buffer.from(username),
+        repositoryAccount.toBuffer(),
+        nameRouterAccount.toBuffer()
+      ],
+      program.programId
+    );
+    await program.methods.claimUserTokens(username).accounts({
+      user: user,
+      userRewardTokenAccount: userRewardTokenAccount,
+      routerCreator: routerCreator,
+      nameRouterAccount: nameRouterAccount,
+      userClaimAccount: userClaimAccount,
+      repositoryAccount: repositoryAccount,
+      repositoryCreator: repositoryCreator,
+      repositoryTokenPoolAccount: repositoryTokenPoolAccount,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      systemProgram: web3.SystemProgram.programId,
+      rent: web3.SYSVAR_RENT_PUBKEY,
+      verifiedUser: verifiedUserAccount,
+      rewardsMint: rewardsMint,
+      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+    })
+      .rpc()
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((e) => {
+        reject(e)
+      })
+  })
+
+}
+
 export const claimReward = (commitCreator: PublicKey, commitVerifiedUser: PublicKey, issueAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer)

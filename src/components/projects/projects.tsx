@@ -24,6 +24,11 @@ import { clicked } from '@/store/notifClickSlice';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
+import { claimTokens } from '@/lib/helpers/contractInteract';
+import { selectUserMapping } from '@/store/userMappingSlice';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useSession } from 'next-auth/react';
+import { PublicKey } from '@solana/web3.js';
 
 const sort = [
   { id: 0, name: 'Hot', order_by: '-num_open_issues' },
@@ -129,6 +134,9 @@ const Search: React.FC<SearchProps> = ({
 
 export default function Projects() {
   const router = useRouter();
+  const { data: session } = useSession();
+  const wallet = useWallet();
+  const userMappingState = useAppSelector(selectUserMapping);
 
   const [search, setSearch] = useState('');
   const [orderBy, setOrderBy] = useState<any>(sort[0]);
@@ -413,6 +421,18 @@ export default function Projects() {
     }
   }, [projectsData, searchQuery, setSearchQuery, expandFirst, dispatch]);
 
+  const claimPendingTokens = (project: any) => {
+    claimTokens(
+      //@ts-ignore
+      session?.user.id,
+      wallet.publicKey as PublicKey,
+      new PublicKey(
+        userMappingState.userMapping?.verifiedUserAccount as string
+      ),
+      new PublicKey(project.account) // Pass here the project account
+    );
+  };
+
   return (
     <div className="mx-auto w-full">
       <div className="mb-5 flex w-full items-center justify-between">
@@ -560,7 +580,15 @@ export default function Projects() {
                 Explore Open Issues
               </Button>
               <ActiveLink href={routes.projects}>
-                <Button shape="rounded" color="success" fullWidth size="medium">
+                <Button
+                  shape="rounded"
+                  color="success"
+                  fullWidth
+                  size="medium"
+                  onClick={() => {
+                    claimPendingTokens(project);
+                  }}
+                >
                   Claim Pending Tokens
                 </Button>
               </ActiveLink>
