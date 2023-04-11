@@ -454,7 +454,7 @@ export default function Projects() {
             buttonText: 'Browse Projects',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              ? `https://solscan.io/tx/${res.toString()}?cluster=devnet`
               : '',
           })
         );
@@ -648,11 +648,11 @@ export default function Projects() {
                 color="success"
                 fullWidth
                 size="medium"
-                // disabled={!project.claimable}
+                disabled={!project.claimable}
                 onClick={() => {
-                  // if (project.claimable) {
+                  if (project.claimable) {
                     claimPendingTokens(project);
-                  // }
+                  }
                 }}
               >
                 Claim Pending Tokens
