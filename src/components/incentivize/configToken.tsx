@@ -124,7 +124,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
             tokenName: tokenName,
             tokenSymbol: tokenSymbol,
             totalSupply: totalSupply,
-            address: undefined
+            address: undefined,
           })
         );
         setIsExpand(false);
@@ -156,21 +156,27 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
   const importTokenHandler = () => {
     if (splTokenAddress === '') return;
-    fetchTokenMetadata(splTokenAddress).then((res)=>{
-      if(res){
+    fetchTokenMetadata(splTokenAddress).then((res) => {
+      if (res) {
         setSplTokenName(res.name);
         setSplTokenSymbol(res.symbol);
         setSplTokenDecimals(res.decimals);
         setSplTokenAddressConfirm(res.address.toBase58());
         setImportError('');
-      }else{
+      } else {
         setImportError('Not a valid SPL Token Address try again.');
         setSplTokenName('');
         setSplTokenSymbol('');
         setSplTokenDecimals(0);
         setSplTokenAddressConfirm('');
       }
-    })
+    }).catch(()=>{
+      setImportError('Not a valid SPL Token Address try again.');
+      setSplTokenName('');
+      setSplTokenSymbol('');
+      setSplTokenDecimals(0);
+      setSplTokenAddressConfirm('');
+    });
   };
 
   return (
@@ -300,7 +306,11 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                           value={splTokenAddress}
                           onChange={(e) => setSplTokenAddress(e.target.value)}
                         />
-                        <Button onClick={importTokenHandler} className='mt-8' shape="rounded">
+                        <Button
+                          onClick={importTokenHandler}
+                          className="mt-8"
+                          shape="rounded"
+                        >
                           Import
                         </Button>
                       </div>

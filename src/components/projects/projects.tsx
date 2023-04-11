@@ -21,6 +21,7 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 import { clicked } from '@/store/notifClickSlice';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
@@ -422,6 +423,19 @@ export default function Projects() {
   }, [projectsData, searchQuery, setSearchQuery, expandFirst, dispatch]);
 
   const claimPendingTokens = (project: any) => {
+    let config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: 'https://api-v1.defi-os.com/projects/claims',
+      headers: {
+        Authorization: firebase_jwt,
+      },
+      params: {
+        project_id: project._id,
+      },
+    };
+    let resCalled = false;
+    dispatch(onLoading('Claiming Pending Tokens on the Project...'));
     claimTokens(
       //@ts-ignore
       session?.user.id,
@@ -429,8 +443,58 @@ export default function Projects() {
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
-      new PublicKey(project.account) // Pass here the project account
-    );
+      new PublicKey(project.project_account) // Pass here the project account
+    )
+      .then((res: any) => {
+        resCalled = true;
+        dispatch(
+          onSuccess({
+            label: 'Pending Token Claim Successful',
+            description: 'Check out your token claim at',
+            buttonText: 'Browse Projects',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
+        axios(config)
+          .then(() => {
+            setTriggerSearch(true);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Pending Token Claim Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+        setTriggerSearch(true);
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Pending Token Claim Successful',
+              description: '',
+              buttonText: 'Browse Projects',
+              redirect: null,
+              link: '',
+            })
+          );
+          axios(config)
+            .then(() => {
+              setTriggerSearch(true);
+            })
+            .catch((err) => console.log(err));
+        }
+      });
   };
 
   return (
@@ -579,19 +643,20 @@ export default function Projects() {
               >
                 Explore Open Issues
               </Button>
-              <ActiveLink href={routes.projects}>
-                <Button
-                  shape="rounded"
-                  color="success"
-                  fullWidth
-                  size="medium"
-                  onClick={() => {
+              <Button
+                shape="rounded"
+                color="success"
+                fullWidth
+                size="medium"
+                // disabled={!project.claimable}
+                onClick={() => {
+                  // if (project.claimable) {
                     claimPendingTokens(project);
-                  }}
-                >
-                  Claim Pending Tokens
-                </Button>
-              </ActiveLink>
+                  // }
+                }}
+              >
+                Claim Pending Tokens
+              </Button>
             </div>
           </ProjectList>
         ))}

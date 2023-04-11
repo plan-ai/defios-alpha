@@ -162,7 +162,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
           <div className="text-xl">4. Creation Process</div>
           {stepOfCreation === 4 && (
             <div className="flex text-sm text-gray-500">
-              ( {step - 1}/5 creation steps are completed )
+              ( {step - 1}/1 creation steps are completed )
             </div>
           )}
         </div>
