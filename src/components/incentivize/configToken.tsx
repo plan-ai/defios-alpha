@@ -100,14 +100,36 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const [splTokenDecimals, setSplTokenDecimals] = useState(0);
 
   useEffect(() => {
+    setTokenType('Create New Token');
+    setIsSubmitted(false);
     setIsExpand(false);
+
+    setImportError('');
+    setSplTokenName('');
+    setSplTokenSymbol('');
+    setSplTokenDecimals(0);
+    setSplTokenAddressConfirm('');
+
     setTokenSymbol('');
     setTokenName('');
     setTotalSupply(0);
     setSplTokenAddress('');
-    setTokenType('Create New Token');
-    setIsSubmitted(false);
   }, [reset]);
+
+  useEffect(() => {
+    if (tokenType == 'Create New Token') {
+      setImportError('');
+      setSplTokenName('');
+      setSplTokenSymbol('');
+      setSplTokenDecimals(0);
+      setSplTokenAddressConfirm('');
+    } else {
+      setTokenSymbol('');
+      setTokenName('');
+      setTotalSupply(0);
+      setSplTokenAddress('');
+    }
+  }, [tokenType]);
 
   useEffect(() => {
     if (stepOfCreation === 3) {
@@ -156,27 +178,29 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
   const importTokenHandler = () => {
     if (splTokenAddress === '') return;
-    fetchTokenMetadata(splTokenAddress).then((res) => {
-      if (res) {
-        setSplTokenName(res.name);
-        setSplTokenSymbol(res.symbol);
-        setSplTokenDecimals(res.decimals);
-        setSplTokenAddressConfirm(res.address.toBase58());
-        setImportError('');
-      } else {
+    fetchTokenMetadata(splTokenAddress)
+      .then((res) => {
+        if (res) {
+          setSplTokenName(res.name);
+          setSplTokenSymbol(res.symbol);
+          setSplTokenDecimals(res.decimals);
+          setSplTokenAddressConfirm(res.address.toBase58());
+          setImportError('');
+        } else {
+          setImportError('Not a valid SPL Token Address try again.');
+          setSplTokenName('');
+          setSplTokenSymbol('');
+          setSplTokenDecimals(0);
+          setSplTokenAddressConfirm('');
+        }
+      })
+      .catch(() => {
         setImportError('Not a valid SPL Token Address try again.');
         setSplTokenName('');
         setSplTokenSymbol('');
         setSplTokenDecimals(0);
         setSplTokenAddressConfirm('');
-      }
-    }).catch(()=>{
-      setImportError('Not a valid SPL Token Address try again.');
-      setSplTokenName('');
-      setSplTokenSymbol('');
-      setSplTokenDecimals(0);
-      setSplTokenAddressConfirm('');
-    });
+      });
   };
 
   return (

@@ -399,10 +399,10 @@ const IssuesPage: NextPageWithLayout = () => {
             <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Project Name
             </span>
-            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Staked Tokens
             </span>
-            <span className="col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Tags
             </span>
           </div>

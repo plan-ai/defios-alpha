@@ -5,6 +5,8 @@ import GithubTags from '@/components/ui/tags/github-tags';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
+import { fetchDecimals } from '@/lib/helpers/metadata';
+
 interface IssuesListTypes {
   data: any;
   initExpand?: boolean;
@@ -18,11 +20,19 @@ export default function IssuesList({
   let [isExpand, setIsExpand] = useState(initExpand || false);
   const wallet = useWallet();
 
-  const removeDuplicates = (arr:string[]) => {
+  let [tokenDecimals, setTokenDecimals] = useState(1);
+
+  const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
   };
 
+  const getDecimals = async () => {
+    const decimals = await fetchDecimals(data?.issue_stake_token_url);
+    setTokenDecimals(decimals);
+  };
+
   useEffect(() => {
+    getDecimals();
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
     }
@@ -39,14 +49,15 @@ export default function IssuesList({
         <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           <IssueState state={data?.issue_state} />
         </span>
-        <span className="text-center text-sm font-medium tracking-wider text-white">
+        <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           {data?.issue_project_name}
         </span>
-        <span className="text-center text-sm font-medium tracking-wider text-white">
-          {Math.round(data?.issue_stake_amount * 100) / 100}{' '}
+        <span className="col-span-2 text-center text-sm font-medium tracking-wider text-white">
+          {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
+            100}{' '}
           {data?.issue_stake_token_symbol}
         </span>
-        <span className="col-span-2 flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
+        <span className="flex flex-wrap items-center justify-center text-center text-sm font-medium tracking-wider text-white">
           {data?.issue_tags?.length !== 0 &&
             removeDuplicates(data?.issue_tags)?.map(
               (tag: string, idx: number) => <GithubTags tag={tag} key={idx} />

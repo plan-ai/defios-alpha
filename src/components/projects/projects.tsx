@@ -358,19 +358,38 @@ export default function Projects() {
       await projects.map(async (project: any): Promise<any> => {
         const _project = project;
         const _url = _project?.project_token?.token_image_url;
-        const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-        await axios
-          .get(IpfsNewGateway)
-          .then((res) => {
-            if (typeof res.data === 'object') {
-              if (res.data.image) {
-                _project.project_token.token_image_url = res.data.image;
+        if (_url.includes('gateway.pinata.cloud')) {
+          const IpfsNewGateway = _url.replace(
+            'gateway.pinata.cloud',
+            'ipfs.io'
+          );
+          await axios
+            .get(IpfsNewGateway)
+            .then((res) => {
+              if (typeof res.data === 'object') {
+                if (res.data.image) {
+                  _project.project_token.token_image_url = res.data.image;
+                }
               }
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        if (_url == '') {
+          await axios
+            .get(
+              `https://public-api.solscan.io/token/meta?tokenAddress=${_project.project_token.token_spl_addr}`
+            )
+            .then((res) => {
+              if (res.data.icon) {
+                _project.project_token.token_image_url = res.data.icon;
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
         return _project;
       })
     );
@@ -648,11 +667,11 @@ export default function Projects() {
                 color="success"
                 fullWidth
                 size="medium"
-                disabled={!project.claimable}
+                // disabled={!project.claimable}
                 onClick={() => {
-                  if (project.claimable) {
-                    claimPendingTokens(project);
-                  }
+                  // if (project.claimable) {
+                  claimPendingTokens(project);
+                  // }
                 }}
               >
                 Claim Pending Tokens
