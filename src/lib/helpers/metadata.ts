@@ -47,3 +47,13 @@ export const fetchTokenMetadata = async (tokenID: string) => {
         ...nft, ...mintInfo
     }
 }
+
+export const fetchDecimals = async (tokenID: string) => {
+    const connection = new Connection(clusterApiUrl("devnet"));
+    const mintAddress = new PublicKey(tokenID);
+    const mintInfo = await getMint(
+        connection,
+        mintAddress
+    )
+    return mintInfo.decimals
+}
