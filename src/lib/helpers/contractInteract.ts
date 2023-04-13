@@ -29,7 +29,7 @@ import {
 import sha1 from 'sha1';
 import { rectToBox } from 'reactflow';
 
-const nameRouterAccount = new PublicKey("zNjz5kM2GTgAbYuoQ576D9QKEp2D4xTB3khVH57rWLr")
+const nameRouterAccount = new PublicKey("DMdqFYVfw9Yn6X2BDB12Gce55KXZUX8NacHqcnvn14wq")
 const routerCreator = new PublicKey("Au5UxjuuLLD9AQuE4QWQ1ucUqKPjaXQ8EkSBokUPCiB6")
 
 export const getProvider = async (
