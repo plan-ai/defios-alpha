@@ -352,14 +352,6 @@ export const stakeIssue = (issueStaker: PublicKey, issueAccount: PublicKey, amou
       issueStaker
     );
 
-    const createIssueStakerTokenAccountIx =
-      createAssociatedTokenAccountInstruction(
-        issueStaker,
-        issueStakerTokenAccount,
-        issueStaker,
-        rewardsMint
-      );
-
     const [issueStakerAccount] = await web3.PublicKey.findProgramAddress(
       [
         Buffer.from('issuestaker'),
@@ -388,7 +380,6 @@ export const stakeIssue = (issueStaker: PublicKey, issueAccount: PublicKey, amou
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .preInstructions([createIssueStakerTokenAccountIx])
       .rpc({ skipPreflight: true })
       .then((res) => {
         resolve(res)
