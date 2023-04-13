@@ -66,23 +66,44 @@ export default function RightSideInfo({
       return;
     const _url = coinInfo?.token_image_url;
     const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-    axios
-      .get(IpfsNewGateway)
-      .then((res) => {
-        if (typeof res.data === 'object') {
-          if (res.data.image) {
-            setTokenImgUrl(res.data.image);
+    if (_url.includes('gateway.pinata.cloud')) {
+      axios
+        .get(IpfsNewGateway)
+        .then((res) => {
+          if (typeof res.data === 'object') {
+            if (res.data.image) {
+              setTokenImgUrl(res.data.image);
+            } else {
+              setTokenImgUrl(coinInfo?.token_image_url);
+            }
           } else {
             setTokenImgUrl(coinInfo?.token_image_url);
           }
-        } else {
+        })
+        .catch((err) => {
+          console.log(err);
           setTokenImgUrl(coinInfo?.token_image_url);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setTokenImgUrl(coinInfo?.token_image_url);
-      });
+        });
+    }
+    if (_url == '') {
+      axios
+        .get(
+          `https://public-api.solscan.io/token/meta?tokenAddress=${coinInfo?.token_spl_addr}`,
+          {
+            headers: {
+              token: process.env.SOLSCAN_TOKEN,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.icon) {
+            setTokenImgUrl(res.data.icon);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [coinInfo]);
 
   useEffect(() => {

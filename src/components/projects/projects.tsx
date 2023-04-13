@@ -379,7 +379,11 @@ export default function Projects() {
         if (_url == '') {
           await axios
             .get(
-              `https://public-api.solscan.io/token/meta?tokenAddress=${_project.project_token.token_spl_addr}`
+              `https://public-api.solscan.io/token/meta?tokenAddress=${_project.project_token.token_spl_addr}`,{
+                headers:{
+                  token: process.env.SOLSCAN_TOKEN
+                }
+              }
             )
             .then((res) => {
               if (res.data.icon) {

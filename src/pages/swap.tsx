@@ -30,19 +30,43 @@ const SwapPage: NextPageWithLayout = () => {
       await tokens.map(async (token: any): Promise<any> => {
         const _token = token;
         const _url = _token?.token_image_url;
-        const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-        await axios
-          .get(IpfsNewGateway)
-          .then((res) => {
-            if (typeof res.data === 'object') {
-              if (res.data.image) {
-                _token.token_image_url = res.data.image;
+        if (_url.includes('gateway.pinata.cloud')) {
+          const IpfsNewGateway = _url.replace(
+            'gateway.pinata.cloud',
+            'ipfs.io'
+          );
+          await axios
+            .get(IpfsNewGateway)
+            .then((res) => {
+              if (typeof res.data === 'object') {
+                if (res.data.image) {
+                  _token.token_image_url = res.data.image;
+                }
               }
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        if (_url == '') {
+          await axios
+            .get(
+              `https://public-api.solscan.io/token/meta?tokenAddress=${_token.token_spl_addr}`,
+              {
+                headers: {
+                  token: process.env.SOLSCAN_TOKEN,
+                },
+              }
+            )
+            .then((res) => {
+              if (res.data.icon) {
+                _token.token_image_url = res.data.icon;
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
         return _token;
       })
     );
