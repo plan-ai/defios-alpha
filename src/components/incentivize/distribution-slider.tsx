@@ -115,8 +115,12 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
 
     setFetchData(resp);
 
-    if (Object.keys(resp).length === 0) return;
-    console.log('emptyReturn');
+    if (
+      resp === null ||
+      resp === undefined ||
+      Object.keys(resp).length === 0
+    )
+      return;
     let isContributor = false;
     let isCollaborator = false;
     for (let i = 0; i < resp.length; i++) {

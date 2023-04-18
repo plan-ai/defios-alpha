@@ -85,7 +85,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const [tokenType, setTokenType] = useState('Create New Token');
   const userMappingState = useAppSelector(selectUserMapping);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
   //Create New Token
   const [importError, setImportError] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
