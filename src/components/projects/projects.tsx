@@ -353,6 +353,7 @@ export default function Projects() {
   }, [triggerSearch, firebase_jwt]);
 
   const getAllImgUrls = async (data: any) => {
+    setProjectsData(data);
     const projects = data;
     const newProjects = await Promise.all(
       await projects.map(async (project: any): Promise<any> => {
