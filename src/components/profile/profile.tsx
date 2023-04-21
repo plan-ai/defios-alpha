@@ -83,7 +83,7 @@ export default function Profile() {
               onClick={() => handleCopyToClipboard()}
             >
               {copyButtonStatus ? (
-                <Check className="h-auto w-3.5 text-green-500" />
+                <Check className="h-auto w-3.5 text-new-green" />
               ) : (
                 <Copy className="h-auto w-3.5" />
               )}

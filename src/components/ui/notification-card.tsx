@@ -76,7 +76,7 @@ export default function NotificationCard({
   return (
     <div
       onClick={onClickHandler}
-      className="mb-4 flex items-start rounded-lg bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5"
+      className="mb-4 flex items-start rounded-xl bg-light-dark p-4 shadow-card transition-all duration-200 last:mb-0 hover:-translate-y-0.5 hover:shadow-large sm:mb-5 sm:p-5"
     >
       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full sm:h-12 sm:w-12">
         <Image
@@ -91,11 +91,11 @@ export default function NotificationCard({
           <div
             className={cn({
               'text-red-500': notif_type == 'opened_new_issue',
-              'text-green-500': notif_type == 'staked_initial_amount',
+              'text-new-green': notif_type == 'staked_initial_amount',
               'text-yellow-400': notif_type == 'voting_started',
               'text-emerald-400': notif_type == 'vote_cast',
               'text-orange-500': notif_type == 'voting_closed',
-              'text-blue-500': notif_type == 'issue_closed',
+              'text-new-blue': notif_type == 'issue_closed',
             })}
           >
             <span className="mr-2 font-medium text-white">{sender_name}</span>

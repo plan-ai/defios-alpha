@@ -94,7 +94,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-lg transition-transform hover:-translate-y-1',
+        'group relative overflow-hidden rounded-xl transition-transform hover:-translate-y-1',
         className
       )}
     >

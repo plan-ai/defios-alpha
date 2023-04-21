@@ -55,7 +55,7 @@ export default function CollectionSelect({ onSelect }: CollectionSelectTypes) {
     onSelect(value);
   }
   return (
-    <div className="w-full rounded-lg bg-light-dark text-sm shadow-large">
+    <div className="w-full rounded-xl bg-light-dark text-sm shadow-large">
       <div className="relative">
         <SearchIcon className="absolute left-6 h-full text-white" />
         <input

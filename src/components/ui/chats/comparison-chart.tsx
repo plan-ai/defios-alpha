@@ -44,13 +44,13 @@ function RadioGroupOption({ value }: RadioOptionProps) {
     <RadioGroup.Option value={value}>
       {({ checked }) => (
         <span
-          className={`relative flex h-8 cursor-pointer items-center justify-center rounded-lg px-3 text-sm uppercase tracking-wider ${
+          className={`relative flex h-8 cursor-pointer items-center justify-center rounded-xl px-3 text-sm uppercase tracking-wider ${
             checked ? 'text-white' : 'text-gray-400'
           }`}
         >
           {checked && (
             <motion.span
-              className="absolute bottom-0 left-0 right-0 h-full w-full rounded-lg bg-brand shadow-large"
+              className="absolute bottom-0 left-0 right-0 h-full w-full rounded-xl bg-brand shadow-large"
               layoutId="statusIndicator"
             />
           )}
@@ -91,7 +91,7 @@ export default function ComparisonChart() {
   };
 
   return (
-    <div className="rounded-lg bg-light-dark p-6 shadow-card sm:p-8">
+    <div className="rounded-xl bg-light-dark p-6 shadow-card sm:p-8">
       <div className="flex flex-col-reverse justify-between gap-8 md:items-start lg:flex-row lg:items-center lg:gap-4">
         <div>
           <div className="text-sm uppercase tracking-wider text-gray-400 sm:text-base">
@@ -139,7 +139,7 @@ export default function ComparisonChart() {
             <span
               className={cn(
                 'mb-1 flex items-center text-xs sm:mb-0 sm:text-base',
-                priceDiff > 0 ? 'text-green-500' : 'text-red-500'
+                priceDiff > 0 ? 'text-new-green' : 'text-red-500'
               )}
             >
               <span

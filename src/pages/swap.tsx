@@ -150,6 +150,7 @@ const SwapPage: NextPageWithLayout = () => {
             shape="rounded"
             fullWidth={true}
             className="mt-6 uppercase xs:mt-8 xs:tracking-widest"
+            color="info"
           >
             SWAP
           </Button>

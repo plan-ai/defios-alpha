@@ -35,7 +35,7 @@ function SortList() {
         Distribution Strategy
       </span>
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-12 w-full items-center justify-between rounded-lg border border-gray-700 bg-light-dark px-4 text-sm text-white">
+        <Listbox.Button className="flex h-12 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 text-sm text-white">
           {selectedItem.name}
           <ChevronDown />
         </Listbox.Button>
@@ -48,12 +48,12 @@ function SortList() {
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 translate-y-2"
         >
-          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-lg bg-dark p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
+          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-xl bg-dark p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
             {sort.map((item) => (
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-lg px-3 py-3 text-sm font-medium text-white transition  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-3 text-sm font-medium text-white transition  ${
                       selected ? 'my-1 bg-gray-700' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -204,7 +204,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   };
 
   return (
-    <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">
+    <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div className="flex w-full flex-col gap-3">
           <div className="text-xl">3. Configure Token</div>
@@ -232,7 +232,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
           </div>
         )}
         {stepOfCreation > 3 && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-new-blue">
             <Check />
           </div>
         )}

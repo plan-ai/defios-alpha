@@ -38,7 +38,7 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
   }, [stepOfCreation]);
 
   return (
-    <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">
+    <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div
           onClick={() => {
@@ -61,7 +61,7 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
           )}
         </div>
         {stepOfCreation > 2 && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-new-blue">
             <Check />
           </div>
         )}
@@ -93,7 +93,7 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
               <div className="h-[90vh] w-[35vw] rounded-2xl bg-dark">
                 <RepoModal
                   repo={repo}
-                  setRepo={(repo)=>{
+                  setRepo={(repo) => {
                     setRepo(repo);
                     if (setRepoCallback) setRepoCallback(repo);
                   }}

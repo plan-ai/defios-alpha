@@ -129,7 +129,7 @@ export default function RightSideInfo({
     >
       <Scrollbar style={{ height: 'calc(100% - 20px)' }}>
         <div className="relative z-20 h-screen pb-5">
-          <div className="my-16 mx-5 flex h-full flex-col justify-between overflow-x-hidden rounded-lg bg-transparent sm:mx-6 sm:flex-row lg:mx-0 lg:flex-col lg:p-6 xl:my-0 2xl:p-8">
+          <div className="my-16 mx-5 flex h-full flex-col justify-between overflow-x-hidden rounded-xl bg-transparent sm:mx-6 sm:flex-row lg:mx-0 lg:flex-col lg:p-6 xl:my-0 2xl:p-8">
             {coinInfo !== null ? (
               <div className="w-full sm:w-[48%] lg:w-full">
                 {coinInfo?.token_image_url && (
@@ -179,7 +179,7 @@ export default function RightSideInfo({
                   <div
                     className={cn({
                       'text-red-500': coinInfo?.token_ltp_24h_change < 0,
-                      'text-green-500': coinInfo?.token_ltp_24h_change > 0,
+                      'text-new-green': coinInfo?.token_ltp_24h_change > 0,
                     })}
                   >{`(${coinInfo?.token_ltp_24h_change >= 0 ? '+' : ''}${
                     Math.round(coinInfo?.token_ltp_24h_change * 100) / 100

@@ -44,7 +44,7 @@ export default function CoinSelectView({
     }
   }
   return (
-    <div className="w-full rounded-lg bg-dark text-sm shadow-large xs:w-[400px]">
+    <div className="w-full rounded-xl bg-dark text-sm shadow-large xs:w-[400px]">
       <h2 className="p-6 text-lg font-medium uppercase text-white">Pay with</h2>
       <div className="relative">
         <SearchIcon className="absolute left-6 h-full text-gray-700" />

@@ -34,8 +34,8 @@ const PriceChart: React.FC<PriceChartProps> = ({ chartData, change }) => {
               x2="0"
               y2="1"
             >
-              <stop offset="5%" stopColor="#16a34a" stopOpacity={0.5} />
-              <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
+              <stop offset="5%" stopColor="#0c373d" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="#1D606A" stopOpacity={0} />
             </linearGradient>
             <linearGradient
               id="liquidity-gradient-red"
@@ -53,7 +53,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ chartData, change }) => {
             dataKey="value"
             stroke={
               change === '+'
-                ? '#22c55e'
+                ? '#1D606A'
                 : change === '-'
                 ? '#dc2626'
                 : '#7645D9'

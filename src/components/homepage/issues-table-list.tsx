@@ -27,7 +27,7 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({ item }) => {
 
   return (
     <div
-      className="relative mb-2 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large"
+      className="relative mb-2 overflow-hidden rounded-xl bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large"
       onClick={onClickHandler}
     >
       <div

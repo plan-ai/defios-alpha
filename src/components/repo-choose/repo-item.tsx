@@ -23,7 +23,7 @@ const RepoItem: React.FC<RepoItemProps> = ({
   return (
     <div
       className={cn(
-        'mb-2 flex h-28 w-full flex-col rounded-lg border border-gray-600 p-2',
+        'mb-2 flex h-28 w-full flex-col rounded-xl border border-gray-600 p-2',
         { 'border-blue-700': selectedRepo === html_url }
       )}
       onClick={() => setSelect(html_url)}
@@ -41,7 +41,7 @@ const RepoItem: React.FC<RepoItemProps> = ({
         {description && description.length > 140
           ? description.slice(0, 140) + '...'
           : description}
-        {description===null && (
+        {description === null && (
           <div className="text-gray-500">No Description</div>
         )}
       </div>

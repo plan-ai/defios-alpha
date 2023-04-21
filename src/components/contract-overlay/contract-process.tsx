@@ -63,9 +63,9 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
         {/* success */}
         {callStatus === 'success' && (
-          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-lg bg-light-dark px-10 py-10 shadow-xl">
+          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark px-10 py-10 shadow-xl">
             <div className="flex flex-col items-center justify-center gap-5">
-              <CheckBadgeIcon className="h-16 w-16 text-blue-500" />
+              <CheckBadgeIcon className="h-16 w-16 text-new-blue" />
               <div className="text-center text-lg">{successLabel}</div>
             </div>
             <div className="text-md text-center text-gray-400">
@@ -97,7 +97,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
         {/* failure */}
         {callStatus === 'failure' && (
-          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-lg bg-light-dark px-10 py-10 shadow-xl">
+          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark px-10 py-10 shadow-xl">
             <div className="flex flex-col items-center justify-center gap-5">
               <ExclamationTriangleIcon className="h-16 w-16 text-red-600" />
               <div className="text-center text-lg">{failureLabel}</div>

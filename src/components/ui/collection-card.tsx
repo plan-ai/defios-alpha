@@ -44,7 +44,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
   return (
     <div
       className={cn(
-        'group relative overflow-hidden rounded-lg transition-transform hover:-translate-y-1',
+        'group relative overflow-hidden rounded-xl transition-transform hover:-translate-y-1',
         className
       )}
     >
@@ -61,7 +61,7 @@ export default function CollectionCard({ item, className = '' }: CardProps) {
               ? repoURL.replace('https://github.com', '').slice(0, 27) + '...'
               : repoURL.replace('https://github.com', '')}
           </AnchorLink>
-          <SecurityStatus security={Security}/>
+          <SecurityStatus security={Security} />
         </div>
         <div className="flex w-full flex-col items-center justify-center">
           <div className="my-5 flex w-full flex-row items-center justify-center">

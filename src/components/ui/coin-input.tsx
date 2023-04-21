@@ -67,7 +67,7 @@ export default function CoinInput({
     <>
       <div
         className={cn(
-          'group flex min-h-[70px] rounded-lg border border-gray-700 transition-colors duration-200 hover:border-gray-600',
+          'group flex min-h-[70px] rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600',
           className
         )}
       >

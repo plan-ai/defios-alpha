@@ -25,8 +25,8 @@ export const PRCard: React.FC<PRChekerProps> = ({
   return (
     <div
       className={cn(
-        'flex h-52 w-full flex-col justify-between rounded-lg border border-gray-800 bg-dark p-4 shadow-xl',
-        { 'border-3 border-blue-500': checked }
+        'flex h-52 w-full flex-col justify-between rounded-xl border border-gray-800 bg-dark p-4 shadow-xl',
+        { 'border-3 border-new-blue': checked }
       )}
     >
       <div className="flex w-full justify-between">

@@ -87,7 +87,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         </h3>
         <div className="mb-4 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
           <div
-            className={cn('h-2.5 rounded-full bg-blue-600 dark:bg-blue-500')}
+            className={cn('h-2.5 rounded-full bg-blue-600 dark:bg-new-blue')}
             style={{ width: `${(raisedAmount / toBeRaised) * 100}%` }}
           ></div>
         </div>

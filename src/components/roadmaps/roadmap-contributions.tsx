@@ -13,7 +13,7 @@ const RoadmapContributions: React.FC<RoadmapContributionsProps> = ({
 }) => {
   const [percentage, setPercentage] = useState(contributions?.[0]?.value);
   return (
-    <div className="rounded-lg bg-transparent  ">
+    <div className="rounded-xl bg-transparent  ">
       <div className="relative flex h-[290px] justify-center">
         <ResponsiveContainer width={290} height="100%">
           <PieChart className="h-[290px] w-[290px] md:scale-[.90] xl:scale-100">

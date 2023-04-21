@@ -20,12 +20,12 @@ export default function NftDropDown() {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-4"
         >
-          <Menu.Items className="absolute right-0 z-20 mt-5 w-60 origin-top-right rounded-lg bg-gray-800 py-3 shadow-large">
+          <Menu.Items className="absolute right-0 z-20 mt-5 w-60 origin-top-right rounded-xl bg-gray-800 py-3 shadow-large">
             <div className="px-3">
               <Menu.Item>
                 <AnchorLink
                   href="/"
-                  className="block rounded-lg px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
                 >
                   Place floor bid
                   <span className="ml-2 inline-flex rounded-md bg-[#FF445C] px-2 py-1 text-xs text-white">
@@ -36,7 +36,7 @@ export default function NftDropDown() {
               <Menu.Item>
                 <AnchorLink
                   href="/profile"
-                  className="block rounded-lg px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
                 >
                   New bid
                 </AnchorLink>
@@ -47,7 +47,7 @@ export default function NftDropDown() {
               <Menu.Item>
                 <AnchorLink
                   href="/"
-                  className="block rounded-lg px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
                 >
                   Refresh metadata
                 </AnchorLink>
@@ -55,7 +55,7 @@ export default function NftDropDown() {
               <Menu.Item>
                 <AnchorLink
                   href="/"
-                  className="block rounded-lg px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
                 >
                   Open original ipfs
                 </AnchorLink>
@@ -63,7 +63,7 @@ export default function NftDropDown() {
               <Menu.Item>
                 <AnchorLink
                   href="/"
-                  className="block rounded-lg px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
+                  className="block rounded-xl px-3 py-2 text-sm font-medium uppercase text-white transition hover:bg-gray-700"
                 >
                   Report
                 </AnchorLink>

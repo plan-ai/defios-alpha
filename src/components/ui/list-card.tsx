@@ -36,7 +36,7 @@ function handleImageSize(variant: string) {
 
 export default function ListCard({
   item,
-  className = 'p-3 tracking-wider rounded-lg sm:p-4',
+  className = 'p-3 tracking-wider rounded-xl sm:p-4',
   variant = 'small',
 }: CardProps) {
   const { name, logo, balance, coinType, element } = item ?? {};

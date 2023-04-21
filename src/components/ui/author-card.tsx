@@ -8,16 +8,18 @@ type AuthorCardProps = {
 export default function AuthorCard({ image, name, role }: AuthorCardProps) {
   return (
     <div
-      className={`flex items-center rounded-lg  ${
-        name ? 'bg-light-dark  p-5' : 'ml-3 mr-3 justify-center bg-none p-5'
+      className={`flex items-center rounded-xl  ${
+        name
+          ? 'bg-light-dark  px-3 py-4'
+          : 'ml-3 mr-3 justify-center bg-none p-3 py-4'
       }`}
     >
       <Image
         src={image}
         alt={name || ''}
         className="rounded-full border-2 border-gray-400"
-        width={42}
-        height={42}
+        width={56}
+        height={56}
       />
       <div className="pl-3">
         <h3 className="text-sm font-medium uppercase tracking-wide text-white">

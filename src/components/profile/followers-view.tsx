@@ -8,7 +8,7 @@ export default function Followers({ ...props }) {
 
   return (
     <div
-      className="relative z-50 mx-auto h-[600px] w-[540px] max-w-full rounded-lg bg-light-dark px-6 py-6"
+      className="relative z-50 mx-auto h-[600px] w-[540px] max-w-full rounded-xl bg-light-dark px-6 py-6"
       {...props}
     >
       {data && (

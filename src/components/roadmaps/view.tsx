@@ -15,7 +15,7 @@ export function Tag({ label, link }: TagProps) {
   return (
     <AnchorLink
       href={link}
-      className="mr-2.5 mt-2.5 inline-flex transform rounded-lg px-2.5 py-1.5 text-xs font-medium tracking-tighter shadow-light outline-none transition-transform duration-200 last:mr-0 hover:-translate-y-0.5 hover:bg-gray-50 focus:-translate-y-0.5 focus:bg-gray-50 bg-gray-800 text-white xs:mr-3 xs:mt-3 xs:px-3 xs:py-2 xs:text-sm"
+      className="mr-2.5 mt-2.5 inline-flex transform rounded-xl bg-gray-800 px-2.5 py-1.5 text-xs font-medium tracking-tighter text-white shadow-light outline-none transition-transform duration-200 last:mr-0 hover:-translate-y-0.5 hover:bg-gray-50 focus:-translate-y-0.5 focus:bg-gray-50 xs:mr-3 xs:mt-3 xs:px-3 xs:py-2 xs:text-sm"
     >
       {label}
     </AnchorLink>
@@ -90,11 +90,11 @@ export function SearchFrom({ placeholder = 'Search...' }: SearchFromProps) {
       >
         <label className="flex w-full items-center">
           <input
-            className="h-12 w-full appearance-none rounded-full border-2 py-1 pr-5 pl-11 text-sm tracking-tighter outline-none transition-all border-gray-600 bg-light-dark text-white placeholder:text-gray-500 focus:border-gray-500 sm:pl-14 xl:pl-16"
+            className="h-12 w-full appearance-none rounded-full border-2 border-gray-600 bg-light-dark py-1 pr-5 pl-11 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500 sm:pl-14 xl:pl-16"
             placeholder={placeholder}
             autoComplete="off"
           />
-          <span className="pointer-events-none absolute left-0 flex h-full w-10 cursor-pointer items-center justify-center pl-2 hover:text-gray-900 text-white sm:w-14 sm:pl-3 xl:w-16">
+          <span className="pointer-events-none absolute left-0 flex h-full w-10 cursor-pointer items-center justify-center pl-2 text-white hover:text-gray-900 sm:w-14 sm:pl-3 xl:w-16">
             <SearchIcon className="h-4 w-4" />
           </span>
         </label>
@@ -115,7 +115,7 @@ export function SearchFrom({ placeholder = 'Search...' }: SearchFromProps) {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-4"
       >
-        <div className="absolute left-0 top-full mt-3.5 w-full rounded-lg p-5 shadow-large bg-light-dark xs:mt-4 xs:p-6">
+        <div className="absolute left-0 top-full mt-3.5 w-full rounded-xl bg-light-dark p-5 shadow-large xs:mt-4 xs:p-6">
           <h3 className="mb-2 text-sm font-medium tracking-tighter text-white xs:mb-2.5 xs:text-base">
             Tags
           </h3>

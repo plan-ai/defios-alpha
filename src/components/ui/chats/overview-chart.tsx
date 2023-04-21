@@ -41,21 +41,21 @@ const data = [
 
 interface Props {
   chartWrapperClass?: string;
-  className?:string
+  className?: string;
 }
 
-export default function OverviewChart({ chartWrapperClass,className }: Props) {
+export default function OverviewChart({ chartWrapperClass, className }: Props) {
   return (
     <div
       className={cn(
-        'rounded-lg bg-light-dark p-6 text-white shadow-card sm:p-8',
+        'rounded-xl bg-light-dark p-6 text-white shadow-card sm:p-8',
         className
       )}
     >
       <div className="text-xl font-medium tracking-tighter text-white">
         Community Issue Solving Capacity
       </div>
-      <div className="text-2xl mt-5 font-medium tracking-tighter text-white">
+      <div className="mt-5 text-2xl font-medium tracking-tighter text-white">
         72%
       </div>
       <div className={cn('h-60 w-full', chartWrapperClass)}>

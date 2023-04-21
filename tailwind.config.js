@@ -23,6 +23,9 @@ module.exports = {
         dark: '#0D1321',
         'light-dark': '#171e2e',
         'sidebar-body': '#F8FAFC',
+        primary: '#90AAFA',
+        'new-blue': '#2A4B6B',
+        'new-green': '#1D606A',
       },
       spacing: {
         13: '3.375rem',

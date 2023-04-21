@@ -18,7 +18,7 @@ function ToggleBar({
   children,
 }: React.PropsWithChildren<ToggleBarProps>) {
   return (
-    <div className="rounded-lg shadow-card bg-light-dark">
+    <div className="rounded-xl bg-light-dark shadow-card">
       <div className="relative flex items-center justify-between gap-4 p-4">
         <div className="mr-6 flex items-center">
           {icon && (
@@ -41,9 +41,7 @@ function ToggleBar({
         <Switch checked={checked} onChange={onChange}>
           <div
             className={cn(
-              checked
-                ? 'bg-white'
-                : 'bg-gray-700',
+              checked ? 'bg-white' : 'bg-gray-700',
               'relative inline-flex h-[22px] w-10 items-center rounded-full transition-colors duration-300'
             )}
           >

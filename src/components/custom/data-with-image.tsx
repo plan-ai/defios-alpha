@@ -74,7 +74,7 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
             {value}
             <div
               className={cn('ml-2', {
-                'text-green-500': change[0] !== '',
+                'text-new-green': change[0] !== '',
                 'text-red-500': change[0] === '-',
               })}
             >

@@ -48,7 +48,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
 }) => {
   const [nodeSelected, setNodeSelected] = useState<any>();
   return (
-    <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-lg p-10 transition-all">
+    <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-xl p-10 transition-all">
       <div className="mr-10 flex h-full w-[55%] flex-col items-center justify-end">
         <div className="flex h-full max-h-full w-full items-center justify-center overflow-hidden">
           <div className="h-full w-full rounded-xl">
@@ -72,7 +72,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
           <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <h2 className="flex w-[90%] items-center gap-2 font-medium leading-[1.45em] -tracking-wider text-white text-2xl">
+                <h2 className="flex w-[90%] items-center gap-2 text-2xl font-medium leading-[1.45em] -tracking-wider text-white">
                   {/* {name} */}
                   {nodeSelected?.data?.name}
                 </h2>
@@ -83,7 +83,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     e.stopPropagation();
                     setRoadmap('');
                   }}
-                  className="h-6 w-6 ml-2"
+                  className="ml-2 h-6 w-6"
                 />
               </div>
               <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">

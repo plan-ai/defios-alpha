@@ -100,7 +100,7 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
   );
 
   return (
-    <div className="rounded-lg bg-light-dark p-4 text-sm shadow-card sm:p-5 md:p-6">
+    <div className="rounded-xl bg-light-dark p-4 text-sm shadow-card sm:p-5 md:p-6">
       <div className="flex items-center justify-between border-b border-dashed border-gray-700 pb-3.5 sm:pb-5">
         <div className="flex items-center font-medium ">
           {/* <Image

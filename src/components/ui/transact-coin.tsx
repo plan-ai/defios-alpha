@@ -37,7 +37,7 @@ function TabItem({
     <Tab
       className={({ selected }) =>
         cn(
-          'relative z-0 uppercase tracking-wider focus:outline-none hover:text-white',
+          'relative z-0 uppercase tracking-wider hover:text-white focus:outline-none',
           {
             'font-medium text-white hover:text-white focus:text-white':
               selected,
@@ -54,7 +54,7 @@ function TabItem({
           {selected && (
             <motion.span
               className={cn(
-                'absolute bottom-0 left-0 right-0 -z-[1] h-full w-full rounded-lg bg-brand shadow-button'
+                'absolute bottom-0 left-0 right-0 -z-[1] h-full w-full rounded-xl bg-brand shadow-button'
               )}
               layoutId="activeTabIndicator"
             />
@@ -108,7 +108,7 @@ function CoinTransaction({ transactionType }: CoinTransactionProps) {
 
   return (
     <>
-      <div className="group relative flex rounded-lg border transition-colors duration-200 border-gray-700 hover:border-gray-600">
+      <div className="group relative flex rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600">
         <CoinListBox
           coins={coinList}
           selectedCoin={firstCoin}
@@ -121,10 +121,10 @@ function CoinTransaction({ transactionType }: CoinTransactionProps) {
           placeholder="0.0"
           inputMode="decimal"
           onChange={handleOnChangeFirstCoin}
-          className="md w-full rounded-lg border-0 text-right text-base outline-none focus:ring-0 bg-light-dark"
+          className="md w-full rounded-xl border-0 bg-light-dark text-right text-base outline-none focus:ring-0"
         />
       </div>
-      <div className="relative mt-4 flex h-11 w-full items-center justify-between rounded-lg border px-4 pl-3 text-sm border-gray-700 bg-light-dark text-white sm:h-13 sm:pl-4">
+      <div className="relative mt-4 flex h-11 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 pl-3 text-sm text-white sm:h-13 sm:pl-4">
         <span className="relative flex items-center gap-3 font-medium">
           <IconUSFlag className="h-6 w-6 sm:h-[30px] sm:w-[30px]" /> USD
         </span>
@@ -138,12 +138,12 @@ function CoinTransaction({ transactionType }: CoinTransactionProps) {
           <input
             type="text"
             placeholder="Wallet address"
-            className="h-11 w-full rounded-lg border text-sm border-gray-700 bg-light-dark sm:h-13 sm:text-base"
+            className="h-11 w-full rounded-xl border border-gray-700 bg-light-dark text-sm sm:h-13 sm:text-base"
           />
         </div>
       )}
       {transactionType === 'exchange' && (
-        <div className="group relative mt-4 flex rounded-lg border transition-colors duration-200 border-gray-700 hover:border-gray-600">
+        <div className="group relative mt-4 flex rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600">
           <CoinListBox
             coins={coinList}
             selectedCoin={secondCoin}
@@ -156,7 +156,7 @@ function CoinTransaction({ transactionType }: CoinTransactionProps) {
             placeholder="0.0"
             inputMode="decimal"
             onChange={handleOnChangeSecondCoin}
-            className="w-full rounded-lg border-0 text-right text-right text-base outline-none focus:ring-0 bg-light-dark"
+            className="w-full rounded-xl border-0 bg-light-dark text-right text-right text-base outline-none focus:ring-0"
           />
         </div>
       )}
@@ -193,7 +193,7 @@ export default function TransactCoin({
           ['xs', 'sm', 'md', 'lg', 'xl'].indexOf(breakpoint) !== -1 ? (
             <div
               ref={dropdownEl}
-              className="rounded-lg border-2 border-gray-700"
+              className="rounded-xl border-2 border-gray-700"
             >
               <button
                 onClick={() => setVisibleMobileMenu(!visibleMobileMenu)}
@@ -206,7 +206,7 @@ export default function TransactCoin({
               </button>
               <div
                 className={cn(
-                  'absolute top-full left-0 z-10 mt-1 grid w-full gap-0.5 rounded-lg border p-2 text-left shadow-large border-gray-700 bg-gray-800 xs:gap-1',
+                  'absolute top-full left-0 z-10 mt-1 grid w-full gap-0.5 rounded-xl border border-gray-700 bg-gray-800 p-2 text-left shadow-large xs:gap-1',
                   visibleMobileMenu
                     ? 'visible opacity-100'
                     : 'invisible opacity-0'

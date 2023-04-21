@@ -61,7 +61,7 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
     >
       <Tab.List className="relative mb-6 bg-body bg-dark text-sm uppercase before:absolute before:left-0 before:bottom-0 before:w-full before:rounded-sm before:bg-gray-800 sm:gap-8 sm:rounded-none md:before:h-0.5">
         {isMounted && ['xs', 'sm'].indexOf(breakpoint) !== -1 ? (
-          <div ref={dropdownEl} className="rounded-lg border-2 border-gray-700">
+          <div ref={dropdownEl} className="rounded-xl border-2 border-gray-700">
             <button
               onClick={() => setVisibleMobileMenu(!visibleMobileMenu)}
               className="flex w-full items-center justify-between py-2.5 px-4 uppercase text-gray-300 sm:px-5 sm:py-3.5"
@@ -73,7 +73,7 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
             </button>
             <div
               className={cn(
-                'absolute top-full left-0 z-10 mt-1 grid w-full gap-0.5 rounded-lg border border-gray-700 bg-gray-800 p-2 text-left shadow-large xs:gap-1',
+                'absolute top-full left-0 z-10 mt-1 grid w-full gap-0.5 rounded-xl border border-gray-700 bg-gray-800 p-2 text-left shadow-large xs:gap-1',
                 visibleMobileMenu
                   ? 'visible opacity-100'
                   : 'invisible opacity-0'

@@ -35,7 +35,7 @@ const TagsDropDown: React.FC<TagsDropDownProps> = ({ handleTagSet, tags }) => {
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-4"
         >
-          <Menu.Items className="absolute left-0 z-20 mt-2 w-56 origin-top-right rounded-lg bg-gray-800 py-2 shadow-large">
+          <Menu.Items className="absolute left-0 z-20 mt-2 w-56 origin-top-right rounded-xl bg-gray-800 py-2 shadow-large">
             <div className="px-2">
               {tagsToShow.map((tag, idx) => (
                 <Menu.Item key={idx}>

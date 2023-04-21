@@ -50,7 +50,7 @@ const SortList: React.FC<SortListProps> = ({
   return (
     <div className="relative w-full lg:w-auto">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-11 w-full items-center justify-between rounded-lg bg-light-dark px-4 text-sm text-white md:w-36 lg:w-40 xl:w-48">
+        <Listbox.Button className="flex h-11 w-full items-center justify-between rounded-xl bg-light-dark px-4 text-sm text-white md:w-36 lg:w-40 xl:w-48">
           {selectedItem.name}
           <ChevronDown />
         </Listbox.Button>
@@ -63,12 +63,12 @@ const SortList: React.FC<SortListProps> = ({
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 translate-y-2"
         >
-          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-lg bg-[rgba(0,0,0,0.5)] p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
+          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-xl bg-[rgba(0,0,0,0.5)] p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
             {sort.map((item) => (
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-white transition  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-2 text-sm font-medium text-white transition  ${
                       selected ? 'my-1 bg-gray-700' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -101,7 +101,7 @@ const Search: React.FC<SearchProps> = ({
     <div className="relative flex w-full items-center rounded-full ">
       <label className="relative flex w-full items-center">
         <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+          className="h-11 w-full appearance-none rounded-xl border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -380,10 +380,11 @@ export default function Projects() {
         if (_url == '') {
           await axios
             .get(
-              `https://public-api.solscan.io/token/meta?tokenAddress=${_project.project_token.token_spl_addr}`,{
-                headers:{
-                  token: process.env.SOLSCAN_TOKEN
-                }
+              `https://public-api.solscan.io/token/meta?tokenAddress=${_project.project_token.token_spl_addr}`,
+              {
+                headers: {
+                  token: process.env.SOLSCAN_TOKEN,
+                },
               }
             )
             .then((res) => {
@@ -550,7 +551,7 @@ export default function Projects() {
         </div>
       </div>
 
-      <div className="mb-3 grid grid-cols-8 gap-6 rounded-lg border-b-2 border-gray-500 bg-light-dark shadow-card">
+      <div className="mb-3 grid grid-cols-8 gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark shadow-card">
         <span className="col-span-2 px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm">
           Name
         </span>

@@ -8,7 +8,7 @@ interface OpenIssuesTableProps {
 export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({ data }) => {
   return (
     <div className="mx-auto w-full">
-      <div className="mb-3 flex flex-col rounded-lg border-b-2 border-gray-500 bg-light-dark shadow-card">
+      <div className="mb-3 flex flex-col rounded-xl border-b-2 border-gray-500 bg-light-dark shadow-card">
         <div className="flex w-full items-center py-4 px-6 text-xl uppercase text-gray-300">
           Open Issues For You
         </div>

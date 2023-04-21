@@ -29,16 +29,14 @@ export default function VolumeChart() {
   const dailyVolume = numberAbbr(volume);
 
   return (
-    <div className="rounded-lg p-6 shadow-card bg-light-dark sm:p-8">
+    <div className="rounded-xl bg-light-dark p-6 shadow-card sm:p-8">
       <h3 className="mb-1.5 text-sm uppercase tracking-wider text-gray-400 sm:mb-2 sm:text-base">
         Volume 24h
       </h3>
       <div className="mb-1 text-base font-medium text-white sm:text-xl">
         {dailyVolume}
       </div>
-      <div className="text-xs text-gray-400 sm:text-sm">
-        {formattedDate}
-      </div>
+      <div className="text-xs text-gray-400 sm:text-sm">{formattedDate}</div>
       <div className="mt-5 h-56 sm:mt-8 md:mt-16 lg:mt-8 lg:h-64 2xl:h-72 3xl:h-[340px] 4xl:h-[480px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart

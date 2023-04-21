@@ -37,7 +37,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
     setPercentage('Hover on Chart');
   }, [chartData]);
   return (
-    <div className="rounded-lg bg-transparent  ">
+    <div className="rounded-xl bg-transparent  ">
       <h3 className="text-center text-base font-medium uppercase lg:text-left">
         Top Holders
       </h3>
@@ -56,7 +56,8 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
               dataKey="value"
               onMouseMove={(data) => {
                 setPercentage(
-                  data.payload.payload && `${data.payload.payload.volume} ${chartData.coin.token_symbol}`
+                  data.payload.payload &&
+                    `${data.payload.payload.volume} ${chartData.coin.token_symbol}`
                 );
               }}
             >

@@ -46,7 +46,7 @@ const Search: React.FC<searchProps> = ({
     <div className="relative flex w-full items-center rounded-full">
       <label className="relative flex w-full items-center">
         <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+          className="h-11 w-full appearance-none rounded-xl border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder={placeholder || 'Search'}
           autoComplete="off"
           value={search}
@@ -389,7 +389,7 @@ const IssuesPage: NextPageWithLayout = () => {
               </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 gap-6 rounded-lg border-b-3 border-gray-600 bg-light-dark shadow-card">
+          <div className="my-3 grid grid-cols-7 gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark shadow-card">
             <span className=" col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Issue Title
             </span>

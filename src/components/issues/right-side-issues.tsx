@@ -237,10 +237,10 @@ export default function RightSideIssues({ className }: { className?: string }) {
         </Scrollbar>
         {wallet.publicKey === null && (
           <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-            <div className="flex flex-col items-center justify-center gap-5 rounded-lg border-2 border-white bg-dark p-5 text-lg shadow-2xl">
+            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 text-lg shadow-2xl">
               <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
               <div>Connect Wallet to Continue</div>
-              <WalletMultiButton className="rounded-full bg-blue-500" />
+              <WalletMultiButton className="rounded-full bg-new-blue" />
             </div>
           </div>
         )}

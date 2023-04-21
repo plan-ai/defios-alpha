@@ -19,7 +19,7 @@ const CheckItem: React.FC<CheckItemProps> = ({ label, checked }) => {
       <div
         className={cn('flex h-6 w-6 items-center justify-center rounded-sm', {
           'bg-gray-700': !checked,
-          'bg-blue-500': checked,
+          'bg-new-blue': checked,
         })}
       >
         {checked && <Check />}
@@ -95,8 +95,7 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
             <Link href="/incentivize-contributors" className="w-full">
               <TopupButton
                 label="Create New Project"
-                className="border-white !bg-blue-500"
-                symbolClass="!bg-blue-900"
+                className="border-white !bg-new-blue"
               />
             </Link>
           </div>

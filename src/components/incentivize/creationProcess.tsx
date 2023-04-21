@@ -156,7 +156,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   }, [isExpand]);
 
   return (
-    <div className="mb-4 flex w-[80%] flex-col rounded-lg bg-light-dark shadow-card transition-all">
+    <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div className="flex w-full items-center gap-3">
           <div className="text-xl">4. Creation Process</div>
@@ -177,7 +177,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
           </div>
         )}
         {stepOfCreation > 4 && (
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-new-blue">
             <Check />
           </div>
         )}

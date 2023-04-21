@@ -41,11 +41,6 @@ export const menuItems = [
     href: routes.incentivizeContributors,
   },
   {
-    name: 'Profile',
-    icon: <ProfileIcon />,
-    href: routes.profile,
-  },
-  {
     name: 'Jobs',
     icon: <BriefcaseIcon />,
     href: routes.jobs,

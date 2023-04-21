@@ -11,6 +11,8 @@ import { menuItems } from '@/layouts/sidebar/_menu-items';
 import { useAppSelector } from '@/store/store';
 import { useWallet } from '@solana/wallet-adapter-react';
 
+import Link from 'next/link';
+
 export default function Sidebar({ className }: { className?: string }) {
   const { closeDrawer } = useDrawer();
   const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
@@ -40,11 +42,13 @@ export default function Sidebar({ className }: { className?: string }) {
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard
-            image={githubInfo?.avatar_url || ''}
-            name={githubInfo?.name || ''}
-            role={githubInfo?.login || ''}
-          />
+          <Link href="/profile">
+            <AuthorCard
+              image={githubInfo?.avatar_url || ''}
+              name={githubInfo?.name || ''}
+              role={githubInfo?.login || ''}
+            />
+          </Link>
 
           <div className="mt-5">
             {menuItems.map((item, index) => (

@@ -77,7 +77,7 @@ function HeaderRightArea() {
   return (
     <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
       <NotificationButton />
-      <WalletMultiButton className="rounded-full bg-blue-500" />
+      <WalletMultiButton className="rounded-full bg-new-blue" />
     </div>
   );
 }

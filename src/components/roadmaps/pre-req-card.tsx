@@ -14,7 +14,7 @@ export default function PreReqCard({ item, className }: PreReqCardProps) {
   return (
     <div
       className={cn(
-        'flex items-center justify-between rounded-lg bg-light-dark p-3 text-sm font-medium shadow-card',
+        'flex items-center justify-between rounded-xl bg-light-dark p-3 text-sm font-medium shadow-card',
         className
       )}
     >

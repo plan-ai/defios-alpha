@@ -37,7 +37,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
     <div className="relative overflow-hidden transition-all duration-200">
       <div
         className={cn(
-          'rounded-lg bg-light-dark shadow-card hover:shadow-large',
+          'rounded-xl bg-light-dark shadow-card hover:shadow-large',
           className
         )}
       >

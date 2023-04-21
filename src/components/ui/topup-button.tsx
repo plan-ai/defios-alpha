@@ -13,7 +13,7 @@ export default function TopupButton({
   return (
     <button
       className={cn(
-        'flex h-10 w-full items-center whitespace-nowrap rounded-lg border-2 border-dashed border-gray-600 bg-gray-800 px-6 text-sm uppercase tracking-wider text-white lg:h-12 3xl:h-13',
+        'flex h-10 w-full items-center whitespace-nowrap rounded-xl border-2 border-dashed border-gray-600 bg-gray-800 px-6 text-sm uppercase tracking-wider text-white lg:h-12 3xl:h-13',
         className
       )}
     >

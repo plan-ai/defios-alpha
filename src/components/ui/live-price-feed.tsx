@@ -39,7 +39,7 @@ export function LivePriceFeed({
   return (
     <div
       className={cn(
-        'flex items-center gap-4 rounded-lg bg-light-dark p-5 lg:flex-row',
+        'flex items-center gap-4 rounded-xl bg-light-dark p-5 lg:flex-row',
         {
           'light:border light:border-slate-200': !isBorder,
           'shadow-card': !isBorder,
@@ -67,7 +67,7 @@ export function LivePriceFeed({
 
           <span
             className={`flex items-center  ${
-              isChangePositive ? 'text-green-500' : 'text-red-500'
+              isChangePositive ? 'text-new-green' : 'text-red-500'
             }`}
           >
             <span className={`mr-2 ${!isChangePositive ? 'rotate-180' : ''}`}>

@@ -22,8 +22,7 @@ interface ListboxTypes {
 const listboxVariantClasses = {
   ghost:
     'transition-shadow border hover:ring-1 border-gray-700 bg-gray-800 text-gray-100 hover:border-gray-600 hover:ring-gray-600',
-  solid:
-    'transition-colors bg-gray-800 hover:bg-gray-700',
+  solid: 'transition-colors bg-gray-800 hover:bg-gray-700',
   transparent: '',
 };
 
@@ -41,7 +40,7 @@ export default function Listbox({
       <HeadlessListbox value={selectedOption} onChange={onChange}>
         <HeadlessListbox.Button
           className={cn(
-            'text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-lg px-4 text-sm font-medium outline-none duration-200 sm:h-12 sm:px-5',
+            'text-case-inherit letter-space-inherit flex h-10 w-full items-center justify-between rounded-xl px-4 text-sm font-medium outline-none duration-200 sm:h-12 sm:px-5',
             listboxVariantClasses[variant]
           )}
         >
@@ -54,15 +53,15 @@ export default function Listbox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <HeadlessListbox.Options className="absolute left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-lg border p-1 shadow-large outline-none border-gray-700 bg-gray-800 xs:p-2">
+          <HeadlessListbox.Options className="absolute left-0 z-10 mt-1 grid w-full origin-top-right gap-0.5 rounded-xl border border-gray-700 bg-gray-800 p-1 shadow-large outline-none xs:p-2">
             {options.map((option) => (
               <HeadlessListbox.Option key={option.value} value={option}>
                 {({ selected }) => (
                   <div
                     onClick={() => onSelect && onSelect(option.value)}
-                    className={`flex cursor-pointer items-center rounded-md px-3 py-2 text-sm transition text-gray-100  ${
+                    className={`flex cursor-pointer items-center rounded-xl px-3 py-2 text-sm text-gray-100 transition  ${
                       selected
-                        ? 'font-medium bg-gray-600/60'
+                        ? 'bg-gray-600/60 font-medium'
                         : 'hover:bg-gray-700/70'
                     }`}
                   >

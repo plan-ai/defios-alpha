@@ -46,7 +46,7 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
   return (
     <div
       className={cn(
-        'flex h-20 w-full flex-row items-center justify-between rounded-lg border border-gray-800 bg-dark p-4 shadow-xl'
+        'flex h-20 w-full flex-row items-center justify-between rounded-xl border border-gray-800 bg-dark p-4 shadow-xl'
       )}
       onClick={() => {
         setEditData(data);
@@ -115,11 +115,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
 
     setFetchData(resp);
 
-    if (
-      resp === null ||
-      resp === undefined ||
-      Object.keys(resp).length === 0
-    )
+    if (resp === null || resp === undefined || Object.keys(resp).length === 0)
       return;
     let isContributor = false;
     let isCollaborator = false;

@@ -20,7 +20,7 @@ import { setFilters, reset } from '@/store/roadmapFilterSlice';
 export function GridSwitcher() {
   const { isGridCompact, setIsGridCompact } = useGridSwitcher();
   return (
-    <div className="flex overflow-hidden rounded-lg">
+    <div className="flex overflow-hidden rounded-xl">
       <button
         className={`relative flex h-11 w-11 items-center justify-center bg-gray-800 transition ${
           !isGridCompact ? 'z-10 text-white' : 'text-white'
@@ -67,7 +67,7 @@ export function SortList() {
   return (
     <div className="relative">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-lg bg-gray-800 px-4 text-xs text-white sm:w-56 sm:text-sm lg:h-11">
+        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-xl bg-gray-800 px-4 text-xs text-white sm:w-56 sm:text-sm lg:h-11">
           {selectedItem.name}
           <ChevronDown className="ml-2" />
         </Listbox.Button>
@@ -79,12 +79,12 @@ export function SortList() {
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 translate-y-2"
         >
-          <Listbox.Options className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-light-dark p-3 shadow-large sm:w-full">
+          <Listbox.Options className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-xl bg-light-dark p-3 shadow-large sm:w-full">
             {sort.map((item) => (
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-lg px-3 py-2 text-xs font-medium text-white transition sm:text-sm  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-2 text-xs font-medium text-white transition sm:text-sm  ${
                       selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -143,7 +143,7 @@ export const RangeFilter: React.FC<RangeFilterProps> = ({
     <div className="p-5">
       <div className="mb-4 grid grid-cols-2 gap-2">
         <input
-          className="h-9 rounded-lg border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
+          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
           type="number"
           value={range.min}
           onChange={(e) => handleMinChange(parseInt(e.target.value))}
@@ -152,7 +152,7 @@ export const RangeFilter: React.FC<RangeFilterProps> = ({
           placeholder="placeholder"
         />
         <input
-          className="h-9 rounded-lg border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
+          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
           type="number"
           value={range.max}
           onChange={(e) => handleMaxChange(parseInt(e.target.value))}
@@ -190,7 +190,7 @@ export const Status: React.FC<StatusProps> = ({ values, plan, setPlan }) => {
           <RadioGroup.Option value={val} key={idx}>
             {({ checked }) => (
               <span
-                className={`flex h-12 cursor-pointer items-center justify-center rounded-lg border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+                className={`flex h-12 cursor-pointer items-center justify-center rounded-xl border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
                   checked
                     ? 'border-brand bg-brand text-white shadow-button'
                     : 'border-gray-700 bg-gray-800 text-white'

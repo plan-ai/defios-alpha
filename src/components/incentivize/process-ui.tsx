@@ -37,7 +37,7 @@ const StepOfProcess: React.FC<StepOfProcessProps> = ({
       <div className="mb-4 flex w-full items-center">
         <div
           className={cn('h-0.5 w-8', {
-            'border-t-2 border-blue-500':
+            'border-t-2 border-new-blue':
               step >= stepNumber && isStart === undefined,
             'border-t-2 border-dashed border-gray-500':
               step < stepNumber && isStart === undefined,
@@ -47,7 +47,7 @@ const StepOfProcess: React.FC<StepOfProcessProps> = ({
           className={cn(
             'flex h-16 w-16 items-center justify-center rounded-full border-2 text-xl text-gray-400 ',
             {
-              'border-blue-500 bg-blue-500': step > stepNumber,
+              'border-new-blue bg-new-blue': step > stepNumber,
               'border-dashed border-gray-500 bg-transparent':
                 step <= stepNumber,
             }
@@ -63,7 +63,7 @@ const StepOfProcess: React.FC<StepOfProcessProps> = ({
         </div>
         <div
           className={cn('h-0.5 w-8 ', {
-            'border-t-2 border-blue-500':
+            'border-t-2 border-new-blue':
               step > stepNumber && isEnd === undefined,
             'border-t-2 border-dashed border-gray-500':
               step <= stepNumber && isEnd === undefined,

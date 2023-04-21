@@ -29,8 +29,8 @@ const colors: Record<ColorNames, string[]> = {
   primary: ['text-brand', 'bg-brand', 'border-brand'],
   white: ['text-gray-400', 'bg-white', 'border-white'],
   gray: ['text-gray-400', 'bg-gray-100', 'border-gray-100'],
-  success: ['text-green-500', 'bg-green-500', 'border-green-500'],
-  info: ['text-blue-500', 'bg-blue-500', 'border-blue-500'],
+  success: ['text-new-green', 'bg-new-green', 'border-new-green'],
+  info: ['text-new-blue', 'bg-new-blue', 'border-new-blue'],
   warning: ['text-yellow-500', 'bg-yellow-500', 'border-yellow-500'],
   danger: ['text-red-500', 'bg-red-500', 'border-red-500'],
 };

@@ -25,7 +25,7 @@ const AuthorProfilePage: NextPageWithLayout<
         title="Profile"
         description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
-      <div className="relative h-36 w-full overflow-hidden rounded-lg sm:h-44 md:h-64 xl:h-80 2xl:h-96 3xl:h-[448px]">
+      <div className="relative h-36 w-full overflow-hidden rounded-xl sm:h-44 md:h-64 xl:h-80 2xl:h-96 3xl:h-[448px]">
         <Image
           src={authorData?.cover_image?.thumbnail}
           placeholder="blur"

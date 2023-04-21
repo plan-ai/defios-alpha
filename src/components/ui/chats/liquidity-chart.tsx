@@ -32,7 +32,7 @@ export default function LiquidityChart() {
   const dailyLiquidity = numberAbbr(liquidity);
 
   return (
-    <div className="rounded-lg bg-light-dark p-6 shadow-card sm:p-8">
+    <div className="rounded-xl bg-light-dark p-6 shadow-card sm:p-8">
       <h3 className="mb-1.5 text-sm uppercase tracking-wider text-gray-400 sm:mb-2 sm:text-base">
         Liquidity
       </h3>

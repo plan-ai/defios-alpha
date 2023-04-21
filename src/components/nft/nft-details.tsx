@@ -50,12 +50,8 @@ export default function NftDetails({ product }: { product: NftDetailsProps }) {
       <div className="mx-auto flex w-full flex-grow flex-col transition-all xl:max-w-[1360px] 4xl:max-w-[1760px]">
         <div className="relative mb-5 flex flex-grow items-center justify-center md:left-0 md:pb-7 md:pt-4 md:pl-6 lg:fixed lg:mb-0 lg:h-[calc(100%-96px)] lg:w-[calc(100%-492px)] lg:pl-8 xl:w-[calc(100%-550px)] xl:pr-12 xl:pl-[340px] 2xl:pl-96 3xl:w-[calc(100%-632px)] 4xl:pl-0">
           <div className="flex h-full max-h-full w-full items-center justify-center lg:max-w-[768px]">
-            <div className="relative aspect-square max-h-full overflow-hidden rounded-lg">
-              <Image
-                src={image}
-                alt={name}
-                className="h-full bg-light-dark"
-              />
+            <div className="relative aspect-square max-h-full overflow-hidden rounded-xl">
+              <Image src={image} alt={name} className="h-full bg-light-dark" />
             </div>
           </div>
         </div>

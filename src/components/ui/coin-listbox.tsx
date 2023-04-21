@@ -36,12 +36,12 @@ export default function CoinListBox({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute -left-[1px] -right-[1px] z-50 mt-2 origin-top-right rounded-lg bg-gray-800 p-3 shadow-large">
+          <Listbox.Options className="absolute -left-[1px] -right-[1px] z-50 mt-2 origin-top-right rounded-xl bg-gray-800 p-3 shadow-large">
             {coins?.map((coin) => (
               <Listbox.Option key={coin.code} value={coin}>
                 {({ selected }) => (
                   <span
-                    className={`my-1 flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-white transition  ${
+                    className={`my-1 flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-white transition  ${
                       selected ? 'my-1 bg-dark' : 'hover:bg-gray-700'
                     }`}
                   >

@@ -38,7 +38,7 @@ export default function IssuesList({
     }
   }, [initExpand]);
   return (
-    <div className="relative mb-3 overflow-hidden rounded-lg bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
+    <div className="relative mb-3 overflow-hidden rounded-xl bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
       <div
         className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start gap-6"
         onClick={() => setIsExpand(!isExpand)}
@@ -81,9 +81,9 @@ export default function IssuesList({
               {children}
               {wallet.publicKey === null && (
                 <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                  <div className="flex items-center justify-center gap-5 rounded-lg border-2 border-white bg-dark p-5 px-10  text-xl shadow-2xl">
+                  <div className="flex items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 px-10  text-xl shadow-2xl">
                     <div>Connect Wallet to Continue</div>
-                    <WalletMultiButton className="rounded-full bg-blue-500" />
+                    <WalletMultiButton className="rounded-full bg-new-blue" />
                   </div>
                 </div>
               )}

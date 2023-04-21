@@ -73,7 +73,7 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
   return (
     <div
       className={cn(
-        'flex items-center gap-4 rounded-lg bg-light-dark p-5 pb-2 shadow-card lg:flex-row'
+        'flex items-center gap-4 rounded-xl bg-light-dark p-5 pb-2 shadow-card lg:flex-row'
       )}
     >
       <div className="w-full flex-col">
@@ -109,7 +109,7 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
               <span
                 className={`flex items-center  ${
                   data?.token_ltp_24h_change >= 0
-                    ? 'text-green-500'
+                    ? 'text-new-green'
                     : 'text-red-500'
                 }`}
               >

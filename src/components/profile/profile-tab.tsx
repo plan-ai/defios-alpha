@@ -38,7 +38,7 @@ const Search: React.FC<SearchProps> = ({
     <div className="relative mb-5 flex w-full items-center rounded-full">
       <label className="relative flex w-full items-center">
         <input
-          className="h-11 w-full appearance-none rounded-lg border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+          className="h-11 w-full appearance-none rounded-xl border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
           placeholder="Search Projects"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
