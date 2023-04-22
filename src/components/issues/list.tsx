@@ -4,18 +4,23 @@ import IssueState from '@/components/ui/tags/issue-state';
 import GithubTags from '@/components/ui/tags/github-tags';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import cn from 'classnames';
 
 import { fetchDecimals } from '@/lib/helpers/metadata';
 
 interface IssuesListTypes {
   data: any;
   initExpand?: boolean;
+  last?: boolean;
+  first?: boolean;
 }
 
 export default function IssuesList({
   data,
   initExpand,
   children,
+  last,
+  first,
 }: React.PropsWithChildren<IssuesListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
   const wallet = useWallet();
@@ -38,7 +43,15 @@ export default function IssuesList({
     }
   }, [initExpand]);
   return (
-    <div className="relative mb-3 overflow-hidden rounded-xl bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large">
+    <div
+      className={cn(
+        'relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
+        {
+          'rounded-b-xl': last,
+          'rounded-t-xl': first,
+        }
+      )}
+    >
       <div
         className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start gap-6"
         onClick={() => setIsExpand(!isExpand)}
@@ -91,6 +104,7 @@ export default function IssuesList({
           </motion.div>
         )}
       </AnimatePresence>
+      {!last && <div className="mx-3 border border-gray-500"></div>}
     </div>
   );
 }

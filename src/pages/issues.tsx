@@ -413,6 +413,8 @@ const IssuesPage: NextPageWithLayout = () => {
                 data={issue}
                 key={idx}
                 initExpand={idx == 0 ? initExapand : false}
+                last={issuesData.length === idx + 1}
+                first={idx === 0}
               >
                 {issue?.issue_state === 'open' && (
                   <OpenIssueExpand

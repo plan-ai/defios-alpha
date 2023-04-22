@@ -573,9 +573,11 @@ export default function Projects() {
         projectsData.length !== 0 &&
         projectsData.map((project: any, idx: number) => (
           <ProjectList
-            initExpand={idx == 0 ? initExapand : false}
+            initExpand={idx === 0 ? initExapand : false}
             key={idx}
             data={project}
+            last={projectsData.length === idx + 1}
+            first={idx === 0}
           >
             <div className="mb-2 flex flex-row items-center justify-between text-sm">
               <div className="flex w-[30%]">

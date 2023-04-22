@@ -71,7 +71,11 @@
 }
 
 .glass-table {
-  background: linear-gradient(286.5deg, rgba(255, 255, 255, 0.04) 25.86%, rgba(255, 255, 255, 0.02) 99.29%);
+  background: linear-gradient(
+    286.5deg,
+    rgba(255, 255, 255, 0.04) 25.86%,
+    rgba(255, 255, 255, 0.02) 99.29%
+  );
   border-radius: 12px;
 }
 

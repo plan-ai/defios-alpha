@@ -29,7 +29,14 @@ export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({ data }) => {
       </div>
       {data.length !== 0 &&
         data.map((item: any, idx: number) => {
-          return <IssuesTableList item={item} key={idx} />;
+          return (
+            <IssuesTableList
+              item={item}
+              key={idx}
+              last={data.length === idx + 1}
+              first={idx === 0}
+            />
+          );
         })}
     </div>
   );

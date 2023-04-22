@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import IssueState from '../ui/tags/issue-state';
 import { useAppDispatch } from '@/store/store';
 import { clicked } from '@/store/notifClickSlice';
 import { useRouter } from 'next/router';
+import cn from 'classnames';
+
+import { fetchDecimals } from '@/lib/helpers/metadata';
 
 interface IssuesTableListProps {
   item: any;
+  last?: boolean;
+  first?: boolean;
 }
 
-export const IssuesTableList: React.FC<IssuesTableListProps> = ({ item }) => {
+export const IssuesTableList: React.FC<IssuesTableListProps> = ({
+  item,
+  last,
+  first,
+}) => {
   let [isExpand, setIsExpand] = useState(false);
 
   const router = useRouter();
@@ -25,9 +34,26 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({ item }) => {
     router.push('/issues');
   };
 
+  let [tokenDecimals, setTokenDecimals] = useState(1);
+
+  const getDecimals = async () => {
+    const decimals = await fetchDecimals(item?.issue_stake_token_url);
+    setTokenDecimals(decimals);
+  };
+
+  useEffect(() => {
+    getDecimals();
+  }, []);
+
   return (
     <div
-      className="relative mb-2 overflow-hidden rounded-xl bg-light-dark shadow-card transition-all last:mb-0 hover:shadow-large"
+      className={cn(
+        'relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
+        {
+          'rounded-b-xl': last,
+          'rounded-t-xl': first,
+        }
+      )}
       onClick={onClickHandler}
     >
       <div
@@ -44,10 +70,12 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({ item }) => {
           {item?.issue_project_name}
         </div>
         <div className="text-center text-xs font-medium tracking-wider text-white sm:text-sm">
-          {Math.round(item?.issue_stake_amount * 100) / 100}{' '}
+          {Math.round((item?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
+            100}{' '}
           {item?.issue_stake_token_symbol}
         </div>
       </div>
+      {!last && <div className="mx-3 border border-gray-500"></div>}
     </div>
   );
 };
