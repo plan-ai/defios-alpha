@@ -11,8 +11,6 @@ import { SearchIcon } from '@/components/icons/search';
 import { useRouter } from 'next/router';
 import Input from '@/components/ui/forms/input';
 
-// static data
-// import { profileProjects } from '@/data/static/profile-projects';
 import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
 

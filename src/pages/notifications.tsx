@@ -5,7 +5,7 @@ import { NextSeo } from 'next-seo';
 import Button from '@/components/ui/button';
 import NotificationCard, {
   NotificationCardProps,
-} from '@/components/ui/notification-card';
+} from '@/components/notifications/notification-card';
 import RootLayout from '@/layouts/_root-layout';
 import { useAppSelector } from '@/store/store';
 import Spinner from '@/components/custom/spinner';

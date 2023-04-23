@@ -7,7 +7,7 @@ const routes = {
   incentivizeContributors: '/incentivize-contributors',
   profile: '/profile',
   jobs: '/jobs',
-  enterprise: '/enterprise',
+  // enterprise: '/enterprise',
   notification: '/notifications',
 };
 

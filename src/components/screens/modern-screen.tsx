@@ -1,10 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextSeo } from 'next-seo';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import Button from '@/components/ui/button/button';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
+import { useAppSelector } from '@/store/store';
 import { useEffect, useState } from 'react';
 
 import TopTokenFeedSlider from '@/components/homepage/top-token-feed';
@@ -20,14 +16,8 @@ import OverviewChart from '@/components/ui/chats/overview-chart';
 import axios from 'axios';
 import Spinner from '../custom/spinner';
 import Journey from '@/components/homepage/journey';
-import { setConnection, setSigner } from '@/lib/helpers/wallet';
 
 export default function ModernScreen() {
-  const { data: session } = useSession();
-  const wallet = useWallet();
-  const userMappingState = useAppSelector(selectUserMapping);
-  const dispatch = useAppDispatch();
-
   const [homeData, setHomeData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const firebase_jwt = useAppSelector(

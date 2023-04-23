@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ContributionsHistoryCard from '@/components/profile/contributions-history-card';
 // static data
-// import { contributionsHistory } from '@/data/static/contributions';
 import { useAppSelector } from '@/store/store';
 import axios from 'axios';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';

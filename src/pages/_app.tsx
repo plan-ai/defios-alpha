@@ -1,7 +1,6 @@
 import type { AppProps } from 'next/app';
 import type { NextPageWithLayout } from '@/types';
 import Head from 'next/head';
-import ModalsContainer from '@/components/modal-views/container';
 import DrawersContainer from '@/components/drawer-views/container';
 import WalletContextProvider from '@/components/wallet/WalletContextProvider';
 import { SessionProvider } from 'next-auth/react';
@@ -39,7 +38,6 @@ function CustomApp({
         <SessionProvider session={session}>
           <WalletContextProvider>
             {getLayout(<Component {...pageProps} />)}
-            <ModalsContainer />
             <DrawersContainer />
           </WalletContextProvider>
         </SessionProvider>

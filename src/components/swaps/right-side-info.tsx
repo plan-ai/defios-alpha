@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import Scrollbar from '@/components/ui/scrollbar';
-import Avatar from '@/components/ui/avatar';
 import HoldersChart from '@/components/swaps/holders-chart';
 //images
-import AuthorImage from '@/assets/images/coin/binance.svg';
 import TransactionInfo from '@/components/ui/transaction-info';
 import PriceChart from '@/components/ui/chats/price-chart';
 import Image from 'next/image';

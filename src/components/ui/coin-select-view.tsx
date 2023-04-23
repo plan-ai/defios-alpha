@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { SearchIcon } from '@/components/icons/search';
-import { useModal } from '@/components/modal-views/context';
 import Image from 'next/image';
 
 interface CoinSelectViewTypes {
@@ -12,7 +11,6 @@ export default function CoinSelectView({
   onSelect,
   coinList,
 }: CoinSelectViewTypes) {
-  const { closeModal } = useModal();
   const [searchKeyword, setSearchKeyword] = useState('');
   const [coinListData, setCoinListData] = useState<any>([]);
   useEffect(() => {
@@ -32,7 +30,6 @@ export default function CoinSelectView({
 
   function handleSelectedCoin(item: any) {
     onSelect(item);
-    closeModal();
   }
   function handleSelectedCoinOnKeyDown(
     event: React.KeyboardEvent<HTMLLIElement>,
@@ -40,7 +37,6 @@ export default function CoinSelectView({
   ) {
     if (event.code === 'Enter') {
       onSelect(item);
-      closeModal();
     }
   }
   return (

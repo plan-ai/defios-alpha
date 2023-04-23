@@ -1,16 +1,6 @@
 import { StaticImageData } from 'next/dist/client/image';
 import NFT1 from '@/assets/images/nft/nft-1.jpg';
-import NFT2 from '@/assets/images/nft/nft-2.jpg';
-import NFT3 from '@/assets/images/nft/nft-3.jpg';
-import NFT4 from '@/assets/images/nft/nft-4.jpg';
-import User1 from '@/assets/images/avatar/8.jpg';
-import User2 from '@/assets/images/avatar/9.jpg';
-import User3 from '@/assets/images/avatar/10.jpg';
-import User4 from '@/assets/images/avatar/1.png';
-import User5 from '@/assets/images/avatar/2.png';
-import User6 from '@/assets/images/avatar/3.png';
-import User7 from '@/assets/images/avatar/4.png';
-import User8 from '@/assets/images/avatar/5.png';
+import User1 from '@/assets/images/dummy-author.jpg';
 import { CogIcon } from '@/components/icons/cog';
 import { WenchScrewdriverIcon } from '@/components/icons/wench-screwdriver';
 import { BookOpenIcon } from '@/components/icons/book-open';
@@ -100,7 +90,7 @@ export const RoadmapList = [
         description:
           '\u2022 Add more community progress indicators and allow for tunable dashboard metrics using on-chain activity and facilitate on-chain collaboration using crypto university credential NFTs.\n\u2022 Completely migrate the community to a web3 platform for complete censorship resistance',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['enhancement', 'help wanted', 'new feature'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -147,21 +137,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -170,8 +160,8 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: User2,
-    image: NFT2,
+    creatorImage: User1,
+    image: NFT1,
     name: 'OnFinance',
     creationDate: '09-02-2023',
     totalStake: '400$',
@@ -182,7 +172,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of OnFinance',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -229,21 +219,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -252,8 +242,8 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: User3,
-    image: NFT3,
+    creatorImage: User1,
+    image: NFT1,
     name: 'MusicProX',
     creationDate: '09-02-2023',
     totalStake: '200$',
@@ -264,7 +254,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of MusicProX',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -311,21 +301,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -334,8 +324,8 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: User4,
-    image: NFT4,
+    creatorImage: User1,
+    image: NFT1,
     name: 'DefiOS Core',
     creationDate: '09-02-2023',
     totalStake: '200$',
@@ -346,7 +336,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of DefiOS Core',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -393,21 +383,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -416,8 +406,8 @@ export const RoadmapList = [
   },
   {
     creator: 'never2average',
-    creatorImage: User5,
-    image: NFT2,
+    creatorImage: User1,
+    image: NFT1,
     name: 'DefiOS Rust',
     creationDate: '09-02-2023',
     totalStake: '100$',
@@ -428,7 +418,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of DefiOS Rust',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -475,21 +465,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -498,8 +488,8 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: User6,
-    image: NFT4,
+    creatorImage: User1,
+    image: NFT1,
     name: 'FitBro',
     creationDate: '09-02-2023',
     totalStake: '100$',
@@ -510,7 +500,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of FitBro',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -557,21 +547,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -580,8 +570,8 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: User7,
-    image: NFT3,
+    creatorImage: User1,
+    image: NFT1,
     name: 'Anime NFTs',
     creationDate: '09-02-2023',
     totalStake: '100$',
@@ -592,7 +582,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of Anime NFTs',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -639,21 +629,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },
@@ -662,7 +652,7 @@ export const RoadmapList = [
   },
   {
     creator: 'Rohitkk432',
-    creatorImage: User8,
+    creatorImage: User1,
     image: NFT1,
     name: 'Buildoor',
     creationDate: '09-02-2023',
@@ -674,7 +664,7 @@ export const RoadmapList = [
       details: {
         description: 'Roadmap states the working tree of Buildoor',
         topContributor: 'Rohitkk432',
-        topContributorImg: User3,
+        topContributorImg: User1,
         tags: ['urgent', 'help wanted'],
         timeframe: '2 Feb 2023 - 14 March 2023',
         stakerIncentive: '50',
@@ -721,21 +711,21 @@ export const RoadmapList = [
         {
           id: 2,
           username: 'never2average',
-          userImage: User2,
+          userImage: User1,
           value: 30,
           color: '#259C77',
         },
         {
           id: 3,
           username: 'AbhisekBasu1',
-          userImage: User3,
+          userImage: User1,
           value: 20,
           color: '#3468D1',
         },
         {
           id: 4,
           username: 'MayankMittal07',
-          userImage: User4,
+          userImage: User1,
           value: 10,
           color: '#F3BA2F',
         },

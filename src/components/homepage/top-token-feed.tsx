@@ -1,11 +1,11 @@
 import { ArrowUp } from '@/components/icons/arrow-up';
-import AnchorLink from '../ui/links/anchor-link';
+import AnchorLink from '@/components/ui/links/anchor-link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y } from 'swiper';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import cn from 'classnames';
 import Image from 'next/image';
-import PriceChart from '../ui/chats/price-chart';
+import PriceChart from '@/components/ui/chats/price-chart';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 

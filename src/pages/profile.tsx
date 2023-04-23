@@ -2,7 +2,8 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
 import Image from '@/components/ui/image';
-import Avatar from '@/components/ui/avatar';
+import Avatar from 'react-avatar';
+
 import Profile from '@/components/profile/profile';
 // static data
 import { authorData } from '@/data/static/author';
@@ -35,14 +36,15 @@ const AuthorProfilePage: NextPageWithLayout<
         />
       </div>
       <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 3xl:max-w-[1700px] 3xl:px-12">
-        <Avatar
-          size="xl"
-          image={githubInfo?.avatar_url || ''}
-          alt={githubInfo?.name || ''}
-          className="z-10 mx-0 -mt-16 flex items-center justify-center border-gray-500 "
-          width={120}
-          height={120}
-        />
+        <div className="z-10 mx-0 -mt-16 flex w-32 items-center justify-center rounded-full border-2 border-gray-500">
+          <Avatar
+            src={githubInfo?.avatar_url || ''}
+            name={githubInfo?.name || ''}
+            className="rounded-full"
+            size="128"
+          />
+        </div>
+
         <Profile />
       </div>
     </>
