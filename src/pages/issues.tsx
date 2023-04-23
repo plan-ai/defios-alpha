@@ -8,6 +8,7 @@ import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import IssuesList from '@/components/issues/list';
 import { Close } from '@/components/icons/close';
+import Input from '@/components/ui/forms/input';
 
 import OpenIssueExpand from '@/components/issues/open-issues-expand';
 import VotingExpand from '@/components/issues/voting-expand';
@@ -45,12 +46,12 @@ const Search: React.FC<searchProps> = ({
   return (
     <div className="relative flex w-full items-center rounded-full">
       <label className="relative flex w-full items-center">
-        <input
-          className="h-11 w-full appearance-none rounded-xl border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+        <Input
+          className="w-full"
           placeholder={placeholder || 'Search'}
-          autoComplete="off"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          autoComplete="off"
         />
         <Close
           onClick={() => setSearch('')}

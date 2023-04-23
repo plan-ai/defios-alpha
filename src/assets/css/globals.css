@@ -53,6 +53,14 @@
   }
 }
 
+.gradient-border:focus {
+  border: double transparent;
+  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .homepageGradient {
   background-image: url('../images/hero.png');
   background-size: 100% 100%;

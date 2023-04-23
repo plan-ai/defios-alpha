@@ -9,6 +9,8 @@ import Button from '../ui/button/button';
 import { PlusCircle } from '../icons/plus-circle';
 import { SearchIcon } from '@/components/icons/search';
 import { useRouter } from 'next/router';
+import Input from '@/components/ui/forms/input';
+
 // static data
 // import { profileProjects } from '@/data/static/profile-projects';
 import GitHubCalendar from 'react-github-calendar';
@@ -37,8 +39,8 @@ const Search: React.FC<SearchProps> = ({
   return (
     <div className="relative mb-5 flex w-full items-center rounded-full">
       <label className="relative flex w-full items-center">
-        <input
-          className="h-11 w-full appearance-none rounded-xl border-2 border-gray-600 bg-transparent py-1 pr-5 pl-5 text-sm tracking-tighter text-white outline-none transition-all placeholder:text-gray-500 focus:border-gray-500"
+        <Input
+          className="w-full"
           placeholder="Search Projects"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

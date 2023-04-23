@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import IssueState from '../ui/tags/issue-state';
 import { useAppDispatch } from '@/store/store';
 import { clicked } from '@/store/notifClickSlice';
@@ -69,13 +69,13 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({
         <div className="text-center text-xs font-medium tracking-wider text-white sm:text-sm">
           {item?.issue_project_name}
         </div>
-        <div className="text-center text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="px-6 text-center text-xs font-medium tracking-wider text-white sm:text-sm">
           {Math.round((item?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
             100}{' '}
           {item?.issue_stake_token_symbol}
         </div>
       </div>
-      {!last && <div className="mx-3 border border-gray-500"></div>}
+      {!last && <div className="mx-6 border border-gray-500"></div>}
     </div>
   );
 };

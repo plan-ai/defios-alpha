@@ -7,21 +7,13 @@ import { Transition } from '@/components/ui/transition';
 import Button from '@/components/ui/button';
 import { Close } from '@/components/icons/close';
 import { useModal, MODAL_VIEW } from '@/components/modal-views/context';
-import Followers from '@/components/profile/followers-view';
 // dynamic imports
 const SearchView = dynamic(() => import('@/components/roadmaps/view'));
-const ShareView = dynamic(() => import('@/components/nft/share-view'));
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {
     case 'SEARCH_VIEW':
       return <SearchView />;
-    case 'SHARE_VIEW':
-      return <ShareView />;
-    case 'FOLLOWING_VIEW':
-      return <Followers />;
-    case 'FOLLOWERS_VIEW':
-      return <Followers />;
     default:
       return null;
   }

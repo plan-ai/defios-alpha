@@ -48,7 +48,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
           className={cn(
-            'mt-1 block h-10 w-full rounded-md border border-gray-700 bg-light-dark px-4 py-2  text-sm text-gray-100 placeholder-gray-400 transition-shadow duration-200 invalid:border-red-500 invalid:text-red-600 focus:border-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-600 focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:h-12 sm:rounded-lg',
+            'gradient-border mt-1 block h-10 w-full rounded-md border-2 border-gray-700 bg-body px-4 py-2 text-sm text-gray-100 placeholder-gray-400 transition-shadow duration-200 invalid:border-red-500 invalid:text-red-600 focus:outline-none focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:text-gray-500 sm:h-12 sm:rounded-lg',
             inputClassName
           )}
         />

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
-import NftFooter from '@/components/nft/nft-footer';
-import cn from 'classnames';
 import RoadmapPopupDetails from '@/components/roadmaps/roadmap-popup-details';
 import PreReqCard from '@/components/roadmaps/pre-req-card';
 import { RoadmapList, detailsType } from '@/data/static/roadmap-list';
