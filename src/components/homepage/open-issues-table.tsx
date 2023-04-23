@@ -12,7 +12,7 @@ export const OpenIssuesTable: React.FC<OpenIssuesTableProps> = ({ data }) => {
         <div className="flex w-full items-center py-4 px-6 text-xl uppercase text-gray-300">
           Open Issues For You
         </div>
-        <div className="grid grid-cols-5 gap-6 border-t border-dashed border-gray-600 text-gray-300">
+        <div className="grid grid-cols-5 items-center gap-6 border-t border-dashed border-gray-600 text-gray-300">
           <span className="col-span-2 py-4 px-6 text-xs tracking-wider sm:text-sm">
             Issue Title
           </span>

@@ -389,8 +389,8 @@ const IssuesPage: NextPageWithLayout = () => {
               </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark shadow-card">
-            <span className=" col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark shadow-card">
+            <span className="col-span-2 px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
               Issue Title
             </span>
             <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
@@ -402,7 +402,7 @@ const IssuesPage: NextPageWithLayout = () => {
             <span className="col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Staked Tokens
             </span>
-            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 px-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
               Tags
             </span>
           </div>

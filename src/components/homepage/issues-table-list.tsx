@@ -57,7 +57,7 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({
       onClick={onClickHandler}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-5 items-start gap-6"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-5 items-center gap-6"
         onClick={() => setIsExpand(!isExpand)}
       >
         <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
