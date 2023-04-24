@@ -207,7 +207,10 @@ export default function Roadmap() {
         </div>
 
         <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
-          <Button onClick={() => openDrawer('DRAWER_SEARCH')} fullWidth>
+          <Button
+            onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
+            fullWidth
+          >
             Filters
           </Button>
         </div>
