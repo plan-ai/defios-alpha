@@ -7,15 +7,10 @@ import routes from '@/config/routes';
 export default function Logo() {
   const isMounted = useIsMounted();
   return (
-    <AnchorLink
-      href={{
-        pathname: routes.home,
-      }}
-      className="flex w-28 outline-none sm:w-32 4xl:w-36"
-    >
+    <div className="flex w-28 outline-none 2xl:w-32">
       <span className="relative flex overflow-hidden">
         {isMounted && <Image src={darkLogo} alt="DefiOS" priority />}
       </span>
-    </AnchorLink>
+    </div>
   );
 }

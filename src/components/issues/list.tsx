@@ -53,24 +53,24 @@ export default function IssuesList({
       )}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6 text-3xs xl:text-xs 3xl:text-sm"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <span className="col-span-2 flex items-center justify-start px-6 text-sm font-medium tracking-wider text-white">
+        <span className="col-span-2 flex items-center justify-start px-6 font-medium tracking-wider text-white">
           {data?.issue_title}
         </span>
-        <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
+        <span className="flex items-center justify-center text-center font-medium tracking-wider text-white">
           <IssueState state={data?.issue_state} />
         </span>
-        <span className="flex items-center justify-center text-center text-sm font-medium tracking-wider text-white">
+        <span className="flex items-center justify-center text-center font-medium tracking-wider text-white">
           {data?.issue_project_name}
         </span>
-        <span className="col-span-2 text-center text-sm font-medium tracking-wider text-white">
+        <span className="col-span-2 text-center font-medium tracking-wider text-white">
           {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
             100}{' '}
           {data?.issue_stake_token_symbol}
         </span>
-        <span className="flex flex-wrap items-center justify-center px-6 text-center text-sm font-medium tracking-wider text-white">
+        <span className="flex flex-wrap items-center justify-center px-6 text-center font-medium tracking-wider text-white">
           {data?.issue_tags?.length !== 0 &&
             removeDuplicates(data?.issue_tags)?.map(
               (tag: string, idx: number) => <GithubTags tag={tag} key={idx} />

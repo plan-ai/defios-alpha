@@ -91,7 +91,7 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
             </div>
           </div>
         ) : (
-          <div className="flex gap-6 md:gap-8 xl:gap-10 3xl:gap-12">
+          <div className="flex gap-6 md:gap-8 xl:gap-10 4xl:gap-12">
             {tabMenu.map((item) => (
               <TabItem key={item.path}>
                 <div className="flex flex-row items-center justify-center">

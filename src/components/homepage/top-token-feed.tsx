@@ -97,12 +97,12 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
 
         <div className="flex items-center gap-4">
           <div className="w-full flex-col">
-            <div className="mb-2 text-sm font-medium tracking-tighter text-white lg:text-lg 2xl:text-xl 3xl:text-2xl">
+            <div className="mb-2 text-sm font-medium tracking-tighter text-white lg:text-lg 2xl:text-xl 4xl:text-2xl">
               1<span className="ml-3">{data?.token_symbol}</span>
             </div>
 
             <div className="flex items-center text-xs font-medium 2xl:text-sm">
-              <span className="mr-5 truncate tracking-tighter text-gray-400 2xl:w-24 3xl:w-auto">
+              <span className="mr-5 truncate tracking-tighter text-gray-400 2xl:w-24 4xl:w-auto">
                 $ {Math.round(data?.token_ltp * 10000) / 10000}
               </span>
 

@@ -56,7 +56,7 @@ const Search: React.FC<SearchProps> = ({
         content={tooltipVal}
         placement="right-start"
         style="light"
-        className="!whitespace-pre-wrap"
+        className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
         <InfoCircle />
@@ -159,12 +159,12 @@ export default function Roadmap() {
 
   return (
     <>
-      <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)] 4xl:grid-cols-[320px_minmax(auto,_1fr)]">
+      <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
         <div className="hidden border-r border-dashed border-gray-700 pr-8 2xl:block">
           <Filters />
         </div>
 
-        <div className="2xl:pl-8 4xl:pl-10">
+        <div className="2xl:pl-8">
           <div className="relative z-10 mb-6 flex items-center justify-between">
             <span className="w-3/5 text-xs font-medium text-white sm:text-sm">
               <Search
@@ -174,7 +174,7 @@ export default function Roadmap() {
               />
             </span>
 
-            <div className="flex gap-6 3xl:gap-8">
+            <div className="flex gap-6 4xl:gap-8">
               <div className="flex items-center justify-center">
                 <Button shape="rounded" disabled className="!bg-gray-800">
                   <div className="flex flex-row items-center justify-center gap-2">
@@ -186,16 +186,16 @@ export default function Roadmap() {
                   Coming Soon
                 </span>
               </div>
-              <div className="hidden 3xl:block">
+              <div className="hidden 4xl:block">
                 <GridSwitcher />
               </div>
-              <div className="hidden sm:block 2xl:hidden">
+              <div className="block 2xl:hidden">
                 <Button
                   shape="rounded"
                   size="small"
                   variant="ghost"
                   color="gray"
-                  onClick={() => openDrawer('DRAWER_SEARCH')}
+                  onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
                   className="!h-11 !p-3 hover:!translate-y-0 hover:!shadow-none focus:!translate-y-0 focus:!shadow-none"
                 >
                   <OptionIcon className="relative h-auto w-[18px]" />

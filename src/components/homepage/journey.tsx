@@ -47,7 +47,7 @@ interface JourneyChecklistProps {
 
 const JourneyChecklist: React.FC<JourneyChecklistProps> = ({ items }) => {
   return (
-    <div className="flex flex w-full flex-col gap-5">
+    <div className="flex flex w-full flex-col gap-5 text-xs xl:text-sm 2xl:text-base">
       {items.map((item: any, idx: number) => {
         return <CheckItem key={idx} label={item?.[0]} checked={item?.[1]} />;
       })}
@@ -76,13 +76,13 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
   return (
     <div
       className={cn(
-        'fixed top-0 right-0 z-20 h-full w-[22rem] w-full max-w-full border-l border-dashed border-gray-700 pt-20',
+        'fixed top-0 right-0 z-20 h-full w-[16.25rem] w-full max-w-full border-l border-dashed border-gray-700 pt-12 lg:pt-16 xl:w-[18.25rem] 2xl:w-[20.75rem] 2xl:pt-20 3xl:w-[22rem]',
         className
       )}
     >
       <Scrollbar style={{ height: 'calc(100%)' }}>
         <div className="h-screen w-full py-3 px-5">
-          <div className="mb-2 flex w-full flex-col items-center gap-3 border-b border-dashed border-gray-700 pt-3 pb-8">
+          <div className="mb-2 flex w-full flex-col items-center gap-3 border-b border-dashed border-gray-700 pt-3 pb-4 text-xs lg:pb-6 xl:text-sm 2xl:pb-8 2xl:text-base">
             <div className="flex flex-col items-center">
               <div>Lets Supercharge Open</div>
               <div>Source Collaboration Now</div>
@@ -100,8 +100,10 @@ const Journey: React.FC<JourneyProps> = ({ className, data }) => {
             </Link>
           </div>
           <div className="flex w-full flex-col items-center px-1 py-2 pb-32">
-            <div className="mb-4 text-lg">Choose Your Journey</div>
-            <div className="mb-8 w-full pb-4">
+            <div className="mb-4 text-xs xl:text-sm lg:text-base 2xl:text-lg">
+              Choose Your Journey
+            </div>
+            <div className="mb-4 w-full xl:mb-6 2xl:mb-8">
               <Swiper
                 modules={[A11y]}
                 spaceBetween={5}

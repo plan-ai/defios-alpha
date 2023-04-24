@@ -9,7 +9,13 @@ export type DRAWER_VIEW =
 
 type DIRECTION = 'left' | 'right';
 type BLUR = 'transparent' | 'transparent-glass' | 'glass';
-const drawerAtom = atom({
+type ATOM = {
+  isOpen: boolean;
+  view: DRAWER_VIEW;
+  direction: DIRECTION;
+  blur: BLUR;
+};
+const drawerAtom = atom<ATOM>({
   isOpen: false,
   view: 'DASHBOARD_SIDEBAR',
   direction: 'left',
@@ -20,7 +26,7 @@ export function useDrawer() {
   const [state, setState] = useAtom(drawerAtom);
   const openDrawer = (
     view: DRAWER_VIEW,
-    direction: DIRECTION = 'left',
+    direction: DIRECTION,
     blur: BLUR = 'glass'
   ) => {
     setState({ ...state, isOpen: true, view, direction, blur });

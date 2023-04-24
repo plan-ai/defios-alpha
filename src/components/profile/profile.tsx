@@ -64,8 +64,8 @@ export default function Profile() {
   }, [firebase_jwt]);
 
   return (
-    <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row 3xl:pt-12">
-      <div className="shrink-0 border-dashed border-gray-700 md:w-72 md:border-r md:pr-7 lg:pr-10 2xl:w-80 3xl:w-96 3xl:pr-14">
+    <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row 4xl:pt-12">
+      <div className="shrink-0 border-dashed border-gray-700 md:w-72 md:border-r md:pr-7 lg:pr-10 2xl:w-80 4xl:w-96 4xl:pr-14">
         <div className="text-center md:text-left">
           <h2 className="text-xl font-medium tracking-tighter text-white xl:text-2xl">
             {githubInfo?.name}
@@ -143,7 +143,7 @@ export default function Profile() {
           <PortfolioCreator portfolioType={portfolioType} isGenerated={false} />
         </div>
       </div>
-      <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 3xl:pl-14">
+      <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 4xl:pl-14">
         <ProfileTab />
       </div>
     </div>

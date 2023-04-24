@@ -40,7 +40,7 @@ export default function LiquidityChart() {
         {dailyLiquidity}
       </div>
       <div className="text-xs text-gray-400 sm:text-sm">{formattedDate}</div>
-      <div className="mt-5 h-64 sm:mt-8 2xl:h-72 3xl:h-[340px] 4xl:h-[480px]">
+      <div className="mt-5 h-64 sm:mt-8 2xl:h-72">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={LiquidityData}

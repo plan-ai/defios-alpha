@@ -30,27 +30,29 @@ export default function ProjectList({
       )}
     >
       <div
-        className="relative my-4 items-center grid h-auto cursor-pointer grid-cols-8 items-start gap-6"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-8 items-start items-center gap-6 text-3xs xl:text-xs 3xl:text-sm"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="col-span-2 px-6  font-medium tracking-wider text-white">
           {data?.project_name}
         </div>
-        <div className="text-center text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
+        <div className="text-center  font-medium uppercase tracking-wider text-white">
           {data?.num_open_issues}
         </div>
-        <div className="px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
+        <div className="px-6 font-medium  uppercase tracking-wider text-white">
           <SecurityStatus noIcon={true} security={data?.project_status} />
         </div>
-        <div className="col-span-2 px-6 text-xs font-medium uppercase tracking-wider text-white sm:text-sm">
+        <div className="col-span-2 px-6  font-medium uppercase tracking-wider text-white">
           <div className="flex items-center">
-            <Image
-              src={data?.project_token?.token_image_url || ''}
-              alt={data?.project_token?.token_symbol || ''}
-              width={48}
-              height={48}
-              className="rounded-full"
-            />
+            <div className="relative h-9 w-9 xl:h-10 xl:w-10 2xl:h-12 2xl:w-12">
+              <Image
+                src={data?.project_token?.token_image_url || ''}
+                alt={data?.project_token?.token_symbol || ''}
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+
             <div className="ml-3">
               <div className="mb-1 flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Staked</div>
@@ -67,7 +69,7 @@ export default function ProjectList({
             </div>
           </div>
         </div>
-        <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="col-span-2 px-6  font-medium tracking-wider text-white">
           <div>
             {data.top_builder_name}
             <span className="text-gray-500">(Builder🛠️)</span>

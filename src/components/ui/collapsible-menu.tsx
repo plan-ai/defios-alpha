@@ -41,7 +41,7 @@ export function MenuItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="mb-2 min-h-[48px] list-none last:mb-0">
+    <div className="mb-1.5 list-none last:mb-0 2xl:mb-2">
       {dropdownItems?.length ? (
         <>
           <div
@@ -100,7 +100,7 @@ export function MenuItem({
             pathname: href,
           }}
           className={cn(
-            'relative flex h-12 items-center whitespace-nowrap rounded-xl px-4 text-sm text-gray-500 transition-all hover:text-white',
+            'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-xs  text-gray-500 transition-all hover:text-white 2xl:h-12 2xl:text-sm',
             {
               'bg-brand': isActive,
             }

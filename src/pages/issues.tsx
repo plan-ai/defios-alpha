@@ -70,7 +70,7 @@ const Search: React.FC<searchProps> = ({
         content={tooltipVal}
         placement="right-start"
         style="light"
-        className="!whitespace-pre-wrap"
+        className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
         <InfoCircle />
@@ -390,20 +390,20 @@ const IssuesPage: NextPageWithLayout = () => {
               </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark shadow-card">
-            <span className="col-span-2 px-6 py-4 text-xs tracking-wider text-gray-300 sm:text-sm">
+          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl text-3xs xl:text-xs 3xl:text-sm border-b-3 border-gray-600 bg-light-dark shadow-card">
+            <span className="col-span-2 px-6 py-4 tracking-wider text-gray-300">
               Issue Title
             </span>
-            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center tracking-wider text-gray-300">
               Issue State
             </span>
-            <span className="py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 text-center tracking-wider text-gray-300">
               Project Name
             </span>
-            <span className="col-span-2 py-4 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="col-span-2 py-4 text-center tracking-wider text-gray-300">
               Staked Tokens
             </span>
-            <span className="py-4 px-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+            <span className="py-4 px-6 text-center tracking-wider text-gray-300">
               Tags
             </span>
           </div>

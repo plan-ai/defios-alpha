@@ -7,15 +7,10 @@ export default function ModernLayout({
   contentClassName,
 }: React.PropsWithChildren<{ contentClassName?: string }>) {
   return (
-    <div className="xl:pl-72 2xl:pl-80">
+    <div className="lg:pl-56 xl:pl-64 2xl:pl-72 3xl:pl-80">
       <Header />
-      <Sidebar className="hidden xl:block" />
-      <main
-        className={cn(
-          'pt-4 pb-5 px-6 ',
-          contentClassName
-        )}
-      >
+      <Sidebar className="hidden lg:block" />
+      <main className={cn('px-6 pt-4 pb-5 ', contentClassName)}>
         {children}
       </main>
     </div>

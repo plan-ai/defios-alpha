@@ -149,13 +149,13 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
   return (
     <>
-      <div className="fixed top-0 right-0 z-20 h-full w-96 border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl">
+      <div className="fixed top-0 right-0 z-20 h-full w-[18.25rem] border-l border-dashed border-gray-700 bg-dark pt-5 shadow-xl xl:w-[20.25rem] 2xl:w-[22.75rem] 3xl:w-[24rem]">
         <Scrollbar style={{ height: 'calc(100%)' }}>
           <div className="relative z-20 h-screen pb-5">
             <div className="flex h-full flex-col overflow-x-hidden px-5 pb-32">
               <Button
                 onClick={() => setModalOpen(true)}
-                className="my-2 w-full"
+                className="my-2 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
                 shape="rounded"
                 color={repo !== null ? 'success' : 'primary'}
               >
@@ -168,7 +168,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                       height={24}
                       className="rounded-full"
                     />
-                    <div className="ml-2 text-sm">{repo?.project_name}</div>
+                    <div className="ml-2">{repo?.project_name}</div>
                   </div>
                 )}
                 {repo === null && <div>Choose your Project</div>}
@@ -176,13 +176,14 @@ export default function RightSideIssues({ className }: { className?: string }) {
               <Input
                 placeholder="Issue Title"
                 type="text"
-                className="my-2 w-full"
+                className="my-2 w-full text-2xs lg:text-xs 2xl:text-sm"
                 value={issueTitle}
                 onChange={(e) => setIssueTitle(e.target.value)}
               />
               <Textarea
                 className="my-2 w-full"
                 placeholder="Issue Description"
+                inputClassName="text-2xs lg:text-xs 2xl:text-sm"
                 value={issueDescription}
                 onChange={(e) => setIssueDescription(e.target.value)}
               />
@@ -204,7 +205,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
               )}
               <Button
                 onClick={handleCreateIssue}
-                className="my-2 mb-5 w-full"
+                className="my-2 mb-5 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
                 shape="rounded"
                 color="info"
               >
@@ -214,22 +215,37 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 <Input
                   placeholder="Amount"
                   type="number"
-                  className="my-2 w-full"
+                  className="my-2 w-full text-2xs lg:text-xs 2xl:text-sm"
                   inputClassName="!h-10"
                 />
                 <div className="ml-2 flex h-full items-center gap-1">
-                  <Button size="mini" shape="rounded">
+                  <Button
+                    size="mini"
+                    shape="rounded"
+                    className="!text-2xs lg:!text-xs 2xl:!text-sm"
+                  >
                     50%
                   </Button>
-                  <Button size="mini" shape="rounded">
+                  <Button
+                    size="mini"
+                    shape="rounded"
+                    className="!text-2xs lg:!text-xs 2xl:!text-sm"
+                  >
                     100%
                   </Button>
                 </div>
               </div>
-              <Button className="my-2 w-full" shape="rounded">
+              <Button
+                className="my-2 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
+                shape="rounded"
+              >
                 Approve DIC Spend
               </Button>
-              <Button className="my-2 w-full" shape="rounded" color="success">
+              <Button
+                className="my-2 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
+                shape="rounded"
+                color="success"
+              >
                 Stake DIC
               </Button>
             </div>
@@ -237,7 +253,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
         </Scrollbar>
         {wallet.publicKey === null && (
           <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 text-lg shadow-2xl">
+            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 text-lg shadow-2xl ">
               <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
               <div>Connect Wallet to Continue</div>
               <WalletMultiButton className="rounded-full bg-new-blue" />

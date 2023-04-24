@@ -20,28 +20,28 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        'top-0 left-0 z-40 h-full w-full max-w-full border-r border-dashed border-gray-700 bg-dark xs:w-[20rem] xl:fixed  xl:w-[20rem] 2xl:w-[20rem]',
+        'fixed top-0 left-0 z-40 h-full w-full w-[15rem] border-r border-dashed border-gray-700 bg-dark xl:w-[16.75rem] 2xl:w-[18.75rem] 3xl:w-[20rem]',
         className
       )}
     >
-      <div className="relative flex h-24 items-center justify-between overflow-hidden px-6 py-4 2xl:px-8">
-        <Logo />
-        <div className="md:hidden">
+      <div className="relative flex items-center overflow-hidden px-6 py-5 2xl:py-7 3xl:px-8">
+        <div className="lg:hidden">
           <Button
             title="Close"
-            color="white"
             shape="circle"
-            variant="transparent"
+            variant="solid"
             size="small"
             onClick={closeDrawer}
+            className="mr-3"
           >
-            <Close className="h-auto w-2.5" />
+            <Close className="h-auto w-3" />
           </Button>
         </div>
+        <Logo />
       </div>
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
-        <div className="px-6 pb-5 2xl:px-8">
+        <div className="px-6 pb-5 2xl:px-7 3xl:px-8">
           <Link href="/profile">
             <AuthorCard
               image={githubInfo?.avatar_url || ''}

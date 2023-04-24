@@ -35,10 +35,10 @@ const colors: Record<ColorNames, string[]> = {
   danger: ['text-red-500', 'bg-red-500', 'border-red-500'],
 };
 const sizes: Record<SizeNames, string[]> = {
-  large: ['px-7 sm:px-9 h-11 sm:h-13', 'w-11 h-11 sm:w-13 sm:h-13'],
-  medium: ['px-5 sm:px-8 h-10 sm:h-12', 'h-10 w-10 sm:w-12 sm:h-12'],
-  small: ['px-7 h-10', 'w-10 h-10'],
-  mini: ['px-4 h-8', 'w-8 h-8'],
+  large: ['px-7 sm:px-9 h-11 xl:h-12 2xl:h-13', 'w-11 h-11 sm:w-13 sm:h-13'],
+  medium: ['px-5 sm:px-8 h-10 xl:h-11 2xl:h-12', 'h-10 w-10 sm:w-12 sm:h-12'],
+  small: ['px-7 h-8 xl:h-9 2xl:h-10', 'w-10 h-10'],
+  mini: ['px-4 h-6 xl:h-7 2xl:h-8', 'w-8 h-8'],
 };
 
 export interface ButtonProps

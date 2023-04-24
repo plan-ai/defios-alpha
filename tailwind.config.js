@@ -7,14 +7,15 @@ module.exports = {
   darkMode: 'class',
   theme: {
     screens: {
-      xs: '500px',
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
+      xs: '640px',
+      sm: '768px',
+      md: '950px',
+      lg: '1200px',
+      xl: '1300px',
       '2xl': '1440px',
-      '3xl': '1780px',
-      '4xl': '2160px', // only need to control product grid mode in ultra 4k device
+      '3xl': '1650px',
+      '4xl': '1780px',
+      '5xl': '2160px', // only need to control product grid mode in ultra 4k device
     },
     extend: {
       colors: {
@@ -44,6 +45,10 @@ module.exports = {
         body: ['Fira Code', 'monospace'],
       },
       fontSize: {
+        '5xs': ['5px', '9px'],
+        '4xs': ['7px', '11px'],
+        '3xs': ['9px', '13px'],
+        '2xs': ['11px', '15px'],
         '13px': ['13px', '18px'],
       },
       borderWidth: {

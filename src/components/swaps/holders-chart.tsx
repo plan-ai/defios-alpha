@@ -38,7 +38,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
   }, [chartData]);
   return (
     <div className="rounded-xl bg-transparent  ">
-      <h3 className="text-center text-base font-medium uppercase lg:text-left">
+      <h3 className="text-center text-sm font-medium uppercase xl:text-base 2xl:text-lg 3xl:text-xl">
         Top Holders
       </h3>
 
@@ -75,7 +75,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
         <div className="absolute left-2/4 top-2/4 flex h-[136px]  w-[136px] -translate-x-2/4 -translate-y-2/4 transform  items-center  justify-center rounded-full border border-dashed border-gray-600 bg-transparent md:h-32 md:w-32 xl:h-[136px] xl:w-[136px]">
           <span
             className={cn(
-              'flex items-center justify-center text-center text-base font-medium'
+              'flex items-center justify-center text-center text-xs font-medium xl:text-sm 2xl:text-base'
             )}
           >
             {percentage}
@@ -93,7 +93,7 @@ const HoldersChart: React.FC<HoldersChartProps> = ({ chartData }) => {
             chartData.chartData.map((item: any, idx: number) => (
               <li
                 key={idx}
-                className="grid grid-cols-2 items-center justify-between text-sm font-medium text-white"
+                className="grid grid-cols-2 items-center justify-between text-2xs font-medium text-white xl:text-xs 2xl:text-sm"
               >
                 <AnchorLink
                   href={`https://solscan.io/account/${item.owner}`}

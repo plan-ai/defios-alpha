@@ -125,7 +125,7 @@ const Search: React.FC<SearchProps> = ({
         content={tooltipVal}
         placement="right-start"
         style="light"
-        className="!whitespace-pre-wrap"
+        className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
         <InfoCircle />
@@ -533,15 +533,15 @@ export default function Projects() {
             setTriggerSearch={setTriggerSearch}
           />
         </div>
-        <div className="flex items-center justify-between gap-6">
-          <div>
+        <div className="flex w-[45%] items-center justify-between gap-3">
+          <div className="w-full">
             <StackedSwitch
               isStacked={isMine}
               setIsStacked={setIsMine}
               label="My Projects"
             />
           </div>
-          <div>
+          <div className="w-full">
             <StackedSwitch
               isStacked={isNative}
               setIsStacked={setIsNative}
@@ -552,20 +552,20 @@ export default function Projects() {
         </div>
       </div>
 
-      <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark shadow-card">
-        <span className="col-span-2 px-6 py-6 text-xs tracking-wider text-gray-300 sm:text-sm">
+      <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
+        <span className="col-span-2 px-6 py-6 tracking-wider text-gray-300">
           Name
         </span>
-        <span className="py-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+        <span className="py-6 text-center tracking-wider text-gray-300">
           Open Issues
         </span>
-        <span className="py-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm">
+        <span className="py-6 text-center tracking-wider text-gray-300">
           Repository Status
         </span>
-        <span className="col-span-2 py-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm ">
+        <span className="col-span-2 py-6 text-center tracking-wider text-gray-300 ">
           Liquidity
         </span>
-        <span className="col-span-2 py-6 text-center text-xs tracking-wider text-gray-300 sm:text-sm ">
+        <span className="col-span-2 py-6 text-center tracking-wider text-gray-300 ">
           Top Contributors
         </span>
       </div>

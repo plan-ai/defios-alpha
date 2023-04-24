@@ -53,27 +53,33 @@ export default function DrawersContainer() {
           leaveTo="opacity-0"
         >
           <Dialog.Overlay
-            className={cn('fixed inset-0', {
+            className={cn('z-100 fixed inset-0', {
               'bg-gray-700 bg-opacity-60 backdrop-blur': blur == 'glass',
               'bg-gray-700 bg-opacity-30': blur == 'transparent-glass',
               'bg-gray-700 bg-opacity-0': blur == 'transparent',
             })}
+            onClick={closeDrawer}
           />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
           enter="transform transition ease-out duration-300"
           enterFrom={
-            direction == 'right' ? 'translate-x-full' : '-translate-x-full'
+            direction === 'right' ? 'translate-x-full' : '-translate-x-full'
           }
           enterTo="translate-x-0"
           leave="transform transition ease-in duration-300"
           leaveFrom="translate-x-0"
           leaveTo={
-            direction == 'right' ? 'translate-x-full' : '-translate-x-full'
+            direction === 'right' ? 'translate-x-full' : '-translate-x-full'
           }
         >
-          <div className="fixed inset-y-0 right-0 flex w-full max-w-full xs:w-auto">
+          <div
+            className={cn('fixed inset-y-0  flex w-full max-w-full xs:w-auto', {
+              'right-0': direction === 'right',
+              'left-0': direction !== 'right',
+            })}
+          >
             {view && renderDrawerContent(view)}
           </div>
         </Transition.Child>

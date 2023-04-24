@@ -37,7 +37,7 @@ export default function VolumeChart() {
         {dailyVolume}
       </div>
       <div className="text-xs text-gray-400 sm:text-sm">{formattedDate}</div>
-      <div className="mt-5 h-56 sm:mt-8 md:mt-16 lg:mt-8 lg:h-64 2xl:h-72 3xl:h-[340px] 4xl:h-[480px]">
+      <div className="mt-5 h-56 sm:mt-8 md:mt-16 lg:mt-8 lg:h-64 2xl:h-72">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={VolumeData}

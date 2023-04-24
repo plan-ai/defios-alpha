@@ -13,7 +13,7 @@ export default function TransactionInfo({
   return (
     <div
       className={cn(
-        'flex items-center justify-between text-gray-300',
+        'flex items-center justify-between text-2xs text-gray-300 xl:text-xs 2xl:text-sm 3xl:text-base',
         className
       )}
     >

@@ -21,8 +21,8 @@ export default function Feeds({
           className={cn(
             'grid gap-5 sm:grid-cols-2 md:grid-cols-3',
             isGridCompact
-              ? '3xl:!grid-cols-4 4xl:!grid-cols-5'
-              : '3xl:!grid-cols-3 4xl:!grid-cols-4',
+              ? '4xl:!grid-cols-4 5xl:!grid-cols-5'
+              : '4xl:!grid-cols-3 5xl:!grid-cols-4',
             className
           )}
         >

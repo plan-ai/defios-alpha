@@ -167,7 +167,7 @@ export default function ComparisonChart() {
         </RadioGroup>
       </div>
 
-      <div className="mt-5 h-56 sm:mt-8 md:h-96 lg:h-[380px] xl:h-[402px] 2xl:h-[30rem] 3xl:h-[496px] 4xl:h-[580px]">
+      <div className="mt-5 h-56 sm:mt-8 md:h-96 lg:h-[380px] xl:h-[402px] 2xl:h-[30rem]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             width={500}

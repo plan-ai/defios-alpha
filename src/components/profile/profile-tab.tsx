@@ -61,7 +61,7 @@ const Search: React.FC<SearchProps> = ({
         content={tooltipVal}
         placement="left-start"
         style="light"
-        className="!whitespace-pre-wrap"
+        className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
         <InfoCircle />
@@ -239,7 +239,7 @@ export default function ProfileTab() {
             'string' && (
             <div
               className={cn(
-                'grid gap-4 xs:grid-cols-2 lg:grid-cols-2 lg:gap-5 xl:gap-6 3xl:grid-cols-3 4xl:grid-cols-4',
+                'grid gap-4 xs:grid-cols-2 lg:grid-cols-2 lg:gap-5 xl:gap-6 4xl:grid-cols-3',
                 'md:grid-cols-1'
               )}
             >

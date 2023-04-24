@@ -46,7 +46,7 @@ const GithubTags: React.FC<GithubTagsProps> = ({
   return (
     <div
       className={cn(
-        'mx-1 my-0.5 flex items-center justify-between rounded-full bg-black py-2 px-3 text-xs font-medium tracking-wider shadow-card',
+        'mx-1 my-0.5 flex items-center justify-between rounded-full bg-black py-1 px-2 text-3xs font-medium tracking-wider shadow-card lg:text-2xs 2xl:py-1.5 2xl:px-2.5 2xl:px-3 2xl:text-xs 3xl:py-2',
         {
           'text-[#CD9CA6]': tag === 'bug',
           'text-[#148DFF]': tag === 'documentation',

@@ -21,7 +21,7 @@ export const ButtonImg: React.FC<ButtonImgProps> = ({
     <button
       onClick={onClick}
       className={cn(
-        'flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-gray-700 px-3 py-2 text-[14px]',
+        'flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-gray-700 px-3 py-2 text-3xs xl:text-2xs 2xl:text-xs',
         {
           '!bg-new-blue': active === true,
         }

@@ -26,9 +26,9 @@ function NotificationButton() {
           : routes.notification
       }
     >
-      <div className="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-700 bg-light-dark text-white shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none sm:h-12 sm:w-12">
+      <div className="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-700 bg-light-dark text-white shadow-main transition-all hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none xl:h-12 xl:w-12">
         <BellIcon />
-        <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-slate-50 shadow-light sm:h-3 sm:w-3" />
+        <span className="absolute top-0 right-0 h-2.5 w-2.5 rounded-full bg-slate-50 shadow-light xl:h-3 xl:w-3" />
       </div>
     </AnchorLink>
   );
@@ -75,9 +75,9 @@ function HeaderRightArea() {
   }, [wallet.publicKey, connection]);
 
   return (
-    <div className="relative order-last flex shrink-0 items-center gap-4 sm:gap-6 lg:gap-8">
+    <div className="relative order-last flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8">
       <NotificationButton />
-      <WalletMultiButton className="rounded-full bg-new-blue" />
+      <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
     </div>
   );
 }
@@ -90,29 +90,31 @@ export default function Header({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'sticky top-0 right-0 z-30 h-16 w-full transition-all duration-300 sm:h-20 3xl:h-24',
-        (isMounted && windowScroll.y) > 2
+        'sticky top-0 right-0 z-30 h-[3.5rem] w-full transition-all duration-300 lg:h-[4rem] 2xl:h-[5rem]',
+        isMounted && windowScroll.y
           ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
           : '',
         className
       )}
     >
-      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8 3xl:px-10">
+      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <div className="mr-2 block sm:mr-4 xl:hidden">
+          <div className="mr-2 block lg:hidden">
             <Hamburger
               isOpen={false}
               variant="solid"
-              onClick={() => openDrawer('DASHBOARD_SIDEBAR')}
+              onClick={() => openDrawer('DASHBOARD_SIDEBAR', 'left')}
               className="text-white"
             />
           </div>
           {router.pathname === '/home' && (
-            <div className="text-2xl">Welcome to defiOS</div>
+            <div className="text-lg xl:text-xl 2xl:text-2xl">
+              Welcome to defiOS
+            </div>
           )}
           <div
             onClick={() => router.push(routes.home)}
-            className="flex items-center xl:hidden"
+            className="flex items-center lg:hidden"
           >
             <Logo />
           </div>
