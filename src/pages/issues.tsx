@@ -390,20 +390,20 @@ const IssuesPage: NextPageWithLayout = () => {
               </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl text-3xs xl:text-xs 3xl:text-sm border-b-3 border-gray-600 bg-light-dark shadow-card">
-            <span className="col-span-2 px-6 py-4 tracking-wider text-gray-300">
+          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
+            <span className="col-span-2 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Issue Title
             </span>
-            <span className="py-4 text-center tracking-wider text-gray-300">
+            <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Issue State
             </span>
-            <span className="py-4 text-center tracking-wider text-gray-300">
+            <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Project Name
             </span>
-            <span className="col-span-2 py-4 text-center tracking-wider text-gray-300">
+            <span className="col-span-2 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Staked Tokens
             </span>
-            <span className="py-4 px-6 text-center tracking-wider text-gray-300">
+            <span className="py-3 px-6 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Tags
             </span>
           </div>

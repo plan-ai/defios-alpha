@@ -33,7 +33,7 @@ const RepoItem: React.FC<RepoItemProps> = ({
     <div
       onClick={() => setChoosenRepo(item)}
       className={cn(
-        'flex cursor-pointer items-center gap-2 py-3 px-6 outline-none hover:bg-gray-800 focus:bg-gray-900',
+        'flex cursor-pointer items-center gap-2 py-3 px-6 text-xs outline-none hover:bg-gray-800 focus:bg-gray-900 xl:text-sm 3xl:text-base',
         {
           'bg-black': item?.project_name === choosenRepo?.project_name,
         }
@@ -133,7 +133,7 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
 
   return (
     <div className="w-full rounded-xl bg-dark text-sm shadow-large xs:w-[400px]">
-      <h2 className="p-6 text-lg font-medium uppercase text-white">
+      <h2 className="p-4 text-sm font-medium uppercase text-white xl:p-5 xl:text-base 3xl:p-6 3xl:text-lg">
         Choose Project
       </h2>
       <div className="relative">
@@ -144,14 +144,14 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
           onChange={(e) => setSearch(e.target.value)}
           autoFocus={true}
           placeholder="Search Project"
-          className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-sm focus:border-gray-600 focus:ring-0"
+          className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-2xs focus:border-gray-600 focus:ring-0 xl:text-xs 3xl:text-sm"
         />
       </div>
-      <div className="h-[40vh] overflow-y-scroll py-3">
+      <div className="h-[16rem] lg:h-[17rem] xl:h-[19rem] 2xl:h-[20.5rem] 3xl:h-[21.5rem] overflow-y-scroll py-3">
         {!isLoading && repoSearch.length === 0 && (
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-5">
             <EmptyList />
-            <div className="w-60 text-center text-sm text-gray-500">
+            <div className="w-60 text-center text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               No projects found that match your search.
             </div>
           </div>

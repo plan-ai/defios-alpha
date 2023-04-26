@@ -31,11 +31,11 @@ function SortList() {
   }, [selectedItem, dispatch]);
   return (
     <div className="relative w-full">
-      <span className="text-gray-10 mb-3 block text-sm font-medium uppercase tracking-widest">
+      <span className="text-gray-10 mb-3 block text-xs font-medium uppercase tracking-widest xl:text-sm 3xl:text-base">
         Distribution Strategy
       </span>
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-12 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 text-sm text-white">
+        <Listbox.Button className="flex !h-9 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 text-2xs text-white xl:text-xs 2xl:!h-10 3xl:!h-11 3xl:text-sm">
           {selectedItem.name}
           <ChevronDown />
         </Listbox.Button>
@@ -53,7 +53,7 @@ function SortList() {
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-xl px-3 py-3 text-sm font-medium text-white transition  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-3 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
                       selected ? 'my-1 bg-gray-700' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -207,23 +207,25 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
     <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div className="flex w-full flex-col gap-3">
-          <div className="text-xl">3. Configure Token</div>
+          <div className="text-base xl:text-lg 3xl:text-xl">
+            3. Configure Token
+          </div>
           {isSubmitted && !isExpand && tokenType === 'Create New Token' && (
-            <div className="flex gap-10 text-sm text-gray-500">
+            <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               <div>Token Name: {tokenName}</div>
               <div>Token Symbol: {tokenSymbol}</div>
               <div>Token Supply: {totalSupply}</div>
             </div>
           )}
           {isSubmitted && !isExpand && tokenType === 'Import Existing' && (
-            <div className="flex gap-10 text-sm text-gray-500">
+            <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               <div>SPL Token Address: {splTokenAddress}</div>
             </div>
           )}
         </div>
         {stepOfCreation === 3 && (
           <div
-            className={`duration-400 z-[1] p-2 transition-transform ${
+            className={`duration-400 z-[1] transition-transform ${
               isExpand ? 'rotate-180' : ''
             }`}
             onClick={() => setIsExpand(!isExpand)}
@@ -319,7 +321,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                 {tokenType === 'Import Existing' && (
                   <>
                     <div className="mb-3 flex w-full gap-3">
-                      <div className="flex w-full gap-2">
+                      <div className="flex w-full items-center gap-2">
                         <Input
                           id="splTokenAddress"
                           label="Enter Token SPL Address"

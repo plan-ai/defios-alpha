@@ -11,43 +11,43 @@ import { BuildingIcon } from '@/components/icons/building';
 
 export const menuItems = [
   {
-    name: 'Home',
+    name: 'home',
     icon: <HomeIcon />,
     href: routes.home,
   },
   {
-    name: 'Projects',
+    name: 'projects',
     icon: <FarmIcon />,
     href: routes.projects,
   },
   {
-    name: 'Swap',
+    name: 'swap',
     icon: <ExchangeIcon />,
     href: routes.swap,
   },
   {
-    name: 'Roadmaps',
+    name: 'roadmaps',
     icon: <CompassIcon />,
     href: routes.roadmaps,
   },
   {
-    name: 'Issues',
+    name: 'issues',
     icon: <PoolIcon />,
     href: routes.issues,
   },
   {
-    name: 'Create a Project',
+    name: 'create a project',
     icon: <PlusCircle />,
     href: routes.incentivizeContributors,
   },
   {
-    name: 'Jobs',
+    name: 'jobs',
     icon: <BriefcaseIcon />,
     href: routes.jobs,
     comingSoon: true,
   },
   // {
-  //   name: 'Enterprise',
+  //   name: 'enterprise',
   //   icon: <BuildingIcon />,
   //   href: routes.enterprise,
   //   comingSoon: true,

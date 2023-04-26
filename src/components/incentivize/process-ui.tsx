@@ -70,7 +70,7 @@ const StepOfProcess: React.FC<StepOfProcessProps> = ({
           })}
         ></div>
       </div>
-      <div className="text-center text-sm">{label}</div>
+      <div className="text-center text-2xs xl:text-xs 3xl:text-sm">{label}</div>
     </div>
   );
 };

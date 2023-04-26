@@ -67,17 +67,17 @@ export default function CoinInput({
     <>
       <div
         className={cn(
-          'group flex min-h-[70px] rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600',
+          'group flex rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600',
           className
         )}
       >
-        <div className="min-w-[80px] border-r border-gray-700 p-3 transition-colors duration-200 group-hover:border-gray-600">
-          <span className="mb-1.5 block text-xs uppercase text-gray-400">
+        <div className="border-r border-gray-700 p-3 transition-colors duration-200 group-hover:border-gray-600">
+          <span className="mb-1.5 block text-3xs uppercase text-gray-400 xl:text-2xs 3xl:text-xs">
             {label}
           </span>
           <button
             onClick={() => setVisibleCoinList(true)}
-            className="flex items-center font-medium text-gray-100 outline-none"
+            className="flex items-center text-xs font-medium text-gray-100 outline-none xl:text-sm 3xl:text-base"
           >
             <Image
               src={selectedCoin?.token_image_url || ''}
@@ -97,10 +97,10 @@ export default function CoinInput({
             placeholder="0.0"
             inputMode="decimal"
             onChange={handleOnChange}
-            className="w-full rounded-tr-lg rounded-br-lg border-0 bg-light-dark pb-0.5 text-right text-lg outline-none focus:ring-0"
+            className="w-full rounded-tr-lg rounded-br-lg border-0 bg-light-dark pb-0.5 text-right text-sm outline-none focus:ring-0 xl:text-base 3xl:text-lg"
             {...rest}
           />
-          <span className="font-xs px-3 text-gray-400">
+          <span className="font-xs px-3 text-xs text-gray-400 xl:text-sm 3xl:text-base">
             = ${exchangeRate ? exchangeRate : '0.00'}
           </span>
         </div>

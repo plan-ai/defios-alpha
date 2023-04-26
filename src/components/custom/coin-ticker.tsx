@@ -17,20 +17,19 @@ const CoinTicker: React.FC<CoinTickerProps> = ({
 }) => {
   return (
     <div className={cn('flex items-center', className)}>
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
+      <div className="relative h-10 w-10 rounded-full xl:h-11 xl:w-11 3xl:h-12 3xl:w-12">
         <Image
           src={coin?.token_image_url || ''}
           alt={coin?.token_name || ''}
-          width={48}
-          height={48}
-          className="rounded-full"
+          fill
+          className="rounded-full object-cover"
         />
       </div>
-      <div className="ml-2.5 flex flex-col  xl:ml-4">
+      <div className="ml-2.5 flex flex-col  text-xs xl:ml-4 xl:text-sm 3xl:text-base">
         <strong className="font-medium -tracking-wider text-white">
           {coin?.token_name}
         </strong>
-        <span className="mb-0.5 flex text-sm">
+        <span className="mb-0.5 flex text-3xs xl:text-2xs 2xl:text-xs 3xl:text-sm">
           ${value}
           <div
             className={cn('ml-2', {

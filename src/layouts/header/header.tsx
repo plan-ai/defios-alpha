@@ -90,7 +90,7 @@ export default function Header({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'sticky top-0 right-0 z-30 h-[3.5rem] w-full transition-all duration-300 lg:h-[4rem] 2xl:h-[5rem]',
+        'sticky top-0 right-0 z-30 h-[4.5rem] w-full transition-all duration-300 lg:h-[5.5rem] 2xl:h-[6.5rem]',
         isMounted && windowScroll.y
           ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
           : '',
@@ -99,7 +99,7 @@ export default function Header({ className }: { className?: string }) {
     >
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <div className="mr-2 block lg:hidden">
+          <div className="mr-5 block lg:hidden">
             <Hamburger
               isOpen={false}
               variant="solid"
@@ -107,17 +107,30 @@ export default function Header({ className }: { className?: string }) {
               className="text-white"
             />
           </div>
+          {/* <div
+            onClick={() => router.push(routes.home)}
+            className="mr-4 flex items-center lg:hidden"
+          >
+            <Logo />
+          </div> */}
           {router.pathname === '/home' && (
             <div className="text-lg xl:text-xl 2xl:text-2xl">
               Welcome to defiOS
             </div>
           )}
-          <div
-            onClick={() => router.push(routes.home)}
-            className="flex items-center lg:hidden"
-          >
-            <Logo />
-          </div>
+          {router.pathname === '/projects' && (
+            <div className="flex flex-col">
+              <div className="text-xl font-bold text-primary xl:text-2xl 2xl:text-3xl">
+                projects
+              </div>
+              <div className="text-xs xl:text-sm 2xl:text-base">
+                get rewarded when you contribute to a project.
+              </div>
+              <div className="text-xs xl:text-sm 2xl:text-base">
+                create your own project to incentivize contributors.
+              </div>
+            </div>
+          )}
         </div>
         <HeaderRightArea />
       </div>

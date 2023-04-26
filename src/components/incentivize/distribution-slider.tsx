@@ -53,14 +53,13 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
         setModalOpen(true);
       }}
     >
-      <div className="flex flex-row items-center">
-        <div className="mr-4 h-12 w-12 rounded-full bg-black">
+      <div className="flex flex-row items-center text-xs xl:text-sm 3xl:text-base">
+        <div className="relative mr-4 h-9 w-9 xl:h-11 xl:w-11 3xl:h-12 3xl:w-12 rounded-full">
           <Image
             src={data.avatar_url || ''}
             alt={data.login || ''}
-            width={48}
-            height={48}
-            className="rounded-full"
+            fill
+            className="rounded-full object-cover"
           />
         </div>
         <div className="flex flex-col gap-1 text-sm">
@@ -265,7 +264,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
               ref={modalContainerRef}
               className="inline-block text-left align-middle"
             >
-              <div className="h-[35vh] w-[30vw] rounded-2xl bg-dark">
+              <div className="w-[30vw] rounded-2xl bg-dark">
                 <DistributionModal
                   modalOpen={modalOpen}
                   setModalOpen={setModalOpen}

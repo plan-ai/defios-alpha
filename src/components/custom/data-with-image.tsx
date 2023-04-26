@@ -36,7 +36,7 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
 }) => {
   return (
     <div className={cn('flex w-full items-center', className)}>
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200 md:h-9 md:w-9 xl:h-10 xl:w-10">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-800 text-gray-200 xl:h-11 xl:w-11 3xl:h-12 3xl:w-12">
         {image === 'wench' && <WenchIcon />}
         {image === 'briefcase' && <BriefcaseIcon />}
         {image === 'handshake' && <HandshakeIcon />}
@@ -60,9 +60,11 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
         )}
       </div>
       <div className="ml-2.5 flex flex-col xl:ml-4">
-        <span className="mb-0.5 text-xs text-gray-400">{header}</span>
-        {change == undefined && value!==undefined  && (
-          <strong className="text-sm font-medium -tracking-wider text-white">
+        <span className="mb-0.5 text-3xs text-gray-400 xl:text-2xs 3xl:text-xs">
+          {header}
+        </span>
+        {change == undefined && value !== undefined && (
+          <strong className="text-2xs font-medium -tracking-wider text-white xl:text-xs 3xl:text-sm">
             {value.length > (trunc || 12)
               ? value.slice(0, trunc || 12) + '...'
               : value}{' '}
@@ -70,7 +72,7 @@ const DataWithImage: React.FC<DataWithImageProps> = ({
         )}
 
         {change !== undefined && (
-          <span className="mb-0.5 flex text-sm">
+          <span className="mb-0.5 flex text-2xs xl:text-xs 3xl:text-sm">
             {value}
             <div
               className={cn('ml-2', {

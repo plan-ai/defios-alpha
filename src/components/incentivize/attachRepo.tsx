@@ -46,17 +46,17 @@ const AttachRepo: React.FC<AttachRepoProps> = ({
           }}
           className="flex w-full flex-col gap-3"
         >
-          <div className="text-xl">2. Attach Repository</div>
+          <div className="text-base xl:text-lg 3xl:text-xl">
+            2. Attach Repository
+          </div>
           {repo !== '' && (
-            <div className="flex text-sm text-gray-500">
+            <div className="flex text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               <Image
                 src={GithubLogo}
                 alt="github logo"
                 className="mr-1 h-3.5 w-3.5"
               />
-              <div className="text-xs">
-                {repo.replace('https://github.com', '')}
-              </div>
+              <div>{repo.replace('https://github.com', '')}</div>
             </div>
           )}
         </div>

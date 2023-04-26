@@ -46,14 +46,14 @@ const Uploader: React.FC<UploaderProps> = ({
       {label && (
         <span
           className={cn(
-            'block font-medium tracking-widest text-gray-100',
+            'block text-xs font-medium tracking-widest text-gray-100 xl:text-sm 3xl:text-base',
             useUppercaseLabel ? 'mb-2 uppercase sm:mb-3' : 'mb-2'
           )}
         >
           {label}
         </span>
       )}
-      <div className="h-12 w-full rounded-lg border border-solid border-gray-700 bg-light-dark">
+      <div className="w-full rounded-lg border border-solid border-gray-700 bg-light-dark !h-9 2xl:!h-10 3xl:!h-11">
         <div
           {...getRootProps({
             className: 'h-full flex items-center justify-center rounded-lg',

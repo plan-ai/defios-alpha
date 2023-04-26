@@ -28,11 +28,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
   const handleEditSumbit = () => {
     if (newValue === '') return;
-    const data:any = {};
+    const data: any = {};
     const oldVal = parseFloat(Contributors[editData.login]);
     const newVal = parseFloat(newValue);
 
-    const percentageLeft = parseFloat('100');
+    const percentageLeft = parseFloat('30');
 
     const dataContributors = Object.keys(Contributors);
 
@@ -53,15 +53,14 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
   };
 
   return (
-    <div className="flex h-full w-full flex-col justify-between p-5">
+    <div className="flex h-full w-full flex-col justify-between p-5 gap-3">
       <div className="flex w-full items-center">
-        <div className="mr-5 h-16 w-16 rounded-full bg-black">
+        <div className="relative mr-5 h-12 w-12 rounded-full bg-black xl:h-14 xl:w-14 3xl:h-16 3xl:w-16">
           <Image
             src={editData.avatar_url || ''}
             alt={editData.login || ''}
-            width={64}
-            height={64}
-            className="rounded-full"
+            fill
+            className="rounded-full object-cover"
           />
         </div>
         <div className="flex flex-col gap-2">

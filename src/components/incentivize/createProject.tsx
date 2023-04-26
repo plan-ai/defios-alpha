@@ -39,9 +39,11 @@ const CreateProject: React.FC<CreateProjectProps> = ({
     <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div className="flex w-full flex-col gap-3">
-          <div className="text-xl">1. Create Project</div>
+          <div className="text-base xl:text-lg 3xl:text-xl">
+            1. Create Project
+          </div>
           {projectName !== '' && ownerCut !== 0 && !isExpand && (
-            <div className="flex gap-10 text-sm text-gray-500">
+            <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               <div>Project Name: {projectName}</div>
               <div>Owner Cut: {ownerCut} %</div>
             </div>
@@ -49,7 +51,7 @@ const CreateProject: React.FC<CreateProjectProps> = ({
         </div>
         {stepOfCreation === 1 && (
           <div
-            className={`duration-400 z-[1] p-2 transition-transform ${
+            className={`duration-400 z-[1] transition-transform ${
               isExpand ? 'rotate-180' : ''
             }`}
             onClick={() => setIsExpand(!isExpand)}

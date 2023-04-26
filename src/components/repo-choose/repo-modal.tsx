@@ -149,7 +149,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
   }, [session, reposState, repoSearch]);
 
   return (
-    <div className="flex h-full w-full flex-col p-5">
+    <div className="flex h-full w-full flex-col p-3 xl:p-4 3xl:p-5">
       <div className="relative flex w-full">
         <Input
           value={search}

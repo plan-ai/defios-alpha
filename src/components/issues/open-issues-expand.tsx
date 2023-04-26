@@ -186,7 +186,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   };
 
   return (
-    <div className="flex w-full justify-between gap-5 py-5">
+    <div className="flex w-full justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
       <div className="flex w-1/2 flex-col gap-3">
         <strong>Description</strong>
         <div className="tracking-wider">

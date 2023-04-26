@@ -65,7 +65,7 @@ export function MenuItem({
 
             {isChildrenActive && (
               <motion.span
-                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-xl bg-brand shadow-large"
+                className="absolute bottom-0 left-0 right-0 h-full w-full rounded-xl shadow-large"
                 layoutId="menu-item-active-indicator"
               />
             )}
@@ -101,11 +101,8 @@ export function MenuItem({
           }}
           className={cn(
             'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-xs  text-gray-500 transition-all hover:text-white 2xl:h-12 2xl:text-sm',
-            {
-              'bg-brand': isActive,
-            }
           )}
-          activeClassName="!text-white"
+          activeClassName="!text-primary"
         >
           <span
             className={cn(
@@ -125,7 +122,7 @@ export function MenuItem({
           )}
           {href === pathname && (
             <motion.span
-              className="absolute bottom-0 left-0 right-0 h-full w-full rounded-xl bg-brand shadow-large"
+              className="absolute bottom-0 left-0 right-0 h-full w-full rounded-xl shadow-large"
               layoutId="menu-item-active-indicator"
             />
           )}

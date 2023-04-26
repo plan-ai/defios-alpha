@@ -26,11 +26,11 @@ const SecurityStatus: React.FC<SecurityStatusProps> = ({
               : BrokenLogo
           }
           alt={security}
-          className="h-8 w-8"
+          className="h-6 w-6 xl:h-7 xl:w-7 3xl:h-8 3xl:w-8"
         />
       )}
       <div
-        className={cn('text-sm uppercase', {
+        className={cn('text-2xs uppercase xl:text-xs 3xl:text-sm', {
           'text-green-600': security?.toLowerCase() === 'secure',
           'text-yellow-500': security?.toLowerCase() === 'vulnerable',
           'text-red-600': security?.toLowerCase() === 'broken',

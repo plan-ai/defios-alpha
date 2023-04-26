@@ -34,10 +34,12 @@ const ComingSoon: React.FC<ComingSoonProps> = ({
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center">
-        <div className="mb-3 text-3xl">{header}</div>
-        <div className="text-md w-[75%] text-center">{discription}</div>
+        <div className="mb-3 text-xl xl:text-2xl 3xl:text-3xl">{header}</div>
+        <div className="w-[75%] text-center text-xs xl:text-sm 3xl:text-base">
+          {discription}
+        </div>
       </div>
-      <div className="m-5 h-[24rem] w-[40rem] bg-body">
+      <div className="m-5 h-[18rem] w-[30rem] bg-body xl:h-[21rem] xl:w-[35rem] 3xl:h-[24rem] 3xl:w-[40rem]">
         <iframe
           width="100%"
           height="100%"

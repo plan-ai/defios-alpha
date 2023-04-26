@@ -93,9 +93,9 @@ const SwapPage: NextPageWithLayout = () => {
         title="Swaps"
         description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
-      <div className="flex h-full w-full items-center justify-between px-60">
+      <div className="flex h-full w-full items-center justify-between">
         <Trade>
-          <div className="mb-5 w-[24.2rem] border-b border-dashed border-gray-800 pb-5 xs:mb-7 xs:pb-6">
+          <div className="w-[18.7rem] border-b border-dashed border-gray-800 mb-3 pb-2 xl:mb-5 xl:pb-4 3xl:mb-7 3xl:pb-6 xl:w-[20.2rem] 2xl:w-[22.7rem] 3xl:w-[24.2rem]">
             {coinList.length !== 0 ? (
               <div
                 className={cn(
@@ -137,7 +137,7 @@ const SwapPage: NextPageWithLayout = () => {
               <Spinner />
             )}
           </div>
-          <div className="flex flex-col gap-4 xs:gap-[18px]">
+          <div className="flex flex-col gap-3 xl:gap-3.5 3xl:gap-4">
             <TransactionInfo label={'Min. Received'} />
             <TransactionInfo label={'Rate'} />
             <TransactionInfo label={'Offered by'} />
@@ -149,7 +149,7 @@ const SwapPage: NextPageWithLayout = () => {
             size="large"
             shape="rounded"
             fullWidth={true}
-            className="mt-6 uppercase xs:mt-8 xs:tracking-widest"
+            className="mt-4 xl:mt-6 3xl:mt-8 uppercase xs:tracking-widest"
             color="info"
           >
             SWAP

@@ -51,7 +51,7 @@ const SortList: React.FC<SortListProps> = ({
   return (
     <div className="relative w-full lg:w-auto">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-11 w-full items-center justify-between rounded-xl bg-light-dark px-4 text-sm text-white md:w-36 lg:w-40 xl:w-48">
+        <Listbox.Button className="flex w-full items-center justify-between rounded-xl bg-light-dark px-4 text-2xs xl:text-xs 3xl:text-sm text-white md:w-36 lg:w-40 xl:w-48 !h-9 2xl:!h-10 3xl:!h-11">
           {selectedItem.name}
           <ChevronDown />
         </Listbox.Button>
@@ -69,7 +69,7 @@ const SortList: React.FC<SortListProps> = ({
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-xl px-3 py-2 text-sm font-medium text-white transition  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-2 text-2xs xl:text-xs 3xl:text-sm font-medium text-white transition  ${
                       selected ? 'my-1 bg-gray-700' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -553,19 +553,19 @@ export default function Projects() {
       </div>
 
       <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
-        <span className="col-span-2 px-6 py-6 tracking-wider text-gray-300">
+        <span className="col-span-2 px-6 py-4 tracking-wider text-gray-300 xl:py-5 3xl:py-6">
           Name
         </span>
-        <span className="py-6 text-center tracking-wider text-gray-300">
+        <span className="py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6">
           Open Issues
         </span>
-        <span className="py-6 text-center tracking-wider text-gray-300">
+        <span className="py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6">
           Repository Status
         </span>
-        <span className="col-span-2 py-6 text-center tracking-wider text-gray-300 ">
+        <span className="col-span-2 py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6 ">
           Liquidity
         </span>
-        <span className="col-span-2 py-6 text-center tracking-wider text-gray-300 ">
+        <span className="col-span-2 py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6 ">
           Top Contributors
         </span>
       </div>
@@ -647,7 +647,7 @@ export default function Projects() {
             </div>
             <div className="mb-6 grid grid-cols-3 gap-3 text-sm">
               <ActiveLink href={routes.projects}>
-                <Button shape="rounded" fullWidth size="medium">
+                <Button shape="rounded" fullWidth size="medium" color='info'>
                   Explore Related Roadmaps
                 </Button>
               </ActiveLink>
