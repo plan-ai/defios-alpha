@@ -90,7 +90,7 @@ export default function Header({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'sticky top-0 right-0 z-30 h-[4.5rem] w-full transition-all duration-300 lg:h-[5.5rem] 2xl:h-[6.5rem]',
+        'sticky top-0 right-0 z-30 h-[5.5rem] w-full transition-all duration-300 lg:h-[6.5rem] 2xl:h-[7.5rem]',
         isMounted && windowScroll.y
           ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
           : '',
@@ -114,13 +114,13 @@ export default function Header({ className }: { className?: string }) {
             <Logo />
           </div> */}
           {router.pathname === '/home' && (
-            <div className="text-lg xl:text-xl 2xl:text-2xl">
+            <div className="text-lg xl:text-xl 2xl:text-xl">
               Welcome to defiOS
             </div>
           )}
           {router.pathname === '/projects' && (
             <div className="flex flex-col">
-              <div className="text-xl font-bold text-primary xl:text-2xl 2xl:text-3xl">
+              <div className="text-3xl font-bold text-primary xl:text-4xl 2xl:text-5xl mb-2 2xl:mb-2.5 3xl:mb-3 mt-4 xl:mt-6 3xl:mt-8">
                 projects
               </div>
               <div className="text-xs xl:text-sm 2xl:text-base">

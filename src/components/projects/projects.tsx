@@ -552,7 +552,7 @@ export default function Projects() {
         </div>
       </div>
 
-      <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
+      <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 uppercase border-gray-500 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
         <span className="col-span-2 px-6 py-4 tracking-wider text-gray-300 xl:py-5 3xl:py-6">
           Name
         </span>

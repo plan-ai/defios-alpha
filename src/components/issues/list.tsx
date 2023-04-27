@@ -53,7 +53,7 @@ export default function IssuesList({
       )}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6 text-3xs xl:text-xs 3xl:text-sm"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
         onClick={() => setIsExpand(!isExpand)}
       >
         <span className="col-span-2 flex items-center justify-start px-6 font-medium tracking-wider text-white">

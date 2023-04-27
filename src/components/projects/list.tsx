@@ -30,7 +30,7 @@ export default function ProjectList({
       )}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-8 items-start items-center gap-6 text-3xs xl:text-xs 3xl:text-sm"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-8 items-start items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
         onClick={() => setIsExpand(!isExpand)}
       >
         <div className="col-span-2 px-6  font-medium tracking-wider text-white">
@@ -53,7 +53,7 @@ export default function ProjectList({
               />
             </div>
 
-            <div className="ml-3">
+            <div className="ml-3 text-3xs xl:text-xs 2xl:text-sm">
               <div className="mb-1 flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Staked</div>
                 <div>

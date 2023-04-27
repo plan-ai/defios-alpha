@@ -390,7 +390,7 @@ const IssuesPage: NextPageWithLayout = () => {
               </div>
             </Button>
           </div>
-          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark text-3xs shadow-card xl:text-xs 3xl:text-sm">
+          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark text-3xs uppercase shadow-card xl:text-xs 3xl:text-sm">
             <span className="col-span-2 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Issue Title
             </span>
