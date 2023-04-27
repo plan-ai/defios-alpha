@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 type AuthorCardProps = {
   image: string;
   name?: string;
@@ -6,11 +7,13 @@ type AuthorCardProps = {
 };
 
 export default function AuthorCard({ image, name, role }: AuthorCardProps) {
+  const router = useRouter();
+  const { pathname } = router;
   return (
     <div
       className={`flex items-center rounded-xl px-3 py-3 2xl:px-3 2xl:py-4  ${
         name ? 'bg-light-dark' : 'justify-center bg-none'
-      }`}
+      } ${pathname === '/profile' ? 'gradient-border-box' : ''}`}
     >
       <div className="relative h-11 w-11 2xl:h-14 2xl:w-14">
         <Image

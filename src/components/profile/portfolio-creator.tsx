@@ -69,8 +69,8 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
       )}
       {status && (
         <div className="mt-5 flex flex-row items-center justify-center">
-          <div className="flex h-9 w-[90%] items-center rounded-full bg-light-dark shadow-card">
-            <div className="text truncate text-ellipsis bg-center pl-4 text-xs text-gray-300 sm:text-sm">
+          <div className="flex h-7 xl:h-8 3xl:h-9 w-[90%] items-center rounded-full bg-light-dark shadow-card">
+            <div className="text truncate text-ellipsis bg-center pl-4 text-2xs text-gray-300 xl:text-xs 3xl:text-sm">
               {generatedLink}
             </div>
             <div

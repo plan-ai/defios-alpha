@@ -65,16 +65,16 @@ export default function Profile() {
 
   return (
     <div className="flex w-full flex-col pt-4 md:flex-row md:pt-10 lg:flex-row 4xl:pt-12">
-      <div className="shrink-0 border-dashed border-gray-700 md:w-72 md:border-r md:pr-7 lg:pr-10 2xl:w-80 4xl:w-96 4xl:pr-14">
+      <div className="w-[15rem] shrink-0 border-r border-dashed border-gray-700 pr-3  lg:w-[15.75rem] lg:pr-3.5 xl:w-[16.75rem] xl:pr-4 2xl:w-[19.25rem] 2xl:pr-5 3xl:w-[20rem] 3xl:pr-6">
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-medium tracking-tighter text-white xl:text-2xl">
+          <h2 className="text-lg font-medium tracking-tighter text-white xl:text-xl 3xl:text-2xl">
             {githubInfo?.name}
           </h2>
-          <div className="mt-1 text-sm font-medium tracking-tighter text-gray-400 xl:mt-3">
+          <div className="mt-1 text-xs font-medium tracking-tighter text-gray-400 xl:mt-3 xl:text-sm 3xl:text-base">
             @{githubInfo?.login}
           </div>
           <div className="md:max-w-auto mx-auto mt-5 flex h-9 max-w-sm items-center rounded-full bg-light-dark shadow-card md:mx-0 xl:mt-6">
-            <div className="text truncate text-ellipsis bg-center pl-4 text-xs text-gray-300 sm:text-sm">
+            <div className="text truncate text-ellipsis bg-center pl-4 text-2xs text-gray-300 xl:text-xs 3xl:text-sm">
               {wallet.publicKey?.toString()}
             </div>
             <div
@@ -90,26 +90,26 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-12 xl:gap-8 xl:py-6">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-8 xl:gap-8 xl:py-6">
           <div>
-            <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
+            <div className="mb-1.5 text-sm font-medium tracking-tighter text-white xl:text-base 3xl:text-lg">
               {sidebarData?.issues_solved}
             </div>
-            <div className="text-sm tracking-tighter text-gray-400">
+            <div className="text-2xs tracking-tighter text-gray-400 xl:text-xs 3xl:text-sm">
               # issues solved
             </div>
           </div>
           <div>
-            <div className="mb-1.5 text-lg font-medium tracking-tighter text-white">
+            <div className="mb-1.5 text-sm font-medium tracking-tighter text-white xl:text-base 3xl:text-lg">
               {sidebarData?.issues_rewarded}
             </div>
-            <div className="text-sm tracking-tighter text-gray-400">
+            <div className="text-2xs tracking-tighter text-gray-400 xl:text-xs 3xl:text-sm">
               # issues rewarded
             </div>
           </div>
         </div>
         <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
-          <div className="mb-2 text-sm font-medium uppercase tracking-wider text-white">
+          <div className="mb-2 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
             Top Solves
           </div>
           <div className="flex justify-center md:justify-start">
@@ -121,19 +121,18 @@ export default function Profile() {
               </div>
             ))}
           </div>
-          <div className="mt-4 text-sm tracking-tighter text-gray-400">
+          <div className="mt-4 text-2xs tracking-tighter text-gray-400 xl:text-xs 3xl:text-sm">
             {authorData.totalAmount} USDC
           </div>
-          <div className="mt-4 text-sm tracking-tighter text-gray-400">
+          <div className="mt-4 text-2xs tracking-tighter text-gray-400 xl:text-xs 3xl:text-sm">
             Last Synced Date : {authorData.syncDate}
           </div>
         </div>
         <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
-          <div className="mb-4 text-sm font-medium uppercase tracking-wider text-white">
+          <div className="mb-4 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
             Portfolio
           </div>
           <ToggleBtn
-            className="w-24"
             label="Theme"
             option1={'Basic'}
             option2={'Advanced'}

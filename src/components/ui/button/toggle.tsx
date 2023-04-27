@@ -22,7 +22,9 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({
   const [status, setStatus] = useState(option1);
   return (
     <div className="flex flex-row items-center justify-start">
-      {label && <div className="mr-2">{label}:</div>}
+      {label && (
+        <div className="mr-2 text-xs xl:text-sm 3xl:text-base">{label}:</div>
+      )}
       <RadioGroup
         value={
           stateChoosen !== undefined && setStateChoosen !== undefined
@@ -40,7 +42,7 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({
           {({ checked }) => (
             <span
               className={cn(
-                'relative flex h-8 w-32 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:text-sm',
+                'relative flex h-6 xl:h-7 3xl:h-8 w-[5.25rem] cursor-pointer items-center justify-center rounded-lg text-center text-2xs font-medium tracking-wider 2xl:w-[6rem] xl:text-xs 3xl:w-[6.75rem] 3xl:text-sm',
                 checked ? 'text-white' : 'text-white/50',
                 className
               )}
@@ -59,7 +61,7 @@ const ToggleBtn: React.FC<ToggleBtnProps> = ({
           {({ checked }) => (
             <span
               className={cn(
-                'relative flex h-8 w-32 cursor-pointer items-center justify-center rounded-lg text-center text-xs font-medium tracking-wider sm:text-sm',
+                'relative flex h-6 xl:h-7 3xl:h-8 w-[5.25rem] cursor-pointer items-center justify-center rounded-lg text-center text-2xs font-medium tracking-wider 2xl:w-[6rem] xl:text-xs 3xl:w-[6.75rem] 3xl:text-sm',
                 checked ? 'text-white' : 'text-white/50',
                 className
               )}

@@ -239,8 +239,7 @@ export default function ProfileTab() {
             'string' && (
             <div
               className={cn(
-                'grid gap-4 xs:grid-cols-2 lg:grid-cols-2 lg:gap-5 xl:gap-6 4xl:grid-cols-3',
-                'md:grid-cols-1'
+                'grid gap-4 grid-cols-2 lg:gap-5 xl:gap-6'
               )}
             >
               {projectsData.map((project: any, idx: number) => (
@@ -275,7 +274,7 @@ export default function ProfileTab() {
       </TabPanel>
       <TabPanel className="focus:outline-none">
         <div className="space-y-8 xl:space-y-9">
-          <div className="w-full lg:mx-2">
+          <div className="w-full mx-4">
             <GitHubCalendar
               theme={{
                 level0: '#161b22',

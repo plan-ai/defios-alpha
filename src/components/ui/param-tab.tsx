@@ -59,7 +59,7 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
       selectedIndex={selectedTabIndex}
       onChange={(index) => handleTabChange(index)}
     >
-      <Tab.List className="relative mb-6 bg-body bg-dark text-sm uppercase before:absolute before:left-0 before:bottom-0 before:w-full before:rounded-sm before:bg-gray-800 sm:gap-8 sm:rounded-none md:before:h-0.5">
+      <Tab.List className="relative mb-6 bg-body bg-dark text-2xs uppercase before:absolute before:left-0 before:bottom-0 before:w-full before:rounded-sm before:bg-gray-800 sm:gap-8 sm:rounded-none md:before:h-0.5 xl:text-xs 3xl:text-sm">
         {isMounted && ['xs', 'sm'].indexOf(breakpoint) !== -1 ? (
           <div ref={dropdownEl} className="rounded-xl border-2 border-gray-700">
             <button
