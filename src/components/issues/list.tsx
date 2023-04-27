@@ -104,7 +104,7 @@ export default function IssuesList({
           </motion.div>
         )}
       </AnimatePresence>
-      {!last && <div className="childDiv mx-6 border border-gray-500"></div>}
+      <div className="childDiv mx-6 border border-gray-500"></div>
     </div>
   );
 }
