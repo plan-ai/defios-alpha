@@ -75,7 +75,7 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({
           {item?.issue_stake_token_symbol}
         </div>
       </div>
-      <div className="childDiv mx-6 border border-gray-500"></div>
+      {!last && <div className="childDiv mx-6 border border-gray-500"></div>}
     </div>
   );
 };

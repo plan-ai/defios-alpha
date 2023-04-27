@@ -99,7 +99,9 @@ export default function ProjectList({
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="childDiv mx-6 border border-gray-700"></div>
+      {!last && (
+        <div className='childDiv mx-6 border border-gray-700'></div>
+      )}
     </div>
   );
 }

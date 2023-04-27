@@ -11,7 +11,7 @@ export default function AuthorCard({ image, name, role }: AuthorCardProps) {
   const { pathname } = router;
   return (
     <div
-      className={`flex items-center rounded-xl border-2 border-transparent px-3 py-3 2xl:px-3 2xl:py-4 ${
+      className={`flex items-center rounded-xl border border-transparent px-3 py-3 2xl:px-3 2xl:py-4 ${
         name ? 'bg-light-dark' : 'justify-center bg-none'
       } ${pathname === '/profile' ? 'border-primary' : 'hover:border-white'}`}
     >

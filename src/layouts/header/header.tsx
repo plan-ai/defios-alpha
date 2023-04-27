@@ -16,6 +16,9 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 
+import Button from '@/components/ui/button';
+import { PlusCircle } from '@/components/icons/plus-circle';
+
 function NotificationButton() {
   const router = useRouter();
   return (
@@ -35,6 +38,7 @@ function NotificationButton() {
 }
 
 function HeaderRightArea() {
+  const router = useRouter();
   const { data: session } = useSession();
   const wallet = useWallet();
   const { connection } = useConnection();
@@ -75,31 +79,49 @@ function HeaderRightArea() {
   }, [wallet.publicKey, connection]);
 
   return (
-    <div className="relative order-last flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8 mt-5">
-      <NotificationButton />
-      <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
+    <div className="flex flex-col items-end gap-6 xl:gap-7 2xl:gap-8 3xl:gap-10">
+      <div className="relative mt-5 flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8">
+        <NotificationButton />
+        <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
+      </div>
+      {router.pathname === '/projects' && (
+        <AnchorLink
+          href='/incentivize-contributors'
+        >
+          <Button
+            shape="rounded"
+            size="small"
+            color="info"
+          >
+            <div className="flex items-center gap-2">
+              <PlusCircle />
+              <div>create a project</div>
+            </div>
+          </Button>
+        </AnchorLink>
+      )}
     </div>
   );
 }
 
-interface PageHeaderProps{
-  title:string;
-  description?:string[];
+interface PageHeaderProps {
+  title: string;
+  description?: string[];
 }
 
-const PageHeader:React.FC<PageHeaderProps> = ({title,description}) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ title, description }) => {
   return (
     <div className="flex flex-col">
       <div className="mb-3 mt-5 text-5xl font-bold text-primary xl:mt-3.5 xl:text-6xl 2xl:mb-3.5 2xl:text-7xl 3xl:mb-4 3xl:mt-4">
         {title}
       </div>
       {description &&
-      description.length!==0 &&
-      description.map((item:string,idx:number)=>(
+        description.length !== 0 &&
+        description.map((item: string, idx: number) => (
           <div key={idx} className="text-xs xl:text-sm 2xl:text-base">
             {item}
           </div>
-      ))}
+        ))}
     </div>
   );
 };
@@ -136,9 +158,7 @@ export default function Header({ className }: { className?: string }) {
             <Logo />
           </div> */}
           {router.pathname === '/home' && (
-            <PageHeader
-              title="welcome to defios!"
-            />
+            <PageHeader title="welcome to defios!" />
           )}
           {router.pathname === '/projects' && (
             <PageHeader
@@ -149,36 +169,14 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {router.pathname === '/swap' && (
-            <PageHeader
-              title="swap"
-            />
-          )}
-          {router.pathname === '/roadmaps' && (
-            <PageHeader
-              title="roadmaps"
-            />
-          )}
-          {router.pathname === '/issues' && (
-            <PageHeader
-              title="issues"
-            />
-          )}
+          {router.pathname === '/swap' && <PageHeader title="swap" />}
+          {router.pathname === '/roadmaps' && <PageHeader title="roadmaps" />}
+          {router.pathname === '/issues' && <PageHeader title="issues" />}
           {router.pathname === '/incentivize-contributors' && (
-            <PageHeader
-              title="create a project"
-            />
+            <PageHeader title="create a project" />
           )}
-          {router.pathname === '/profile' && (
-            <PageHeader
-              title="profile"
-            />
-          )}
-          {router.pathname === '/jobs' && (
-            <PageHeader
-              title="jobs"
-            />
-          )}
+          {router.pathname === '/profile' && <PageHeader title="profile" />}
+          {router.pathname === '/jobs' && <PageHeader title="jobs" />}
         </div>
         <HeaderRightArea />
       </div>
