@@ -36,12 +36,12 @@ const AuthorProfilePage: NextPageWithLayout<
         />
       </div>
       <div className="mx-auto flex w-full shrink-0 flex-col md:px-4 xl:px-6 4xl:max-w-[1700px] 4xl:px-12">
-        <div className="z-10 mx-0 -mt-16 flex w-32 items-center justify-center rounded-full border-2 border-gray-500">
+        <div className="z-10 relative mx-0 -mt-16 flex h-32 w-32 items-center justify-center rounded-full border-2 border-gray-500">
           <Avatar
             src={githubInfo?.avatar_url || ''}
             name={githubInfo?.name || ''}
-            className="rounded-full"
-            size="128"
+            className="rounded-full object-cover"
+            style={'fill'}
           />
         </div>
 

@@ -45,7 +45,7 @@ export default function IssuesList({
   return (
     <div
       className={cn(
-        'relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
+        'parentDiv relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
         {
           'rounded-b-xl': last,
           'rounded-t-xl': first,
@@ -104,7 +104,7 @@ export default function IssuesList({
           </motion.div>
         )}
       </AnimatePresence>
-      {!last && <div className="mx-6 border border-gray-500"></div>}
+      {!last && <div className="childDiv mx-6 border border-gray-500"></div>}
     </div>
   );
 }

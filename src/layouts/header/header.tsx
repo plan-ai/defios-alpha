@@ -75,12 +75,34 @@ function HeaderRightArea() {
   }, [wallet.publicKey, connection]);
 
   return (
-    <div className="relative order-last flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8">
+    <div className="relative order-last flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8 mt-5">
       <NotificationButton />
       <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
     </div>
   );
 }
+
+interface PageHeaderProps{
+  title:string;
+  description?:string[];
+}
+
+const PageHeader:React.FC<PageHeaderProps> = ({title,description}) => {
+  return (
+    <div className="flex flex-col">
+      <div className="mb-3 mt-5 text-5xl font-bold text-primary xl:mt-3.5 xl:text-6xl 2xl:mb-3.5 2xl:text-7xl 3xl:mb-4 3xl:mt-4">
+        {title}
+      </div>
+      {description &&
+      description.length!==0 &&
+      description.map((item:string,idx:number)=>(
+          <div key={idx} className="text-xs xl:text-sm 2xl:text-base">
+            {item}
+          </div>
+      ))}
+    </div>
+  );
+};
 
 export default function Header({ className }: { className?: string }) {
   const router = useRouter();
@@ -90,14 +112,14 @@ export default function Header({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        'sticky top-0 right-0 z-30 h-[5.5rem] w-full transition-all duration-300 lg:h-[6.5rem] 2xl:h-[7.5rem]',
-        isMounted && windowScroll.y
-          ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
-          : '',
+        'relative top-0 right-0 z-30 h-[7rem] w-full transition-all duration-300 lg:h-[8rem] 2xl:h-[11rem]',
+        // isMounted && windowScroll.y
+        //   ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
+        //   : '',
         className
       )}
     >
-      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="flex h-full items-start justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <div className="mr-5 block lg:hidden">
             <Hamburger
@@ -114,22 +136,48 @@ export default function Header({ className }: { className?: string }) {
             <Logo />
           </div> */}
           {router.pathname === '/home' && (
-            <div className="text-lg xl:text-xl 2xl:text-xl">
-              Welcome to defiOS
-            </div>
+            <PageHeader
+              title="welcome to defios!"
+            />
           )}
           {router.pathname === '/projects' && (
-            <div className="flex flex-col">
-              <div className="text-3xl font-bold text-primary xl:text-4xl 2xl:text-5xl mb-2 2xl:mb-2.5 3xl:mb-3 mt-4 xl:mt-6 3xl:mt-8">
-                projects
-              </div>
-              <div className="text-xs xl:text-sm 2xl:text-base">
-                get rewarded when you contribute to a project.
-              </div>
-              <div className="text-xs xl:text-sm 2xl:text-base">
-                create your own project to incentivize contributors.
-              </div>
-            </div>
+            <PageHeader
+              title="projects"
+              description={[
+                'get rewarded when you contribute to a project.',
+                'create your own project to incentivize contributors.',
+              ]}
+            />
+          )}
+          {router.pathname === '/swap' && (
+            <PageHeader
+              title="swap"
+            />
+          )}
+          {router.pathname === '/roadmaps' && (
+            <PageHeader
+              title="roadmaps"
+            />
+          )}
+          {router.pathname === '/issues' && (
+            <PageHeader
+              title="issues"
+            />
+          )}
+          {router.pathname === '/incentivize-contributors' && (
+            <PageHeader
+              title="create a project"
+            />
+          )}
+          {router.pathname === '/profile' && (
+            <PageHeader
+              title="profile"
+            />
+          )}
+          {router.pathname === '/jobs' && (
+            <PageHeader
+              title="jobs"
+            />
           )}
         </div>
         <HeaderRightArea />
