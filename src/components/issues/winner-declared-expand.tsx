@@ -29,6 +29,7 @@ const WinnerDeclaredExpand: React.FC<WinnerDeclaredExpandProps> = ({
   useEffect(() => {
     if (data === undefined || data === null) return;
     const PrsList = data?.issue_prs;
+    if(PrsList.length===0) return;
     const _winner = PrsList?.reduce((prev: any, current: any) => {
       return prev?.issue_vote_amount > current?.issue_vote_amount
         ? prev

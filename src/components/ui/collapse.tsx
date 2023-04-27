@@ -28,7 +28,7 @@ export default function Collapse({
       style={{ height: isOpen ? 54 + height : 54 }}
     >
       <button
-        className="flex h-13 w-full items-center justify-between px-5 py-2 text-sm font-medium uppercase tracking-wider text-white"
+        className="flex h-13 w-full items-center justify-between px-5 py-2 text-2xs xl:text-xs 3xl:text-sm font-medium uppercase tracking-wider text-white"
         onClick={() => setIsOpen(!isOpen)}
       >
         {label}

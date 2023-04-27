@@ -12,6 +12,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
   useEffect(() => {
     if (data === undefined || data === null) return;
     const PrsList = data?.issue_prs;
+    if (PrsList.length === 0) return;
     const _winner = PrsList?.reduce((prev: any, current: any) => {
       return prev?.issue_vote_amount > current?.issue_vote_amount
         ? prev
@@ -21,26 +22,31 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       return Pr !== _winner;
     });
 
-    const _runnerup = removeWinner?.reduce((prev: any, current: any) => {
-      return prev?.issue_vote_amount > current?.issue_vote_amount
-        ? prev
-        : current;
-    });
+    const _runnerup =
+      removeWinner.length === 0
+        ? { issue_vote_amount: 0 }
+        : removeWinner?.reduce((prev: any, current: any) => {
+            return prev?.issue_vote_amount > current?.issue_vote_amount
+              ? prev
+              : current;
+          });
 
-    setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
-
-    const _totalVotes = PrsList?.map(
-      (item: any) => item?.issue_vote_amount
-    )?.reduce((prev: number, next: number) => prev + next);
     const prValSplit = _winner?.issue_pr_link?.split('/');
     const prValue =
       prValSplit[prValSplit.length - 2] +
       '/' +
       prValSplit[prValSplit.length - 1];
 
+    const _totalVotes = PrsList?.map(
+      (item: any) => item?.issue_vote_amount
+    )?.reduce((prev: number, next: number) => prev + next);
+
+    setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
+
     setWinner(_winner);
-    setTotalVotes(_totalVotes);
     setReducedLink(prValue);
+
+    setTotalVotes(_totalVotes);
   }, [data]);
   return (
     <div className="flex w-full flex-col justify-between gap-5 py-5">

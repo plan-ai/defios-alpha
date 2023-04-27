@@ -46,7 +46,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
 }) => {
   const [nodeSelected, setNodeSelected] = useState<any>();
   return (
-    <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-xl p-10 transition-all">
+    <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-xl p-6 transition-all xl:p-8 3xl:p-10">
       <div className="mr-10 flex h-full w-[55%] flex-col items-center justify-end">
         <div className="flex h-full max-h-full w-full items-center justify-center overflow-hidden">
           <div className="h-full w-full rounded-xl">
@@ -70,7 +70,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
           <div className="flex h-full w-full flex-col overflow-x-hidden overflow-y-scroll pr-10">
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <h2 className="flex w-[90%] items-center gap-2 text-2xl font-medium leading-[1.45em] -tracking-wider text-white">
+                <h2 className="flex w-[90%] items-center gap-2 text-lg font-medium leading-[1.45em] -tracking-wider text-white xl:text-xl 3xl:text-2xl">
                   {/* {name} */}
                   {nodeSelected?.data?.name}
                 </h2>
@@ -84,12 +84,12 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   className="ml-2 h-6 w-6"
                 />
               </div>
-              <div className="mt-1.5 inline-flex items-center text-sm -tracking-wider text-gray-400 hover:text-white xl:mt-2.5">
+              <div className="mt-1.5 inline-flex items-center text-2xs -tracking-wider text-gray-400 hover:text-white xl:mt-2.5  xl:text-xs 3xl:text-sm">
                 created at {creationDate}
               </div>
-              <div className="mt-4 flex flex-wrap gap-6 pt-0.5 lg:-mx-6 lg:mt-6 lg:gap-0">
+              <div className="mt-4 flex flex-wrap gap-4 pt-0.5 lg:-mx-6 lg:mt-6 lg:gap-0">
                 <div className="shrink-0 border-dashed border-gray-700 lg:border-r lg:px-6">
-                  <h3 className="text-heading-style mb-2 uppercase text-white">
+                  <h3 className="mb-2 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
                     Created By
                   </h3>
                   <ListCard
@@ -108,8 +108,8 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
                   />
                 </div>
-                <div className="shrink-0 lg:px-6">
-                  <h3 className="text-heading-style mb-2.5 uppercase text-white">
+                <div className="shrink-0 lg:px-4">
+                  <h3 className="mb-2.5 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
                     Deliverable
                   </h3>
                   <ListCard
@@ -173,7 +173,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center text-2xl">
+          <div className="flex h-full w-full flex-col items-center justify-center text-lg xl:text-xl 3xl:text-2xl">
             <div>Select a Node</div>
             <div>to Continue</div>
           </div>

@@ -42,7 +42,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
         )}
       >
         <div className="h-20 p-4">
-          <div className="text-xl font-semibold text-white ">
+          <div className="text-base font-semibold text-white xl:text-lg 3xl:text-xl ">
             {item?.title?.length > 45
               ? item?.title.slice(0, 45) + '...'
               : item?.title}
@@ -50,20 +50,19 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
         </div>
         <div
           onClick={(e) => setRoadmap(item?.title)}
-          className="relative block"
+          className="relative block h-80 w-full"
         >
           <Image
             src={item?.cover_image || ''}
             alt=""
-            width={320}
-            height={320}
-            className="h-80 w-80 object-cover object-center"
+            fill
+            className="object-cover object-cover"
           />
         </div>
 
         <div className="p-5 pt-3">
           <div className="flex items-center gap-2">
-            <div className="text-xs">Created by:</div>
+            <div className="text-2xs xl:text-xs 3xl:text-sm">Created by:</div>
             <ListCard
               item={{
                 name: item?.creator_name,
@@ -80,17 +79,21 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             />
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
-            <div className="text-xs">Total Staked:</div>
-            <div className="text-xl font-semibold text-white">
+            <div className="text-2xs xl:text-xs 3xl:text-sm">
+              Total Staked:
+            </div>
+            <div className="text-base font-semibold text-white xl:text-lg 3xl:text-xl">
               {'$' + Math.round(item?.total_stake * 100) / 100}
             </div>
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
-            <div className="text-xs">Active Objectives:</div>
+            <div className="text-2xs xl:text-xs 3xl:text-sm">
+              Active Objectives:
+            </div>
             <div>{item?.active_objectives}</div>
           </div>
           <div className=" mt-1.5 flex items-center gap-2">
-            <div className="text-xs">Created</div>
+            <div className="text-2xs xl:text-xs 3xl:text-sm">Created</div>
             <div className="text-sm text-gray-500">{datestr}</div>
           </div>
         </div>

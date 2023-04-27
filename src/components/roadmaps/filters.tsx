@@ -67,7 +67,7 @@ export function SortList() {
   return (
     <div className="relative">
       <Listbox value={selectedItem} onChange={setSelectedItem}>
-        <Listbox.Button className="flex h-10 w-auto items-center justify-between rounded-xl bg-gray-800 px-4 text-xs text-white sm:w-56 sm:text-sm lg:h-11">
+        <Listbox.Button className="3xl::text-sm flex h-10 w-auto items-center justify-between rounded-xl bg-gray-800 px-4 text-2xs text-white sm:w-56 lg:h-11 xl:text-xs">
           {selectedItem.name}
           <ChevronDown className="ml-2" />
         </Listbox.Button>
@@ -84,7 +84,7 @@ export function SortList() {
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer rounded-xl px-3 py-2 text-xs font-medium text-white transition sm:text-sm  ${
+                    className={`block cursor-pointer rounded-xl px-3 py-2 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
                       selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -143,7 +143,7 @@ export const RangeFilter: React.FC<RangeFilterProps> = ({
     <div className="p-5">
       <div className="mb-4 grid grid-cols-2 gap-2">
         <input
-          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
+          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-2xs text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0 xl:text-xs 3xl:text-sm"
           type="number"
           value={range.min}
           onChange={(e) => handleMinChange(parseInt(e.target.value))}
@@ -152,7 +152,7 @@ export const RangeFilter: React.FC<RangeFilterProps> = ({
           placeholder="placeholder"
         />
         <input
-          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-sm text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0"
+          className="h-9 rounded-xl border-gray-600 bg-gray-800 text-2xs text-white outline-none focus:border-gray-500 focus:outline-none focus:ring-0 xl:text-xs 3xl:text-sm"
           type="number"
           value={range.max}
           onChange={(e) => handleMaxChange(parseInt(e.target.value))}
@@ -190,7 +190,7 @@ export const Status: React.FC<StatusProps> = ({ values, plan, setPlan }) => {
           <RadioGroup.Option value={val} key={idx}>
             {({ checked }) => (
               <span
-                className={`flex h-12 cursor-pointer items-center justify-center rounded-xl border border-solid text-center text-sm font-medium uppercase tracking-wide transition-all ${
+                className={`flex h-12 cursor-pointer items-center justify-center rounded-xl border border-solid text-center text-2xs font-medium uppercase tracking-wide transition-all xl:text-xs 3xl:text-sm ${
                   checked
                     ? 'border-brand bg-brand text-white shadow-button'
                     : 'border-gray-700 bg-gray-800 text-white'
@@ -233,7 +233,7 @@ const CheckBoxList: React.FC<CheckBoxListProps> = ({
       {list.length !== 0 &&
         list.map((item, idx) => {
           return (
-            <div className="flex w-full flex-row" key={idx}>
+            <div className="flex w-full flex-row 3xl:text-base xl:text-sm text-xs" key={idx}>
               <div
                 onClick={() => handleCheck(item)}
                 className="mr-2 flex h-6 w-6 items-center justify-center rounded-sm bg-gray-600"
@@ -341,10 +341,10 @@ export default function DrawerFilters() {
   return (
     <div className="relative w-full max-w-full bg-dark xs:w-80">
       <div className="flex h-20 items-center justify-between overflow-hidden px-6 py-4">
-        <h2 className="text-xl font-medium uppercase tracking-wider text-white">
+        <h2 className="text-base xl:text-lg 3xl:text-xl font-medium uppercase tracking-wider text-white">
           Filters
         </h2>
-        <Button shape="circle" onClick={closeDrawer}>
+        <Button shape="circle" size='small' onClick={closeDrawer}>
           <Close className="h-auto w-3" />
         </Button>
       </div>
@@ -352,7 +352,7 @@ export default function DrawerFilters() {
         <Filters />
       </div>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
-        <Button fullWidth onClick={closeDrawer}>
+        <Button fullWidth onClick={closeDrawer} size="small">
           DONE
         </Button>
       </div>

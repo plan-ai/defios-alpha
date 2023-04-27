@@ -26,17 +26,17 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
     topContributorImg,
   } = details;
   return (
-    <div className="space-y-6 ">
+    <div className="space-y-6 text-2xs xl:text-xs 3xl:text-sm">
       <div className="block">
-        <h3 className="text-heading-style mb-2 uppercase text-white">
+        <h3 className=" mb-2 font-medium uppercase tracking-wider text-white">
           Description
         </h3>
-        <div className="whitespace-pre-wrap text-sm leading-6 -tracking-wider text-gray-400">
+        <div className="whitespace-pre-wrap  leading-6 -tracking-wider text-gray-400">
           {description}
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-2 uppercase text-white">
+        <h3 className=" mb-2 font-medium uppercase tracking-wider text-white">
           Top Contributor
         </h3>
         <div className="flex">
@@ -58,7 +58,9 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-2 uppercase text-white">Tag</h3>
+        <h3 className=" mb-2 font-medium uppercase tracking-wider text-white">
+          Tag
+        </h3>
         <div className="flex">
           {tags.map((tag, idx) => {
             return <GithubTags tag={tag} key={idx} />;
@@ -66,23 +68,23 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-2 uppercase text-white">
+        <h3 className=" mb-2 font-medium uppercase tracking-wider text-white">
           Timeframe
         </h3>
-        <div className="text-sm leading-6 -tracking-wider text-gray-400">
+        <div className=" leading-6 -tracking-wider text-gray-400">
           {timeframe}
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-2 uppercase text-white">
+        <h3 className=" mb-2 font-medium uppercase tracking-wider text-white">
           Staker Incentive
         </h3>
-        <div className="text-sm leading-6 -tracking-wider text-gray-400">
+        <div className=" leading-6 -tracking-wider text-gray-400">
           {stakerIncentive}
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-4 uppercase text-white">
+        <h3 className=" mb-4 font-medium uppercase tracking-wider text-white">
           Contributions to be Raised (progress)
         </h3>
         <div className="mb-4 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
@@ -91,13 +93,13 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
             style={{ width: `${(raisedAmount / toBeRaised) * 100}%` }}
           ></div>
         </div>
-        <div className="text-sm leading-6 -tracking-wider text-gray-400">
+        <div className=" leading-6 -tracking-wider text-gray-400">
           ({raisedAmount}/{toBeRaised}) {(raisedAmount / toBeRaised) * 100}%
           raised
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style uppercase text-white">
+        <h3 className=" font-medium uppercase tracking-wider text-white">
           Split of the Funds Expense
         </h3>
         <div className="w-full">
@@ -105,7 +107,7 @@ const RoadmapPopupDetails: React.FC<RoadmapPopupDetailsProps> = ({
         </div>
       </div>
       <div className="block">
-        <h3 className="text-heading-style mb-4 uppercase text-white">
+        <h3 className=" mb-4 font-medium uppercase tracking-wider text-white">
           Stake on Issue
         </h3>
         <div className="w-full">
