@@ -45,19 +45,14 @@ const Search: React.FC<searchProps> = ({
     'direct issue title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid,\nissue_project_id,\nissue_project_name,\nstate,\nstake_amount,\nstake_token_symbol,\nnum_prs,\ncreator_gh,\nissue_tags, order_by';
   return (
     <div className="relative flex w-full items-center rounded-full">
-      <label className="relative flex w-full items-center">
-        <Input
-          className="w-full"
-          placeholder={placeholder || 'Search'}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          autoComplete="off"
-        />
-        <Close
-          onClick={() => setSearch('')}
-          className="absolute right-3 h-4 w-4"
-        />
-      </label>
+      <Input
+        className="w-full"
+        placeholder={placeholder || 'Search'}
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        autoComplete="off"
+        search={true}
+      />
       <Button
         shape="rounded"
         size="small"
@@ -400,10 +395,10 @@ const IssuesPage: NextPageWithLayout = () => {
             <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Project Name
             </span>
-            <span className="col-span-2 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+            <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Staked Tokens
             </span>
-            <span className="py-3 px-6 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+            <span className="col-span-2 py-3 px-6 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               Tags
             </span>
           </div>

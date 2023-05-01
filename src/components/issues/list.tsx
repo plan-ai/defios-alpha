@@ -65,12 +65,12 @@ export default function IssuesList({
         <span className="flex items-center justify-center text-center font-medium tracking-wider text-white">
           {data?.issue_project_name}
         </span>
-        <span className="col-span-2 text-center font-medium tracking-wider text-white">
+        <span className="text-center font-medium tracking-wider text-white">
           {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
             100}{' '}
           {data?.issue_stake_token_symbol}
         </span>
-        <span className="flex flex-wrap items-center justify-center px-6 text-center font-medium tracking-wider text-white">
+        <span className="col-span-2 flex flex-wrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
           {data?.issue_tags?.length !== 0 &&
             removeDuplicates(data?.issue_tags)?.map(
               (tag: string, idx: number) => <GithubTags tag={tag} key={idx} />

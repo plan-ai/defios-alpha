@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import cn from 'classnames';
+import { SearchIcon } from '@/components/icons/search';
 
 type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -10,6 +11,7 @@ type InputProps = React.DetailedHTMLProps<
   className?: string;
   inputClassName?: string;
   useUppercaseLabel?: boolean;
+  search?: boolean;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -20,12 +22,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       type = 'text',
       className,
       inputClassName,
+      search,
       useUppercaseLabel = true,
       ...props
     },
     ref
   ) => (
-    <div className={cn('text-xs sm:text-sm', className)}>
+    <div className={cn('relative text-2xs xl:text-xs 3xl:text-sm', className)}>
       <label>
         {label && (
           <span
@@ -48,10 +51,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
           className={cn(
-            'gradient-border mt-1 block !h-9 w-full rounded-md border-2 border-gray-700 bg-body px-4 py-2 text-sm text-xs text-gray-100 placeholder-gray-400 transition-shadow duration-200 invalid:border-red-500 invalid:text-red-600 focus:outline-none focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:text-gray-500 sm:rounded-lg xl:text-sm 2xl:!h-10 3xl:!h-11 3xl:text-base',
+            'gradient-border mt-1 block !h-9 w-full rounded-md border-2 border-gray-700 bg-body px-4 py-2 text-xs text-gray-100 placeholder-gray-400 transition-shadow duration-200 invalid:border-red-500 invalid:text-red-600 focus:outline-none focus:invalid:border-red-500 focus:invalid:ring-red-500 disabled:border-gray-200 disabled:text-gray-500 sm:rounded-lg xl:text-sm 2xl:!h-10 3xl:!h-11 3xl:text-base',
+            {
+              'pl-8 xl:pl-9 3xl:pl-10': search,
+            },
             inputClassName
           )}
         />
+        {search && (
+          <SearchIcon className="absolute left-3.5 top-[35%] h-3.5 w-3.5 text-gray-500 xl:h-4 xl:w-4 3xl:h-5 3xl:w-5" />
+        )}
       </label>
       {error && (
         <span

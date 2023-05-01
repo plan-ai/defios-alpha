@@ -150,15 +150,13 @@ const RepoModal: React.FC<RepoModalProps> = ({
 
   return (
     <div className="flex h-full w-full flex-col p-3 xl:p-4 3xl:p-5">
-      <div className="relative flex w-full">
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search Repositories"
-          className="w-full"
-        />
-        <SearchIcon className="absolute right-4 top-4 h-5 w-5" />
-      </div>
+      <Input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search Repositories"
+        className="w-full"
+        search={true}
+      />
       <div className="my-3 flex gap-3">
         <Button
           size="mini"

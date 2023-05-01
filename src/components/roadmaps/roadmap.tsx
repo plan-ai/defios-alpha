@@ -31,19 +31,14 @@ const Search: React.FC<SearchProps> = ({
     'direct roadmap title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\n creator\n====filters==>\nchoose from side panel.';
   return (
     <div className="relative flex w-full items-center rounded-full ">
-      <label className="relative flex w-full items-center">
-        <Input
-          className="w-full"
-          placeholder="Search Roadmaps"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          autoComplete="off"
-        />
-        <Close
-          onClick={() => setSearch('')}
-          className="absolute right-3 h-4 w-4"
-        />
-      </label>
+      <Input
+        className="w-full"
+        placeholder="Search Roadmaps"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        autoComplete="off"
+        search={true}
+      />
       <Button
         shape="rounded"
         size="small"

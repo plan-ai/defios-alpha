@@ -100,19 +100,14 @@ const Search: React.FC<SearchProps> = ({
     'direct project name \nsearch or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid, num_open_issues,\ntop_supporter_name,\ntokens_staked,\nproject_owner_github,\ninternal_tags';
   return (
     <div className="relative flex w-full items-center rounded-full ">
-      <label className="relative flex w-full items-center">
-        <Input
-          className="w-full"
-          placeholder="Search Projects"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          autoComplete="off"
-        />
-        <Close
-          onClick={() => setSearch('')}
-          className="absolute right-3 h-4 w-4"
-        />
-      </label>
+      <Input
+        className="w-full"
+        placeholder="Search Projects"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        autoComplete="off"
+        search={true}
+      />
       <Button
         shape="rounded"
         size="small"
