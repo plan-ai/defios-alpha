@@ -38,9 +38,7 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
 
   useEffect(() => {
     if (Contributors === null) return;
-    setShare(
-      Math.round(parseFloat(Contributors[`${data.login}`]) * 100) / 100 + '%'
-    );
+    setShare(Math.round(parseFloat(Contributors[data.id]) * 100) / 100 + '%');
   }, [Contributors, setShare]);
 
   return (
@@ -54,7 +52,7 @@ export const DistributionCard: React.FC<DistributionCardProps> = ({
       }}
     >
       <div className="flex flex-row items-center text-xs xl:text-sm 3xl:text-base">
-        <div className="relative mr-4 h-9 w-9 xl:h-11 xl:w-11 3xl:h-12 3xl:w-12 rounded-full">
+        <div className="relative mr-4 h-9 w-9 rounded-full xl:h-11 xl:w-11 3xl:h-12 3xl:w-12">
           <Image
             src={data.avatar_url || ''}
             alt={data.login || ''}
@@ -111,7 +109,6 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
     )
       .then((res) => res.json())
       .catch((err) => console.log(err));
-
     setFetchData(resp);
 
     if (resp === null || resp === undefined || Object.keys(resp).length === 0)
@@ -157,7 +154,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
 
     const distributionInit: any = {};
     resp.forEach((el: any) => {
-      const contri = el?.author?.login;
+      const contri = el?.author?.id;
       distributionInit[`${contri}`] = '0%';
     });
     setIsLoading(false);
@@ -165,12 +162,7 @@ const DistributionSlider: React.FC<DistributionSliderProps> = ({}) => {
   };
 
   const AlgoOwner = () => {
-    const newData = OptionRepoOwner(
-      repoFullName,
-      fetchData,
-      MainDistribution,
-      myInfo.login
-    );
+    const newData = OptionRepoOwner(fetchData, MainDistribution, myInfo.id);
     dispatch(setDistribution(newData));
   };
 

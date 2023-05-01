@@ -85,17 +85,11 @@ function HeaderRightArea() {
         <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
       </div>
       {router.pathname === '/projects' && (
-        <AnchorLink
-          href='/incentivize-contributors'
-        >
-          <Button
-            shape="rounded"
-            size="small"
-            color="info"
-          >
+        <AnchorLink href="/incentivize-contributors">
+          <Button shape="rounded" size="small" color="info">
             <div className="flex items-center gap-2">
               <PlusCircle />
-              <div>create a project</div>
+              <div>Create A Project</div>
             </div>
           </Button>
         </AnchorLink>

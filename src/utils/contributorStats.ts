@@ -32,35 +32,28 @@ export const CodeContributorStats = (
       adds += data[i].weeks[j].a;
       deletes += data[i].weeks[j].d;
     }
-    newData[data[i].author.login] = adds + deletes;
+    newData[data[i].author.id] = adds + deletes;
     totalCode += adds + deletes;
   }
   for (let i = 0; i < data.length; i++) {
-    newData[data[i].author.login] =
-      (newData[data[i].author.login] / totalCode) * percentage + '%';
+    newData[data[i].author.id] =
+      (newData[data[i].author.id] / totalCode) * percentage + '%';
   }
   return newData;
 };
 
 export const OptionRepoOwner = (
-  repoFullName: string,
   contributors: any,
   distributionPercentage: any,
-  daoCreator: string
+  daoCreator: any
 ) => {
   const newData: any = {};
   const percentage = parseInt(distributionPercentage);
-  let owner = '';
-  if (daoCreator === '') {
-    owner = repoFullName.split('/')[0];
-  } else if (daoCreator !== '') {
-    owner = daoCreator;
-  }
   for (let i = 0; i < contributors?.length; i++) {
-    if (contributors[i].author.login === owner) {
-      newData[contributors[i].author.login] = `${percentage}%`;
+    if (contributors[i].author.id === daoCreator) {
+      newData[contributors[i].author.id] = `${percentage}%`;
     } else {
-      newData[contributors[i].author.login] = '0%';
+      newData[contributors[i].author.id] = '0%';
     }
   }
   return newData;
@@ -82,16 +75,16 @@ export const CodeDurationStats = (data: any, distributionPercentage: any) => {
       contribArray.push(data[i].weeks[j].a + data[i].weeks[j].d);
     }
     if (isNaN(calcCoefficientOfVariation(contribArray))) {
-      newData[data[i].author.login] = adds + deletes;
+      newData[data[i].author.id] = adds + deletes;
     } else if (!isNaN(calcCoefficientOfVariation(contribArray))) {
-      newData[data[i].author.login] =
+      newData[data[i].author.id] =
         (adds + deletes) / calcCoefficientOfVariation(contribArray);
     }
-    totalCode += newData[data[i].author.login];
+    totalCode += newData[data[i].author.id];
   }
   for (let i = 0; i < data.length; i++) {
-    newData[data[i].author.login] =
-      (newData[data[i].author.login] / totalCode) * percentage + '%';
+    newData[data[i].author.id] =
+      (newData[data[i].author.id] / totalCode) * percentage + '%';
   }
   return newData;
 };
