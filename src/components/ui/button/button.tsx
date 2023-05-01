@@ -29,8 +29,18 @@ const colors: Record<ColorNames, string[]> = {
   primary: ['text-brand', 'bg-brand', 'border-brand'],
   white: ['text-gray-400', 'bg-white', 'border-white'],
   gray: ['text-gray-400', 'bg-gray-100', 'border-gray-100'],
-  success: ['text-new-green', 'bg-new-green', 'border-new-green'],
-  info: ['text-new-blue', 'bg-new-blue', 'border-new-blue'],
+  success: [
+    'text-new-green',
+    'bg-new-green',
+    'border-new-green',
+    'hover:shadow-primary-green1',
+  ],
+  info: [
+    'text-new-blue',
+    'bg-new-blue',
+    'border-new-blue',
+    'hover:shadow-primary',
+  ],
   warning: ['text-yellow-500', 'bg-yellow-500', 'border-yellow-500'],
   danger: ['text-red-500', 'bg-red-500', 'border-red-500'],
 };
@@ -112,7 +122,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         break;
 
       default:
-        buttonColorClassNames = `${colorClassNames[1]} ${colorClassNames[2]}`;
+        buttonColorClassNames = `${colorClassNames[1]} ${colorClassNames[2]} ${colorClassNames[3]}`;
         buttonDripColor = 'rgba(255, 255, 255, 0.3)';
         break;
     }
@@ -122,13 +132,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={buttonRef}
         onClick={clickHandler}
         className={cn(
-          'relative inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-xs font-medium tracking-wider outline-none transition-all sm:text-sm',
+          'relative inline-flex shrink-0 items-center justify-center overflow-hidden text-center text-2xs font-medium tracking-wider outline-none transition-all xl:text-xs 3xl:text-sm',
           !disabled
             ? buttonColorClassNames
             : 'cursor-not-allowed bg-gray-100 text-gray-400',
           disabled || isLoading || variant === 'transparent'
             ? ''
-            : 'hover:-translate-y-0.5 hover:shadow-large focus:-translate-y-0.5 focus:shadow-large focus:outline-none',
+            : 'hover:-translate-y-0.5 hover:shadow-md focus:-translate-y-0.5 focus:shadow-md focus:outline-none',
           isLoading && 'pointer-events-auto cursor-default focus:outline-none',
           fullWidth && 'w-full',
           color === 'white' || color === 'gray'

@@ -25,6 +25,8 @@ module.exports = {
         'light-dark': '#171e2e',
         'sidebar-body': '#F8FAFC',
         primary: '#90AAFA',
+        'primary-green1': '#33A9A2',
+        'primary-green2': '#3EB3B7',
         'new-blue': '#2A4B6B',
         'new-green': '#1D606A',
       },

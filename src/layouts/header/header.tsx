@@ -89,7 +89,7 @@ function HeaderRightArea() {
           <Button shape="rounded" size="small" color="info">
             <div className="flex items-center gap-2">
               <PlusCircle />
-              <div>Create A Project</div>
+              <div>Create a Project</div>
             </div>
           </Button>
         </AnchorLink>
