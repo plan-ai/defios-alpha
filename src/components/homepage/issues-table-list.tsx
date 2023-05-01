@@ -57,19 +57,19 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({
       onClick={onClickHandler}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-5 items-center gap-6"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-5 items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <div className="col-span-2 px-6 text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="col-span-2 px-6 font-medium tracking-wider text-white">
           {item?.issue_title}
         </div>
-        <div className="flex items-center justify-center text-center text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="flex items-center justify-center text-center font-medium tracking-wider text-white">
           <IssueState state={item?.issue_state} />
         </div>
-        <div className="text-center text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="text-center font-medium tracking-wider text-white">
           {item?.issue_project_name}
         </div>
-        <div className="px-6 text-center text-xs font-medium tracking-wider text-white sm:text-sm">
+        <div className="px-6 text-center font-medium tracking-wider text-white">
           {Math.round((item?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
             100}{' '}
           {item?.issue_stake_token_symbol}

@@ -76,7 +76,7 @@ export default function ProfileProjectCard({
           <AnchorLink
             href={item?.project_repo_link || ''}
             target="_blank"
-            className="xl-h-9 inline-flex h-8 shrink-0 items-center rounded-full bg-black px-4 text-2xs font-medium uppercase normal-case -tracking-wide text-white backdrop-blur-[40px] xl:text-xs
+            className="xl:h-9 inline-flex h-8 shrink-0 items-center rounded-full bg-black px-4 text-2xs font-medium uppercase normal-case -tracking-wide text-white backdrop-blur-[40px] xl:text-xs
           3xl:h-10 3xl:text-sm"
           >
             <Image

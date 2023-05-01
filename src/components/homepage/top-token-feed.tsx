@@ -82,14 +82,15 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
           target="_blank"
         >
           <div className="mb-2 flex items-center">
-            <Image
-              src={tokenImgUrl || ''}
-              alt={data?.token_symbol || ''}
-              width={36}
-              height={36}
-              className="rounded-full"
-            />
-            <h4 className="ml-3 text-sm font-medium text-white">
+            <div className="relative h-6 w-6 xl:h-7 xl:w-7 3xl:h-8 3xl:w-8 ">
+              <Image
+                src={tokenImgUrl || ''}
+                alt={data?.token_symbol || ''}
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
+            <h4 className="ml-3 text-sm xl:text-base 3xl:text-lg font-medium text-white">
               {data?.token_name}
             </h4>
           </div>
@@ -97,11 +98,11 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
 
         <div className="flex items-center gap-4">
           <div className="w-full flex-col">
-            <div className="mb-2 text-sm font-medium tracking-tighter text-white lg:text-lg 2xl:text-xl 4xl:text-2xl">
+            <div className="mb-2 text-lg font-medium tracking-tighter text-white xl:text-xl 3xl:text-2xl">
               1<span className="ml-3">{data?.token_symbol}</span>
             </div>
 
-            <div className="flex items-center text-xs font-medium 2xl:text-sm">
+            <div className="flex items-center text-2xs xl:text-xs font-medium 3xl:text-sm">
               <span className="mr-5 truncate tracking-tighter text-gray-400 2xl:w-24 4xl:w-auto">
                 $ {Math.round(data?.token_ltp * 10000) / 10000}
               </span>

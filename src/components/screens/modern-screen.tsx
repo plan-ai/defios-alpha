@@ -50,7 +50,7 @@ export default function ModernScreen() {
       />
       {!isLoading && homeData !== null && (
         <>
-          <div className="flex h-full w-[57vw] flex-col items-center justify-center gap-5">
+          <div className="flex w-[73%] w-full flex-col items-center justify-center gap-5">
             <div className="w-full">
               <TopTokenFeedSlider TopTokenFeeds={homeData?.tokens} />
             </div>

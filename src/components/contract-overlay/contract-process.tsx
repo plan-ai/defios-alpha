@@ -63,12 +63,14 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
         {/* success */}
         {callStatus === 'success' && (
-          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark px-10 py-10 shadow-xl">
+          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10">
             <div className="flex flex-col items-center justify-center gap-5">
-              <CheckBadgeIcon className="h-16 w-16 text-new-blue" />
-              <div className="text-center text-lg">{successLabel}</div>
+              <CheckBadgeIcon className="h-12 w-12 text-new-blue xl:h-14 xl:w-14 3xl:h-16 3xl:w-16" />
+              <div className="text-center text-sm xl:text-base 3xl:text-lg">
+                {successLabel}
+              </div>
             </div>
-            <div className="text-md text-center text-gray-400">
+            <div className="text-xs text-gray-400 xl:text-sm 3xl:text-base">
               {successDescription}
               {successLink !== '' && (
                 <AnchorLink
@@ -97,12 +99,14 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
         {/* failure */}
         {callStatus === 'failure' && (
-          <div className="flex w-[34rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark px-10 py-10 shadow-xl">
+          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[30rem] xl:p-8 3xl:w-[34rem] 3xl:p-10">
             <div className="flex flex-col items-center justify-center gap-5">
-              <ExclamationTriangleIcon className="h-16 w-16 text-red-600" />
-              <div className="text-center text-lg">{failureLabel}</div>
+              <ExclamationTriangleIcon className="h-12 w-12 text-red-600 xl:h-14 xl:w-14 3xl:h-16 3xl:w-16" />
+              <div className="text-center text-sm xl:text-base 3xl:text-lg">
+                {failureLabel}
+              </div>
             </div>
-            <div className="text-md text-center text-gray-400">
+            <div className=" text-center text-xs text-gray-400 xl:text-sm 3xl:text-base">
               {failureDescription}
               {failureLink !== '' && (
                 <AnchorLink
@@ -121,7 +125,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                   router.push(failureRedirect);
                 }
               }}
-              size="medium"
+              size="small"
               shape="rounded"
             >
               {failureBtnText !== '' ? failureBtnText : 'Continue'}

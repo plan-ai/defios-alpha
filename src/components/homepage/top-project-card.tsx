@@ -102,16 +102,22 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6"
         onClick={onClickHandler}
       >
-        <div className="text-xl uppercase">Most Trending Project</div>
+        <div className="text-base uppercase xl:text-lg 3xl:text-xl">
+          Most Trending Project
+        </div>
         <div className="flex justify-between gap-3">
           <AnchorLink
             href={item?.project_repo_link || ''}
             target="_blank"
-            className="inline-flex h-10 shrink-0 items-center rounded-full bg-black px-4 text-sm font-medium uppercase normal-case -tracking-wide
-          text-white backdrop-blur-[40px]"
+            className="inline-flex h-8 shrink-0 items-center rounded-full bg-black px-4 text-2xs font-medium uppercase normal-case -tracking-wide text-white backdrop-blur-[40px] xl:h-9 xl:text-xs
+          3xl:h-10 3xl:text-sm"
           >
-            <Image src={GithubLogo} alt={'github'} className="mr-1 h-5 w-5" />
-            {item?.project_repo_link?.replace('rewarded: string;', '').length >
+            <Image
+              src={GithubLogo}
+              alt={'github'}
+              className="mr-1 h-3.5 w-3.5  xl:h-4 xl:w-4 3xl:h-5 3xl:w-5"
+            />
+            {item?.project_repo_link?.replace('https://github.com', '').length >
             18
               ? item?.project_repo_link
                   ?.replace('https://github.com', '')
@@ -119,7 +125,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
               : item?.project_repo_link?.replace('https://github.com', '')}
           </AnchorLink>
         </div>
-        <div className="my-5 flex w-full flex-row items-center justify-center">
+        <div className="my-3.5 flex w-full flex-row items-center justify-center xl:my-4 3xl:my-5">
           <StatsData
             icon={'issues'}
             header={'Open Issues'}
@@ -131,7 +137,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
             value={item?.coins_staked + ' ' + item?.project_token?.token_symbol}
           />
         </div>
-        <div className="flex w-full flex-col gap-3 border-t border-dashed border-gray-800 pt-6">
+        <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
           <CoinTicker
             value={Math.round(item?.project_token?.token_ltp * 100) / 100}
             coin={{ ...item?.project_token, token_image_url: tokenImgUrl }}
