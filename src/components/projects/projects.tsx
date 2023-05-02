@@ -1,12 +1,11 @@
 import Button from '@/components/ui/button';
 import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import { ChevronDown } from '@/components/icons/chevron-down';
-import { SearchIcon } from '@/components/icons/search';
 import routes from '@/config/routes';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import PriceChart from '@/components/ui/chats/price-chart';
@@ -15,9 +14,9 @@ import DataWithImage from '@/components/custom/data-with-image';
 import StackedSwitch from '@/components/custom/stacked-switch';
 import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
-import { Close } from '@/components/icons/close';
 import Input from '@/components/ui/forms/input';
 
+import _debounce from 'lodash/debounce';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
@@ -96,34 +95,37 @@ const Search: React.FC<SearchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+  const handleDebounceFn = () => {
+    setTriggerSearch(true);
+  };
+
+  const debounceFn = useCallback(_debounce(handleDebounceFn, 500), []);
+
   const tooltipVal =
     'direct project name \nsearch or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid, num_open_issues,\ntop_supporter_name,\ntokens_staked,\nproject_owner_github,\ninternal_tags';
   return (
     <div className="relative flex w-full items-center rounded-full ">
       <Input
         className="w-full"
-        placeholder="Search Projects"
+        placeholder="search projects"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         autoComplete="off"
         search={true}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            debounceFn();
+          }
+        }}
       />
-      <Button
-        shape="rounded"
-        size="small"
-        className="mx-2 mr-5 flex items-center justify-center"
-        onClick={() => setTriggerSearch(true)}
-      >
-        <SearchIcon className="h-4 w-4" />
-      </Button>
       <Tooltip
         content={tooltipVal}
         placement="right-start"
         style="light"
-        className="!whitespace-pre-wrap text-black"
+        className="m-2 !whitespace-pre-wrap text-black"
         arrow={false}
       >
-        <InfoCircle />
+        <InfoCircle className="ml-4" />
       </Tooltip>
     </div>
   );

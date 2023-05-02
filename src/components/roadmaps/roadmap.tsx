@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -8,6 +8,7 @@ import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '../icons/plus-circle';
 import Input from '@/components/ui/forms/input';
 
+import _debounce from 'lodash/debounce';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { triggerFilter, searchDone } from '@/store/roadmapFilterSlice';
@@ -27,26 +28,29 @@ const Search: React.FC<SearchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+  const handleDebounceFn = () => {
+    setTriggerSearch(true);
+  };
+
+  const debounceFn = useCallback(_debounce(handleDebounceFn, 500), []);
+
   const tooltipVal =
     'direct roadmap title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\n creator\n====filters==>\nchoose from side panel.';
   return (
     <div className="relative flex w-full items-center rounded-full ">
       <Input
         className="w-full"
-        placeholder="Search Roadmaps"
+        placeholder="search roadmaps"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         autoComplete="off"
         search={true}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            debounceFn();
+          }
+        }}
       />
-      <Button
-        shape="rounded"
-        size="small"
-        className="mx-2 mr-5 flex items-center justify-center"
-        onClick={() => setTriggerSearch(true)}
-      >
-        <SearchIcon className="h-4 w-4" />
-      </Button>
       <Tooltip
         content={tooltipVal}
         placement="right-start"
@@ -54,7 +58,7 @@ const Search: React.FC<SearchProps> = ({
         className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
-        <InfoCircle />
+        <InfoCircle className="ml-4" />
       </Tooltip>
     </div>
   );

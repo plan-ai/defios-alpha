@@ -153,7 +153,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
       <Input
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search Repositories"
+        placeholder="search repositories"
         className="w-full"
         search={true}
       />

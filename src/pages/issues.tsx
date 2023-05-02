@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useCallback } from 'react';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
 import Button from '@/components/ui/button/button';
 import StackedSwitch from '@/components/custom/stacked-switch';
-import { SearchIcon } from '@/components/icons/search';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import IssuesList from '@/components/issues/list';
-import { Close } from '@/components/icons/close';
 import Input from '@/components/ui/forms/input';
 
 import OpenIssueExpand from '@/components/issues/open-issues-expand';
@@ -19,6 +17,7 @@ import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 import axios from 'axios';
 
+import _debounce from 'lodash/debounce';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 import { resetRefetch } from '@/store/refetchSlice';
@@ -41,6 +40,13 @@ const Search: React.FC<searchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+
+  const handleDebounceFn = () => {
+    setTriggerSearch(true);
+  };
+
+  const debounceFn = useCallback(_debounce(handleDebounceFn, 500), []);
+
   const tooltipVal =
     'direct issue title search or using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid,\nissue_project_id,\nissue_project_name,\nstate,\nstake_amount,\nstake_token_symbol,\nnum_prs,\ncreator_gh,\nissue_tags, order_by';
   return (
@@ -52,15 +58,12 @@ const Search: React.FC<searchProps> = ({
         onChange={(e) => setSearch(e.target.value)}
         autoComplete="off"
         search={true}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            debounceFn();
+          }
+        }}
       />
-      <Button
-        shape="rounded"
-        size="small"
-        className="mx-2 mr-5 flex items-center justify-center"
-        onClick={() => setTriggerSearch(true)}
-      >
-        <SearchIcon className="h-4 w-4" />
-      </Button>
       <Tooltip
         content={tooltipVal}
         placement="right-start"
@@ -68,7 +71,7 @@ const Search: React.FC<searchProps> = ({
         className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
-        <InfoCircle />
+        <InfoCircle className="ml-4" />
       </Tooltip>
     </div>
   );
@@ -359,7 +362,7 @@ const IssuesPage: NextPageWithLayout = () => {
         <div className="flex h-full w-full flex-col">
           <div className="mb-2 flex w-full items-center gap-5">
             <Search
-              placeholder="Search Issues"
+              placeholder="search issues"
               search={search}
               setSearch={setSearch}
               setTriggerSearch={setTriggerSearch}

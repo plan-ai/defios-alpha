@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import ContributionsHistory from '@/components/profile/contributions-history';
 import ProfileProjectCard from '@/components/profile/profile-project-card';
@@ -14,6 +14,7 @@ import Input from '@/components/ui/forms/input';
 import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
 
+import _debounce from 'lodash/debounce';
 import axios from 'axios';
 import { useAppSelector } from '@/store/store';
 import { Close } from '@/components/icons/close';
@@ -32,26 +33,29 @@ const Search: React.FC<SearchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
+  const handleDebounceFn = () => {
+    setTriggerSearch(true);
+  };
+
+  const debounceFn = useCallback(_debounce(handleDebounceFn, 500), []);
+
   const tooltipVal =
     'direct project name search \nor using keys\n====Search==>\n<key>:<value> separated by ;\n====keys==>\nid, num_open_issues,\ntop_supporter_name, tokens_staked,\nproject_owner_github, internal_tags';
   return (
     <div className="relative mb-5 flex w-full items-center rounded-full">
       <Input
         className="w-full"
-        placeholder="Search Projects"
+        placeholder="search projects"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         autoComplete="off"
         search={true}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            debounceFn();
+          }
+        }}
       />
-      <Button
-        shape="rounded"
-        size="small"
-        className="mx-2 mr-5 flex items-center justify-center"
-        onClick={() => setTriggerSearch(true)}
-      >
-        <SearchIcon className="h-4 w-4" />
-      </Button>
       <Tooltip
         content={tooltipVal}
         placement="left-start"
@@ -59,7 +63,7 @@ const Search: React.FC<SearchProps> = ({
         className="!whitespace-pre-wrap text-black"
         arrow={false}
       >
-        <InfoCircle />
+        <InfoCircle className="ml-4" />
       </Tooltip>
     </div>
   );
