@@ -12,6 +12,8 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
+import { uploadMetadataToIPFS } from '@/lib/helpers/metadata';
+
 interface OpenIssueExpandProps {
   issueDesc: string;
   link: string;
@@ -116,9 +118,34 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           },
         };
 
-        axios(commitsConfig).then((commitRes) => {
+        axios(commitsConfig).then(async (commitRes) => {
           const latestCommit = commitRes.data[commitRes.data.length - 1];
           let resCalled = false;
+
+          var config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `https://api.github.com/repos/${link?.replace(
+              'https://github.com/',
+              ''
+            )}`,
+            headers: {
+              Authorization: `Bearer ${(session as any)?.accessToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
+          };
+
+          const issueInfo = await axios(config)
+            .then((res) => res.data)
+            .catch((err) => console.log(err));
+
+          const ipfsMetadata = await uploadMetadataToIPFS({
+            issue_author_github: issueInfo.user.id,
+            issue_title: issueInfo.title,
+            issue_url: issueInfo.html_url,
+            pr_url: res.data.html_url,
+          });
+
           addCommit(
             wallet.publicKey as PublicKey,
             new PublicKey(account),
@@ -127,7 +154,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             ),
             latestCommit.commit.tree.sha,
             latestCommit.sha,
-            res.data.html_url
+            ipfsMetadata
           )
             .then((res: any) => {
               resCalled = true;
