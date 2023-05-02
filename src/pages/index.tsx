@@ -99,7 +99,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
               </div>
             </div>
             <div className="flex w-full gap-4 text-[2vh] font-semibold text-white">
-              {/* {!session && (
+              {!session && (
                 <Button
                   onClick={() =>
                     signIn('github', {
@@ -107,21 +107,21 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                     })
                   }
                   shape="rounded"
-                  className="!bg-[#90A9FC] !text-black"
+                  color="info"
                 >
                   Continue with GitHub{' '}
-                  <ArrowRightIcon className=" inline-block h-5 w-5 text-black" />
+                  <ArrowRightIcon className=" inline-block h-5 w-5" />
                 </Button>
               )}
               {session && (
                 <Link href="/home">
-                  <Button shape="rounded" className="!bg-[#90A9FC] !text-black">
+                  <Button shape="rounded" color="info">
                     Continue with GitHub{' '}
-                    <ArrowRightIcon className=" inline-block h-5 w-5 text-black" />
+                    <ArrowRightIcon className=" inline-block h-5 w-5" />
                   </Button>
                 </Link>
-              )} */}
-              <div className="flex gap-2">
+              )}
+              {/* <div className="flex gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -132,7 +132,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                 <Button onClick={onSubmitHandler} shape="rounded" color="info">
                   Join Waitlist
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

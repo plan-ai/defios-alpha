@@ -23,6 +23,7 @@ export default function IssuesList({
   first,
 }: React.PropsWithChildren<IssuesListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
+  let [issueTags, setIssueTags] = useState<string[]>([]);
   const wallet = useWallet();
 
   let [tokenDecimals, setTokenDecimals] = useState(1);
@@ -37,6 +38,7 @@ export default function IssuesList({
   };
 
   useEffect(() => {
+    setIssueTags(removeDuplicates(data?.issue_tags));
     getDecimals();
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
@@ -45,7 +47,7 @@ export default function IssuesList({
   return (
     <div
       className={cn(
-        'parentDiv relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
+        'parentDiv relative bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
         {
           'rounded-b-xl': last,
           'rounded-t-xl': first,
@@ -71,10 +73,17 @@ export default function IssuesList({
           {data?.issue_stake_token_symbol}
         </span>
         <span className="col-span-2 flex flex-wrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
-          {data?.issue_tags?.length !== 0 &&
-            removeDuplicates(data?.issue_tags)?.map(
-              (tag: string, idx: number) => <GithubTags tag={tag} key={idx} />
-            )}
+          {issueTags.length !== 0 && <GithubTags tag={issueTags[0]} key={0} />}
+          <div className="group relative">
+            {issueTags.length-1>0 && 
+              <div>(+{issueTags.length - 1})</div>
+            }
+            <div className="absolute top-8 right-2 w-[15rem] 3xl:p-3 xl:p-2.5 p-2 rounded-xl shadow-xl z-[100] hidden flex-wrap bg-dark group-hover:flex">
+              {issueTags.slice(1).map((tag, idx) => (
+                <GithubTags tag={tag} key={idx+1} />
+              ))}
+            </div>
+          </div>
         </span>
       </div>
       <AnimatePresence initial={false}>
