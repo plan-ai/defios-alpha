@@ -28,7 +28,7 @@ const variants: Record<VariantNames, string[]> = {
 const colors: Record<ColorNames, string[]> = {
   primary: ['text-brand', 'bg-brand', 'border-brand'],
   white: ['text-gray-400', 'bg-white', 'border-white'],
-  gray: ['text-gray-400', 'bg-gray-100', 'border-gray-100'],
+  gray: ['text-gray-400', 'bg-gray-900', 'border-gray-100'],
   success: [
     'text-new-green',
     'bg-new-green',
