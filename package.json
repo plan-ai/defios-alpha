@@ -40,7 +40,7 @@
         "ethers": "^6.0.2",
         "firebase": "^9.17.1",
         "flowbite": "^1.6.3",
-        "flowbite-react": "^0.4.2",
+        "flowbite-react": "^0.4.4",
         "framer-motion": "^9.0.1",
         "fs": "^0.0.1-security",
         "jotai": "^2.0.0",
