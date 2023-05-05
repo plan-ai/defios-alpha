@@ -88,7 +88,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   };
 
   const handleCommitSubmit = () => {
-    if (prUrl === '' || !prUrl.includes('https://github.com/')) return;
+    if (prUrl === '' || !prUrl.startsWith('https://github.com/')) return;
     dispatch(onLoading('Submitting your commit on the issue...'));
     const pullApiUrl = prUrl
       .replace('https://github.com/', '')
