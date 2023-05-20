@@ -50,10 +50,11 @@ export const PRCard: React.FC<PRChekerProps> = ({
 
 interface PRSliderProps {
   PRs: any;
+  selectedPR:any;
+  setSelectedPR:React.Dispatch<React.SetStateAction<any>>
 }
 
-export default function PRSlider({ PRs }: PRSliderProps) {
-  const [selectedPR, setSelectedPR] = useState<any>();
+export default function PRSlider({ PRs,selectedPR,setSelectedPR }: PRSliderProps) {
   const [totalVotes, setTotalVotes] = useState(1);
   useEffect(() => {
     const _totalVotes = PRs?.map(

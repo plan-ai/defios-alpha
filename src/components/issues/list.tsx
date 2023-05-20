@@ -5,7 +5,7 @@ import GithubTags from '@/components/ui/tags/github-tags';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import cn from 'classnames';
-import Button from '@/components/ui/button/button'
+import Button from '@/components/ui/button/button';
 
 import { fetchDecimals } from '@/lib/helpers/metadata';
 
@@ -73,15 +73,17 @@ export default function IssuesList({
             100}{' '}
           {data?.issue_stake_token_symbol}
         </span>
-        <span className="col-span-2 flex flex-wrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
+        <span className="col-span-2 flex flex-nowrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
           {issueTags.length !== 0 && <GithubTags tag={issueTags[0]} key={0} />}
           <div className="group relative">
-            {issueTags.length-1>0 && 
-              <Button size='mini' shape='pill' color='gray' >(+{issueTags.length - 1})</Button>
-            }
-            <div className="absolute top-8 right-2 w-[15rem] 3xl:p-3 xl:p-2.5 p-2 rounded-xl shadow-xl z-[100] hidden flex-wrap bg-dark group-hover:flex">
+            {issueTags.length - 1 > 0 && (
+              <Button size="mini" shape="pill" color="gray">
+                (+{issueTags.length - 1})
+              </Button>
+            )}
+            <div className="absolute top-8 right-2 z-[100] hidden w-[15rem] flex-wrap rounded-xl bg-dark p-2 shadow-xl group-hover:flex xl:p-2.5 3xl:p-3">
               {issueTags.slice(1).map((tag, idx) => (
-                <GithubTags tag={tag} key={idx+1} />
+                <GithubTags tag={tag} key={idx + 1} />
               ))}
             </div>
           </div>

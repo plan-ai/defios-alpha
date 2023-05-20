@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
 import AnchorLink from '../ui/links/anchor-link';
@@ -12,18 +12,23 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
+import EmptyList from '@/components/icons/EmptyList';
+import PRSlider from '@/components/issues/pr-slider';
+
 import { uploadMetadataToIPFS } from '@/lib/helpers/metadata';
 
 interface OpenIssueExpandProps {
   issueDesc: string;
   link: string;
   account: string;
+  PRData: any;
 }
 
 const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   issueDesc,
   link,
   account,
+  PRData,
 }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
@@ -34,6 +39,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const userMappingState = useAppSelector(selectUserMapping);
   const [prLoading, setPrLoading] = React.useState<boolean>(false);
+
+  const [expandState, setExpandState] = useState('issue');
+
+  const [PRStakeAmount, setPRStakeAmount] = React.useState<number>(0);
+  const [selectedPR, setSelectedPR] = useState<any>();
 
   const handleStake = () => {
     if (stakeAmount <= 0) return;
@@ -213,67 +223,147 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   };
 
   return (
-    <div className="flex w-full justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
-      <div className="flex w-1/2 flex-col gap-3">
-        <strong>Description</strong>
-        <div className="tracking-wider">
-          {issueDesc.length === 0 && 'No Description available'}
-          {issueDesc.length > 250 ? issueDesc.slice(0, 240) + '...' : issueDesc}
-        </div>
-        <AnchorLink href={link} target="_blank">
-          <strong className="underline">view Thread on Github</strong>
-        </AnchorLink>
-      </div>
-      <div className="flex w-1/2 flex-col gap-3">
-        <div className="flex-flex-col w-full">
-          <div className="mb-2">Build 🛠️</div>
-          <div className="flex w-full items-center justify-center">
-            <Input
-              type="text"
-              placeholder="Pull Request URL"
-              inputClassName="w-full border-r-0 !h-10 !rounded-r-none !my-0"
-              className="w-full"
-              onChange={(e) => {
-                setPrUrl(e.target.value);
-              }}
-            />
-            <Button
-              color="info"
-              className="w-1/3 -translate-x-2"
-              size="small"
-              shape="rounded"
-              onClick={handleCommitSubmit}
-              isLoading={stateLoading === 'loading'}
-            >
-              Submit
-            </Button>
-          </div>
-        </div>
-        <div className="flex-flex-col w-full">
-          <div className="mb-2">Speed Up 🚅</div>
-          <div className="flex w-full items-center justify-center">
-            <Input
-              type="text"
-              placeholder="Stake Amount"
-              inputClassName="w-full border-r-0 !h-10 !rounded-r-none !my-0"
-              className="w-full"
-              onChange={(e) => {
-                setStakeAmount(parseFloat(e.target.value));
-              }}
-            />
-            <Button
-              color="success"
-              className="w-1/3 -translate-x-2"
-              size="small"
-              shape="rounded"
-              onClick={handleStake}
-              isLoading={stateLoading === 'loading'}
-            >
-              Stake
-            </Button>
-          </div>
+    <div className="mt-4 flex w-full flex-col">
+      <div className="flex items-center gap-4">
+        <Button
+          color={expandState === 'issue' ? 'info' : 'primary'}
+          size="mini"
+          shape="rounded"
+          onClick={(e) => setExpandState('issue')}
+        >
+          Issue
+        </Button>
+        <Button
+          color={expandState === 'pull request' ? 'info' : 'primary'}
+          size="mini"
+          shape="rounded"
+          onClick={(e) => setExpandState('pull request')}
+        >
+          Pull Request
+        </Button>
+        <div className="xl-text-base mx-40 text-sm font-semibold 3xl:text-lg">
+          {expandState === 'issue'
+            ? 'Stake on Issue, Submit Pull Request'
+            : 'Stake on Pull Requests'}
         </div>
       </div>
+      {expandState === 'issue' && (
+        <div className="flex w-full justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
+          <div className="flex w-1/2 flex-col gap-3">
+            <strong>Description</strong>
+            <div className="tracking-wider">
+              {issueDesc.length === 0 && 'No Description available'}
+              {issueDesc.length > 250
+                ? issueDesc.slice(0, 240) + '...'
+                : issueDesc}
+            </div>
+            <AnchorLink href={link} target="_blank">
+              <strong className="underline">view Thread on Github</strong>
+            </AnchorLink>
+          </div>
+          <div className="flex w-1/2 flex-col gap-3">
+            <div className="flex-flex-col w-full">
+              <div className="mb-2">Build 🛠️</div>
+              <div className="flex w-full items-center justify-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="Pull Request URL"
+                  inputClassName="w-full !h-10 !my-0"
+                  className="w-full"
+                  onChange={(e) => {
+                    setPrUrl(e.target.value);
+                  }}
+                />
+                <Button
+                  color="info"
+                  size="small"
+                  shape="rounded"
+                  onClick={handleCommitSubmit}
+                  isLoading={stateLoading === 'loading'}
+                >
+                  Submit
+                </Button>
+              </div>
+            </div>
+            <div className="flex-flex-col w-full">
+              <div className="mb-2">Speed Up 🚅</div>
+              <div className="flex w-full items-center justify-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="Stake Amount"
+                  inputClassName="w-full !h-10 !my-0"
+                  className="w-full"
+                  onChange={(e) => {
+                    setStakeAmount(parseFloat(e.target.value));
+                  }}
+                />
+                <Button
+                  color="success"
+                  size="small"
+                  shape="rounded"
+                  onClick={handleStake}
+                  isLoading={stateLoading === 'loading'}
+                >
+                  Stake
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {expandState === 'pull request' && (
+        <div className="flex w-full flex-col justify-between gap-5 py-5">
+          {PRData.length > 0 && (
+            <>
+              <div className="mb-3 flex w-full flex-row items-center justify-between">
+                <PRSlider
+                  PRs={PRData}
+                  selectedPR={selectedPR}
+                  setSelectedPR={setSelectedPR}
+                />
+              </div>
+              <div className="flex w-full items-center justify-between">
+                <div className="flex w-2/3 items-center gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Stake Amount"
+                    inputClassName="w-full !h-10 !my-0"
+                    className="w-full"
+                    onChange={(e) => {
+                      setPRStakeAmount(parseFloat(e.target.value));
+                    }}
+                  />
+                  <Button
+                    color="success"
+                    size="small"
+                    shape="rounded"
+                    // onClick={handleStake}
+                    isLoading={stateLoading === 'loading'}
+                  >
+                    Stake on Pull Request
+                  </Button>
+                </div>
+                <Button
+                  color="info"
+                  size="small"
+                  shape="rounded"
+                  isLoading={stateLoading === 'loading'}
+                >
+                  Merge Selected Pull Request
+                </Button>
+              </div>
+            </>
+          )}
+          {PRData.length === 0 && (
+            <div className="mb-3 flex w-full flex-col items-center justify-center gap-5">
+              <EmptyList />
+              <div className="text-lg text-gray-500">
+                No PRs available on this issue.
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
