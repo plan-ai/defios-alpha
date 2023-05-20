@@ -315,15 +315,15 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         <div className="flex w-full flex-col justify-between gap-5 py-5">
           {PRData.length > 0 && (
             <>
-              <div className="mb-3 flex w-full flex-row items-center justify-between">
+              <div className="flex w-full flex-row items-center justify-between">
                 <PRSlider
                   PRs={PRData}
                   selectedPR={selectedPR}
                   setSelectedPR={setSelectedPR}
                 />
               </div>
-              <div className="flex w-full items-center justify-between">
-                <div className="flex w-2/3 items-center gap-2">
+              <div className="flex w-full items-center gap-5">
+                <div className="flex items-center gap-2">
                   <Input
                     type="text"
                     placeholder="Stake Amount"
