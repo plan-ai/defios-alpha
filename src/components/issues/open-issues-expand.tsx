@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect,Fragment } from 'react';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
 import AnchorLink from '../ui/links/anchor-link';
@@ -16,6 +16,76 @@ import EmptyList from '@/components/icons/EmptyList';
 import PRSlider from '@/components/issues/pr-slider';
 
 import { uploadMetadataToIPFS } from '@/lib/helpers/metadata';
+
+import { ChevronDown } from '@/components/icons/chevron-down';
+import { Listbox } from '@/components/ui/listbox';
+import { Transition } from '@/components/ui/transition';
+
+const sort = [
+  { id: 1, name: 'Repository creator' },
+  { id: 2, name: 'By amount of code contributed (minified)' },
+  { id: 3, name: 'By duration of project involvement (compute intensive)' },
+];
+
+interface SortListProps{
+  sort:any;
+  selectedSubmitPR:any;
+  setSelectedSubmitPR:React.Dispatch<React.SetStateAction<any>>;
+}
+
+const SortList:React.FC<SortListProps> = ({sort,selectedSubmitPR,setSelectedSubmitPR})=>{
+  return (
+    <div className="relative w-full">
+      <Listbox value={selectedSubmitPR} onChange={setSelectedSubmitPR}>
+        <Listbox.Button className="flex !h-9 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 text-2xs text-white xl:text-xs 2xl:!h-10 3xl:!h-11 3xl:text-sm">
+          <div>
+            {selectedSubmitPR.title.length > 21
+              ? selectedSubmitPR.title.slice(0, 20) + '...'
+              : selectedSubmitPR.title}
+          </div>
+          <div className="font-semibold">
+            {selectedSubmitPR.id !== -1 ? '#' + selectedSubmitPR.id : null}
+          </div>
+          <ChevronDown />
+        </Listbox.Button>
+        <Transition
+          as={Fragment}
+          enter="ease-out duration-200"
+          enterFrom="opacity-0 translate-y-2"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 -translate-y-0"
+          leaveTo="opacity-0 translate-y-2"
+        >
+          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-xl bg-dark p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
+            {sort.map((item: any) => (
+              <Listbox.Option key={item.id} value={item}>
+                {({ selected }) => (
+                  <div
+                    className={`block cursor-pointer flex items-center justify-between rounded-xl px-3 py-3 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
+                      selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
+                    }`}
+                  >
+                    <div>
+                      {item.title.length > 21
+                        ? item.title.slice(0, 20) + '...'
+                        : item.title}
+                    </div>
+                    <div className="font-semibold">
+                      {item.id !== -1
+                        ? '#' + item.id
+                        : null}
+                    </div>
+                  </div>
+                )}
+              </Listbox.Option>
+            ))}
+          </Listbox.Options>
+        </Transition>
+      </Listbox>
+    </div>
+  );
+}
 
 interface OpenIssueExpandProps {
   issueDesc: string;
@@ -35,15 +105,29 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const wallet = useWallet();
   const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const { data: session } = useSession();
-  const [prUrl, setPrUrl] = React.useState<string>('');
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const userMappingState = useAppSelector(selectUserMapping);
   const [prLoading, setPrLoading] = React.useState<boolean>(false);
 
   const [expandState, setExpandState] = useState('issue');
 
+
   const [PRStakeAmount, setPRStakeAmount] = React.useState<number>(0);
   const [selectedPR, setSelectedPR] = useState<any>();
+
+  const userInfo = useAppSelector((state) => state.userInfo.githubInfo);
+
+  const [PRSort,setPRSort] = useState<any>([{
+      id:-1,
+      title:'Select Pull Request',
+      PR_link:''
+    }]);
+
+  const [selectedSubmitPR, setSelectedSubmitPR] = useState<any>({
+    id: -1,
+    title: 'Select Pull Request',
+    PR_link: '',
+  });
 
   const handleStake = () => {
     if (stakeAmount <= 0) return;
@@ -98,9 +182,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   };
 
   const handleCommitSubmit = () => {
-    if (prUrl === '' || !prUrl.startsWith('https://github.com/')) return;
+    if (selectedSubmitPR?.PR_link === '' || !selectedSubmitPR?.PR_link.startsWith('https://github.com/')) return;
     dispatch(onLoading('Submitting your commit on the issue...'));
-    const pullApiUrl = prUrl
+    const pullApiUrl = selectedSubmitPR?.PR_link
       .replace('https://github.com/', '')
       .replace('pull', 'pulls');
 
@@ -222,6 +306,48 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       });
   };
 
+  const getPRsToSelect = async () => {
+    var config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: link
+        .replace('github.com', 'api.github.com/repos')
+        .concat('/timeline'),
+      headers: {
+        Authorization: `Bearer ${(session as any)?.accessToken}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    };
+    const timeline = await axios(config)
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+    const allPRs = timeline.filter(
+      (item: any) => item.event === 'cross-referenced'
+    );
+    const MyPRs = allPRs.filter((item: any) => item.actor.id === userInfo.id && item.source.issue.state==='open');
+    const _sortlistPRs = MyPRs.map((item:any)=>{
+      return {
+        id:item?.source?.issue?.number,
+        title:item?.source?.issue?.title,
+        PR_link:item?.source?.issue?.html_url
+      }
+    })
+    const _listPRs = [
+      {
+        id: -1,
+        title: 'Select Pull Request',
+        PR_link: '',
+      },
+      ..._sortlistPRs,
+    ];
+    setPRSort(_listPRs)
+  }
+
+  useEffect(() => {
+    if (!link.includes('github.com')) return;
+    getPRsToSelect();
+  }, [link]);
+
   return (
     <div className="mt-4 flex w-full flex-col">
       <div className="flex items-center gap-4">
@@ -241,11 +367,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         >
           Pull Request
         </Button>
-        <div className="xl-text-base mx-40 text-sm font-semibold 3xl:text-lg">
-          {expandState === 'issue'
-            ? 'Stake on Issue, Submit Pull Request'
-            : 'Stake on Pull Requests'}
-        </div>
       </div>
       {expandState === 'issue' && (
         <div className="flex w-full justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
@@ -262,29 +383,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             </AnchorLink>
           </div>
           <div className="flex w-1/2 flex-col gap-3">
-            <div className="flex-flex-col w-full">
-              <div className="mb-2">Build 🛠️</div>
-              <div className="flex w-full items-center justify-center gap-2">
-                <Input
-                  type="text"
-                  placeholder="Pull Request URL"
-                  inputClassName="w-full !h-10 !my-0"
-                  className="w-full"
-                  onChange={(e) => {
-                    setPrUrl(e.target.value);
-                  }}
-                />
-                <Button
-                  color="info"
-                  size="small"
-                  shape="rounded"
-                  onClick={handleCommitSubmit}
-                  isLoading={stateLoading === 'loading'}
-                >
-                  Submit
-                </Button>
-              </div>
-            </div>
             <div className="flex-flex-col w-full">
               <div className="mb-2">Speed Up 🚅</div>
               <div className="flex w-full items-center justify-center gap-2">
@@ -314,15 +412,26 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       {expandState === 'pull request' && (
         <div className="flex w-full flex-col justify-between gap-5 py-5">
           {PRData.length > 0 && (
-            <>
-              <div className="flex w-full flex-row items-center justify-between">
-                <PRSlider
-                  PRs={PRData}
-                  selectedPR={selectedPR}
-                  setSelectedPR={setSelectedPR}
-                />
+            <div className="flex w-full flex-row items-center justify-between">
+              <PRSlider
+                PRs={PRData}
+                selectedPR={selectedPR}
+                setSelectedPR={setSelectedPR}
+              />
+            </div>
+          )}
+          {PRData.length === 0 && (
+            <div className="flex w-full flex-col items-center justify-center gap-5">
+              <EmptyList />
+              <div className="text-lg text-gray-500">
+                No PRs available on this issue.
               </div>
-              <div className="flex w-full items-center gap-5">
+            </div>
+          )}
+          <div className="flex w-full items-end gap-5">
+            {PRData.length > 0 && (
+              <div className="flex-flex-col w-1/3">
+                <div className="mb-2">Stake On Pull Request 💸</div>
                 <div className="flex items-center gap-2">
                   <Input
                     type="text"
@@ -340,28 +449,37 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     // onClick={handleStake}
                     isLoading={stateLoading === 'loading'}
                   >
-                    Stake on Pull Request
+                    Stake
                   </Button>
                 </div>
+              </div>
+            )}
+            <div className="flex-flex-col w-1/3">
+              <div className="mb-2">Build 🛠️</div>
+              <div className="flex w-full items-center justify-center gap-2">
+                <SortList sort={PRSort} selectedSubmitPR={selectedSubmitPR} setSelectedSubmitPR={setSelectedSubmitPR} />
                 <Button
                   color="info"
                   size="small"
                   shape="rounded"
+                  onClick={handleCommitSubmit}
                   isLoading={stateLoading === 'loading'}
                 >
-                  Merge Selected Pull Request
+                  Submit
                 </Button>
               </div>
-            </>
-          )}
-          {PRData.length === 0 && (
-            <div className="mb-3 flex w-full flex-col items-center justify-center gap-5">
-              <EmptyList />
-              <div className="text-lg text-gray-500">
-                No PRs available on this issue.
-              </div>
             </div>
-          )}
+            {PRData.length > 0 && (
+              <Button
+                color="info"
+                size="small"
+                shape="rounded"
+                isLoading={stateLoading === 'loading'}
+              >
+                Merge Selected Pull Request
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </div>
