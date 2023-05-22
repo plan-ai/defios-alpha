@@ -384,7 +384,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           </div>
           <div className="flex w-1/2 flex-col gap-3">
             <div className="flex-flex-col w-full">
-              <div className="mb-2">Speed Up 🚅</div>
+              <div className="mb-2">stake on the issue</div>
               <div className="flex w-full items-center justify-center gap-2">
                 <Input
                   type="text"
@@ -410,7 +410,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         </div>
       )}
       {expandState === 'pull request' && (
-        <div className="flex w-full flex-col justify-between gap-5 py-5">
+        <div className="flex w-full flex-col justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
           {PRData.length > 0 && (
             <div className="flex w-full flex-row items-center justify-between">
               <PRSlider
@@ -428,10 +428,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               </div>
             </div>
           )}
-          <div className="flex w-full items-end gap-5">
+          <div className="flex w-full items-end justify-center gap-5">
             {PRData.length > 0 && (
               <div className="flex-flex-col w-1/3">
-                <div className="mb-2">Stake On Pull Request 💸</div>
+                <div className="mb-2">stake on the pull request</div>
                 <div className="flex items-center gap-2">
                   <Input
                     type="text"
@@ -455,9 +455,13 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               </div>
             )}
             <div className="flex-flex-col w-1/3">
-              <div className="mb-2">Build 🛠️</div>
+              <div className="mb-2">submit new pull request</div>
               <div className="flex w-full items-center justify-center gap-2">
-                <SortList sort={PRSort} selectedSubmitPR={selectedSubmitPR} setSelectedSubmitPR={setSelectedSubmitPR} />
+                <SortList
+                  sort={PRSort}
+                  selectedSubmitPR={selectedSubmitPR}
+                  setSelectedSubmitPR={setSelectedSubmitPR}
+                />
                 <Button
                   color="info"
                   size="small"
@@ -474,6 +478,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 color="info"
                 size="small"
                 shape="rounded"
+                className='!w-1/3'
                 isLoading={stateLoading === 'loading'}
               >
                 Merge Selected Pull Request
