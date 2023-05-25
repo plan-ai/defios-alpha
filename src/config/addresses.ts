@@ -1,6 +1,5 @@
 export const contractAddresses = {
-  defios: 'GoEYPHGoF3PvqczLQcE3DQrXkA4UFvYn6MTGWbq4UBo1',
-  tokenVesting: '8gaPh52mnkicpXMF7sKVoeiDjga5kbEuPDSGb1uL2mJm',
+  defios: 'EYJjYKdY8zS3QwcvPXgS5FtPHjdExHA3YTWe2obLn76m',
 };
 
 export const staticAddresses = {

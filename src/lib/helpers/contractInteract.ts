@@ -1,6 +1,5 @@
 import { contractAddresses } from '@/config/addresses';
-import { Defios, IDL } from '../../types/defios';
-import { TokenVesting } from '@/types/token_vesting';
+import { Defios, IDL } from '@/types/idl/defios';
 import {
   Program,
   AnchorProvider,
@@ -10,7 +9,6 @@ import {
   BN,
 } from '@project-serum/anchor';
 import { clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js';
-import { TokenVestingIDL } from '../../types/idl/token_vesting';
 import * as mpl from '@metaplex-foundation/mpl-token-metadata';
 import {
   Metaplex,
@@ -36,9 +34,8 @@ import {
   MintLayout,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
-import sha1 from 'sha1';
-import { rectToBox } from 'reactflow';
 
+//change
 const nameRouterAccount = new PublicKey(
   'DMdqFYVfw9Yn6X2BDB12Gce55KXZUX8NacHqcnvn14wq'
 );
@@ -63,75 +60,84 @@ export const getDefiOsProgram = async (provider: AnchorProvider) => {
   return program;
 };
 
-export const getTokenVestingProgram = async (provider: AnchorProvider) => {
-  const program: Program<TokenVesting> = new Program(
-    TokenVestingIDL,
-    contractAddresses.tokenVesting,
-    provider
-  );
-  return program;
+export const get_pda_from_seeds = async (seeds: any, program: any) => {
+  return await web3.PublicKey.findProgramAddressSync(seeds, program.programId);
 };
 
-export const createRepositoryImported = (
-  repositoryVerifiedUser: PublicKey,
-  tokenAddress: PublicKey,
-  tokenName: string,
-  tokenSymbol: string,
+export const createRepository = (
+  repositoryCreator: PublicKey,
   repoName: string,
-  repoLink: string
+  repoLink: string,
+  tokenName: string,
+  tokenImage: string,
+  tokenMetadata: string,
+  repositoryVerifiedUser: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
 
-      const [repositoryAccount] = await web3.PublicKey.findProgramAddress(
+      const [repositoryAccount] = await get_pda_from_seeds(
         [
           Buffer.from('repository'),
           Buffer.from(repoName),
           Signer.publicKey.toBuffer(),
         ],
-        program.programId
+        program
       );
-      const repositoryTokenPoolAccount = await getAssociatedTokenAddress(
-        tokenAddress,
-        repositoryAccount,
+      const [mintKeypair] = await get_pda_from_seeds(
+        [
+          Buffer.from('Miners'),
+          Buffer.from('MinerC'),
+          repositoryAccount.toBuffer(),
+        ],
+        program
+      );
+      const [vestingAccount] = await get_pda_from_seeds(
+        [Buffer.from('vesting'), repositoryAccount.toBuffer()],
+        program
+      );
+      const vestingTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        vestingAccount,
         true
       );
-
-      const createAssociatedTokenIx = createAssociatedTokenAccountInstruction(
-        Signer.publicKey,
-        repositoryTokenPoolAccount,
-        repositoryAccount,
-        tokenAddress
+      const repositoryCreatorTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        Signer.publicKey
+      );
+      const [defaultVestingSchedule] = await get_pda_from_seeds(
+        [
+          Buffer.from('isGodReal?'),
+          Buffer.from('DoULoveMe?'),
+          Buffer.from('SweetChick'),
+        ],
+        program
       );
 
-      let usernames: Array<string> = [];
-      let amounts: Array<BN> = [];
-
-      const tokenInfo = await fetchTokenMetadata(tokenAddress.toBase58());
-      program.methods
+      await program.methods
         .createRepository(
           repoName,
           'Open source revolution',
           repoLink,
-          usernames,
-          amounts,
           tokenName,
-          tokenSymbol,
-          tokenInfo.uri
+          tokenImage,
+          tokenMetadata
         )
         .accounts({
           nameRouterAccount,
           repositoryAccount,
-          repositoryCreator: Signer.publicKey,
+          repositoryCreatorTokenAccount,
+          repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
-          rewardsMint: tokenAddress,
+          rewardsMint: mintKeypair,
           routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
-          repositoryTokenPoolAccount,
+          vestingAccount: vestingAccount,
+          vestingTokenAccount: vestingTokenAccount,
+          defaultSchedule: defaultVestingSchedule,
         })
-        .preInstructions([createAssociatedTokenIx])
         .rpc({ skipPreflight: true })
         .then(() => {
           resolve(repositoryAccount);
@@ -145,164 +151,56 @@ export const createRepositoryImported = (
   });
 };
 
-export const createRepository = (
-  repositoryVerifiedUser: PublicKey,
-  image: File,
-  tokenName: string,
-  tokenSymbol: string,
+export const createRepositoryImported = (
+  repositoryCreator: PublicKey,
   repoName: string,
   repoLink: string,
-  mintAmount: number,
-  owners: any
+  repositoryVerifiedUser: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
-      const metaplex = Metaplex.make(Connection)
-        .use(walletAdapterIdentity(Signer))
-        .use(bundlrStorage());
 
-      const mintKeypair = Keypair.generate();
-      await metaplex.tokens().createMint({
-        mint: mintKeypair,
-        mintAuthority: Signer.publicKey,
-        decimals: 9,
-      });
-      const metadataPDA = metaplex.nfts().pdas().metadata({
-        mint: mintKeypair.publicKey,
-      });
-      const accounts = {
-        metadata: metadataPDA,
-        mintKeypair,
-        mintAuthority: Signer.publicKey,
-        payer: Signer.publicKey,
-        updateAuthority: Signer.publicKey,
-      };
-      const imageCID = await uploadFileToIPFS(image);
-      const metadataCID = await uploadMetadataToIPFS({
-        name: tokenName,
-        symbol: tokenSymbol,
-        image: `https://gateway.pinata.cloud/ipfs/${imageCID}`,
-      });
-      const dataV2 = {
-        name: tokenName,
-        symbol: tokenSymbol,
-        uri: `https://gateway.pinata.cloud/ipfs/${metadataCID}`,
-        sellerFeeBasisPoints: 0,
-        creators: null,
-        collection: null,
-        uses: null,
-      };
-      let ix;
-      const args = {
-        createMetadataAccountArgsV2: {
-          data: dataV2,
-          isMutable: true,
-        },
-      };
-
-      ix = mpl.createCreateMetadataAccountV2Instruction(
-        {
-          metadata: accounts.metadata,
-          mint: accounts.mintKeypair.publicKey,
-          mintAuthority: accounts.mintAuthority,
-          payer: accounts.payer,
-          updateAuthority: accounts.updateAuthority,
-        },
-        args
-      );
-
-      const [repositoryAccount] = await web3.PublicKey.findProgramAddress(
+      const [repositoryAccount] = await get_pda_from_seeds(
         [
           Buffer.from('repository'),
           Buffer.from(repoName),
           Signer.publicKey.toBuffer(),
         ],
-        program.programId
+        program
       );
-      const repositoryTokenPoolAccount = await getAssociatedTokenAddress(
-        mintKeypair.publicKey,
-        repositoryAccount,
-        true
+      const [defaultVestingSchedule] = await get_pda_from_seeds(
+        [
+          Buffer.from('isGodReal?'),
+          Buffer.from('DoULoveMe?'),
+          Buffer.from('SweetChick'),
+        ],
+        program
       );
-
-      const createAssociatedTokenIx = createAssociatedTokenAccountInstruction(
-        Signer.publicKey,
-        repositoryTokenPoolAccount,
-        repositoryAccount,
-        mintKeypair.publicKey
-      );
-
-      const mintTokensIx = createMintToCheckedInstruction(
-        mintKeypair.publicKey,
-        repositoryTokenPoolAccount,
-        Signer.publicKey,
-        mintAmount * 10 ** 9,
-        9,
-        []
-      );
-
-      const selfTokenAccount = await getAssociatedTokenAddress(
-        mintKeypair.publicKey,
-        new PublicKey('9HhPBSikrvS1J6e8uDWUQgJ4VMXrcPyq3qhcENBqSoTg')
-      );
-
-      const createAssociatedTokenIx2 = createAssociatedTokenAccountInstruction(
-        Signer.publicKey,
-        selfTokenAccount,
-        new PublicKey('9HhPBSikrvS1J6e8uDWUQgJ4VMXrcPyq3qhcENBqSoTg'),
-        mintKeypair.publicKey
-      );
-
-      const mintTokensIx2 = createMintToCheckedInstruction(
-        mintKeypair.publicKey,
-        selfTokenAccount,
-        Signer.publicKey,
-        20000 * 10 ** 9,
-        9,
-        []
-      );
-
-      let usernames: Array<string> = [];
-      let amounts: Array<BN> = [];
-      Object.keys(owners).forEach((key) => {
-        usernames.push(key);
-        let percentageString = owners[key].replace('%', '');
-        let percentage = parseFloat(percentageString);
-        let amount = (percentage / 100) * mintAmount;
-        amounts.push(new BN(amount * 10 ** 9));
-      });
-      console.log(owners, usernames, amounts);
 
       program.methods
         .createRepository(
           repoName,
           'Open source revolution',
           repoLink,
-          usernames,
-          amounts,
-          tokenName,
-          tokenSymbol,
-          `https://gateway.pinata.cloud/ipfs/${metadataCID}`
+          null,
+          null,
+          null
         )
         .accounts({
           nameRouterAccount,
           repositoryAccount,
-          repositoryCreator: Signer.publicKey,
+          repositoryCreatorTokenAccount: null,
+          repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
-          rewardsMint: mintKeypair.publicKey,
+          rewardsMint: null,
           routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
-          repositoryTokenPoolAccount,
+          vestingAccount: null,
+          vestingTokenAccount: null,
+          defaultSchedule: defaultVestingSchedule,
         })
-        .preInstructions([
-          ix,
-          createAssociatedTokenIx,
-          createAssociatedTokenIx2,
-          mintTokensIx,
-          mintTokensIx2,
-        ])
         .rpc({ skipPreflight: true })
         .then(() => {
           resolve(repositoryAccount);
@@ -325,26 +223,38 @@ export const createIssue = (
   return new Promise<PublicKey>(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
-    const { issueIndex, repositoryCreator, rewardsMint } =
-      await program.account.repository.fetch(repositoryAccount);
-    console.log('issueIndex', repositoryCreator);
-    const [issueAccount] = await web3.PublicKey.findProgramAddress(
+
+    const { repositoryCreator } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+
+    const uriSplit = issueURI.split('/');
+    const issueIndex = uriSplit[uriSplit.length - 1];
+
+    const [issueAccount] = await get_pda_from_seeds(
       [
         Buffer.from('issue'),
         Buffer.from(issueIndex.toString()),
         repositoryAccount.toBuffer(),
         issueCreator.toBuffer(),
       ],
-      program.programId
+      program
     );
 
-    console.log('issueAccount', issueAccount.toBase58());
+    const [mintKeypair] = await get_pda_from_seeds(
+      [
+        Buffer.from('Miners'),
+        Buffer.from('MinerC'),
+        repositoryAccount.toBuffer(),
+      ],
+      program
+    );
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      mintKeypair,
       issueAccount,
       true
     );
-    console.log('issueTokenPoolAccount', issueTokenPoolAccount.toBase58());
+
     program.methods
       .addIssue(issueURI)
       .accounts({
@@ -355,10 +265,9 @@ export const createIssue = (
         issueVerifiedUser,
         nameRouterAccount,
         repositoryAccount,
-        rewardsMint: rewardsMint,
+        rewardsMint: mintKeypair,
         routerCreator: routerCreator,
         repositoryCreator: repositoryCreator,
-        rent: web3.SYSVAR_RENT_PUBKEY,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
@@ -380,30 +289,36 @@ export const stakeIssue = (
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
+
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
 
-    const transferAmount = amount * 10 ** 9;
-    console.log('transferAmount: ' + transferAmount);
-    const issueStakerTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      issueStaker
-    );
-
-    const [issueStakerAccount] = await web3.PublicKey.findProgramAddress(
+    const [issueStakerAccount] = await get_pda_from_seeds(
       [
         Buffer.from('issuestaker'),
         issueAccount.toBuffer(),
         issueStaker.toBuffer(),
       ],
-      program.programId
+      program
+    );
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueStaker
     );
 
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      mintKeypair,
       issueAccount,
       true
     );
+
+    const transferAmount = amount * 10 ** 9;
+    console.log('transferAmount: ' + transferAmount);
 
     program.methods
       .stakeIssue(new BN(transferAmount))
@@ -413,10 +328,11 @@ export const stakeIssue = (
         issueTokenPoolAccount,
         issueStaker: issueStaker,
         issueStakerAccount,
-        issueStakerTokenAccount,
-        rewardsMint: rewardsMint,
+        issueStakerTokenAccount: issueStakerTokenAccount,
+        rewardsMint: mintKeypair,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
       .rpc({ skipPreflight: true })
       .then((res) => {
@@ -430,36 +346,40 @@ export const stakeIssue = (
 
 export const unstakeIssue = (
   issueStaker: PublicKey,
-  issueAccount: PublicKey,
-  amount: number
+  issueAccount: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
-    const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
 
-    const [issueStakerAccount] = await web3.PublicKey.findProgramAddress(
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
+    const [issueStakerAccount] = await get_pda_from_seeds(
       [
         Buffer.from('issuestaker'),
         issueAccount.toBuffer(),
         issueStaker.toBuffer(),
       ],
-      program.programId
+      program
+    );
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueStaker
     );
 
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      mintKeypair,
       issueAccount,
       true
     );
 
-    const issueStakerTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      issueStaker
-    );
-
-    await program.methods
+    program.methods
       .unstakeIssue()
       .accounts({
         issueAccount,
@@ -467,8 +387,8 @@ export const unstakeIssue = (
         issueTokenPoolAccount,
         issueStaker: issueStaker,
         issueStakerAccount,
-        issueStakerTokenAccount,
-        rewardsMint: rewardsMint,
+        issueStakerTokenAccount: issueStakerTokenAccount,
+        rewardsMint: mintKeypair,
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
@@ -501,14 +421,14 @@ export const addCommit = (
     const { repositoryCreator } = await program.account.repository.fetch(
       repository
     );
-    const [commitAccount] = await web3.PublicKey.findProgramAddress(
+    const [commitAccount] = await get_pda_from_seeds(
       [
         Buffer.from('commit'),
         Buffer.from(commitHash),
         commitCreator.toBuffer(),
         issueAccount.toBuffer(),
       ],
-      program.programId
+      program
     );
 
     program.methods
@@ -527,7 +447,7 @@ export const addCommit = (
       })
       .rpc({ skipPreflight: true })
       .then((res) => {
-        resolve(commitAccount);
+        resolve(res);
       })
       .catch((e) => {
         reject(e);
@@ -535,61 +455,65 @@ export const addCommit = (
   });
 };
 
-export const claimTokens = (
-  username: string,
-  user: PublicKey,
-  verifiedUserAccount: PublicKey,
-  repositoryAccount: PublicKey
+export const addPr = (
+  commitCreator: PublicKey,
+  issueAccount: PublicKey,
+  commitVerifiedUser: PublicKey,
+  commitHashUnsliced: string,
+  metadataURI: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
-    const { repositoryCreator, rewardsMint } =
-      await program.account.repository.fetch(repositoryAccount);
-    const repositoryTokenPoolAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      repositoryAccount,
+    const commitHash = commitHashUnsliced.slice(0, 8);
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
+    const [commitAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('commit'),
+        Buffer.from(commitHash),
+        commitCreator.toBuffer(),
+        issueAccount.toBuffer(),
+      ],
+      program
+    );
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      pullRequestMetadataAccount,
       true
     );
-    const userRewardTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      user
-    );
-    const [userClaimAccount] = await web3.PublicKey.findProgramAddress(
-      [
-        Buffer.from('user_claim'),
-        Buffer.from(username),
-        repositoryAccount.toBuffer(),
-        nameRouterAccount.toBuffer(),
-      ],
-      program.programId
-    );
-    const createUserTokenAccountIx = createAssociatedTokenAccountInstruction(
-      user,
-      userRewardTokenAccount,
-      user,
-      rewardsMint
-    );
-    await program.methods
-      .claimUserTokens(username)
+
+    program.methods
+      .addPr(metadataURI)
       .accounts({
-        user: user,
-        userRewardTokenAccount: userRewardTokenAccount,
+        pullRequestVerifiedUser: commitVerifiedUser,
+        issue: issueAccount,
+        commit: commitAccount,
+        pullRequestMetadataAccount: pullRequestMetadataAccount,
+        nameRouterAccount,
+        pullRequestTokenAccount,
+        pullRequestAddr: commitCreator,
         routerCreator: routerCreator,
-        nameRouterAccount: nameRouterAccount,
-        userClaimAccount: userClaimAccount,
-        repositoryAccount: repositoryAccount,
-        repositoryCreator: repositoryCreator,
-        repositoryTokenPoolAccount: repositoryTokenPoolAccount,
-        tokenProgram: TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
-        rent: web3.SYSVAR_RENT_PUBKEY,
-        verifiedUser: verifiedUserAccount,
-        rewardsMint: rewardsMint,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rewardsMint: mintKeypair,
+        tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .preInstructions([createUserTokenAccountIx])
-      .rpc()
+      .rpc({ skipPreflight: true })
       .then((res) => {
         resolve(res);
       })
@@ -599,53 +523,350 @@ export const claimTokens = (
   });
 };
 
-export const claimReward = (
-  commitCreator: PublicKey,
-  commitVerifiedUser: PublicKey,
-  issueAccount: PublicKey
+export const stakePr = (
+  prStaker: PublicKey,
+  prAccount: PublicKey,
+  amount: number
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
-    const { repository, issueCreator } = await program.account.issue.fetch(
-      issueAccount
-    );
-    const { rewardsMint, repositoryCreator } =
-      await program.account.repository.fetch(repository);
 
-    const commitCreatorRewardTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      commitCreator
+    const { sentBy, commits } = await program.account.pullRequest.fetch(
+      prAccount
+    );
+    const pullRequestAddr = sentBy;
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
     );
 
-    const issueTokenPoolAccount = await getAssociatedTokenAddress(
-      rewardsMint,
-      issueAccount,
+    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      pullRequestMetadataAccount,
+      true
+    );
+
+    const pullRequestStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      Signer.publicKey
+    );
+
+    const [pullRequestStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrestaker'),
+        pullRequestMetadataAccount.toBuffer(),
+        prStaker.toBuffer(),
+      ],
+      program
+    );
+
+    const transferAmount = amount * 10 ** 9;
+    console.log('transferAmount: ' + transferAmount);
+
+    program.methods
+      .stakePr(new BN(transferAmount))
+      .accounts({
+        pullRequestAddr,
+        issue: issueAccount,
+        pullRequestMetadataAccount: pullRequestMetadataAccount,
+        nameRouterAccount,
+        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestTokenAccount,
+        routerCreator: routerCreator,
+        systemProgram: web3.SystemProgram.programId,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rewardsMint: mintKeypair,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        pullRequestStaker: prStaker,
+        pullRequestStakerTokenAccount,
+        pullRequestStakerAccount,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { sentBy, commits } = await program.account.pullRequest.fetch(
+      prAccount
+    );
+    const pullRequestAddr = sentBy;
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      pullRequestMetadataAccount,
+      true
+    );
+
+    const pullRequestStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      Signer.publicKey
+    );
+
+    const [pullRequestStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrestaker'),
+        pullRequestMetadataAccount.toBuffer(),
+        prStaker.toBuffer(),
+      ],
+      program
+    );
+
+    program.methods
+      .unstakePr()
+      .accounts({
+        pullRequestAddr,
+        issue: issueAccount,
+        pullRequestMetadataAccount: pullRequestMetadataAccount,
+        nameRouterAccount,
+        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestTokenAccount,
+        routerCreator: routerCreator,
+        systemProgram: web3.SystemProgram.programId,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rewardsMint: mintKeypair,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        pullRequestStaker: prStaker,
+        pullRequestStakerTokenAccount,
+        pullRequestStakerAccount,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const acceptPr = (
+  verifiedUserAccount: PublicKey,
+  prAccount: PublicKey
+) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { sentBy, commits } = await program.account.pullRequest.fetch(
+      prAccount
+    );
+    const pullRequestAddr = sentBy;
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository } = await program.account.issue.fetch(issueAccount);
+    const { repositoryCreator, name } = await program.account.repository.fetch(
+      repository
+    );
+
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    program.methods
+      .acceptPr(name)
+      .accounts({
+        nameRouterAccount,
+        repositoryVerifiedUser: verifiedUserAccount,
+        pullRequestAddr,
+        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestMetadataAccount,
+        repositoryCreator,
+        repositoryAccount: repository,
+        issue: issueAccount,
+        routerCreator: routerCreator,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc({ skipPreflight: true })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const unlockTokens = (
+  repositoryAccount: PublicKey,
+  verifiedUserAccount: PublicKey
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const { name, repositoryCreator } =
+        await program.account.repository.fetch(repositoryAccount);
+
+      const [mintKeypair] = await get_pda_from_seeds(
+        [
+          Buffer.from('Miners'),
+          Buffer.from('MinerC'),
+          repositoryAccount.toBuffer(),
+        ],
+        program
+      );
+      const [vestingAccount] = await get_pda_from_seeds(
+        [Buffer.from('vesting'), repositoryAccount.toBuffer()],
+        program
+      );
+      const vestingTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        vestingAccount,
+        true
+      );
+      const repositoryCreatorTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        Signer.publicKey
+      );
+      const [defaultVestingSchedule] = await get_pda_from_seeds(
+        [
+          Buffer.from('isGodReal?'),
+          Buffer.from('DoULoveMe?'),
+          Buffer.from('SweetChick'),
+        ],
+        program
+      );
+
+      await program.methods
+        .unlockTokens(name)
+        .accounts({
+          nameRouterAccount,
+          repositoryAccount,
+          repositoryCreatorTokenAccount,
+          repositoryCreator,
+          repositoryVerifiedUser: verifiedUserAccount,
+          routerCreator: routerCreator,
+          systemProgram: web3.SystemProgram.programId,
+          vestingAccount: vestingAccount,
+          tokenMint: mintKeypair,
+          vestingTokenAccount: vestingTokenAccount,
+        })
+        .rpc({ skipPreflight: true })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const claimReward = (verifiedUserAccount: PublicKey, prAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { sentBy, commits } = await program.account.pullRequest.fetch(
+      prAccount
+    );
+    const pullRequestAddr = sentBy;
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository, issueTokenPoolAccount, issueCreator } =
+      await program.account.issue.fetch(issueAccount);
+
+    const { repositoryCreator } = await program.account.repository.fetch(
+      repository
+    );
+
+    const [mintKeypair] = await get_pda_from_seeds(
+      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+      program
+    );
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      pullRequestMetadataAccount,
       true
     );
 
     program.methods
       .claimReward()
       .accounts({
-        commitCreatorRewardTokenAccount,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        commitCreator: commitCreator,
-        commitVerifiedUser,
-        issueAccount,
-        rent: web3.SYSVAR_RENT_PUBKEY,
-        rewardsMint: rewardsMint,
-        repositoryAccount: repository,
-        repositoryCreator: repositoryCreator,
-        systemProgram: web3.SystemProgram.programId,
-        routerCreator: routerCreator,
-        tokenProgram: TOKEN_PROGRAM_ID,
         nameRouterAccount,
+        pullRequestCreator: pullRequestAddr,
+        pullRequestVerifiedUser: verifiedUserAccount,
+        pullRequest: pullRequestMetadataAccount,
+        pullRequestCreatorRewardAccount: Signer,
+        repositoryCreator: repositoryCreator,
+        rewardsMint: mintKeypair,
+        repositoryAccount: repository,
+        issueAccount: issueAccount,
         issueTokenPoolAccount,
-        issueCreator,
-        // firstCommitAccount: commitAccounts[0],
-        // secondCommitAccount: commitAccounts[1],
-        // thirdCommitAccount: commitAccounts[2],
-        // fourthCommitAccount: commitAccounts[3],
+        issueCreator: issueCreator,
+        routerCreator: routerCreator,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        pullRequestTokenAccount: pullRequestTokenAccount,
+        systemProgram: web3.SystemProgram.programId,
       })
       .rpc({ skipPreflight: true })
       .then((res) => {

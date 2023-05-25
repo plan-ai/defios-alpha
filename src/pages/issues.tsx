@@ -5,39 +5,44 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
+
+import axios from 'axios';
+import _debounce from 'lodash/debounce';
+
+//layout
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
+
+//UI components
 import Button from '@/components/ui/button/button';
-import StackedSwitch from '@/components/custom/stacked-switch';
-import { PlusCircle } from '@/components/icons/plus-circle';
-import IssuesList from '@/components/issues/list';
 import Input from '@/components/ui/forms/input';
-
-import OpenIssueExpand from '@/components/issues/open-issues-expand';
-import VotingExpand from '@/components/issues/voting-expand';
-import WinnerDeclaredExpand from '@/components/issues/winner-declared-expand';
-import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
-
-import EmptyList from '@/components/icons/EmptyList';
+import StackedSwitch from '@/components/custom/stacked-switch';
 import Spinner from '@/components/custom/spinner';
-import axios from 'axios';
-
-import _debounce from 'lodash/debounce';
-import { useAppSelector, useAppDispatch } from '@/store/store';
-import { reset } from '@/store/notifClickSlice';
-import { resetRefetch } from '@/store/refetchSlice';
-
 import { Tooltip } from 'flowbite-react';
-import { InfoCircle } from '@/components/icons/info-circle';
-
 import { useDrawer } from '@/components/drawer-views/context';
 
+//Icons
+import { InfoCircle } from '@/components/icons/info-circle';
+import EmptyList from '@/components/icons/EmptyList';
+import { PlusCircle } from '@/components/icons/plus-circle';
 import {
   FunnelIcon,
   ChevronUpIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
+
+//Components
+import IssuesList from '@/components/issues/list';
+import OpenIssueExpand from '@/components/issues/open-issues-expand';
+import WinnerDeclaredExpand from '@/components/issues/winner-declared-expand';
+import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
+
+//redux store
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { reset } from '@/store/notifClickSlice';
+import { resetRefetch } from '@/store/refetchSlice';
+
 
 interface searchProps {
   placeholder?: string;
@@ -103,14 +108,13 @@ const IssuesPage: NextPageWithLayout = () => {
   const [fetchTrigger, setFetchTrigger] = useState(0);
 
 
-  const [initExapand, setInitExpand] = useState(false);
-
   //redirect to page and query search
   const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
   const setSearchQuery = useAppSelector(
     (state) => state.notifClick.setSearchQuery
   );
   const expandFirst = useAppSelector((state) => state.notifClick.expandFirst);
+  const [initExapand, setInitExpand] = useState(false);
   const clickPathname = useAppSelector((state) => state.notifClick.pathname);
   const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
 
@@ -318,7 +322,6 @@ const IssuesPage: NextPageWithLayout = () => {
           />
         )}
         {issue?.issue_state === 'voting' && (
-          // <VotingExpand PRData={issue?.issue_prs} />
           <OpenIssueExpand
             issueDesc={issue?.issue_summary}
             link={issue?.issue_gh_url}
