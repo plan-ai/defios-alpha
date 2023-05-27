@@ -37,10 +37,13 @@ import {
 
 //change
 const nameRouterAccount = new PublicKey(
-  'DMdqFYVfw9Yn6X2BDB12Gce55KXZUX8NacHqcnvn14wq'
+  '93dPegr5VD4qnH2LpAAUuTy4JXFiEKLwvA1ptfineWv3'
 );
 const routerCreator = new PublicKey(
-  'Au5UxjuuLLD9AQuE4QWQ1ucUqKPjaXQ8EkSBokUPCiB6'
+  '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
+);
+const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
+  'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s'
 );
 
 export const getProvider = async (
@@ -64,18 +67,33 @@ export const get_pda_from_seeds = async (seeds: any, program: any) => {
   return await web3.PublicKey.findProgramAddressSync(seeds, program.programId);
 };
 
+async function get_metadata_account(mintKeypair: any) {
+  return (
+    await web3.PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('metadata'),
+        TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+        mintKeypair.toBuffer(),
+      ],
+      TOKEN_METADATA_PROGRAM_ID
+    )
+  )[0];
+}
+
 export const createRepository = (
   repositoryCreator: PublicKey,
   repoName: string,
   repoLink: string,
   tokenName: string,
-  tokenImage: string,
+  tokenSymbol: string,
   tokenMetadata: string,
   repositoryVerifiedUser: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(Signer.publicKey);
       const provider = await getProvider(Connection, Signer);
+      const metaplex = await Metaplex.make(Connection);
       const program = await getDefiOsProgram(provider);
 
       const [repositoryAccount] = await get_pda_from_seeds(
@@ -94,6 +112,8 @@ export const createRepository = (
         ],
         program
       );
+      const metadataAddress = await get_metadata_account(mintKeypair);
+      console.log(metadataAddress);
       const [vestingAccount] = await get_pda_from_seeds(
         [Buffer.from('vesting'), repositoryAccount.toBuffer()],
         program
@@ -122,7 +142,7 @@ export const createRepository = (
           'Open source revolution',
           repoLink,
           tokenName,
-          tokenImage,
+          tokenSymbol,
           tokenMetadata
         )
         .accounts({
@@ -137,6 +157,8 @@ export const createRepository = (
           vestingAccount: vestingAccount,
           vestingTokenAccount: vestingTokenAccount,
           defaultSchedule: defaultVestingSchedule,
+          metadata: metadataAddress,
+          tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         })
         .rpc({ skipPreflight: true })
         .then(() => {
@@ -200,8 +222,10 @@ export const createRepositoryImported = (
           vestingAccount: null,
           vestingTokenAccount: null,
           defaultSchedule: defaultVestingSchedule,
+          tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+          metadata: null,
         })
-        .rpc({ skipPreflight: true })
+        .rpc({ skipPreflight: false })
         .then(() => {
           resolve(repositoryAccount);
         })
@@ -224,12 +248,14 @@ export const createIssue = (
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { repositoryCreator } = await program.account.repository.fetch(
+    const { repositoryCreator, rewardsMint } =
+      await program.account.repository.fetch(repositoryAccount);
+
+    const { issueIndex } = await program.account.repository.fetch(
       repositoryAccount
     );
 
     const uriSplit = issueURI.split('/');
-    const issueIndex = uriSplit[uriSplit.length - 1];
 
     const [issueAccount] = await get_pda_from_seeds(
       [
@@ -241,14 +267,10 @@ export const createIssue = (
       program
     );
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [
-        Buffer.from('Miners'),
-        Buffer.from('MinerC'),
-        repositoryAccount.toBuffer(),
-      ],
-      program
-    );
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
       issueAccount,
@@ -271,7 +293,7 @@ export const createIssue = (
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(issueAccount);
       })
@@ -291,6 +313,7 @@ export const stakeIssue = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
 
     const [issueStakerAccount] = await get_pda_from_seeds(
       [
@@ -301,10 +324,10 @@ export const stakeIssue = (
       program
     );
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
-      program
-    );
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -334,7 +357,7 @@ export const stakeIssue = (
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -353,6 +376,7 @@ export const unstakeIssue = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
 
     const [issueStakerAccount] = await get_pda_from_seeds(
       [
@@ -363,10 +387,10 @@ export const unstakeIssue = (
       program
     );
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
-      program
-    );
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -392,7 +416,7 @@ export const unstakeIssue = (
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -445,7 +469,7 @@ export const addCommit = (
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -467,6 +491,7 @@ export const addPr = (
     const program = await getDefiOsProgram(provider);
     const commitHash = commitHashUnsliced.slice(0, 8);
     const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
 
     const [commitAccount] = await get_pda_from_seeds(
       [
@@ -478,10 +503,11 @@ export const addPr = (
       program
     );
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
-      program
-    );
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
+
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
@@ -502,7 +528,6 @@ export const addPr = (
       .accounts({
         pullRequestVerifiedUser: commitVerifiedUser,
         issue: issueAccount,
-        commit: commitAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
         nameRouterAccount,
         pullRequestTokenAccount,
@@ -513,7 +538,10 @@ export const addPr = (
         rewardsMint: mintKeypair,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: true })
+      .remainingAccounts([
+        { pubkey: commitAccount, isWritable: true, isSigner: false },
+      ])
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -542,11 +570,26 @@ export const stakePr = (
     );
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+    const { userName } = await program.account.verifiedUser.fetch(
+      pullRequestAddr
+    );
+
+    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
+      [
+        Buffer.from(userName),
+        pullRequestAddr.toBuffer(),
+        nameRouterAccount.toBuffer(),
+      ],
       program
     );
+
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
+
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
@@ -586,7 +629,7 @@ export const stakePr = (
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
         nameRouterAccount,
-        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestVerifiedUser,
         pullRequestTokenAccount,
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
@@ -597,7 +640,7 @@ export const stakePr = (
         pullRequestStakerTokenAccount,
         pullRequestStakerAccount,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -622,11 +665,25 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
     );
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
+    const { userName } = await program.account.verifiedUser.fetch(
+      pullRequestAddr
+    );
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
+    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
+      [
+        Buffer.from(userName),
+        pullRequestAddr.toBuffer(),
+        nameRouterAccount.toBuffer(),
+      ],
       program
     );
+
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
+
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
@@ -663,7 +720,7 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
         nameRouterAccount,
-        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestVerifiedUser,
         pullRequestTokenAccount,
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
@@ -674,7 +731,7 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
         pullRequestStakerTokenAccount,
         pullRequestStakerAccount,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -705,6 +762,18 @@ export const acceptPr = (
     const { repositoryCreator, name } = await program.account.repository.fetch(
       repository
     );
+    const { userName } = await program.account.verifiedUser.fetch(
+      pullRequestAddr
+    );
+
+    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
+      [
+        Buffer.from(userName),
+        pullRequestAddr.toBuffer(),
+        nameRouterAccount.toBuffer(),
+      ],
+      program
+    );
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -721,7 +790,7 @@ export const acceptPr = (
         nameRouterAccount,
         repositoryVerifiedUser: verifiedUserAccount,
         pullRequestAddr,
-        pullRequestVerifiedUser: pullRequestAddr,
+        pullRequestVerifiedUser,
         pullRequestMetadataAccount,
         repositoryCreator,
         repositoryAccount: repository,
@@ -729,7 +798,7 @@ export const acceptPr = (
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })
@@ -741,6 +810,7 @@ export const acceptPr = (
 
 export const unlockTokens = (
   repositoryAccount: PublicKey,
+  repositoryCreator: PublicKey,
   verifiedUserAccount: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
@@ -748,17 +818,15 @@ export const unlockTokens = (
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
 
-      const { name, repositoryCreator } =
-        await program.account.repository.fetch(repositoryAccount);
-
-      const [mintKeypair] = await get_pda_from_seeds(
-        [
-          Buffer.from('Miners'),
-          Buffer.from('MinerC'),
-          repositoryAccount.toBuffer(),
-        ],
-        program
+      const { name, rewardsMint } = await program.account.repository.fetch(
+        repositoryAccount
       );
+
+      const mintKeypair =
+        rewardsMint === null
+          ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+          : rewardsMint;
+
       const [vestingAccount] = await get_pda_from_seeds(
         [Buffer.from('vesting'), repositoryAccount.toBuffer()],
         program
@@ -795,7 +863,7 @@ export const unlockTokens = (
           tokenMint: mintKeypair,
           vestingTokenAccount: vestingTokenAccount,
         })
-        .rpc({ skipPreflight: true })
+        .rpc({ skipPreflight: false })
         .then((res) => {
           resolve(res);
         })
@@ -808,7 +876,10 @@ export const unlockTokens = (
   });
 };
 
-export const claimReward = (verifiedUserAccount: PublicKey, prAccount: PublicKey) => {
+export const claimReward = (
+  verifiedUserAccount: PublicKey,
+  prAccount: PublicKey
+) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -825,14 +896,14 @@ export const claimReward = (verifiedUserAccount: PublicKey, prAccount: PublicKey
     const { repository, issueTokenPoolAccount, issueCreator } =
       await program.account.issue.fetch(issueAccount);
 
-    const { repositoryCreator } = await program.account.repository.fetch(
-      repository
-    );
+    const { repositoryCreator, rewardsMint } =
+      await program.account.repository.fetch(repository);
 
-    const [mintKeypair] = await get_pda_from_seeds(
-      [Buffer.from('Miners'), Buffer.from('MinerC'), repository.toBuffer()],
-      program
-    );
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        : rewardsMint;
+
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
@@ -868,7 +939,7 @@ export const claimReward = (verifiedUserAccount: PublicKey, prAccount: PublicKey
         pullRequestTokenAccount: pullRequestTokenAccount,
         systemProgram: web3.SystemProgram.programId,
       })
-      .rpc({ skipPreflight: true })
+      .rpc({ skipPreflight: false })
       .then((res) => {
         resolve(res);
       })

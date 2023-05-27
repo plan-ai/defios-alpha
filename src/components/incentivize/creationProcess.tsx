@@ -12,6 +12,7 @@ import { PublicKey } from '@solana/web3.js';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { uploadFileToIPFS, uploadMetadataToIPFS } from '@/lib/helpers/metadata';
 
 interface CreationProcessProps {
   stepOfCreation: number;
@@ -38,6 +39,18 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
     }
   }, [stepOfCreation]);
 
+  const AddTokenDataToIPFS = async () => {
+    const imageHash = await uploadFileToIPFS(
+      creationState.step3.tokenSpecs.tokenIcon as File
+    );
+    const metadataHash = await uploadMetadataToIPFS({
+      name: creationState.step3.tokenSpecs.tokenName,
+      symbol: creationState.step3.tokenSpecs.tokenSymbol,
+      image: `https://ipfs.io/ipfs/${imageHash}`,
+    });
+    return `https://ipfs.io/ipfs/${metadataHash}`;
+  };
+
   useEffect(() => {
     if (isExpand) {
       dispatch(onLoading('Creating Project Repository...'));
@@ -45,70 +58,71 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
       let resCalled = false;
 
       if (!creationState.step3.tokenSpecs.address) {
-        createRepository(
-          new PublicKey(
-            userMappingState.userMapping?.verifiedUserAccount as string
-          ),
-          creationState.step3.tokenSpecs.tokenIcon as File,
-          creationState.step3.tokenSpecs.tokenName,
-          creationState.step3.tokenSpecs.tokenSymbol,
-          creationState.step2.repoName,
-          creationState.step2.repoLink,
-          creationState.step3.tokenSpecs.totalSupply,
-          creationState.step3.distribution
-        )
-          .then((res) => {
-            resCalled = true;
-            dispatch(
-              onSuccess({
-                label: 'Project Repository Creation Success',
-                description: 'check out created project repository at',
-                link: res
-                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
-                  : '',
-                redirect: '/projects',
-                buttonText: 'Browse Projects',
+        AddTokenDataToIPFS()
+          .then((data) => {
+            createRepository(
+              new PublicKey(userMappingState.userMapping?.userPubkey as string),
+              creationState.step2.repoName,
+              creationState.step2.repoLink,
+              creationState.step3.tokenSpecs.tokenName,
+              creationState.step3.tokenSpecs.tokenSymbol,
+              data,
+              new PublicKey(
+                userMappingState.userMapping?.verifiedUserAccount as string
+              )
+            )
+              .then((res) => {
+                resCalled = true;
+                dispatch(
+                  onSuccess({
+                    label: 'Project Repository Creation Success',
+                    description: 'check out created project repository at',
+                    link: res
+                      ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                      : '',
+                    redirect: '/projects',
+                    buttonText: 'Browse Projects',
+                  })
+                );
+                setStep(2);
               })
-            );
-            setStep(2);
-          })
-          .catch((err) => {
-            console.log(err);
-            resCalled = true;
-            dispatch(
-              onFailure({
-                label: 'Project Repository Creation Failed',
-                description: err.message,
-                link: '',
-                redirect: '/projects',
-                buttonText: 'Browse Other Projects',
+              .catch((err) => {
+                console.log(err);
+                resCalled = true;
+                dispatch(
+                  onFailure({
+                    label: 'Project Repository Creation Failed',
+                    description: err.message,
+                    link: '',
+                    redirect: '/projects',
+                    buttonText: 'Browse Other Projects',
+                  })
+                );
               })
-            );
+              .finally(() => {
+                if (!resCalled) {
+                  dispatch(
+                    onSuccess({
+                      label: 'Project Repository Creation Success',
+                      description: '',
+                      link: '',
+                      redirect: '/projects',
+                      buttonText: 'Browse Projects',
+                    })
+                  );
+                  setStep(2);
+                }
+              });
           })
-          .finally(() => {
-            if (!resCalled) {
-              dispatch(
-                onSuccess({
-                  label: 'Project Repository Creation Success',
-                  description: '',
-                  link: '',
-                  redirect: '/projects',
-                  buttonText: 'Browse Projects',
-                })
-              );
-              setStep(2);
-            }
-          });
+          .catch((err) => console.log(err.message));
       } else {
         createRepositoryImported(
+          new PublicKey(userMappingState.userMapping?.userPubkey as string),
+          creationState.step2.repoName,
+          creationState.step2.repoLink,
           new PublicKey(
             userMappingState.userMapping?.verifiedUserAccount as string
-          ),
-          new PublicKey(creationState.step3.tokenSpecs.address as string),
-          creationState.step3.tokenSpecs.tokenName,
-          creationState.step3.tokenSpecs.tokenSymbol,
-          creationState.step2.repoName,
-          creationState.step2.repoLink
+          )
         )
           .then((res) => {
             resCalled = true;
@@ -117,7 +131,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                 label: 'Project Repository Creation Success',
                 description: 'check out created project repository at',
                 link: res
-                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                  ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
                   : '',
                 redirect: '/projects',
                 buttonText: 'Browse Projects',
@@ -159,7 +173,9 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
     <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
       <div className="my-4 flex w-full cursor-pointer items-start justify-between px-5">
         <div className="flex w-full items-center gap-3">
-          <div className="text-base xl:text-lg 3xl:text-xl">4. Creation Process</div>
+          <div className="text-base xl:text-lg 3xl:text-xl">
+            4. Creation Process
+          </div>
           {stepOfCreation === 4 && (
             <div className="flex text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               ( {step - 1}/1 creation steps are completed )

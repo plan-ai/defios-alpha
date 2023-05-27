@@ -25,7 +25,7 @@ import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
-import { claimTokens } from '@/lib/helpers/contractInteract';
+import { unlockTokens } from '@/lib/helpers/contractInteract';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
@@ -459,14 +459,10 @@ export default function Projects() {
     };
     let resCalled = false;
     dispatch(onLoading('Claiming Pending Tokens on the Project...'));
-    claimTokens(
-      //@ts-ignore
-      githubInfo?.login,
-      wallet.publicKey as PublicKey,
-      new PublicKey(
-        userMappingState.userMapping?.verifiedUserAccount as string
-      ),
-      new PublicKey(project.project_account) // Pass here the project account
+    unlockTokens(
+      new PublicKey(project.project_account),
+      new PublicKey(userMappingState.userMapping?.userPubkey as string),
+      new PublicKey(userMappingState.userMapping?.verifiedUserAccount as string)
     )
       .then((res: any) => {
         resCalled = true;
@@ -477,17 +473,14 @@ export default function Projects() {
             buttonText: 'Browse Projects',
             redirect: null,
             link: res
-              ? `https://solscan.io/tx/${res.toString()}?cluster=devnet`
+              ? `https://solscan.io/tx/${res.toString()}?cluster=testnet`
               : '',
           })
         );
-        axios(config)
-          .then(() => {
-            setTriggerSearch(true);
-          })
-          .catch((err) => console.log(err));
+
+        setTriggerSearch(true);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         resCalled = true;
         dispatch(
           onFailure({
@@ -511,11 +504,7 @@ export default function Projects() {
               link: '',
             })
           );
-          axios(config)
-            .then(() => {
-              setTriggerSearch(true);
-            })
-            .catch((err) => console.log(err));
+          setTriggerSearch(true);
         }
       });
   };
@@ -673,11 +662,8 @@ export default function Projects() {
                 color="success"
                 fullWidth
                 size="medium"
-                // disabled={!project.claimable}
                 onClick={() => {
-                  // if (project.claimable) {
                   claimPendingTokens(project);
-                  // }
                 }}
               >
                 Claim Pending Tokens

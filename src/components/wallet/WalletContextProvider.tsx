@@ -12,7 +12,7 @@ import {
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const WalletContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const url = useMemo(() => clusterApiUrl('devnet'), []);
+  const url = useMemo(() => clusterApiUrl('testnet'), []);
   const phantom = useMemo(() => new PhantomWalletAdapter(), []);
   // const glow = useMemo(() => new GlowWalletAdapter(), []);
 

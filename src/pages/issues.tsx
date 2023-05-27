@@ -35,14 +35,12 @@ import {
 //Components
 import IssuesList from '@/components/issues/list';
 import OpenIssueExpand from '@/components/issues/open-issues-expand';
-import WinnerDeclaredExpand from '@/components/issues/winner-declared-expand';
 import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
 
 //redux store
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 import { resetRefetch } from '@/store/refetchSlice';
-
 
 interface searchProps {
   placeholder?: string;
@@ -57,7 +55,6 @@ const Search: React.FC<searchProps> = ({
   setSearch,
   setTriggerSearch,
 }) => {
-
   //debounce,denounce for searchbar
   const handleDebounceFn = () => {
     setTriggerSearch(true);
@@ -107,7 +104,6 @@ const IssuesPage: NextPageWithLayout = () => {
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [fetchTrigger, setFetchTrigger] = useState(0);
 
-
   //redirect to page and query search
   const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
   const setSearchQuery = useAppSelector(
@@ -133,7 +129,7 @@ const IssuesPage: NextPageWithLayout = () => {
 
   //pagination with intersection observer for infinite scroll
   const [page, setPage] = useState(1);
-  const [donePagination,setDonePagination] = useState(false);
+  const [donePagination, setDonePagination] = useState(false);
   const observerTarget = useRef(null);
 
   //adds filters,search,page and fetches
@@ -189,7 +185,7 @@ const IssuesPage: NextPageWithLayout = () => {
           }
         });
       }
-      //search single param 
+      //search single param
       else if (search.includes(':') && !search.includes(';')) {
         const [key, value] = search.trim().split(':');
         if (key === 'id') {
@@ -240,7 +236,7 @@ const IssuesPage: NextPageWithLayout = () => {
           }
         }
         //no more data to fetch end pagination
-        if(res.data.issues.length===0){
+        if (res.data.issues.length === 0) {
           setDonePagination(true);
         }
         setIsLoading(false);
@@ -289,7 +285,7 @@ const IssuesPage: NextPageWithLayout = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          console.log(entry);
+          // console.log(entry);
           if (entry.isIntersecting && !donePagination) {
             setPage(page + 1);
           }
@@ -319,6 +315,7 @@ const IssuesPage: NextPageWithLayout = () => {
             link={issue?.issue_gh_url}
             account={issue?.issue_account}
             PRData={issue?.issue_prs}
+            issueCreatorGH={issue?.issue_creator_gh}
           />
         )}
         {issue?.issue_state === 'voting' && (
@@ -327,13 +324,11 @@ const IssuesPage: NextPageWithLayout = () => {
             link={issue?.issue_gh_url}
             account={issue?.issue_account}
             PRData={issue?.issue_prs}
+            issueCreatorGH={issue?.issue_creator_gh}
           />
         )}
         {issue?.issue_state === 'winner_declared' && (
-          <WinnerDeclaredExpand
-            data={issue}
-            issueAccount={issue?.issue_account}
-          />
+          <ClosedIssueExpand data={issue} />
         )}
         {issue?.issue_state === 'closed' && <ClosedIssueExpand data={issue} />}
       </IssuesList>
@@ -436,9 +431,12 @@ const IssuesPage: NextPageWithLayout = () => {
               <Spinner />
             </div>
           )}
-          
+
           {/* intersection element 40vh above from bottom of content */}
-          <div ref={observerTarget} className="absolute left-0 right-0 bottom-[40vh]" ></div>
+          <div
+            ref={observerTarget}
+            className="absolute left-0 right-0 bottom-[40vh]"
+          ></div>
         </div>
       </div>
     </>

@@ -292,6 +292,12 @@ export type Defios = {
           }
         },
         {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
           "name": "rewardsMint",
           "isMut": true,
           "isSigner": false,
@@ -329,6 +335,11 @@ export type Defios = {
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -1500,11 +1511,6 @@ export type Defios = {
         {
           "name": "issue",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "commit",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -3598,7 +3604,7 @@ export type Defios = {
           "index": false
         },
         {
-          "name": "tokenImage",
+          "name": "tokenSymbol",
           "type": {
             "option": "string"
           },
@@ -3942,6 +3948,11 @@ export type Defios = {
       "code": 6020,
       "name": "IncorrectMaths",
       "msg": "Incorrect Inputs for buy/sell given"
+    },
+    {
+      "code": 6021,
+      "name": "IncorrectMetadataAccount",
+      "msg": "Incorrect Metadata account provided"
     }
   ]
 };
@@ -4240,6 +4251,12 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "metadata",
+          "isMut": true,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
           "name": "rewardsMint",
           "isMut": true,
           "isSigner": false,
@@ -4277,6 +4294,11 @@ export const IDL: Defios = {
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenMetadataProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -5448,11 +5470,6 @@ export const IDL: Defios = {
         {
           "name": "issue",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "commit",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -7546,7 +7563,7 @@ export const IDL: Defios = {
           "index": false
         },
         {
-          "name": "tokenImage",
+          "name": "tokenSymbol",
           "type": {
             "option": "string"
           },
@@ -7890,6 +7907,11 @@ export const IDL: Defios = {
       "code": 6020,
       "name": "IncorrectMaths",
       "msg": "Incorrect Inputs for buy/sell given"
+    },
+    {
+      "code": 6021,
+      "name": "IncorrectMetadataAccount",
+      "msg": "Incorrect Metadata account provided"
     }
   ]
 };

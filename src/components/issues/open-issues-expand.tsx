@@ -1,8 +1,16 @@
-import React, { useState, useEffect,Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
 import AnchorLink from '../ui/links/anchor-link';
-import { addCommit, stakeIssue } from '@/lib/helpers/contractInteract';
+import {
+  addCommit,
+  addPr,
+  acceptPr,
+  stakeIssue,
+  unstakeIssue,
+  stakePr,
+  unstakePr,
+} from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { selectUserMapping } from '@/store/userMappingSlice';
@@ -27,13 +35,17 @@ const sort = [
   { id: 3, name: 'By duration of project involvement (compute intensive)' },
 ];
 
-interface SortListProps{
-  sort:any;
-  selectedSubmitPR:any;
-  setSelectedSubmitPR:React.Dispatch<React.SetStateAction<any>>;
+interface SortListProps {
+  sort: any;
+  selectedSubmitPR: any;
+  setSelectedSubmitPR: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const SortList:React.FC<SortListProps> = ({sort,selectedSubmitPR,setSelectedSubmitPR})=>{
+const SortList: React.FC<SortListProps> = ({
+  sort,
+  selectedSubmitPR,
+  setSelectedSubmitPR,
+}) => {
   return (
     <div className="relative w-full">
       <Listbox value={selectedSubmitPR} onChange={setSelectedSubmitPR}>
@@ -62,7 +74,7 @@ const SortList:React.FC<SortListProps> = ({sort,selectedSubmitPR,setSelectedSubm
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
-                    className={`block cursor-pointer flex items-center justify-between rounded-xl px-3 py-3 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
+                    className={`block flex cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
                       selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
                     }`}
                   >
@@ -72,9 +84,7 @@ const SortList:React.FC<SortListProps> = ({sort,selectedSubmitPR,setSelectedSubm
                         : item.title}
                     </div>
                     <div className="font-semibold">
-                      {item.id !== -1
-                        ? '#' + item.id
-                        : null}
+                      {item.id !== -1 ? '#' + item.id : null}
                     </div>
                   </div>
                 )}
@@ -85,13 +95,14 @@ const SortList:React.FC<SortListProps> = ({sort,selectedSubmitPR,setSelectedSubm
       </Listbox>
     </div>
   );
-}
+};
 
 interface OpenIssueExpandProps {
   issueDesc: string;
   link: string;
   account: string;
   PRData: any;
+  issueCreatorGH: string;
 }
 
 const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
@@ -99,6 +110,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   link,
   account,
   PRData,
+  issueCreatorGH,
 }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
@@ -111,17 +123,18 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
 
   const [expandState, setExpandState] = useState('issue');
 
-
   const [PRStakeAmount, setPRStakeAmount] = React.useState<number>(0);
   const [selectedPR, setSelectedPR] = useState<any>();
 
   const userInfo = useAppSelector((state) => state.userInfo.githubInfo);
 
-  const [PRSort,setPRSort] = useState<any>([{
-      id:-1,
-      title:'Select Pull Request',
-      PR_link:''
-    }]);
+  const [PRSort, setPRSort] = useState<any>([
+    {
+      id: -1,
+      title: 'Select Pull Request',
+      PR_link: '',
+    },
+  ]);
 
   const [selectedSubmitPR, setSelectedSubmitPR] = useState<any>({
     id: -1,
@@ -129,7 +142,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     PR_link: '',
   });
 
-  const handleStake = () => {
+  const handleIssueStake = () => {
     if (stakeAmount <= 0) return;
     let resCalled = false;
     dispatch(onLoading('Staking tokens on the issue...'));
@@ -147,7 +160,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             buttonText: 'Browse Issues',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
               : '',
           })
         );
@@ -181,12 +194,179 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       });
   };
 
-  const handleCommitSubmit = () => {
-    if (selectedSubmitPR?.PR_link === '' || !selectedSubmitPR?.PR_link.startsWith('https://github.com/')) return;
+  const handleIssueUnstake = () => {
+    let resCalled = false;
+    dispatch(onLoading('Unstaking tokens on the issue...'));
+    unstakeIssue(wallet.publicKey as PublicKey, new PublicKey(account))
+      .then((res) => {
+        resCalled = true;
+        dispatch(
+          onSuccess({
+            label: 'Issue Unstaking Successful',
+            description: 'Check out your unstaking at',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              : '',
+          })
+        );
+        dispatch(setRefetch('issue'));
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Issue Unstaking Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Issue Unstaking Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
+          dispatch(setRefetch('issue'));
+        }
+      });
+  };
+
+  const handlePRStake = () => {
+    if (selectedPR === undefined || selectedPR === null) return;
+    if (
+      selectedPR.issue_pr_account === null ||
+      selectedPR.issue_pr_account === undefined
+    )
+      return;
+    if (PRStakeAmount <= 0) return;
+    let resCalled = false;
+    dispatch(onLoading('Staking tokens on the pull request...'));
+    stakePr(
+      wallet.publicKey as PublicKey,
+      new PublicKey(selectedPR.issue_pr_account),
+      PRStakeAmount
+    )
+      .then((res) => {
+        resCalled = true;
+        dispatch(
+          onSuccess({
+            label: 'Pull Request Staking Successful',
+            description: 'Check out your staking at',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              : '',
+          })
+        );
+        dispatch(setRefetch('issue'));
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Pull Request Staking Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Pull Request Staking Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
+          dispatch(setRefetch('issue'));
+        }
+      });
+  };
+
+  const handlePRUnstake = () => {
+    if (selectedPR === undefined || selectedPR === null) return;
+    if (
+      selectedPR.issue_pr_account === null ||
+      selectedPR.issue_pr_account === undefined
+    )
+      return;
+    let resCalled = false;
+    dispatch(onLoading('Staking tokens on the pull request...'));
+    unstakePr(
+      wallet.publicKey as PublicKey,
+      new PublicKey(selectedPR.issue_pr_account)
+    )
+      .then((res) => {
+        resCalled = true;
+        dispatch(
+          onSuccess({
+            label: 'Pull Request Staking Successful',
+            description: 'Check out your staking at',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              : '',
+          })
+        );
+        dispatch(setRefetch('issue'));
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Pull Request Staking Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Pull Request Staking Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
+          dispatch(setRefetch('issue'));
+        }
+      });
+  };
+
+  const handlePRSubmit = () => {
+    if (
+      selectedSubmitPR?.PR_link === '' ||
+      !selectedSubmitPR?.PR_link.startsWith('https://github.com/')
+    )
+      return;
     dispatch(onLoading('Submitting your commit on the issue...'));
-    const pullApiUrl = selectedSubmitPR?.PR_link
-      .replace('https://github.com/', '')
-      .replace('pull', 'pulls');
+    //getting commit tree hash,commit hash
+    const pullApiUrl = selectedSubmitPR?.PR_link.replace(
+      'https://github.com/',
+      ''
+    ).replace('pull', 'pulls');
 
     var config = {
       method: 'get',
@@ -239,7 +419,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             issue_url: issueInfo.html_url,
             pr_url: res.data.html_url,
           });
-
+          //add commit
           addCommit(
             wallet.publicKey as PublicKey,
             new PublicKey(account),
@@ -251,25 +431,66 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             ipfsMetadata
           )
             .then((res: any) => {
-              resCalled = true;
               dispatch(
-                onSuccess({
-                  label: 'Issue Submit Commit Successful',
-                  description: 'Check out your commit submit at',
-                  buttonText: 'Browse Issues',
-                  redirect: null,
-                  link: res
-                    ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
-                    : '',
-                })
+                onLoading('Submitting your pull request on the issue...')
               );
-              dispatch(setRefetch('issue'));
+              //add pr
+              addPr(
+                wallet.publicKey as PublicKey,
+                new PublicKey(account),
+                new PublicKey(
+                  userMappingState.userMapping?.verifiedUserAccount as string
+                ),
+                latestCommit.sha,
+                ipfsMetadata
+              )
+                .then((resp: any) => {
+                  resCalled = true;
+                  dispatch(
+                    onSuccess({
+                      label: 'Issue Submit Pull Request Successful',
+                      description: 'Check out your commit submit at',
+                      buttonText: 'Browse Issues',
+                      redirect: null,
+                      link: res
+                        ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                        : '',
+                    })
+                  );
+                  dispatch(setRefetch('issue'));
+                })
+                .catch((err) => {
+                  resCalled = true;
+                  dispatch(
+                    onFailure({
+                      label: 'Issue Submit Pull Request Failed',
+                      description: err.message,
+                      redirect: null,
+                      buttonText: 'Continue',
+                      link: '',
+                    })
+                  );
+                })
+                .finally(() => {
+                  if (!resCalled) {
+                    dispatch(
+                      onSuccess({
+                        label: 'Issue Submit Pull Request Successful',
+                        description: '',
+                        buttonText: 'Browse Issues',
+                        redirect: null,
+                        link: '',
+                      })
+                    );
+                    dispatch(setRefetch('issue'));
+                  }
+                });
             })
             .catch((err) => {
               resCalled = true;
               dispatch(
                 onFailure({
-                  label: 'Issue Submit Commit Failed',
+                  label: 'Issue Submit Pull Request Failed',
                   description: err.message,
                   redirect: null,
                   buttonText: 'Continue',
@@ -281,7 +502,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               if (!resCalled) {
                 dispatch(
                   onSuccess({
-                    label: 'Issue Submit Commit Successful',
+                    label: 'Issue Submit Pull Request Successful',
                     description: '',
                     buttonText: 'Browse Issues',
                     redirect: null,
@@ -296,13 +517,117 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       .catch((err) => {
         dispatch(
           onFailure({
-            label: 'Issue Submit Commit Failed',
+            label: 'Issue Submit Pull Request Failed',
             description: err.message,
             redirect: null,
             buttonText: 'Continue',
             link: '',
           })
         );
+      });
+  };
+
+  const handleAcceptPR = () => {
+    if (selectedPR === undefined || selectedPR === null) return;
+    if (
+      selectedPR.issue_pr_account === null ||
+      selectedPR.issue_pr_account === undefined ||
+      selectedPR.issue_pr_link === null ||
+      selectedPR.issue_pr_link === undefined ||
+      selectedPR.issue_pr_link === ''
+    )
+      return;
+    let resCalled = false;
+    dispatch(onLoading('Merging pull request...'));
+    acceptPr(
+      new PublicKey(
+        userMappingState.userMapping?.verifiedUserAccount as string
+      ),
+      new PublicKey(selectedPR.issue_pr_account)
+    )
+      .then((res) => {
+        const pullApiUrl = selectedPR.issue_pr_link
+          .replace('https://github.com/', '')
+          .replace('pull', 'pulls');
+
+        var config = {
+          method: 'put',
+          maxBodyLength: Infinity,
+          url: `https://api.github.com/repos/${pullApiUrl}/merge`,
+          headers: {
+            Authorization: `Bearer ${(session as any)?.accessToken}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+        };
+
+        axios(config)
+          .then((resp) => {
+            resCalled = true;
+            dispatch(
+              onSuccess({
+                label: 'Pull Request merging Successful',
+                description: 'Check out your merging at',
+                buttonText: 'Browse Issues',
+                redirect: null,
+                link: res
+                  ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                  : '',
+              })
+            );
+            dispatch(setRefetch('issue'));
+          })
+          .catch((err) => {
+            resCalled = true;
+            dispatch(
+              onFailure({
+                label: 'Pull Request Merging Failed',
+                description: err.message,
+                redirect: null,
+                buttonText: 'Continue',
+                link: '',
+              })
+            );
+          })
+          .finally(() => {
+            if (!resCalled) {
+              dispatch(
+                onSuccess({
+                  label: 'Pull Request Merging Successful',
+                  description: '',
+                  buttonText: 'Browse Issues',
+                  redirect: null,
+                  link: '',
+                })
+              );
+              dispatch(setRefetch('issue'));
+            }
+          });
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Pull Request Merging Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Pull Request Merging Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
+          dispatch(setRefetch('issue'));
+        }
       });
   };
 
@@ -324,14 +649,17 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     const allPRs = timeline.filter(
       (item: any) => item.event === 'cross-referenced'
     );
-    const MyPRs = allPRs.filter((item: any) => item.actor.id === userInfo.id && item.source.issue.state==='open');
-    const _sortlistPRs = MyPRs.map((item:any)=>{
+    const MyPRs = allPRs.filter(
+      (item: any) =>
+        item.actor.id === userInfo.id && item.source.issue.state === 'open'
+    );
+    const _sortlistPRs = MyPRs.map((item: any) => {
       return {
-        id:item?.source?.issue?.number,
-        title:item?.source?.issue?.title,
-        PR_link:item?.source?.issue?.html_url
-      }
-    })
+        id: item?.source?.issue?.number,
+        title: item?.source?.issue?.title,
+        PR_link: item?.source?.issue?.html_url,
+      };
+    });
     const _listPRs = [
       {
         id: -1,
@@ -340,8 +668,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       },
       ..._sortlistPRs,
     ];
-    setPRSort(_listPRs)
-  }
+    setPRSort(_listPRs);
+  };
 
   useEffect(() => {
     if (!link.includes('github.com')) return;
@@ -399,10 +727,19 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   color="success"
                   size="small"
                   shape="rounded"
-                  onClick={handleStake}
+                  onClick={handleIssueStake}
                   isLoading={stateLoading === 'loading'}
                 >
                   Stake
+                </Button>
+                <Button
+                  color="info"
+                  size="small"
+                  shape="rounded"
+                  onClick={handleIssueUnstake}
+                  isLoading={stateLoading === 'loading'}
+                >
+                  Unstake
                 </Button>
               </div>
             </div>
@@ -430,7 +767,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           )}
           <div className="flex w-full items-end justify-center gap-5">
             {PRData.length > 0 && (
-              <div className="flex-flex-col w-1/3">
+              <div className="flex-flex-col w-[35%]">
                 <div className="mb-2">stake on the pull request</div>
                 <div className="flex items-center gap-2">
                   <Input
@@ -446,15 +783,24 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     color="success"
                     size="small"
                     shape="rounded"
-                    // onClick={handleStake}
+                    onClick={handlePRStake}
                     isLoading={stateLoading === 'loading'}
                   >
                     Stake
                   </Button>
+                  <Button
+                    color="info"
+                    size="small"
+                    shape="rounded"
+                    onClick={handlePRUnstake}
+                    isLoading={stateLoading === 'loading'}
+                  >
+                    Unstake
+                  </Button>
                 </div>
               </div>
             )}
-            <div className="flex-flex-col w-1/3">
+            <div className="flex-flex-col w-[35%]">
               <div className="mb-2">submit new pull request</div>
               <div className="flex w-full items-center justify-center gap-2">
                 <SortList
@@ -466,19 +812,19 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   color="info"
                   size="small"
                   shape="rounded"
-                  onClick={handleCommitSubmit}
+                  onClick={handlePRSubmit}
                   isLoading={stateLoading === 'loading'}
                 >
                   Submit
                 </Button>
               </div>
             </div>
-            {PRData.length > 0 && (
+            {PRData.length > 0 && issueCreatorGH === userInfo.id.toString() && (
               <Button
                 color="info"
                 size="small"
                 shape="rounded"
-                className='!w-1/3'
+                className="!w-[30%]"
                 isLoading={stateLoading === 'loading'}
               >
                 Merge Selected Pull Request

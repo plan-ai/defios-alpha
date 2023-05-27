@@ -1,53 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import DataWithImage from '@/components/custom/data-with-image';
+import Button from '@/components/ui/button/button';
+import AnchorLink from '../ui/links/anchor-link';
+import { claimReward } from '@/lib/helpers/contractInteract';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { selectUserMapping } from '@/store/userMappingSlice';
+
 interface ClosedIssueExpandProps {
   data: any;
 }
 
 const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const stateLoading = useAppSelector((state) => state.callLoader.callState);
+
+  const wallet = useWallet();
+  const userMappingState = useAppSelector(selectUserMapping);
+
   const [winner, setWinner] = useState<any>();
-  const [winningMargin, setWinningMargin] = useState(0);
   const [reducedLink, setReducedLink] = useState('');
-  const [totalVotes, setTotalVotes] = useState(1);
   useEffect(() => {
-    if (data === undefined || data === null) return;
-    const PrsList = data?.issue_prs;
-    if (PrsList.length === 0) return;
-    const _winner = PrsList?.reduce((prev: any, current: any) => {
-      return prev?.issue_vote_amount > current?.issue_vote_amount
-        ? prev
-        : current;
+    if (data.rewardee === null || data.rewardee === undefined) return;
+    const winnerPR = data.issue_prs.filter((PR: any) => {
+      return PR.issue_pr_author.toString() === data.rewardee.toString();
     });
-    const removeWinner = PrsList.filter((Pr: any) => {
-      return Pr !== _winner;
-    });
-
-    const _runnerup =
-      removeWinner.length === 0
-        ? { issue_vote_amount: 0 }
-        : removeWinner?.reduce((prev: any, current: any) => {
-            return prev?.issue_vote_amount > current?.issue_vote_amount
-              ? prev
-              : current;
-          });
-
-    const prValSplit = _winner?.issue_pr_link?.split('/');
-    const prValue =
-      prValSplit[prValSplit.length - 2] +
-      '/' +
-      prValSplit[prValSplit.length - 1];
-
-    const _totalVotes = PrsList?.map(
-      (item: any) => item?.issue_vote_amount
-    )?.reduce((prev: number, next: number) => prev + next);
-
-    setWinningMargin(_winner?.issue_vote_amount - _runnerup?.issue_vote_amount);
-
-    setWinner(_winner);
-    setReducedLink(prValue);
-
-    setTotalVotes(_totalVotes);
+    setWinner(winnerPR);
   }, [data]);
+
+  const handleClaim = () => {
+    if (winner === undefined || winner === null) return;
+    if (
+      winner.issue_pr_account === undefined ||
+      winner.issue_pr_account === null
+    )
+      return;
+    dispatch(onLoading('Claiming tokens for solving the issue...'));
+    let resCalled = false;
+    claimReward(
+      new PublicKey(
+        userMappingState.userMapping?.verifiedUserAccount as string
+      ),
+      new PublicKey(winner.issue_pr_account)
+    )
+      .then(() => {
+        resCalled = true;
+        onSuccess({
+          label: 'Issue Reward Claiming Successful',
+          description: '',
+          buttonText: 'Browse Issues',
+          redirect: null,
+          link: '',
+        });
+      })
+      .catch((err) => {
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Issue Reward Claiming Failed',
+            description: err.message,
+            redirect: null,
+            buttonText: 'Continue',
+            link: '',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          onSuccess({
+            label: 'Issue Reward Claiming Successful',
+            description: '',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: '',
+          });
+        }
+      });
+  };
+
   return (
     <div className="flex w-full flex-col justify-between gap-5 py-5">
       <div className="mb-3 flex w-full flex-row items-center justify-between">
@@ -72,7 +104,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
           coin={data?.issue_stake_token_url}
         />
       </div>
-      <div className="flex w-full flex-row items-center justify-between">
+      {/* <div className="flex w-full flex-row items-center justify-between">
         <DataWithImage
           header="Total number of votes"
           value={totalVotes.toString()}
@@ -93,6 +125,30 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
           value={winningMargin.toString()}
           image="banknotes"
         />
+      </div> */}
+      <div className="flex w-full flex-row items-center justify-between">
+        <AnchorLink
+          className="w-1/2"
+          href={winner ? winner?.issue_pr_link : '#'}
+          target="_blank"
+        >
+          <Button color="info" className="w-full" size="small" shape="rounded">
+            View Merge on Github
+          </Button>
+        </AnchorLink>
+        {userMappingState.userMapping?.userPubkey?.toString() ===
+          winner?.issue_pr_author?.toString() && (
+          <Button
+            color="success"
+            className="ml-2 w-1/2"
+            size="small"
+            shape="rounded"
+            onClick={handleClaim}
+            isLoading={stateLoading === 'loading'}
+          >
+            Claim Reward
+          </Button>
+        )}
       </div>
     </div>
   );

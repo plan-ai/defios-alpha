@@ -3,7 +3,7 @@ import { AppState } from '../rootReducer';
 
 export interface step1Props {
   projectName: string;
-  ownerCut: number;
+  // ownerCut: number;
 }
 export interface step2Props {
   repoName: string;
@@ -13,15 +13,15 @@ export interface step2Props {
 export interface tokenSpecsProps {
   tokenSymbol: string;
   tokenName: string;
-  totalSupply: number;
+  // totalSupply: number;
   tokenIcon: File | undefined;
   address: string | undefined;
 }
 
 export interface step3Props {
   tokenSpecs: tokenSpecsProps;
-  algorithm: string;
-  distribution: any;
+  // algorithm: string;
+  // distribution: any;
 }
 
 export interface creationState {
@@ -33,7 +33,7 @@ export interface creationState {
 const initialState: creationState = {
   step1: {
     projectName: '',
-    ownerCut: 0,
+    // ownerCut: 0,
   },
   step2: {
     repoLink: '',
@@ -43,12 +43,12 @@ const initialState: creationState = {
     tokenSpecs: {
       tokenIcon: undefined,
       tokenName: '',
-      totalSupply: 0,
+      // totalSupply: 0,
       tokenSymbol: '',
       address: undefined,
     },
-    algorithm: 'Repository creator',
-    distribution: null,
+    // algorithm: 'Repository creator',
+    // distribution: null,
   },
 };
 
@@ -62,19 +62,19 @@ export const creationSlice = createSlice({
     setStep2Data: (state, action: PayloadAction<step2Props>) => {
       state.step2 = action.payload;
     },
-    setAlgo: (state, action: PayloadAction<string>) => {
-      state.step3.algorithm = action.payload;
-    },
-    setDistribution: (state, action: PayloadAction<any>) => {
-      state.step3.distribution = action.payload;
-    },
+    // setAlgo: (state, action: PayloadAction<string>) => {
+    //   state.step3.algorithm = action.payload;
+    // },
+    // setDistribution: (state, action: PayloadAction<any>) => {
+    //   state.step3.distribution = action.payload;
+    // },
     setStep3Data: (state, action: PayloadAction<tokenSpecsProps>) => {
       state.step3.tokenSpecs = action.payload;
     },
     reset: (state) => {
       state.step1 = {
         projectName: '',
-        ownerCut: 0,
+        // ownerCut: 0,
       };
       state.step2 = {
         repoLink: '',
@@ -84,12 +84,12 @@ export const creationSlice = createSlice({
         tokenSpecs: {
           tokenIcon: undefined,
           tokenName: '',
-          totalSupply: 0,
+          // totalSupply: 0,
           tokenSymbol: '',
           address: undefined,
         },
-        algorithm: 'Repository creator',
-        distribution: null,
+        // algorithm: 'Repository creator',
+        // distribution: null,
       };
     },
   },
@@ -101,7 +101,7 @@ export const {
   setStep1Data,
   setStep2Data,
   setStep3Data,
-  setAlgo,
-  setDistribution,
+  // setAlgo,
+  // setDistribution,
   reset,
 } = creationSlice.actions;

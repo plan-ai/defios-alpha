@@ -9,10 +9,13 @@ import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import cn from 'classnames';
 import { Check } from '@/components/icons/check';
-import DistributionSlider from '@/components/incentivize/distribution-slider';
+// import DistributionSlider from '@/components/incentivize/distribution-slider';
 
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { setAlgo, setStep3Data } from '@/store/creationSlice';
+import {
+  // setAlgo,
+  setStep3Data,
+} from '@/store/creationSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from 'axios';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
@@ -26,9 +29,9 @@ const sort = [
 function SortList() {
   const dispatch = useAppDispatch();
   const [selectedItem, setSelectedItem] = useState(sort[0]);
-  useEffect(() => {
-    dispatch(setAlgo(selectedItem.name));
-  }, [selectedItem, dispatch]);
+  // useEffect(() => {
+  //   dispatch(setAlgo(selectedItem.name));
+  // }, [selectedItem, dispatch]);
   return (
     <div className="relative w-full">
       <span className="text-gray-10 mb-3 block text-xs font-medium uppercase tracking-widest xl:text-sm 3xl:text-base">
@@ -90,7 +93,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const [importError, setImportError] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [tokenName, setTokenName] = useState('');
-  const [totalSupply, setTotalSupply] = useState(0);
+  // const [totalSupply, setTotalSupply] = useState(0);
 
   //Import Existing
   const [splTokenAddress, setSplTokenAddress] = useState('');
@@ -112,7 +115,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
     setTokenSymbol('');
     setTokenName('');
-    setTotalSupply(0);
+    // setTotalSupply(0);
     setSplTokenAddress('');
   }, [reset]);
 
@@ -126,7 +129,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
     } else {
       setTokenSymbol('');
       setTokenName('');
-      setTotalSupply(0);
+      // setTotalSupply(0);
       setSplTokenAddress('');
     }
   }, [tokenType]);
@@ -139,13 +142,17 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
   const CheckSubmit = () => {
     if (tokenType === 'Create New Token') {
-      if (tokenSymbol !== '' && tokenName !== '' && totalSupply !== 0) {
+      if (
+        tokenSymbol !== '' &&
+        tokenName !== ''
+        // && totalSupply !== 0
+      ) {
         dispatch(
           setStep3Data({
             tokenIcon: imageFile as File,
             tokenName: tokenName,
             tokenSymbol: tokenSymbol,
-            totalSupply: totalSupply,
+            // totalSupply: totalSupply,
             address: undefined,
           })
         );
@@ -165,7 +172,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
             tokenIcon: undefined,
             tokenName: splTokenName,
             tokenSymbol: splTokenSymbol,
-            totalSupply: 0,
+            // totalSupply: 0,
             address: splTokenAddressConfirm,
           })
         );
@@ -214,7 +221,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
             <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
               <div>Token Name: {tokenName}</div>
               <div>Token Symbol: {tokenSymbol}</div>
-              <div>Token Supply: {totalSupply}</div>
+              {/* <div>Token Supply: {totalSupply}</div> */}
             </div>
           )}
           {isSubmitted && !isExpand && tokenType === 'Import Existing' && (
@@ -282,7 +289,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                         value={tokenName}
                         onChange={(e) => setTokenName(e.target.value)}
                       />
-                      <Input
+                      {/* <Input
                         id="tokenSupply"
                         label="Total Supply"
                         placeholder="Enter Total supply"
@@ -292,21 +299,21 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
                         onChange={(e) =>
                           setTotalSupply(parseInt(e.target.value))
                         }
-                      />
-                    </div>
-                    <div className="flex w-full gap-3">
+                      /> */}
                       <Uploader
                         label="Token Icon"
                         setFile={(file) => {
                           setImageFile(file);
                         }}
                       />
+                    </div>
+                    {/* <div className="flex w-full gap-3">
                       <SortList />
                     </div>
 
                     <div className="mb-3 mt-4 flex w-full flex-row items-center justify-between overflow-hidden">
                       <DistributionSlider />
-                    </div>
+                    </div> */}
 
                     <Button
                       onClick={() => CheckSubmit()}

@@ -22,12 +22,12 @@ const CreateProject: React.FC<CreateProjectProps> = ({
 
   const [isExpand, setIsExpand] = useState(false);
   const [projectName, setProjectName] = useState('');
-  const [ownerCut, setOwnerCut] = useState(0);
+  // const [ownerCut, setOwnerCut] = useState(0);
 
   useEffect(() => {
     setIsExpand(false);
     setProjectName('');
-    setOwnerCut(0);
+    // setOwnerCut(0);
   }, [reset]);
   useEffect(() => {
     if (stepOfCreation === 1) {
@@ -42,12 +42,14 @@ const CreateProject: React.FC<CreateProjectProps> = ({
           <div className="text-base xl:text-lg 3xl:text-xl">
             1. Create Project
           </div>
-          {projectName !== '' && ownerCut !== 0 && !isExpand && (
-            <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
-              <div>Project Name: {projectName}</div>
-              <div>Owner Cut: {ownerCut} %</div>
-            </div>
-          )}
+          {projectName !== '' &&
+            // && ownerCut !== 0
+            !isExpand && (
+              <div className="flex gap-10 text-2xs text-gray-500 xl:text-xs 3xl:text-sm">
+                <div>Project Name: {projectName}</div>
+                {/* <div>Owner Cut: {ownerCut} %</div> */}
+              </div>
+            )}
         </div>
         {stepOfCreation === 1 && (
           <div
@@ -89,22 +91,24 @@ const CreateProject: React.FC<CreateProjectProps> = ({
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
                   />
-                  <Input
+                  {/* <Input
                     label="Set Project Owner Cut in %"
                     placeholder="project owner cut in %"
                     className="w-full"
                     type="number"
                     value={ownerCut}
                     onChange={(e) => setOwnerCut(parseInt(e.target.value))}
-                  />
+                  /> */}
                 </div>
                 <Button
                   onClick={() => {
-                    if (projectName !== '' && ownerCut !== 0) {
+                    if (projectName !== '' 
+                    // && ownerCut !== 0
+                    ) {
                       dispatch(
                         setStep1Data({
                           projectName: projectName,
-                          ownerCut: ownerCut,
+                          // ownerCut: ownerCut,
                         })
                       );
                       setIsExpand(!isExpand);

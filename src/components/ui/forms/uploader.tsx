@@ -64,7 +64,7 @@ const Uploader: React.FC<UploaderProps> = ({
             thumbs
           ) : (
             <div className="flex h-full w-full items-center justify-between text-center">
-              <p className="pl-4 text-sm tracking-tighter text-gray-400">
+              <p className="pl-2 text-3xs xl:text-2xs 3xl:text-xs tracking-tighter text-gray-400">
                 PNG,JPG,SVG. Max 10MB.
               </p>
               <Button size="small" className="!h-full" shape="rounded">
