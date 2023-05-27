@@ -75,30 +75,30 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
   const [reposData, setReposData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getAllImgUrls = async (data: any) => {
-    const projects = data;
-    const newProjects = await Promise.all(
-      await projects.map(async (project: any): Promise<any> => {
-        const _project = project;
-        const _url = _project?.token_url;
-        const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-        await axios
-          .get(IpfsNewGateway)
-          .then((res) => {
-            if (typeof res.data === 'object') {
-              if (res.data.image) {
-                _project.token_url = res.data.image;
-              }
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        return _project;
-      })
-    );
-    setReposData(newProjects);
-  };
+  // const getAllImgUrls = async (data: any) => {
+  //   const projects = data;
+  //   const newProjects = await Promise.all(
+  //     await projects.map(async (project: any): Promise<any> => {
+  //       const _project = project;
+  //       const _url = _project?.token_url;
+  //       const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
+  //       await axios
+  //         .get(IpfsNewGateway)
+  //         .then((res) => {
+  //           if (typeof res.data === 'object') {
+  //             if (res.data.image) {
+  //               _project.token_url = res.data.image;
+  //             }
+  //           }
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //       return _project;
+  //     })
+  //   );
+  //   setReposData(newProjects);
+  // };
 
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === '') return;
@@ -110,7 +110,7 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
         },
       })
       .then((res) => {
-        getAllImgUrls(res.data);
+        setReposData(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -147,7 +147,7 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
           className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-2xs focus:border-gray-600 focus:ring-0 xl:text-xs 3xl:text-sm"
         />
       </div>
-      <div className="h-[16rem] lg:h-[17rem] xl:h-[19rem] 2xl:h-[20.5rem] 3xl:h-[21.5rem] overflow-y-scroll py-3">
+      <div className="h-[16rem] overflow-y-scroll py-3 lg:h-[17rem] xl:h-[19rem] 2xl:h-[20.5rem] 3xl:h-[21.5rem]">
         {!isLoading && repoSearch.length === 0 && (
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-5">
             <EmptyList />

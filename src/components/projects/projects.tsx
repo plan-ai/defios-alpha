@@ -473,7 +473,7 @@ export default function Projects() {
             buttonText: 'Browse Projects',
             redirect: null,
             link: res
-              ? `https://solscan.io/tx/${res.toString()}?cluster=testnet`
+              ? `https://solscan.io/tx/${res.toString()}?cluster=devnet`
               : '',
           })
         );

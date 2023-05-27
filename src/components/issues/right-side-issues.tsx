@@ -98,7 +98,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   description: 'Check out the Issue you created',
                   buttonText: 'Browse Issues',
                   redirect: null,
-                  link: `https://solscan.io/account/${res.toString()}?cluster=testnet`,
+                  link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
                 })
               );
               closeDrawer();

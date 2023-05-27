@@ -40,7 +40,7 @@ export const uploadMetadataToIPFS = async (metadata: any) => {
 };
 
 export const fetchTokenMetadata = async (tokenID: string) => {
-  const connection = new Connection(clusterApiUrl('testnet'));
+  const connection = new Connection(clusterApiUrl('devnet'));
   const metaplex = new Metaplex(connection);
   const mintAddress = new PublicKey(tokenID);
   const nft = await metaplex.nfts().findByMint({ mintAddress });
@@ -52,7 +52,7 @@ export const fetchTokenMetadata = async (tokenID: string) => {
 };
 
 export const fetchDecimals = async (tokenID: string) => {
-  const connection = new Connection(clusterApiUrl('testnet'));
+  const connection = new Connection(clusterApiUrl('devnet'));
   const mintAddress = new PublicKey(tokenID);
   const mintInfo = await getMint(connection, mintAddress);
   return mintInfo.decimals;

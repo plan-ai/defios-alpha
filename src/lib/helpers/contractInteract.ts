@@ -37,7 +37,7 @@ import {
 
 //change
 const nameRouterAccount = new PublicKey(
-  '93dPegr5VD4qnH2LpAAUuTy4JXFiEKLwvA1ptfineWv3'
+  '3uCTwgY9gZTbydpw6ZZoFGBnUJhpmnrzU1BVdaZ38Erj'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -554,7 +554,8 @@ export const addPr = (
 export const stakePr = (
   prStaker: PublicKey,
   prAccount: PublicKey,
-  amount: number
+  amount: number,
+  userName: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -571,10 +572,6 @@ export const stakePr = (
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
-
-    const { userName } = await program.account.verifiedUser.fetch(
-      pullRequestAddr
-    );
 
     const [pullRequestVerifiedUser] = await get_pda_from_seeds(
       [
@@ -650,7 +647,11 @@ export const stakePr = (
   });
 };
 
-export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
+export const unstakePr = (
+  prStaker: PublicKey,
+  prAccount: PublicKey,
+  userName: string
+) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -666,9 +667,6 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
-    const { userName } = await program.account.verifiedUser.fetch(
-      pullRequestAddr
-    );
 
     const [pullRequestVerifiedUser] = await get_pda_from_seeds(
       [
@@ -743,7 +741,8 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
 
 export const acceptPr = (
   verifiedUserAccount: PublicKey,
-  prAccount: PublicKey
+  prAccount: PublicKey,
+  userName:String,
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -761,9 +760,6 @@ export const acceptPr = (
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { repositoryCreator, name } = await program.account.repository.fetch(
       repository
-    );
-    const { userName } = await program.account.verifiedUser.fetch(
-      pullRequestAddr
     );
 
     const [pullRequestVerifiedUser] = await get_pda_from_seeds(

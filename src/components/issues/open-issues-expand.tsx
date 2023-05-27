@@ -160,7 +160,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             buttonText: 'Browse Issues',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
           })
         );
@@ -207,7 +207,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             buttonText: 'Browse Issues',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
           })
         );
@@ -254,7 +254,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     stakePr(
       wallet.publicKey as PublicKey,
       new PublicKey(selectedPR.issue_pr_account),
-      PRStakeAmount
+      PRStakeAmount,
+      selectedPR.issue_pr_github
     )
       .then((res) => {
         resCalled = true;
@@ -265,7 +266,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             buttonText: 'Browse Issues',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
           })
         );
@@ -310,7 +311,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     dispatch(onLoading('Staking tokens on the pull request...'));
     unstakePr(
       wallet.publicKey as PublicKey,
-      new PublicKey(selectedPR.issue_pr_account)
+      new PublicKey(selectedPR.issue_pr_account),
+      selectedPR.issue_pr_github
     )
       .then((res) => {
         resCalled = true;
@@ -321,7 +323,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             buttonText: 'Browse Issues',
             redirect: null,
             link: res
-              ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
           })
         );
@@ -396,29 +398,29 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           const latestCommit = commitRes.data[commitRes.data.length - 1];
           let resCalled = false;
 
-          var config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: `https://api.github.com/repos/${link?.replace(
-              'https://github.com/',
-              ''
-            )}`,
-            headers: {
-              Authorization: `Bearer ${(session as any)?.accessToken}`,
-              Accept: 'application/vnd.github.v3+json',
-            },
-          };
+          // var config = {
+          //   method: 'get',
+          //   maxBodyLength: Infinity,
+          //   url: `https://api.github.com/repos/${link?.replace(
+          //     'https://github.com/',
+          //     ''
+          //   )}`,
+          //   headers: {
+          //     Authorization: `Bearer ${(session as any)?.accessToken}`,
+          //     Accept: 'application/vnd.github.v3+json',
+          //   },
+          // };
 
-          const issueInfo = await axios(config)
-            .then((res) => res.data)
-            .catch((err) => console.log(err));
+          // const issueInfo = await axios(config)
+          //   .then((res) => res.data)
+          //   .catch((err) => console.log(err));
 
-          const ipfsMetadata = await uploadMetadataToIPFS({
-            issue_author_github: issueInfo.user.id,
-            issue_title: issueInfo.title,
-            issue_url: issueInfo.html_url,
-            pr_url: res.data.html_url,
-          });
+          // const ipfsMetadata = await uploadMetadataToIPFS({
+          //   issue_author_github: issueInfo.user.id,
+          //   issue_title: issueInfo.title,
+          //   issue_url: issueInfo.html_url,
+          //   pr_url: res.data.html_url,
+          // });
           //add commit
           addCommit(
             wallet.publicKey as PublicKey,
@@ -428,9 +430,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             ),
             latestCommit.commit.tree.sha,
             latestCommit.sha,
-            ipfsMetadata
+            res.data.html_url
           )
-            .then((res: any) => {
+            .then((resp: any) => {
               dispatch(
                 onLoading('Submitting your pull request on the issue...')
               );
@@ -442,7 +444,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   userMappingState.userMapping?.verifiedUserAccount as string
                 ),
                 latestCommit.sha,
-                ipfsMetadata
+                res.data.html_url
               )
                 .then((resp: any) => {
                   resCalled = true;
@@ -453,7 +455,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                       buttonText: 'Browse Issues',
                       redirect: null,
                       link: res
-                        ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                        ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
                         : '',
                     })
                   );
@@ -543,7 +545,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
-      new PublicKey(selectedPR.issue_pr_account)
+      new PublicKey(selectedPR.issue_pr_account),
+      selectedPR.issue_pr_github
     )
       .then((res) => {
         const pullApiUrl = selectedPR.issue_pr_link
@@ -570,7 +573,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 buttonText: 'Browse Issues',
                 redirect: null,
                 link: res
-                  ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
                   : '',
               })
             );
@@ -825,6 +828,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 size="small"
                 shape="rounded"
                 className="!w-[30%]"
+                onClick={handleAcceptPR}
                 isLoading={stateLoading === 'loading'}
               >
                 Merge Selected Pull Request

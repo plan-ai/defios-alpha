@@ -78,7 +78,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                     label: 'Project Repository Creation Success',
                     description: 'check out created project repository at',
                     link: res
-                      ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                      ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
                       : '',
                     redirect: '/projects',
                     buttonText: 'Browse Projects',
@@ -131,7 +131,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                 label: 'Project Repository Creation Success',
                 description: 'check out created project repository at',
                 link: res
-                  ? `https://solscan.io/account/${res.toString()}?cluster=testnet`
+                  ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
                   : '',
                 redirect: '/projects',
                 buttonText: 'Browse Projects',

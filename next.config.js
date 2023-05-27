@@ -24,6 +24,7 @@ module.exports = {
       'raw.githubusercontent.com',
       'foresight.org',
       'gateway.pinata.cloud',
+      'ipfs.io'
     ],
   },
 };
