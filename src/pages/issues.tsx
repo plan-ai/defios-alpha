@@ -316,6 +316,7 @@ const IssuesPage: NextPageWithLayout = () => {
             account={issue?.issue_account}
             PRData={issue?.issue_prs}
             issueCreatorGH={issue?.issue_creator_gh}
+            issueTokenAddress={issue?.issue_stake_token_url}
           />
         )}
         {issue?.issue_state === 'voting' && (
@@ -325,6 +326,7 @@ const IssuesPage: NextPageWithLayout = () => {
             account={issue?.issue_account}
             PRData={issue?.issue_prs}
             issueCreatorGH={issue?.issue_creator_gh}
+            issueTokenAddress={issue?.issue_stake_token_url}
           />
         )}
         {issue?.issue_state === 'winner_declared' && (

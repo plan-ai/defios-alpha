@@ -103,6 +103,7 @@ interface OpenIssueExpandProps {
   account: string;
   PRData: any;
   issueCreatorGH: string;
+  issueTokenAddress: string;
 }
 
 const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
@@ -111,6 +112,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   account,
   PRData,
   issueCreatorGH,
+  issueTokenAddress,
 }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
@@ -153,6 +155,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     )
       .then((res) => {
         resCalled = true;
+        setStakeAmount(0);
         dispatch(
           onSuccess({
             label: 'Issue Staking Successful',
@@ -168,6 +171,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .catch((err) => {
         resCalled = true;
+        setStakeAmount(0);
         dispatch(
           onFailure({
             label: 'Issue Staking Failed',
@@ -180,6 +184,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .finally(() => {
         if (!resCalled) {
+          setStakeAmount(0);
           dispatch(
             onSuccess({
               label: 'Issue Staking Successful',
@@ -200,6 +205,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     unstakeIssue(wallet.publicKey as PublicKey, new PublicKey(account))
       .then((res) => {
         resCalled = true;
+        setStakeAmount(0);
         dispatch(
           onSuccess({
             label: 'Issue Unstaking Successful',
@@ -215,6 +221,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .catch((err) => {
         resCalled = true;
+        setStakeAmount(0);
         dispatch(
           onFailure({
             label: 'Issue Unstaking Failed',
@@ -227,6 +234,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .finally(() => {
         if (!resCalled) {
+          setStakeAmount(0);
           dispatch(
             onSuccess({
               label: 'Issue Unstaking Successful',
@@ -259,6 +267,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     )
       .then((res) => {
         resCalled = true;
+        setPRStakeAmount(0);
         dispatch(
           onSuccess({
             label: 'Pull Request Staking Successful',
@@ -274,6 +283,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .catch((err) => {
         resCalled = true;
+        setPRStakeAmount(0);
         dispatch(
           onFailure({
             label: 'Pull Request Staking Failed',
@@ -286,6 +296,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .finally(() => {
         if (!resCalled) {
+          setPRStakeAmount(0);
           dispatch(
             onSuccess({
               label: 'Pull Request Staking Successful',
@@ -316,6 +327,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     )
       .then((res) => {
         resCalled = true;
+        setPRStakeAmount(0);
         dispatch(
           onSuccess({
             label: 'Pull Request Staking Successful',
@@ -331,6 +343,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .catch((err) => {
         resCalled = true;
+        setPRStakeAmount(0);
         dispatch(
           onFailure({
             label: 'Pull Request Staking Failed',
@@ -343,6 +356,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       })
       .finally(() => {
         if (!resCalled) {
+          setPRStakeAmount(0);
           dispatch(
             onSuccess({
               label: 'Pull Request Staking Successful',
@@ -757,6 +771,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 PRs={PRData}
                 selectedPR={selectedPR}
                 setSelectedPR={setSelectedPR}
+                issueTokenAddress={issueTokenAddress}
               />
             </div>
           )}

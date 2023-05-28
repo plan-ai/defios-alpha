@@ -9,6 +9,9 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 
+import axios from 'axios';
+import { fetchDecimals } from '@/lib/helpers/metadata';
+
 interface ClosedIssueExpandProps {
   data: any;
 }
@@ -22,15 +25,53 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
 
   const [winner, setWinner] = useState<any>();
   const [reducedLink, setReducedLink] = useState('');
+
+  let [tokenDecimals, setTokenDecimals] = useState(0);
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tokenImageUrl, setTokenImageUrl] = useState('');
+  useEffect(() => {
+    getDecimals();
+    axios
+      .get(
+        `https://api.solscan.io/account?address=${data.issue_stake_token_url}&cluster=devnet`,
+        {
+          headers: {
+            token: process.env.SOLSCAN_TOKEN,
+          },
+        }
+      )
+      .then((res) => {
+        axios
+          .get(res.data.data.metadata.data.uri)
+          .then((resp) => {
+            setTokenImageUrl(resp.data.image);
+            setTokenSymbol(res.data.data.metadata.data.symbol);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }, [data]);
+
+  const getDecimals = async () => {
+    const decimals = await fetchDecimals(data?.issue_stake_token_url);
+    setTokenDecimals(decimals);
+  };
+
   useEffect(() => {
     if (data.rewardee === null || data.rewardee === undefined) return;
     const winnerPR = data.issue_prs.filter((PR: any) => {
       return PR.issue_pr_author.toString() === data.rewardee.toString();
     });
-    setWinner(winnerPR);
+    if (winnerPR.length !== 1) return;
+    const winnerLink = winnerPR[0].issue_pr_link;
+    const linkSplit = winnerLink.split('/');
+    const linkReduced =
+      linkSplit[linkSplit.length - 2] + '/' + linkSplit[linkSplit.length - 1];
+    setReducedLink(linkReduced);
+    setWinner(winnerPR[0]);
   }, [data]);
 
-  const handleClaim = () => {
+  const handleClaim = async () => {
     if (winner === undefined || winner === null) return;
     if (
       winner.issue_pr_account === undefined ||
@@ -40,10 +81,11 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
     dispatch(onLoading('Claiming tokens for solving the issue...'));
     let resCalled = false;
     claimReward(
+      new PublicKey(userMappingState.userMapping?.userPubkey as string),
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
-      new PublicKey(winner.issue_pr_account)
+      new PublicKey(winner.issue_pr_account),
     )
       .then(() => {
         resCalled = true;
@@ -97,11 +139,15 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
         <DataWithImage
           header="Total amount staked"
           value={
-            Math.round(data?.issue_stake_amount * 100) / 100 +
+            Math.round(
+              ((data?.issue_stake_amount + winner?.issue_vote_amount) * 100) /
+                10 ** tokenDecimals
+            ) /
+              100 +
               ' ' +
-              data?.issue_stake_token_symbol || ''
+              tokenSymbol || ''
           }
-          coin={data?.issue_stake_token_url}
+          coin={tokenImageUrl}
         />
       </div>
       {/* <div className="flex w-full flex-row items-center justify-between">

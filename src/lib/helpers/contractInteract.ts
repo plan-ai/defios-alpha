@@ -37,7 +37,7 @@ import {
 
 //change
 const nameRouterAccount = new PublicKey(
-  '3uCTwgY9gZTbydpw6ZZoFGBnUJhpmnrzU1BVdaZ38Erj'
+  '9rW4TLgQ6Njjyh71rqGPyPuhq7odeK382oeJ2RQNuhC8'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -742,7 +742,7 @@ export const unstakePr = (
 export const acceptPr = (
   verifiedUserAccount: PublicKey,
   prAccount: PublicKey,
-  userName:String,
+  userName: String
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -873,6 +873,7 @@ export const unlockTokens = (
 };
 
 export const claimReward = (
+  pullRequestAddr: PublicKey,
   verifiedUserAccount: PublicKey,
   prAccount: PublicKey
 ) => {
@@ -880,10 +881,7 @@ export const claimReward = (
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { sentBy, commits } = await program.account.pullRequest.fetch(
-      prAccount
-    );
-    const pullRequestAddr = sentBy;
+    const { commits } = await program.account.pullRequest.fetch(prAccount);
     const commitAccount = commits[0];
     const { issue, commitCreator } = await program.account.commit.fetch(
       commitAccount
@@ -915,7 +913,7 @@ export const claimReward = (
       true
     );
 
-    program.methods
+    await program.methods
       .claimReward()
       .accounts({
         nameRouterAccount,

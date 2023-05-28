@@ -1390,12 +1390,12 @@ export type Defios = {
         },
         {
           "name": "objectiveStartUnix",
-          "type": "u64"
+          "type": "i64"
         },
         {
           "name": "objectiveEndUnix",
           "type": {
-            "option": "u64"
+            "option": "i64"
           }
         },
         {
@@ -1425,12 +1425,7 @@ export type Defios = {
           "isOptional": true
         },
         {
-          "name": "objectiveAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "parentAccount",
+          "name": "parentObjectiveAccount",
           "isMut": true,
           "isSigner": false,
           "isOptional": true
@@ -1635,11 +1630,6 @@ export type Defios = {
           "name": "commitAddr",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "commit",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "pullRequestMetadataAccount",
@@ -2779,6 +2769,181 @@ export type Defios = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "swap",
+      "accounts": [
+        {
+          "name": "buyer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "communalDeposit1",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "are_we_conscious"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "is love life ?  "
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "arewemadorinlove"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "rewards_mint1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerTokenAccount1",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerTokenAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount1",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint1",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "Miners"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "MinerC"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "repositoryAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint2",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "Miners"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "MinerC"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account2"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalDeposit2",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "are_we_conscious"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "is love life ?  "
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "arewemadorinlove"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "rewards_mint2"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalTokenAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "tokenAmount1",
+          "type": "u64"
+        },
+        {
+          "name": "tokenAmount2",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -3035,7 +3200,9 @@ export type Defios = {
           },
           {
             "name": "stakedAt",
-            "type": "u64"
+            "type": {
+              "vec": "u64"
+            }
           },
           {
             "name": "issueStaker",
@@ -3067,7 +3234,9 @@ export type Defios = {
           },
           {
             "name": "stakedAt",
-            "type": "u64"
+            "type": {
+              "vec": "u64"
+            }
           },
           {
             "name": "prStaker",
@@ -3099,7 +3268,7 @@ export type Defios = {
           },
           {
             "name": "roadmapCreationUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "roadmapCreatorId",
@@ -3147,20 +3316,20 @@ export type Defios = {
           },
           {
             "name": "objectiveCreationUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
-            "name": "objectiveCreatorGhId",
+            "name": "objectiveCreatorId",
             "type": "publicKey"
           },
           {
             "name": "objectiveStartUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "objectiveEndUnix",
             "type": {
-              "option": "u64"
+              "option": "i64"
             }
           },
           {
@@ -3362,7 +3531,9 @@ export type Defios = {
       "fields": [
         {
           "name": "commit",
-          "type": "publicKey",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         },
         {
@@ -3376,13 +3547,20 @@ export type Defios = {
       "name": "AddChildObjectiveEvent",
       "fields": [
         {
-          "name": "parentAccount",
+          "name": "parentObjectiveAccount",
           "type": "publicKey",
           "index": false
         },
         {
           "name": "addedBy",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "objectives",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -3402,18 +3580,18 @@ export type Defios = {
         },
         {
           "name": "objectiveStartUnix",
-          "type": "u64",
+          "type": "i64",
           "index": false
         },
         {
           "name": "objectiveCreationUnix",
-          "type": "u64",
+          "type": "i64",
           "index": false
         },
         {
           "name": "objectiveEndUnix",
           "type": {
-            "option": "u64"
+            "option": "i64"
           },
           "index": false
         },
@@ -3432,6 +3610,18 @@ export type Defios = {
         {
           "name": "objectiveIssue",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "objectiveAddr",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "childObjectives",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -3457,6 +3647,13 @@ export type Defios = {
         {
           "name": "roadmapCreator",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rootObjectiveIds",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -3497,6 +3694,11 @@ export type Defios = {
         {
           "name": "userName",
           "type": "string",
+          "index": false
+        },
+        {
+          "name": "userPubkey",
+          "type": "publicKey",
           "index": false
         }
       ]
@@ -3953,6 +4155,16 @@ export type Defios = {
       "code": 6021,
       "name": "IncorrectMetadataAccount",
       "msg": "Incorrect Metadata account provided"
+    },
+    {
+      "code": 6022,
+      "name": "PullRequestClosedAlready",
+      "msg": "Cannot unstake for a closed pull request"
+    },
+    {
+      "code": 6023,
+      "name": "CantAddObjectiveToSomebodiesRoadmap",
+      "msg": "Unauthorized objective addition"
     }
   ]
 };
@@ -5349,12 +5561,12 @@ export const IDL: Defios = {
         },
         {
           "name": "objectiveStartUnix",
-          "type": "u64"
+          "type": "i64"
         },
         {
           "name": "objectiveEndUnix",
           "type": {
-            "option": "u64"
+            "option": "i64"
           }
         },
         {
@@ -5384,12 +5596,7 @@ export const IDL: Defios = {
           "isOptional": true
         },
         {
-          "name": "objectiveAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "parentAccount",
+          "name": "parentObjectiveAccount",
           "isMut": true,
           "isSigner": false,
           "isOptional": true
@@ -5594,11 +5801,6 @@ export const IDL: Defios = {
           "name": "commitAddr",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "commit",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "pullRequestMetadataAccount",
@@ -6738,6 +6940,181 @@ export const IDL: Defios = {
         }
       ],
       "args": []
+    },
+    {
+      "name": "swap",
+      "accounts": [
+        {
+          "name": "buyer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "communalDeposit1",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "are_we_conscious"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "is love life ?  "
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "arewemadorinlove"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "rewards_mint1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerTokenAccount1",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerTokenAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "repositoryAccount1",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint1",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "Miners"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "MinerC"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "repositoryAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardsMint2",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "Miners"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "MinerC"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account2"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalDeposit2",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "are_we_conscious"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "is love life ?  "
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "arewemadorinlove"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Mint",
+                "path": "rewards_mint2"
+              }
+            ]
+          }
+        },
+        {
+          "name": "communalTokenAccount2",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "tokenAmount1",
+          "type": "u64"
+        },
+        {
+          "name": "tokenAmount2",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -6994,7 +7371,9 @@ export const IDL: Defios = {
           },
           {
             "name": "stakedAt",
-            "type": "u64"
+            "type": {
+              "vec": "u64"
+            }
           },
           {
             "name": "issueStaker",
@@ -7026,7 +7405,9 @@ export const IDL: Defios = {
           },
           {
             "name": "stakedAt",
-            "type": "u64"
+            "type": {
+              "vec": "u64"
+            }
           },
           {
             "name": "prStaker",
@@ -7058,7 +7439,7 @@ export const IDL: Defios = {
           },
           {
             "name": "roadmapCreationUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "roadmapCreatorId",
@@ -7106,20 +7487,20 @@ export const IDL: Defios = {
           },
           {
             "name": "objectiveCreationUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
-            "name": "objectiveCreatorGhId",
+            "name": "objectiveCreatorId",
             "type": "publicKey"
           },
           {
             "name": "objectiveStartUnix",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "objectiveEndUnix",
             "type": {
-              "option": "u64"
+              "option": "i64"
             }
           },
           {
@@ -7321,7 +7702,9 @@ export const IDL: Defios = {
       "fields": [
         {
           "name": "commit",
-          "type": "publicKey",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         },
         {
@@ -7335,13 +7718,20 @@ export const IDL: Defios = {
       "name": "AddChildObjectiveEvent",
       "fields": [
         {
-          "name": "parentAccount",
+          "name": "parentObjectiveAccount",
           "type": "publicKey",
           "index": false
         },
         {
           "name": "addedBy",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "objectives",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -7361,18 +7751,18 @@ export const IDL: Defios = {
         },
         {
           "name": "objectiveStartUnix",
-          "type": "u64",
+          "type": "i64",
           "index": false
         },
         {
           "name": "objectiveCreationUnix",
-          "type": "u64",
+          "type": "i64",
           "index": false
         },
         {
           "name": "objectiveEndUnix",
           "type": {
-            "option": "u64"
+            "option": "i64"
           },
           "index": false
         },
@@ -7391,6 +7781,18 @@ export const IDL: Defios = {
         {
           "name": "objectiveIssue",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "objectiveAddr",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "childObjectives",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -7416,6 +7818,13 @@ export const IDL: Defios = {
         {
           "name": "roadmapCreator",
           "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "rootObjectiveIds",
+          "type": {
+            "vec": "publicKey"
+          },
           "index": false
         }
       ]
@@ -7456,6 +7865,11 @@ export const IDL: Defios = {
         {
           "name": "userName",
           "type": "string",
+          "index": false
+        },
+        {
+          "name": "userPubkey",
+          "type": "publicKey",
           "index": false
         }
       ]
@@ -7912,6 +8326,16 @@ export const IDL: Defios = {
       "code": 6021,
       "name": "IncorrectMetadataAccount",
       "msg": "Incorrect Metadata account provided"
+    },
+    {
+      "code": 6022,
+      "name": "PullRequestClosedAlready",
+      "msg": "Cannot unstake for a closed pull request"
+    },
+    {
+      "code": 6023,
+      "name": "CantAddObjectiveToSomebodiesRoadmap",
+      "msg": "Unauthorized objective addition"
     }
   ]
 };

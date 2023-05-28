@@ -6,6 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import cn from 'classnames';
 import Button from '@/components/ui/button/button';
+import axios from 'axios';
 
 import { fetchDecimals } from '@/lib/helpers/metadata';
 
@@ -27,7 +28,24 @@ export default function IssuesList({
   let [issueTags, setIssueTags] = useState<string[]>([]);
   const wallet = useWallet();
 
-  let [tokenDecimals, setTokenDecimals] = useState(1);
+  let [tokenDecimals, setTokenDecimals] = useState(0);
+
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  useEffect(() => {
+    getDecimals();
+    axios
+      .get(
+        `https://api.solscan.io/account?address=${data.issue_stake_token_url}&cluster=devnet`,
+        {
+          headers: {
+            token: process.env.SOLSCAN_TOKEN,
+          },
+        }
+      )
+      .then((res) => {
+        setTokenSymbol(res.data.data.metadata.data.symbol);
+      });
+  },[data]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -40,7 +58,6 @@ export default function IssuesList({
 
   useEffect(() => {
     setIssueTags(removeDuplicates(data?.issue_tags));
-    getDecimals();
     if (initExpand && initExpand !== undefined) {
       setIsExpand(initExpand);
     }
@@ -71,7 +88,7 @@ export default function IssuesList({
         <span className="text-center font-medium tracking-wider text-white">
           {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
             100}{' '}
-          {data?.issue_stake_token_symbol}
+          {tokenSymbol}
         </span>
         <span className="col-span-2 flex flex-nowrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
           {issueTags.length !== 0 && <GithubTags tag={issueTags[0]} key={0} />}

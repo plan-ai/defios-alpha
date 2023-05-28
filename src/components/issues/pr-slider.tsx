@@ -4,24 +4,47 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { LinkIcon } from '@/components/icons/link-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { fetchDecimals } from '@/lib/helpers/metadata';
 
 interface PRChekerProps {
   title: string;
-  stakerConfidence: string;
-  originality: string;
-  author: string;
+  amountStaked: number;
+  ghAuthor: string;
+  pubKeyAuthor: string;
   link: string;
   checked: boolean;
+  tokenSymbol: string;
+  tokenDecimals: number;
 }
 
 export const PRCard: React.FC<PRChekerProps> = ({
   title,
-  stakerConfidence,
-  originality,
-  author,
+  amountStaked,
+  ghAuthor,
+  pubKeyAuthor,
   link,
   checked,
+  tokenSymbol,
+  tokenDecimals,
 }) => {
+  const { data: session } = useSession();
+
+  const [githubUsername, setGithubUsername] = useState('');
+  useEffect(() => {
+    if (ghAuthor === '') return;
+    axios
+      .get(`https://api.github.com/user/${ghAuthor}`, {
+        headers: {
+          Authorization: `Bearer ${(session as any)?.accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      })
+      .then((res) => setGithubUsername(res.data.login))
+      .catch((err) => console.log(err));
+  }, [ghAuthor]);
+
   return (
     <div
       className={cn(
@@ -40,9 +63,16 @@ export const PRCard: React.FC<PRChekerProps> = ({
         </AnchorLink>
       </div>
       <div className="flex w-full flex-col">
-        <div>Staker Confidence: {stakerConfidence}</div>
-        <div>Originality: {originality}</div>
-        <div>Author: {author}</div>
+        <div>
+          Amount Staked:{' '}
+          {Math.round((amountStaked * 100) / 10 ** tokenDecimals) / 100}{' '}
+          {tokenSymbol}
+        </div>
+        <div>Author Github: {githubUsername}</div>
+        <div>
+          Author PublicKey:{' '}
+          {pubKeyAuthor.slice(0, 5) + '...' + pubKeyAuthor.slice(37, 42)}
+        </div>
       </div>
     </div>
   );
@@ -50,18 +80,40 @@ export const PRCard: React.FC<PRChekerProps> = ({
 
 interface PRSliderProps {
   PRs: any;
-  selectedPR:any;
-  setSelectedPR:React.Dispatch<React.SetStateAction<any>>
+  selectedPR: any;
+  setSelectedPR: React.Dispatch<React.SetStateAction<any>>;
+  issueTokenAddress: string;
 }
 
-export default function PRSlider({ PRs,selectedPR,setSelectedPR }: PRSliderProps) {
-  const [totalVotes, setTotalVotes] = useState(1);
+export default function PRSlider({
+  PRs,
+  selectedPR,
+  setSelectedPR,
+  issueTokenAddress,
+}: PRSliderProps) {
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  let [tokenDecimals, setTokenDecimals] = useState(0);
+
   useEffect(() => {
-    const _totalVotes = PRs?.map(
-      (item: any) => item?.issue_vote_amount
-    )?.reduce((prev: number, next: number) => prev + next);
-    setTotalVotes(_totalVotes);
-  }, [PRs]);
+    getDecimals();
+    axios
+      .get(
+        `https://api.solscan.io/account?address=${issueTokenAddress}&cluster=devnet`,
+        {
+          headers: {
+            token: process.env.SOLSCAN_TOKEN,
+          },
+        }
+      )
+      .then((res) => {
+        setTokenSymbol(res.data.data.metadata.data.symbol);
+      });
+  }, [issueTokenAddress]);
+
+  const getDecimals = async () => {
+    const decimals = await fetchDecimals(issueTokenAddress);
+    setTokenDecimals(decimals);
+  };
 
   return (
     <div className="w-full">
@@ -78,14 +130,13 @@ export default function PRSlider({ PRs,selectedPR,setSelectedPR }: PRSliderProps
           <SwiperSlide key={idx} onClick={() => setSelectedPR(PR)}>
             <PRCard
               title={PR?.issue_title}
-              stakerConfidence={
-                Math.round((PR?.issue_vote_amount / totalVotes) * 10000) / 100 +
-                '%'
-              }
-              originality={PR?.issue_originality_score}
-              author={PR?.issue_pr_author}
+              amountStaked={PR?.issue_vote_amount}
+              ghAuthor={PR?.issue_pr_github}
+              pubKeyAuthor={PR?.issue_pr_author}
               link={PR?.issue_pr_link}
               checked={selectedPR !== undefined ? PR == selectedPR : false}
+              tokenSymbol={tokenSymbol}
+              tokenDecimals={tokenDecimals}
             />
           </SwiperSlide>
         ))}
