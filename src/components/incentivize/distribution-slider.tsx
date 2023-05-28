@@ -1,3 +1,4 @@
+import React from 'react';
 // import React, { useState, useRef, useEffect } from 'react';
 // import { Scrollbar, A11y } from 'swiper';
 // import { Swiper, SwiperSlide } from 'swiper/react';
@@ -272,4 +273,8 @@
 //   );
 // };
 
-// export default DistributionSlider;
+const DistributionSlider = () => {
+  return <div></div>;
+};
+
+export default DistributionSlider;

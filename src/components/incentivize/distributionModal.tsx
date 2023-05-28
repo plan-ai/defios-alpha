@@ -1,3 +1,4 @@
+import React from 'react';
 // import React, { useState, useEffect } from 'react';
 // import Input from '@/components/ui/forms/input';
 // import Button from '@/components/ui/button/button';
@@ -81,4 +82,8 @@
 //   );
 // };
 
-// export default DistributionModal;
+const DistributionModal = () => {
+  return <div></div>;
+};
+
+export default DistributionModal;

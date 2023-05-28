@@ -1,3 +1,4 @@
+import React from 'react';
 // import React, { useState, useEffect } from 'react';
 // import Button from '@/components/ui/button/button';
 // import DataWithImage from '@/components/custom/data-with-image';
@@ -147,4 +148,8 @@
 //   );
 // };
 
-// export default WinnerDeclaredExpand;
+const WinnerDeclaredExpand = () => {
+  return <div></div>;
+};
+
+export default WinnerDeclaredExpand;

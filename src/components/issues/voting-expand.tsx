@@ -1,3 +1,4 @@
+import React from 'react';
 // import React, { useState } from 'react';
 // import Button from '@/components/ui/button/button';
 // import PRSlider from '@/components/issues/pr-slider';
@@ -25,4 +26,8 @@
 //   );
 // };
 
-// export default VotingExpand;
+const VotingExpand = () => {
+  return <div></div>;
+};
+
+export default VotingExpand;
