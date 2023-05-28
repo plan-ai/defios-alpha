@@ -192,7 +192,7 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
                   target="_blank"
                 >
                   <div className="flex items-center justify-center">
-                    <div>Pull Request</div>
+                    <div>{item?.contribution_link?.includes('pull')?"Pull Request":item?.contribution_link?.includes('issue')?"Issue":null}</div>
                     <ExportIcon className="ml-2 h-3 w-3" />
                   </div>
                 </AnchorLink>

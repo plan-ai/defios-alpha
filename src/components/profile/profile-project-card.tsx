@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Image from '@/components/ui/image';
 import cn from 'classnames';
 import AnchorLink from '@/components/ui/links/anchor-link';
@@ -8,7 +7,6 @@ import PriceChart from '@/components/ui/chats/price-chart';
 import DataWithImage from '@/components/custom/data-with-image';
 import StatsData from '@/components/custom/stats-data';
 import SecurityStatus from '@/components/custom/security-status';
-import axios from 'axios';
 
 type CardProps = {
   item: any;
@@ -19,51 +17,6 @@ export default function ProfileProjectCard({
   item,
   className = '',
 }: CardProps) {
-  const [tokenImgUrl, setTokenImgUrl] = useState('');
-
-  useEffect(() => {
-    const _url = item?.project_token?.token_image_url;
-    if (_url.includes('gateway.pinata.cloud')) {
-      const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-      axios
-        .get(IpfsNewGateway)
-        .then((res) => {
-          if (typeof res.data === 'object') {
-            if (res.data.image) {
-              setTokenImgUrl(res.data.image);
-            } else {
-              setTokenImgUrl(item?.project_token?.token_image_url);
-            }
-          } else {
-            setTokenImgUrl(item?.project_token?.token_image_url);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setTokenImgUrl(item?.project_token?.token_image_url);
-        });
-    }
-    if (_url == '') {
-      axios
-        .get(
-          `https://public-api.solscan.io/token/meta?tokenAddress=${item?.project_token?.token_spl_addr}`,
-          {
-            headers: {
-              token: process.env.SOLSCAN_TOKEN,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.icon) {
-            setTokenImgUrl(res.data.icon);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [item]);
-
   return (
     <div
       className={cn(
@@ -76,7 +29,7 @@ export default function ProfileProjectCard({
           <AnchorLink
             href={item?.project_repo_link || ''}
             target="_blank"
-            className="xl:h-9 inline-flex h-8 shrink-0 items-center rounded-full bg-black px-4 text-2xs font-medium uppercase normal-case -tracking-wide text-white backdrop-blur-[40px] xl:text-xs
+            className="inline-flex h-8 shrink-0 items-center rounded-full bg-black px-4 text-2xs font-medium uppercase normal-case -tracking-wide text-white backdrop-blur-[40px] xl:h-9 xl:text-xs
           3xl:h-10 3xl:text-sm"
           >
             <Image
@@ -138,7 +91,7 @@ export default function ProfileProjectCard({
           <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
             <CoinTicker
               value={Math.round(item?.project_token?.token_ltp * 100) / 100}
-              coin={{ ...item?.project_token, token_image_url: tokenImgUrl }}
+              coin={item?.project_token}
               change={(
                 Math.round(item?.project_token?.token_ltp_24h_change * 100) /
                 100

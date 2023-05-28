@@ -75,31 +75,6 @@ const RepoChooseModal: React.FC<RepoChooseModalProps> = ({
   const [reposData, setReposData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // const getAllImgUrls = async (data: any) => {
-  //   const projects = data;
-  //   const newProjects = await Promise.all(
-  //     await projects.map(async (project: any): Promise<any> => {
-  //       const _project = project;
-  //       const _url = _project?.token_url;
-  //       const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-  //       await axios
-  //         .get(IpfsNewGateway)
-  //         .then((res) => {
-  //           if (typeof res.data === 'object') {
-  //             if (res.data.image) {
-  //               _project.token_url = res.data.image;
-  //             }
-  //           }
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         });
-  //       return _project;
-  //     })
-  //   );
-  //   setReposData(newProjects);
-  // };
-
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === '') return;
     setIsLoading(true);

@@ -21,7 +21,6 @@ export default function RightSideInfo({
   const [coinInfo, setCoinInfo] = useState<any>(null);
   const [priceChartData, setPriceChartData] = useState<any>(null);
   const [pieChartData, setPieChartData] = useState<any>(null);
-  const [tokenImgUrl, setTokenImgUrl] = useState('');
 
   const auth_cred = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
@@ -29,6 +28,7 @@ export default function RightSideInfo({
 
   useEffect(() => {
     setCoinInfo(null);
+    console.log('coin: ', coin);
     if (auth_cred === null || coin === null) return;
     axios
       .get('https://api-v1.defi-os.com/swap/profile', {
@@ -60,51 +60,6 @@ export default function RightSideInfo({
   }, [coinInfo]);
 
   useEffect(() => {
-    if (coinInfo === undefined || typeof coinInfo?.token_image_url !== 'string')
-      return;
-    const _url = coinInfo?.token_image_url;
-    const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-    if (_url.includes('gateway.pinata.cloud')) {
-      axios
-        .get(IpfsNewGateway)
-        .then((res) => {
-          if (typeof res.data === 'object') {
-            if (res.data.image) {
-              setTokenImgUrl(res.data.image);
-            } else {
-              setTokenImgUrl(coinInfo?.token_image_url);
-            }
-          } else {
-            setTokenImgUrl(coinInfo?.token_image_url);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setTokenImgUrl(coinInfo?.token_image_url);
-        });
-    }
-    if (_url == '') {
-      axios
-        .get(
-          `https://public-api.solscan.io/token/meta?tokenAddress=${coinInfo?.token_spl_addr}`,
-          {
-            headers: {
-              token: process.env.SOLSCAN_TOKEN,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.icon) {
-            setTokenImgUrl(res.data.icon);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [coinInfo]);
-
-  useEffect(() => {
     setPieChartData(null);
     if (coin === null) return;
     if (coin?.token_spl_addr && coin.token_spl_addr === '') return;
@@ -132,7 +87,7 @@ export default function RightSideInfo({
               <div className="w-full w-full">
                 {coinInfo?.token_image_url && (
                   <Image
-                    src={tokenImgUrl || ''}
+                    src={coinInfo?.token_image_url || ''}
                     alt={coinInfo?.token_symbol || ''}
                     width={80}
                     height={80}

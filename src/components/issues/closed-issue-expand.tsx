@@ -85,7 +85,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
-      new PublicKey(winner.issue_pr_account),
+      new PublicKey(winner.issue_pr_account)
     )
       .then(() => {
         resCalled = true;
@@ -174,7 +174,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       </div> */}
       <div className="flex w-full flex-row items-center justify-between">
         <AnchorLink
-          className="w-1/2"
+          className="w-full"
           href={winner ? winner?.issue_pr_link : '#'}
           target="_blank"
         >

@@ -211,7 +211,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
               >
                 Create Issue
               </Button>
-              <div className="flex w-full flex-row items-center ">
+              {/* <div className="flex w-full flex-row items-center ">
                 <Input
                   placeholder="Amount"
                   type="number"
@@ -247,7 +247,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 color="success"
               >
                 Stake DIC
-              </Button>
+              </Button> */}
             </div>
           </div>
         </Scrollbar>

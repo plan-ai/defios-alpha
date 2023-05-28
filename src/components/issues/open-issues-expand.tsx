@@ -412,29 +412,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           const latestCommit = commitRes.data[commitRes.data.length - 1];
           let resCalled = false;
 
-          // var config = {
-          //   method: 'get',
-          //   maxBodyLength: Infinity,
-          //   url: `https://api.github.com/repos/${link?.replace(
-          //     'https://github.com/',
-          //     ''
-          //   )}`,
-          //   headers: {
-          //     Authorization: `Bearer ${(session as any)?.accessToken}`,
-          //     Accept: 'application/vnd.github.v3+json',
-          //   },
-          // };
-
-          // const issueInfo = await axios(config)
-          //   .then((res) => res.data)
-          //   .catch((err) => console.log(err));
-
-          // const ipfsMetadata = await uploadMetadataToIPFS({
-          //   issue_author_github: issueInfo.user.id,
-          //   issue_title: issueInfo.title,
-          //   issue_url: issueInfo.html_url,
-          //   pr_url: res.data.html_url,
-          // });
           //add commit
           addCommit(
             wallet.publicKey as PublicKey,
@@ -785,7 +762,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           )}
           <div className="flex w-full items-end justify-center gap-5">
             {PRData.length > 0 && (
-              <div className="flex-flex-col w-[35%]">
+              <div className="flex-flex-col w-full">
                 <div className="mb-2">stake on the pull request</div>
                 <div className="flex items-center gap-2">
                   <Input
@@ -818,7 +795,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 </div>
               </div>
             )}
-            <div className="flex-flex-col w-[35%]">
+            <div className="flex-flex-col w-full">
               <div className="mb-2">submit new pull request</div>
               <div className="flex w-full items-center justify-center gap-2">
                 <SortList

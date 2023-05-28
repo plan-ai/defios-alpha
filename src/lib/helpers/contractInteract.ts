@@ -269,7 +269,7 @@ export const createIssue = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -326,7 +326,7 @@ export const stakeIssue = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
@@ -389,7 +389,7 @@ export const unstakeIssue = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
@@ -505,7 +505,7 @@ export const addPr = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
@@ -584,7 +584,7 @@ export const stakePr = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
@@ -679,7 +679,7 @@ export const unstakePr = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
@@ -820,7 +820,7 @@ export const unlockTokens = (
 
       const mintKeypair =
         rewardsMint === null
-          ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+          ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
           : rewardsMint;
 
       const [vestingAccount] = await get_pda_from_seeds(
@@ -895,7 +895,7 @@ export const claimReward = (
 
     const mintKeypair =
       rewardsMint === null
-        ? new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
         : rewardsMint;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
