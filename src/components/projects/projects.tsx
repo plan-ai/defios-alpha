@@ -296,17 +296,6 @@ export default function Projects() {
   }, [projectsData, searchQuery, setSearchQuery, expandFirst, dispatch]);
 
   const claimPendingTokens = (project: any) => {
-    let config = {
-      method: 'delete',
-      maxBodyLength: Infinity,
-      url: 'https://api-v1.defi-os.com/projects/claims',
-      headers: {
-        Authorization: firebase_jwt,
-      },
-      params: {
-        project_id: project._id,
-      },
-    };
     let resCalled = false;
     dispatch(onLoading('Claiming Pending Tokens on the Project...'));
     unlockTokens(
@@ -327,7 +316,6 @@ export default function Projects() {
               : '',
           })
         );
-
         setTriggerSearch(true);
       })
       .catch((err: any) => {

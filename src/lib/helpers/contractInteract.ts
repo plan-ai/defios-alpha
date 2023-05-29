@@ -968,6 +968,29 @@ export const unlockTokens = (
   });
 };
 
+//SWAPS-->
+//helpers
+function calculateBuyAmount(tokenSupply: number, tokenAmount: number): BN {
+  const newTokenAmount = new BN(tokenAmount.toString());
+  const newTokenSupply = new BN(tokenSupply.toString());
+  const value = newTokenAmount
+    .pow(new BN(2))
+    .add(newTokenSupply.mul(newTokenAmount).muln(2));
+  return value;
+}
+
+function calculateSellAmount(tokenSupply: number, tokenAmount: number): BN {
+  const newTokenAmount = new BN(tokenAmount.toString());
+  const newTokenSupply = new BN(tokenSupply.toString());
+  const firstValue = newTokenSupply.mul(newTokenAmount).muln(2);
+  const secondValue = newTokenAmount.pow(new BN(2));
+  if (secondValue.gt(firstValue)) {
+    return new BN(0);
+  } else {
+    return firstValue.sub(secondValue);
+  }
+}
+
 export const buyTransaction = (repositoryAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
