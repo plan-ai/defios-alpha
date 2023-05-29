@@ -143,6 +143,7 @@ export default function Projects() {
   const [isNative, setIsNative] = useState(false);
 
   const [triggerSearch, setTriggerSearch] = useState(false);
+  const [fetchTrigger, setFetchTrigger] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -165,32 +166,9 @@ export default function Projects() {
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setIsLoading(true);
-    axios
-      .get('https://api-v1.defi-os.com/projects', {
-        params: {
-          'filter.pageno': '1',
-          'filter.pagesize': 30,
-        },
-        headers: {
-          Authorization: firebase_jwt,
-        },
-      })
-      .then((res) => {
-        setProjectsData(res.data.projects);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setIsLoading(false);
-      });
-  }, [firebase_jwt]);
-
-  useEffect(() => {
-    if (firebase_jwt === '' || firebase_jwt === null) return;
-    setIsLoading(true);
     const searchParams: any = {
       'filter.pageno': '1',
-      'filter.pagesize': 30,
+      'filter.pagesize': 50,
       'filter.order_by': orderBy.order_by,
     };
     if (isNative) {
@@ -257,98 +235,20 @@ export default function Projects() {
       .then((res) => {
         setProjectsData(res.data.projects);
         setIsLoading(false);
+        setTriggerSearch(false);
       })
       .catch((err) => {
         console.log(err.message);
         setIsLoading(false);
+        setTriggerSearch(false);
       });
     setInitExpand(false);
-  }, [isNative, isMine, orderBy, firebase_jwt]);
+  }, [fetchTrigger, firebase_jwt]);
 
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
-    if (triggerSearch === true) {
-      setIsLoading(true);
-      const searchParams: any = {
-        'filter.pageno': '1',
-        'filter.pagesize': 30,
-        'filter.order_by': orderBy.order_by,
-      };
-      if (isNative) {
-        searchParams['search.is_token_native'] = true;
-      }
-      if (isMine) {
-        searchParams['filter.mine'] = true;
-      }
-      if (search !== '') {
-        if (search.includes(';')) {
-          const searchArray = search.trim().split(';');
-          searchArray.map((item) => {
-            const [key, value] = item.trim().split(':');
-            if (key === 'id') {
-              searchParams['first_id'] = value;
-            }
-            if (key === 'num_open_issues') {
-              searchParams['search.num_open_issues'] = parseInt(value);
-            }
-            if (key === 'top_supporter_name') {
-              searchParams['search.top_supporter_name'] = value;
-            }
-            if (key === 'internal_tags') {
-              searchParams['search.internal_tags'] = value;
-            }
-            if (key === 'tokens_staked') {
-              searchParams['search.tokens_staked'] = parseInt(value);
-            }
-            if (key === 'project_owner_github') {
-              searchParams['search.project_owner_github'] = parseInt(value);
-            }
-          });
-        } else if (search.includes(':') && !search.includes(';')) {
-          const [key, value] = search.trim().split(':');
-          if (key === 'id') {
-            searchParams['first_id'] = value;
-          }
-          if (key === 'num_open_issues') {
-            searchParams['search.num_open_issues'] = parseInt(value);
-          }
-          if (key === 'top_supporter_name') {
-            searchParams['search.top_supporter_name'] = value;
-          }
-          if (key === 'internal_tags') {
-            searchParams['search.internal_tags'] = value;
-          }
-          if (key === 'tokens_staked') {
-            searchParams['search.tokens_staked'] = parseInt(value);
-          }
-          if (key === 'project_owner_github') {
-            searchParams['search.project_owner_github'] = parseInt(value);
-          }
-        } else if (!search.includes(':') && !search.includes(';')) {
-          searchParams['search.project_name'] = search.trim();
-        }
-      }
-
-      axios
-        .get('https://api-v1.defi-os.com/projects', {
-          params: searchParams,
-          headers: {
-            Authorization: firebase_jwt,
-          },
-        })
-        .then((res) => {
-          setProjectsData(res.data.projects);
-          setIsLoading(false);
-          setTriggerSearch(false);
-        })
-        .catch((err) => {
-          console.log(err.message);
-          setIsLoading(false);
-          setTriggerSearch(false);
-        });
-    }
-    setInitExpand(false);
-  }, [triggerSearch, firebase_jwt]);
+    setFetchTrigger(fetchTrigger + 1);
+  }, [isNative, isMine, orderBy, triggerSearch, firebase_jwt]);
 
   const getChartData = async () => {
     const projects = projectsData;

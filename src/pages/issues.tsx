@@ -2,8 +2,8 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useMemo,
-  useRef,
+  // useMemo,
+  // useRef,
 } from 'react';
 
 import axios from 'axios';
@@ -128,9 +128,9 @@ const IssuesPage: NextPageWithLayout = () => {
   const [stakeOrder, setStakeOrder] = useState('');
 
   //pagination with intersection observer for infinite scroll
-  const [page, setPage] = useState(1);
-  const [donePagination, setDonePagination] = useState(false);
-  const observerTarget = useRef(null);
+  // const [page, setPage] = useState(1);
+  // const [donePagination, setDonePagination] = useState(false);
+  // const observerTarget = useRef(null);
 
   //adds filters,search,page and fetches
   useEffect(() => {
@@ -138,8 +138,8 @@ const IssuesPage: NextPageWithLayout = () => {
     setIsLoading(true);
     // pagination
     const searchParams: any = {
-      'filter.pageno': page,
-      'filter.pagesize': 30,
+      'filter.pageno': 1,
+      'filter.pagesize': 50,
     };
     //filters
     if (stakeOrder !== '') {
@@ -229,16 +229,16 @@ const IssuesPage: NextPageWithLayout = () => {
       .then((res) => {
         if (res.data.issues.length !== 0) {
           //first page
-          if (page === 1) {
-            setIssuesData(res.data.issues);
-          } else {
-            setIssuesData([...issuesData, ...res.data.issues]);
-          }
+          // if (page === 1) {
+          setIssuesData(res.data.issues);
+          // } else {
+          //   setIssuesData([...issuesData, ...res.data.issues]);
+          // }
         }
         //no more data to fetch end pagination
-        if (res.data.issues.length === 0) {
-          setDonePagination(true);
-        }
+        // if (res.data.issues.length === 0) {
+        //   setDonePagination(true);
+        // }
         setIsLoading(false);
         setTriggerSearch(false);
       })
@@ -248,13 +248,17 @@ const IssuesPage: NextPageWithLayout = () => {
         setTriggerSearch(false);
       });
     setInitExpand(false);
-  }, [page, fetchTrigger, firebase_jwt]);
+  }, [
+    // page,
+    fetchTrigger,
+    firebase_jwt,
+  ]);
 
   //triggers refetch when any of filters,search is changed from page1
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
-    setPage(1);
-    setDonePagination(false);
+    // setPage(1);
+    // setDonePagination(false);
     setFetchTrigger(fetchTrigger + 1);
   }, [isMine, stakeOrder, triggerSearch, firebase_jwt]);
 
@@ -281,61 +285,61 @@ const IssuesPage: NextPageWithLayout = () => {
   ]);
 
   //intersection observer for infinite scroll/pagination
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // console.log(entry);
-          if (entry.isIntersecting && !donePagination) {
-            setPage(page + 1);
-          }
-        });
-      },
-      { threshold: 1.0 }
-    );
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         // console.log(entry);
+  //         if (entry.isIntersecting && !donePagination) {
+  //           setPage(page + 1);
+  //         }
+  //       });
+  //     },
+  //     { threshold: 1.0 }
+  //   );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-  }, [observerTarget]);
+  //   if (observerTarget.current) {
+  //     observer.observe(observerTarget.current);
+  //   }
+  // }, [observerTarget]);
 
   //useMemo to avoid rerenders previous fetched items because of infinite fetches of data array.
-  const listPart = useMemo(() => {
-    return issuesData.map((issue: any, idx: number) => (
-      <IssuesList
-        data={issue}
-        key={issue._id}
-        initExpand={idx == 0 ? initExapand : false}
-        last={issuesData.length === idx + 1}
-        first={idx === 0}
-      >
-        {issue?.issue_state === 'open' && (
-          <OpenIssueExpand
-            issueDesc={issue?.issue_summary}
-            link={issue?.issue_gh_url}
-            account={issue?.issue_account}
-            PRData={issue?.issue_prs}
-            issueCreatorGH={issue?.issue_creator_gh}
-            issueTokenAddress={issue?.issue_stake_token_url}
-          />
-        )}
-        {issue?.issue_state === 'voting' && (
-          <OpenIssueExpand
-            issueDesc={issue?.issue_summary}
-            link={issue?.issue_gh_url}
-            account={issue?.issue_account}
-            PRData={issue?.issue_prs}
-            issueCreatorGH={issue?.issue_creator_gh}
-            issueTokenAddress={issue?.issue_stake_token_url}
-          />
-        )}
-        {issue?.issue_state === 'winner_declared' && (
-          <ClosedIssueExpand data={issue} />
-        )}
-        {issue?.issue_state === 'closed' && <ClosedIssueExpand data={issue} />}
-      </IssuesList>
-    ));
-  }, [issuesData]);
+  // const listPart = useMemo(() => {
+  // return issuesData.map((issue: any, idx: number) => (
+  //   <IssuesList
+  //     data={issue}
+  //     key={issue._id}
+  //     initExpand={idx == 0 ? initExapand : false}
+  //     last={issuesData.length === idx + 1}
+  //     first={idx === 0}
+  //   >
+  //     {issue?.issue_state === 'open' && (
+  //       <OpenIssueExpand
+  //         issueDesc={issue?.issue_summary}
+  //         link={issue?.issue_gh_url}
+  //         account={issue?.issue_account}
+  //         PRData={issue?.issue_prs}
+  //         issueCreatorGH={issue?.issue_creator_gh}
+  //         issueTokenAddress={issue?.issue_stake_token_url}
+  //       />
+  //     )}
+  //     {issue?.issue_state === 'voting' && (
+  //       <OpenIssueExpand
+  //         issueDesc={issue?.issue_summary}
+  //         link={issue?.issue_gh_url}
+  //         account={issue?.issue_account}
+  //         PRData={issue?.issue_prs}
+  //         issueCreatorGH={issue?.issue_creator_gh}
+  //         issueTokenAddress={issue?.issue_stake_token_url}
+  //       />
+  //     )}
+  //     {issue?.issue_state === 'winner_declared' && (
+  //       <ClosedIssueExpand data={issue} />
+  //     )}
+  //     {issue?.issue_state === 'closed' && <ClosedIssueExpand data={issue} />}
+  //   </IssuesList>
+  // ));
+  // }, [issuesData]);
 
   return (
     <>
@@ -406,7 +410,43 @@ const IssuesPage: NextPageWithLayout = () => {
               Tags
             </span>
           </div>
-          {issuesData?.length !== 0 && listPart}
+          {issuesData?.length !== 0 &&
+            issuesData.map((issue: any, idx: number) => (
+              <IssuesList
+                data={issue}
+                key={issue._id}
+                initExpand={idx == 0 ? initExapand : false}
+                last={issuesData.length === idx + 1}
+                first={idx === 0}
+              >
+                {issue?.issue_state === 'open' && (
+                  <OpenIssueExpand
+                    issueDesc={issue?.issue_summary}
+                    link={issue?.issue_gh_url}
+                    account={issue?.issue_account}
+                    PRData={issue?.issue_prs}
+                    issueCreatorGH={issue?.issue_creator_gh}
+                    issueTokenAddress={issue?.issue_stake_token_url}
+                  />
+                )}
+                {issue?.issue_state === 'voting' && (
+                  <OpenIssueExpand
+                    issueDesc={issue?.issue_summary}
+                    link={issue?.issue_gh_url}
+                    account={issue?.issue_account}
+                    PRData={issue?.issue_prs}
+                    issueCreatorGH={issue?.issue_creator_gh}
+                    issueTokenAddress={issue?.issue_stake_token_url}
+                  />
+                )}
+                {issue?.issue_state === 'winner_declared' && (
+                  <ClosedIssueExpand data={issue} />
+                )}
+                {issue?.issue_state === 'closed' && (
+                  <ClosedIssueExpand data={issue} />
+                )}
+              </IssuesList>
+            ))}
           {!isLoading && issuesData.length === 0 && (
             <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
               <EmptyList />
@@ -435,10 +475,10 @@ const IssuesPage: NextPageWithLayout = () => {
           )}
 
           {/* intersection element 40vh above from bottom of content */}
-          <div
+          {/* <div
             ref={observerTarget}
             className="absolute left-0 right-0 bottom-[40vh]"
-          ></div>
+          ></div> */}
         </div>
       </div>
     </>

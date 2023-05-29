@@ -35,6 +35,8 @@ import {
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 
+import axios from 'axios';
+
 //change
 const nameRouterAccount = new PublicKey(
   '9rW4TLgQ6Njjyh71rqGPyPuhq7odeK382oeJ2RQNuhC8'
@@ -162,6 +164,21 @@ export const createRepository = (
         })
         .rpc({ skipPreflight: true })
         .then(() => {
+          let data = JSON.stringify({
+            mintKeypair: mintKeypair.toString(),
+          });
+
+          let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://namespaces.defi-os.com/createCommunalAccount',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: data,
+          };
+
+          axios(config);
           resolve(repositoryAccount);
         })
         .catch((e) => {
@@ -804,6 +821,85 @@ export const acceptPr = (
   });
 };
 
+export const claimReward = (
+  pullRequestAddr: PublicKey,
+  verifiedUserAccount: PublicKey,
+  prAccount: PublicKey
+) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { commits } = await program.account.pullRequest.fetch(prAccount);
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository, issueTokenPoolAccount, issueCreator } =
+      await program.account.issue.fetch(issueAccount);
+
+    const { repositoryCreator, rewardsMint } =
+      await program.account.repository.fetch(repository);
+
+    const mintKeypair =
+      rewardsMint === null
+        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
+        : rewardsMint;
+
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      pullRequestMetadataAccount,
+      true
+    );
+
+    const pullRequestCreatorRewardAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      Signer.publicKey
+    );
+
+    program.methods
+      .claimReward()
+      .accounts({
+        nameRouterAccount: nameRouterAccount,
+        pullRequestCreator: pullRequestAddr,
+        pullRequestVerifiedUser: verifiedUserAccount,
+        pullRequest: pullRequestMetadataAccount,
+        pullRequestCreatorRewardAccount,
+        repositoryCreator: repositoryCreator,
+        rewardsMint: mintKeypair,
+        repositoryAccount: repository,
+        issueAccount: issueAccount,
+        issueTokenPoolAccount: issueTokenPoolAccount,
+        issueCreator: issueCreator,
+        routerCreator: routerCreator,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        pullRequestTokenAccount: pullRequestTokenAccount,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc({ skipPreflight: false })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      })
+      .finally(() => {
+        resolve('');
+      });
+  });
+};
+
 export const unlockTokens = (
   repositoryAccount: PublicKey,
   repositoryCreator: PublicKey,
@@ -872,66 +968,103 @@ export const unlockTokens = (
   });
 };
 
-export const claimReward = (
-  pullRequestAddr: PublicKey,
-  verifiedUserAccount: PublicKey,
-  prAccount: PublicKey
-) => {
+export const buyTransaction = (repositoryAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { commits } = await program.account.pullRequest.fetch(prAccount);
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
+    const { rewardsMint } = await program.account.repository.fetch(
+      repositoryAccount
     );
-    const issueAccount = issue;
-    const { repository, issueTokenPoolAccount, issueCreator } =
-      await program.account.issue.fetch(issueAccount);
+    if (rewardsMint === null) return;
 
-    const { repositoryCreator, rewardsMint } =
-      await program.account.repository.fetch(repository);
-
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
-
-    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+    const [communal_account] = await get_pda_from_seeds(
       [
-        Buffer.from('pullrequestadded'),
-        issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        rewardsMint.toBuffer(),
       ],
       program
     );
 
-    const pullRequestTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      pullRequestMetadataAccount,
+    const communalTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      communal_account,
       true
     );
 
+    const buyerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      Signer.publicKey
+    );
+
     await program.methods
-      .claimReward()
+      .buyTokens(new BN(20_001), new BN(1))
       .accounts({
-        nameRouterAccount,
-        pullRequestCreator: pullRequestAddr,
-        pullRequestVerifiedUser: verifiedUserAccount,
-        pullRequest: pullRequestMetadataAccount,
-        pullRequestCreatorRewardAccount: Signer,
-        repositoryCreator: repositoryCreator,
-        rewardsMint: mintKeypair,
-        repositoryAccount: repository,
-        issueAccount: issueAccount,
-        issueTokenPoolAccount,
-        issueCreator: issueCreator,
-        routerCreator: routerCreator,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        buyer: Signer.publicKey,
+        communalDeposit: communal_account,
+        communalTokenAccount: communalTokenAccount,
+        rewardsMint: rewardsMint,
         tokenProgram: TOKEN_PROGRAM_ID,
-        pullRequestTokenAccount: pullRequestTokenAccount,
+        repositoryAccount: repositoryAccount,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
+        buyerTokenAccount,
+      })
+      .rpc({ skipPreflight: false })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const sellTransaction = (repositoryAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { rewardsMint } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+    if (rewardsMint === null) return;
+
+    const [communal_account] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        rewardsMint.toBuffer(),
+      ],
+      program
+    );
+
+    const communalTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      communal_account,
+      true
+    );
+
+    const sellerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMint,
+      Signer.publicKey
+    );
+
+    await program.methods
+      .sellTokens(new BN(20_001), new BN(1))
+      .accounts({
+        seller: Signer.publicKey,
+        communalDeposit: communal_account,
+        communalTokenAccount: communalTokenAccount,
+        rewardsMint: rewardsMint,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        repositoryAccount: repositoryAccount,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+        sellerTokenAccount,
       })
       .rpc({ skipPreflight: false })
       .then((res) => {
