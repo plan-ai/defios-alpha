@@ -98,7 +98,6 @@ export const createRepository = (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(Signer.publicKey);
       const provider = await getProvider(Connection, Signer);
       const metaplex = await Metaplex.make(Connection);
       const program = await getDefiOsProgram(provider);
@@ -120,7 +119,6 @@ export const createRepository = (
         program
       );
       const metadataAddress = await get_metadata_account(mintKeypair);
-      console.log(metadataAddress);
       const [vestingAccount] = await get_pda_from_seeds(
         [Buffer.from('vesting'), repositoryAccount.toBuffer()],
         program
@@ -363,7 +361,6 @@ export const stakeIssue = (
     );
 
     const transferAmount = amount * 10 ** 9;
-    console.log('transferAmount: ' + transferAmount);
 
     program.methods
       .stakeIssue(new BN(transferAmount))
@@ -607,7 +604,6 @@ export const stakePr = (
     );
 
     const transferAmount = amount * 10 ** 9;
-    console.log('transferAmount: ' + transferAmount);
 
     program.methods
       .stakePr(new BN(transferAmount))
