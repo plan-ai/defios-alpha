@@ -6,7 +6,7 @@ import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
-import { fetchDecimals } from '@/lib/helpers/metadata';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 interface PRChekerProps {
   title: string;
@@ -95,24 +95,13 @@ export default function PRSlider({
   let [tokenDecimals, setTokenDecimals] = useState(0);
 
   useEffect(() => {
-    getDecimals();
-    axios
-      .get(
-        `https://api.solscan.io/account?address=${issueTokenAddress}&cluster=devnet`,
-        {
-          headers: {
-            token: process.env.SOLSCAN_TOKEN,
-          },
-        }
-      )
-      .then((res) => {
-        setTokenSymbol(res.data.data.metadata.data.symbol);
-      });
+    getTokenInfo();
   }, [issueTokenAddress]);
 
-  const getDecimals = async () => {
-    const decimals = await fetchDecimals(issueTokenAddress);
-    setTokenDecimals(decimals);
+  const getTokenInfo = async () => {
+    const response: any = await fetchTokenMetadata(issueTokenAddress);
+    setTokenSymbol(response.symbol);
+    setTokenDecimals(response.decimals);
   };
 
   return (

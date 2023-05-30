@@ -8,7 +8,12 @@ import {
   Idl,
   BN,
 } from '@project-serum/anchor';
-import { clusterApiUrl, Keypair, PublicKey } from '@solana/web3.js';
+import {
+  clusterApiUrl,
+  Keypair,
+  PublicKey,
+  Transaction,
+} from '@solana/web3.js';
 import * as mpl from '@metaplex-foundation/mpl-token-metadata';
 import {
   Metaplex,
@@ -39,7 +44,7 @@ import axios from 'axios';
 
 //change
 const nameRouterAccount = new PublicKey(
-  '9rW4TLgQ6Njjyh71rqGPyPuhq7odeK382oeJ2RQNuhC8'
+  'DzbmV2GKBzMDJndgoRyYsV97ZUZ2b8HiJfvqH3wmRrLL'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -162,7 +167,7 @@ export const createRepository = (
           metadata: metadataAddress,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         })
-        .rpc({ skipPreflight: true })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
         .then(() => {
           let data = JSON.stringify({
             mintKeypair: mintKeypair.toString(),
@@ -242,7 +247,7 @@ export const createRepositoryImported = (
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           metadata: null,
         })
-        .rpc({ skipPreflight: false })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
         .then(() => {
           resolve(repositoryAccount);
         })
@@ -310,7 +315,7 @@ export const createIssue = (
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(issueAccount);
       })
@@ -374,7 +379,7 @@ export const stakeIssue = (
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -433,7 +438,7 @@ export const unstakeIssue = (
         systemProgram: web3.SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -443,7 +448,7 @@ export const unstakeIssue = (
   });
 };
 
-export const addCommit = (
+export const addPullRequest = (
   commitCreator: PublicKey,
   issueAccount: PublicKey,
   commitVerifiedUser: PublicKey,
@@ -459,57 +464,8 @@ export const addCommit = (
     const { repository, issueCreator } = await program.account.issue.fetch(
       issueAccount
     );
-    const { repositoryCreator } = await program.account.repository.fetch(
-      repository
-    );
-    const [commitAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('commit'),
-        Buffer.from(commitHash),
-        commitCreator.toBuffer(),
-        issueAccount.toBuffer(),
-      ],
-      program
-    );
-
-    program.methods
-      .addCommit(commitHash, treeHash, metadataURI)
-      .accounts({
-        commitAccount,
-        commitCreator: commitCreator,
-        commitVerifiedUser,
-        issueAccount,
-        issueCreator,
-        nameRouterAccount,
-        repositoryCreator,
-        repositoryAccount: repository,
-        routerCreator: routerCreator,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .rpc({ skipPreflight: false })
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((e) => {
-        reject(e);
-      });
-  });
-};
-
-export const addPr = (
-  commitCreator: PublicKey,
-  issueAccount: PublicKey,
-  commitVerifiedUser: PublicKey,
-  commitHashUnsliced: string,
-  metadataURI: string
-) => {
-  return new Promise(async (resolve, reject) => {
-    const provider = await getProvider(Connection, Signer);
-    const program = await getDefiOsProgram(provider);
-    const commitHash = commitHashUnsliced.slice(0, 8);
-    const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
-
+    const { repositoryCreator, rewardsMint } =
+      await program.account.repository.fetch(repository);
     const [commitAccount] = await get_pda_from_seeds(
       [
         Buffer.from('commit'),
@@ -540,7 +496,7 @@ export const addPr = (
       true
     );
 
-    program.methods
+    const ixAddPr = await program.methods
       .addPr(metadataURI)
       .accounts({
         pullRequestVerifiedUser: commitVerifiedUser,
@@ -558,7 +514,24 @@ export const addPr = (
       .remainingAccounts([
         { pubkey: commitAccount, isWritable: true, isSigner: false },
       ])
-      .rpc({ skipPreflight: false })
+      .instruction();
+
+    await program.methods
+      .addCommit(commitHash, treeHash, metadataURI)
+      .accounts({
+        commitAccount,
+        commitCreator: commitCreator,
+        commitVerifiedUser,
+        issueAccount,
+        issueCreator,
+        nameRouterAccount,
+        repositoryCreator,
+        repositoryAccount: repository,
+        routerCreator: routerCreator,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .postInstructions([ixAddPr])
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -654,7 +627,7 @@ export const stakePr = (
         pullRequestStakerTokenAccount,
         pullRequestStakerAccount,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -746,7 +719,7 @@ export const unstakePr = (
         pullRequestStakerTokenAccount,
         pullRequestStakerAccount,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -811,7 +784,7 @@ export const acceptPr = (
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -887,7 +860,7 @@ export const claimReward = (
         pullRequestTokenAccount: pullRequestTokenAccount,
         systemProgram: web3.SystemProgram.programId,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -955,7 +928,7 @@ export const unlockTokens = (
           tokenMint: mintKeypair,
           vestingTokenAccount: vestingTokenAccount,
         })
-        .rpc({ skipPreflight: false })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
           resolve(res);
         })
@@ -969,27 +942,6 @@ export const unlockTokens = (
 };
 
 //SWAPS-->
-//helpers
-function calculateBuyAmount(tokenSupply: number, tokenAmount: number): BN {
-  const newTokenAmount = new BN(tokenAmount.toString());
-  const newTokenSupply = new BN(tokenSupply.toString());
-  const value = newTokenAmount
-    .pow(new BN(2))
-    .add(newTokenSupply.mul(newTokenAmount).muln(2));
-  return value;
-}
-
-function calculateSellAmount(tokenSupply: number, tokenAmount: number): BN {
-  const newTokenAmount = new BN(tokenAmount.toString());
-  const newTokenSupply = new BN(tokenSupply.toString());
-  const firstValue = newTokenSupply.mul(newTokenAmount).muln(2);
-  const secondValue = newTokenAmount.pow(new BN(2));
-  if (secondValue.gt(firstValue)) {
-    return new BN(0);
-  } else {
-    return firstValue.sub(secondValue);
-  }
-}
 
 export const buyTransaction = (repositoryAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
@@ -1022,6 +974,15 @@ export const buyTransaction = (repositoryAccount: PublicKey) => {
       Signer.publicKey
     );
 
+    const [defaultVestingSchedule] = await get_pda_from_seeds(
+      [
+        Buffer.from('isGodReal?'),
+        Buffer.from('DoULoveMe?'),
+        Buffer.from('SweetChick'),
+      ],
+      program
+    );
+
     await program.methods
       .buyTokens(new BN(20_001), new BN(1))
       .accounts({
@@ -1034,8 +995,9 @@ export const buyTransaction = (repositoryAccount: PublicKey) => {
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
+        defaultSchedule: defaultVestingSchedule,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })
@@ -1076,6 +1038,15 @@ export const sellTransaction = (repositoryAccount: PublicKey) => {
       Signer.publicKey
     );
 
+    const [defaultVestingSchedule] = await get_pda_from_seeds(
+      [
+        Buffer.from('isGodReal?'),
+        Buffer.from('DoULoveMe?'),
+        Buffer.from('SweetChick'),
+      ],
+      program
+    );
+
     await program.methods
       .sellTokens(new BN(20_001), new BN(1))
       .accounts({
@@ -1088,8 +1059,162 @@ export const sellTransaction = (repositoryAccount: PublicKey) => {
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
+        defaultSchedule: defaultVestingSchedule,
       })
-      .rpc({ skipPreflight: false })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+//helpers
+//tokenSupply(modified)=tokenSupply(actual)-(number_of_schedules*per_vesting_amount)
+// fill this in both calc param of tokenSupply
+function calculateBuyAmount(tokenSupply: BN, tokenAmount: BN): BN {
+  const newTokenAmount = tokenAmount;
+  const newTokenSupply = tokenSupply;
+  const value = newTokenAmount
+    .pow(new BN(2))
+    .add(newTokenSupply.mul(newTokenAmount).muln(2));
+  return value;
+}
+
+function calculateSellAmount(tokenSupply: BN, tokenAmount: BN): BN {
+  const newTokenAmount = tokenAmount;
+  const newTokenSupply = tokenSupply;
+  const firstValue = newTokenSupply.mul(newTokenAmount).muln(2);
+  const secondValue = newTokenAmount.pow(new BN(2));
+  if (secondValue.gt(firstValue)) {
+    return new BN(0);
+  } else {
+    return firstValue.sub(secondValue);
+  }
+}
+
+
+export const swapTransaction = (
+  repositoryAccountBuy: PublicKey,
+  repositoryAccountSell: PublicKey,
+  amount: number
+) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { rewardsMint: rewardsMintBuy } =
+      await program.account.repository.fetch(repositoryAccountBuy);
+    const { rewardsMint: rewardsMintSell } =
+      await program.account.repository.fetch(repositoryAccountSell);
+
+    if (rewardsMintBuy === null || rewardsMintSell === null) return;
+
+    const [communal_account_buy] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        rewardsMintBuy.toBuffer(),
+      ],
+      program
+    );
+
+    const [communal_account_sell] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        rewardsMintSell.toBuffer(),
+      ],
+      program
+    );
+
+    const communalTokenBuyAccount = await getAssociatedTokenAddress(
+      rewardsMintBuy,
+      communal_account_buy,
+      true
+    );
+
+    const communalTokenSellAccount = await getAssociatedTokenAddress(
+      rewardsMintSell,
+      communal_account_sell,
+      true
+    );
+
+    const sellerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMintSell,
+      Signer.publicKey
+    );
+
+    const buyerTokenAccount = await getAssociatedTokenAddress(
+      rewardsMintBuy,
+      Signer.publicKey
+    );
+
+    const [defaultVestingSchedule] = await get_pda_from_seeds(
+      [
+        Buffer.from('isGodReal?'),
+        Buffer.from('DoULoveMe?'),
+        Buffer.from('SweetChick'),
+      ],
+      program
+    );
+
+    const { numberOfSchedules, perVestingAmount } =
+      await program.account.defaultVestingSchedule.fetch(
+        defaultVestingSchedule
+      );
+
+    //checks
+    //tokenSupply(modified)=tokenSupply(actual)-(number_of_schedules*per_vesting_amount)
+    // fill this in both calc param of tokenSupply
+    const sellTokenInfo = await fetchTokenMetadata(rewardsMintSell.toString());
+    const sellSupplyActual = new BN(sellTokenInfo.supply.toString());
+    const sellSupplyModified = sellSupplyActual.sub(perVestingAmount.muln(numberOfSchedules));
+
+    const buyTokenInfo = await fetchTokenMetadata(rewardsMintBuy.toString());
+    const buySupplyActual = new BN(sellTokenInfo.supply.toString());
+    const buySupplyModified = buySupplyActual.sub(
+      perVestingAmount.muln(numberOfSchedules)
+    );
+
+    
+
+    const ixBuyTokens = await program.methods
+      .buyTokens(new BN(20_001), new BN(1))
+      .accounts({
+        buyer: Signer.publicKey,
+        communalDeposit: communal_account_buy,
+        communalTokenAccount: communalTokenBuyAccount,
+        rewardsMint: rewardsMintBuy,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        repositoryAccount: repositoryAccountBuy,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+        buyerTokenAccount,
+        defaultSchedule: defaultVestingSchedule,
+      })
+      .instruction();
+
+    await program.methods
+      .sellTokens(new BN(20_001), new BN(1))
+      .accounts({
+        seller: Signer.publicKey,
+        communalDeposit: communal_account_sell,
+        communalTokenAccount: communalTokenSellAccount,
+        rewardsMint: rewardsMintSell,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        repositoryAccount: repositoryAccountSell,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+        sellerTokenAccount,
+        defaultSchedule: defaultVestingSchedule,
+      })
+      .postInstructions([ixBuyTokens])
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })

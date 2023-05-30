@@ -3,8 +3,7 @@ import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
 import AnchorLink from '../ui/links/anchor-link';
 import {
-  addCommit,
-  addPr,
+  addPullRequest,
   acceptPr,
   stakeIssue,
   unstakeIssue,
@@ -119,9 +118,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const wallet = useWallet();
   const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const { data: session } = useSession();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const userMappingState = useAppSelector(selectUserMapping);
-  const [prLoading, setPrLoading] = React.useState<boolean>(false);
 
   const [expandState, setExpandState] = useState('issue');
 
@@ -377,7 +374,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       !selectedSubmitPR?.PR_link.startsWith('https://github.com/')
     )
       return;
-    dispatch(onLoading('Submitting your commit on the issue...'));
+    dispatch(onLoading('Submitting your pull request on the issue...'));
     //getting commit tree hash,commit hash
     const pullApiUrl = selectedSubmitPR?.PR_link.replace(
       'https://github.com/',
@@ -412,8 +409,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           const latestCommit = commitRes.data[commitRes.data.length - 1];
           let resCalled = false;
 
-          //add commit
-          addCommit(
+          addPullRequest(
             wallet.publicKey as PublicKey,
             new PublicKey(account),
             new PublicKey(
@@ -424,60 +420,19 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             res.data.html_url
           )
             .then((resp: any) => {
+              resCalled = true;
               dispatch(
-                onLoading('Submitting your pull request on the issue...')
+                onSuccess({
+                  label: 'Issue Submit Pull Request Successful',
+                  description: 'Check out your commit submit at',
+                  buttonText: 'Browse Issues',
+                  redirect: null,
+                  link: res
+                    ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
+                    : '',
+                })
               );
-              //add pr
-              addPr(
-                wallet.publicKey as PublicKey,
-                new PublicKey(account),
-                new PublicKey(
-                  userMappingState.userMapping?.verifiedUserAccount as string
-                ),
-                latestCommit.sha,
-                res.data.html_url
-              )
-                .then((resp: any) => {
-                  resCalled = true;
-                  dispatch(
-                    onSuccess({
-                      label: 'Issue Submit Pull Request Successful',
-                      description: 'Check out your commit submit at',
-                      buttonText: 'Browse Issues',
-                      redirect: null,
-                      link: res
-                        ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
-                        : '',
-                    })
-                  );
-                  dispatch(setRefetch('issue'));
-                })
-                .catch((err) => {
-                  resCalled = true;
-                  dispatch(
-                    onFailure({
-                      label: 'Issue Submit Pull Request Failed',
-                      description: err.message,
-                      redirect: null,
-                      buttonText: 'Continue',
-                      link: '',
-                    })
-                  );
-                })
-                .finally(() => {
-                  if (!resCalled) {
-                    dispatch(
-                      onSuccess({
-                        label: 'Issue Submit Pull Request Successful',
-                        description: '',
-                        buttonText: 'Browse Issues',
-                        redirect: null,
-                        link: '',
-                      })
-                    );
-                    dispatch(setRefetch('issue'));
-                  }
-                });
+              dispatch(setRefetch('issue'));
             })
             .catch((err) => {
               resCalled = true;
@@ -645,7 +600,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     );
     const MyPRs = allPRs.filter(
       (item: any) =>
-        item.actor.id === userInfo.id && item.source.issue.state === 'open'
+        !PRData.some(
+          (e: any) => e.issue_pr_link === item.source.issue.html_url
+        ) &&
+        item.actor.id === userInfo.id &&
+        item.source.issue.state === 'open'
     );
     const _sortlistPRs = MyPRs.map((item: any) => {
       return {

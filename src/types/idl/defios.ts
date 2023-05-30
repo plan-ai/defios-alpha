@@ -2206,6 +2206,30 @@ export type Defios = {
           }
         },
         {
+          "name": "defaultSchedule",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "isGodReal?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "DoULoveMe?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "SweetChick"
+              }
+            ]
+          }
+        },
+        {
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
@@ -2311,6 +2335,30 @@ export type Defios = {
           }
         },
         {
+          "name": "defaultSchedule",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "isGodReal?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "DoULoveMe?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "SweetChick"
+              }
+            ]
+          }
+        },
+        {
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
@@ -2382,70 +2430,6 @@ export type Defios = {
         {
           "name": "unixChange",
           "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "createSplToken",
-      "accounts": [
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mintAuthority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "metadataTitle",
-          "type": "string"
-        },
-        {
-          "name": "metadataSymbol",
-          "type": "string"
-        },
-        {
-          "name": "metadataUri",
-          "type": "string"
         }
       ]
     },
@@ -6377,6 +6361,30 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "defaultSchedule",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "isGodReal?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "DoULoveMe?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "SweetChick"
+              }
+            ]
+          }
+        },
+        {
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
@@ -6482,6 +6490,30 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "defaultSchedule",
+          "isMut": false,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "isGodReal?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "DoULoveMe?"
+              },
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "SweetChick"
+              }
+            ]
+          }
+        },
+        {
           "name": "associatedTokenProgram",
           "isMut": false,
           "isSigner": false
@@ -6553,70 +6585,6 @@ export const IDL: Defios = {
         {
           "name": "unixChange",
           "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "createSplToken",
-      "accounts": [
-        {
-          "name": "metadata",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mintAuthority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenMetadataProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "metadataTitle",
-          "type": "string"
-        },
-        {
-          "name": "metadataSymbol",
-          "type": "string"
-        },
-        {
-          "name": "metadataUri",
-          "type": "string"
         }
       ]
     },

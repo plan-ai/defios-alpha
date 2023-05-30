@@ -10,7 +10,7 @@ import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 
 import axios from 'axios';
-import { fetchDecimals } from '@/lib/helpers/metadata';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 interface ClosedIssueExpandProps {
   data: any;
@@ -30,31 +30,14 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [tokenImageUrl, setTokenImageUrl] = useState('');
   useEffect(() => {
-    getDecimals();
-    axios
-      .get(
-        `https://api.solscan.io/account?address=${data.issue_stake_token_url}&cluster=devnet`,
-        {
-          headers: {
-            token: process.env.SOLSCAN_TOKEN,
-          },
-        }
-      )
-      .then((res) => {
-        axios
-          .get(res.data.data.metadata.data.uri)
-          .then((resp) => {
-            setTokenImageUrl(resp.data.image);
-            setTokenSymbol(res.data.data.metadata.data.symbol);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+    getTokenInfo();
   }, [data]);
 
-  const getDecimals = async () => {
-    const decimals = await fetchDecimals(data?.issue_stake_token_url);
-    setTokenDecimals(decimals);
+  const getTokenInfo = async () => {
+    const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
+    setTokenImageUrl(response.json.image);
+    setTokenSymbol(response.symbol);
+    setTokenDecimals(response.decimals);
   };
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import cn from 'classnames';
 import Button from '@/components/ui/button/button';
 import axios from 'axios';
 
-import { fetchDecimals } from '@/lib/helpers/metadata';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 interface IssuesListTypes {
   data: any;
@@ -32,28 +32,17 @@ export default function IssuesList({
 
   const [tokenSymbol, setTokenSymbol] = useState('');
   useEffect(() => {
-    getDecimals();
-    axios
-      .get(
-        `https://api.solscan.io/account?address=${data.issue_stake_token_url}&cluster=devnet`,
-        {
-          headers: {
-            token: process.env.SOLSCAN_TOKEN,
-          },
-        }
-      )
-      .then((res) => {
-        setTokenSymbol(res.data.data.metadata.data.symbol);
-      });
+    getTokenInfo();
   },[data]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
   };
 
-  const getDecimals = async () => {
-    const decimals = await fetchDecimals(data?.issue_stake_token_url);
-    setTokenDecimals(decimals);
+  const getTokenInfo = async () => {
+    const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
+    setTokenSymbol(response.symbol);
+    setTokenDecimals(response.decimals);
   };
 
   useEffect(() => {

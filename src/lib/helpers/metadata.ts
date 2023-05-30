@@ -45,7 +45,6 @@ export const fetchTokenMetadata = async (tokenID: string) => {
   const mintAddress = new PublicKey(tokenID);
   const nft = await metaplex.nfts().findByMint({ mintAddress });
   const mintInfo = await getMint(connection, mintAddress);
-  console.log(nft, mintInfo);
   return {
     ...nft,
     ...mintInfo,

@@ -63,12 +63,40 @@ export default function RightSideInfo({
     setPieChartData(null);
     if (coin === null) return;
     if (coin?.token_spl_addr && coin.token_spl_addr === '') return;
+    // axios
+    //   .post('api/token/holders-data', {
+    //     token_address: coin?.token_spl_addr,
+    //   })
+    //   .then((res) => {
+    //     setPieChartData({ chartData: res.data, coin: coin });
+    //   })
+    //   .catch((err) => console.log(err));
     axios
-      .post('api/token/holders-data', {
-        token_address: coin?.token_spl_addr,
-      })
+      .get(
+        `https://api.solscan.io/token/holders?token=${coin?.token_spl_addr}&offset=0&size=4&cluster=devnet`
+      )
       .then((res) => {
-        setPieChartData({ chartData: res.data, coin: coin });
+        const data = res.data.data.result;
+        const newData = data.map((item: any) => {
+          let volume = '';
+          const amt = item.uiAmount;
+          if (amt > 10 ** 12) {
+            volume = (Math.floor(amt / 10 ** 10) / 100).toString() + ' Tn';
+          } else if (amt > 10 ** 9) {
+            volume = (Math.floor(amt / 10 ** 7) / 100).toString() + ' Bn';
+          } else if (amt > 10 ** 6) {
+            volume = (Math.floor(amt / 10 ** 5) / 100).toString() + ' Mn';
+          } else {
+            volume = (Math.floor(amt / 10 ** 1) / 100).toString() + ' K';
+          }
+          return {
+            owner: item.address,
+            value: parseInt(item.amount),
+            decimals: item.decimals,
+            volume: volume,
+          };
+        });
+        setPieChartData({ chartData: newData, coin: coin });
       })
       .catch((err) => console.log(err));
   }, [coin]);
