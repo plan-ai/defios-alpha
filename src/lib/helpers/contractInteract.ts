@@ -166,7 +166,7 @@ export const createRepository = (
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then(() => {
+        .then((res) => {
           let data = JSON.stringify({
             mintKeypair: mintKeypair.toString(),
           });
@@ -274,8 +274,6 @@ export const createIssue = (
     const { issueIndex } = await program.account.repository.fetch(
       repositoryAccount
     );
-
-    const uriSplit = issueURI.split('/');
 
     const [issueAccount] = await get_pda_from_seeds(
       [
@@ -862,9 +860,6 @@ export const claimReward = (
       })
       .catch((e) => {
         reject(e);
-      })
-      .finally(() => {
-        resolve('');
       });
   });
 };

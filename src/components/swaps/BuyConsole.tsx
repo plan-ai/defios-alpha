@@ -92,18 +92,22 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
 
   const handleBuyTransaction = () => {
     if (buyAmtBN.eq(new BN(0)) || solAmtBN.eq(new BN(0))) return;
-    dispatch(onLoading(`Buying ${buyAmt} ${toCoin.token_symbol} ...`));
     let resCalled = false;
+    dispatch(onLoading(`Buying ${buyAmt} ${toCoin.token_symbol} ...`));
     buyTransaction(new PublicKey(toCoin.repository), buyAmtBN, solAmtBN)
-      .then(() => {
+      .then((res) => {
         resCalled = true;
-        onSuccess({
-          label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
-          description: '',
-          buttonText: 'Continue',
-          redirect: null,
-          link: '',
-        });
+        dispatch(
+          onSuccess({
+            label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
+            description: 'check out the tx at',
+            buttonText: 'Continue',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
       })
       .catch((err) => {
         resCalled = true;
@@ -119,13 +123,15 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
       })
       .finally(() => {
         if (!resCalled) {
-          onSuccess({
-            label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
-            description: '',
-            buttonText: 'Continue',
-            redirect: null,
-            link: '',
-          });
+          dispatch(
+            onSuccess({
+              label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
+              description: '',
+              buttonText: 'Continue',
+              redirect: null,
+              link: '',
+            })
+          );
         }
       });
   };

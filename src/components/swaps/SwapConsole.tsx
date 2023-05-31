@@ -124,27 +124,31 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
 
   const handleSwapTransaction = () => {
     if (buyAmtBN.eq(new BN(0)) || sellAmtBN.eq(new BN(0))) return;
+    let resCalled = false;
     dispatch(
       onLoading(
         `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} ...`
       )
     );
-    let resCalled = false;
     swapTransaction(
       new PublicKey(fromCoin.repository),
       new PublicKey(toCoin.repository),
       sellAmtBN,
       buyAmtBN
     )
-      .then(() => {
+      .then((res) => {
         resCalled = true;
-        onSuccess({
-          label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
-          description: '',
-          buttonText: 'Continue',
-          redirect: null,
-          link: '',
-        });
+        dispatch(
+          onSuccess({
+            label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
+            description: 'check out the tx at',
+            buttonText: 'Continue',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
       })
       .catch((err) => {
         resCalled = true;
@@ -160,13 +164,15 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       })
       .finally(() => {
         if (!resCalled) {
-          onSuccess({
-            label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
-            description: '',
-            buttonText: 'Continue',
-            redirect: null,
-            link: '',
-          });
+          dispatch(
+            onSuccess({
+              label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
+              description: '',
+              buttonText: 'Continue',
+              redirect: null,
+              link: '',
+            })
+          );
         }
       });
   };

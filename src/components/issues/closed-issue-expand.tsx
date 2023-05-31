@@ -61,8 +61,8 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       winner.issue_pr_account === null
     )
       return;
-    dispatch(onLoading('Claiming tokens for solving the issue...'));
     let resCalled = false;
+    dispatch(onLoading('Claiming tokens for solving the issue...'));
     claimReward(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
       new PublicKey(
@@ -70,15 +70,19 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       ),
       new PublicKey(winner.issue_pr_account)
     )
-      .then(() => {
+      .then((res) => {
         resCalled = true;
-        onSuccess({
-          label: 'Issue Reward Claiming Successful',
-          description: '',
-          buttonText: 'Browse Issues',
-          redirect: null,
-          link: '',
-        });
+        dispatch(
+          onSuccess({
+            label: 'Issue Reward Claiming Successful',
+            description: 'check out the tx at',
+            buttonText: 'Browse Issues',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
       })
       .catch((err) => {
         resCalled = true;
@@ -94,13 +98,15 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
       })
       .finally(() => {
         if (!resCalled) {
-          onSuccess({
-            label: 'Issue Reward Claiming Successful',
-            description: '',
-            buttonText: 'Browse Issues',
-            redirect: null,
-            link: '',
-          });
+          dispatch(
+            onSuccess({
+              label: 'Issue Reward Claiming Successful',
+              description: '',
+              buttonText: 'Browse Issues',
+              redirect: null,
+              link: '',
+            })
+          );
         }
       });
   };
