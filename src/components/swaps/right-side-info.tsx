@@ -28,7 +28,6 @@ export default function RightSideInfo({
 
   useEffect(() => {
     setCoinInfo(null);
-    console.log('coin: ', coin);
     if (auth_cred === null || coin === null) return;
     axios
       .get('https://api-v1.defi-os.com/swap/profile', {

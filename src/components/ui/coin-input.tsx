@@ -16,10 +16,12 @@ interface CoinInputTypes extends React.InputHTMLAttributes<HTMLInputElement> {
   exchangeRate?: number;
   defaultCoinIndex?: number;
   className?: string;
+  value: string;
+  handleOnChange?: (e: any) => void;
   getCoinValue: (param: { coin: string; value: string }) => void;
   coinList: any;
   selectedCoin: any;
-  setSelectedCoin: React.Dispatch<any>;
+  setSelectedCoin?: React.Dispatch<any>;
 }
 
 const decimalPattern = /^[0-9]*[.,]?[0-9]*$/;
@@ -33,32 +35,25 @@ export default function CoinInput({
   coinList,
   setSelectedCoin,
   selectedCoin,
+  handleOnChange,
+  value,
   ...rest
 }: CoinInputTypes) {
-  let [value, setValue] = useState('');
   let [visibleCoinList, setVisibleCoinList] = useState(false);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
     setVisibleCoinList(false);
   });
   useLockBodyScroll(visibleCoinList);
-  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.match(decimalPattern)) {
-      setValue(event.target.value);
-      let param = {
-        coin: selectedCoin.token_symbol,
-        value: event.target.value,
-      };
-      getCoinValue && getCoinValue(param);
-    }
-  };
+
   function handleSelectedCoin(coin: any) {
+    if (setSelectedCoin === undefined) return;
     setSelectedCoin(coin);
     setVisibleCoinList(false);
   }
 
   useEffect(() => {
-    if (coinList.length !== 0) {
+    if (coinList.length !== 0 && setSelectedCoin !== undefined) {
       setSelectedCoin(coinList[0]);
     }
   }, [coinList]);
@@ -76,7 +71,10 @@ export default function CoinInput({
             {label}
           </span>
           <button
-            onClick={() => setVisibleCoinList(true)}
+            onClick={() => {
+              if (setSelectedCoin === undefined) return;
+              setVisibleCoinList(true);
+            }}
             className="flex items-center text-xs font-medium text-gray-100 outline-none xl:text-sm 3xl:text-base"
           >
             <Image
@@ -94,9 +92,12 @@ export default function CoinInput({
           <input
             type="text"
             value={value}
-            placeholder="0.0"
+            placeholder="0"
             inputMode="decimal"
-            onChange={handleOnChange}
+            onChange={(e) => {
+              if (handleOnChange === undefined) return;
+              handleOnChange(e);
+            }}
             className="w-full rounded-tr-lg rounded-br-lg border-0 bg-light-dark pb-0.5 text-right text-sm outline-none focus:ring-0 xl:text-base 3xl:text-lg"
             {...rest}
           />

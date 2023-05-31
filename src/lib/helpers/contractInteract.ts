@@ -939,7 +939,11 @@ export const unlockTokens = (
 
 //SWAPS-->
 
-export const buyTransaction = (repositoryAccount: PublicKey) => {
+export const buyTransaction = (
+  repositoryAccount: PublicKey,
+  amount: BN,
+  lamports: BN
+) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -979,8 +983,21 @@ export const buyTransaction = (repositoryAccount: PublicKey) => {
       program
     );
 
+    const supplyModified = await getSupplyModified(rewardsMint.toString());
+
+    if (
+      !lamports.eq(
+        calculateBuyAmount(
+          supplyModified.div(new BN(10).pow(new BN(9))),
+          amount.div(new BN(10).pow(new BN(9)))
+        )
+      )
+    ) {
+      reject('Calculation Wrong');
+      return;
+    }
     await program.methods
-      .buyTokens(new BN(20_001), new BN(1))
+      .buyTokens(lamports, amount)
       .accounts({
         buyer: Signer.publicKey,
         communalDeposit: communal_account,
@@ -1003,7 +1020,11 @@ export const buyTransaction = (repositoryAccount: PublicKey) => {
   });
 };
 
-export const sellTransaction = (repositoryAccount: PublicKey) => {
+export const sellTransaction = (
+  repositoryAccount: PublicKey,
+  amount: BN,
+  lamports: BN
+) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -1043,8 +1064,22 @@ export const sellTransaction = (repositoryAccount: PublicKey) => {
       program
     );
 
+    const supplyModified = await getSupplyModified(rewardsMint.toString());
+
+    if (
+      !lamports.eq(
+        calculateSellAmount(
+          supplyModified.div(new BN(10).pow(new BN(9))),
+          amount.div(new BN(10).pow(new BN(9)))
+        )
+      )
+    ) {
+      reject('Calculation Wrong');
+      return;
+    }
+
     await program.methods
-      .sellTokens(new BN(20_001), new BN(1))
+      .sellTokens(lamports, amount)
       .accounts({
         seller: Signer.publicKey,
         communalDeposit: communal_account,
@@ -1070,16 +1105,16 @@ export const sellTransaction = (repositoryAccount: PublicKey) => {
 //helpers
 //tokenSupply(modified)=tokenSupply(actual)-(number_of_schedules*per_vesting_amount)
 // fill this in both calc param of tokenSupply
-function calculateBuyAmount(tokenSupply: BN, tokenAmount: BN): BN {
+export const calculateBuyAmount = (tokenSupply: BN, tokenAmount: BN): BN => {
   const newTokenAmount = tokenAmount;
   const newTokenSupply = tokenSupply;
   const value = newTokenAmount
     .pow(new BN(2))
     .add(newTokenSupply.mul(newTokenAmount).muln(2));
   return value;
-}
+};
 
-function calculateSellAmount(tokenSupply: BN, tokenAmount: BN): BN {
+export const calculateSellAmount = (tokenSupply: BN, tokenAmount: BN): BN => {
   const newTokenAmount = tokenAmount;
   const newTokenSupply = tokenSupply;
   const firstValue = newTokenSupply.mul(newTokenAmount).muln(2);
@@ -1089,13 +1124,65 @@ function calculateSellAmount(tokenSupply: BN, tokenAmount: BN): BN {
   } else {
     return firstValue.sub(secondValue);
   }
-}
+};
 
+export const sqrt = (num: BN): BN => {
+  if (num.lt(new BN(0))) {
+    throw new Error('Sqrt only works on non-negtiave inputs');
+  }
+  if (num.lt(new BN(2))) {
+    return num;
+  }
+
+  const smallCand = sqrt(num.shrn(2)).shln(1);
+  const largeCand = smallCand.add(new BN(1));
+
+  if (largeCand.mul(largeCand).gt(num)) {
+    return smallCand;
+  } else {
+    return largeCand;
+  }
+};
+
+export const getAmtOfBuy = (supply: BN, value: BN): BN => {
+  const underRootTerm = sqrt(supply.sqr().add(value));
+  return underRootTerm.sub(supply);
+};
+
+export const getAmtOfSell = (supply: BN, value: BN): BN => {
+  return supply.sub(sqrt(supply.sqr().sub(value)));
+};
+
+export const getSupplyModified = async (tokenAddress: string) => {
+  const provider = await getProvider(Connection, Signer);
+  const program = await getDefiOsProgram(provider);
+
+  const tokenInfo = await fetchTokenMetadata(tokenAddress);
+  const supplyActual = new BN(tokenInfo.supply.toString());
+  const [defaultVestingSchedule] = await get_pda_from_seeds(
+    [
+      Buffer.from('isGodReal?'),
+      Buffer.from('DoULoveMe?'),
+      Buffer.from('SweetChick'),
+    ],
+    program
+  );
+
+  const { numberOfSchedules, perVestingAmount } =
+    await program.account.defaultVestingSchedule.fetch(defaultVestingSchedule);
+
+  const supplyModified = supplyActual.sub(
+    perVestingAmount.muln(numberOfSchedules)
+  );
+
+  return supplyModified;
+};
 
 export const swapTransaction = (
-  repositoryAccountBuy: PublicKey,
   repositoryAccountSell: PublicKey,
-  amount: number
+  repositoryAccountBuy: PublicKey,
+  amountSell: BN,
+  amountBuy: BN
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -1169,18 +1256,27 @@ export const swapTransaction = (
     // fill this in both calc param of tokenSupply
     const sellTokenInfo = await fetchTokenMetadata(rewardsMintSell.toString());
     const sellSupplyActual = new BN(sellTokenInfo.supply.toString());
-    const sellSupplyModified = sellSupplyActual.sub(perVestingAmount.muln(numberOfSchedules));
+    const sellSupplyModified = sellSupplyActual.sub(
+      perVestingAmount.muln(numberOfSchedules)
+    );
+    const valueSell = calculateSellAmount(
+      sellSupplyModified.div(new BN(10).pow(new BN(9))),
+      amountSell.div(new BN(10).pow(new BN(9)))
+    );
 
     const buyTokenInfo = await fetchTokenMetadata(rewardsMintBuy.toString());
-    const buySupplyActual = new BN(sellTokenInfo.supply.toString());
+    const buySupplyActual = new BN(buyTokenInfo.supply.toString());
     const buySupplyModified = buySupplyActual.sub(
       perVestingAmount.muln(numberOfSchedules)
     );
 
-    
+    const valueBuy = calculateBuyAmount(
+      buySupplyModified.div(new BN(10).pow(new BN(9))),
+      amountBuy.div(new BN(10).pow(new BN(9)))
+    );
 
     const ixBuyTokens = await program.methods
-      .buyTokens(new BN(20_001), new BN(1))
+      .buyTokens(valueBuy, amountBuy)
       .accounts({
         buyer: Signer.publicKey,
         communalDeposit: communal_account_buy,
@@ -1196,7 +1292,7 @@ export const swapTransaction = (
       .instruction();
 
     await program.methods
-      .sellTokens(new BN(20_001), new BN(1))
+      .sellTokens(valueSell, amountSell)
       .accounts({
         seller: Signer.publicKey,
         communalDeposit: communal_account_sell,
