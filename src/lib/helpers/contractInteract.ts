@@ -44,7 +44,7 @@ import axios from 'axios';
 
 //change
 const nameRouterAccount = new PublicKey(
-  'DzbmV2GKBzMDJndgoRyYsV97ZUZ2b8HiJfvqH3wmRrLL'
+  'b7CNiQLQqjrQKiz5PH141vh3fACNxoYuN49eiNDkXCh'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
