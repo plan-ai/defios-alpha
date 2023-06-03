@@ -91,7 +91,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
           )
             .then((res) => {
               resCalled = true;
-              dispatch(setRefetch('issue'));
               dispatch(
                 onSuccess({
                   label: 'Issue Creation Successful',
@@ -101,6 +100,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
                 })
               );
+              dispatch(setRefetch('issue'));
               closeDrawer();
             })
             .catch((err) => {
@@ -118,7 +118,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
             })
             .finally(() => {
               if (!resCalled) {
-                dispatch(setRefetch('issue'));
                 dispatch(
                   onSuccess({
                     label: 'Issue Creation Successful',
@@ -128,6 +127,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
                     link: '',
                   })
                 );
+                dispatch(setRefetch('issue'));
                 closeDrawer();
               }
             });

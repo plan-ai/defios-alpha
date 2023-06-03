@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Spinner from '../custom/spinner';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setStep2Data } from '@/store/creationSlice';
-
+import axios from 'axios';
 interface RepoModalProps {
   repo: string;
   setRepo: (repo: string) => void;
@@ -28,6 +28,9 @@ const RepoModal: React.FC<RepoModalProps> = ({
 }) => {
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
 
   const [selectedRepo, setSelectedRepo] = useState('');
 
@@ -46,6 +49,8 @@ const RepoModal: React.FC<RepoModalProps> = ({
     let keepGoing = true;
     let pagination = 1;
     let _repos: any = [];
+    const existingRepos: any = await createExistingArray();
+
     while (keepGoing) {
       const res = await fetch(
         `https://api.github.com/user/repos?affiliation=${affiliation}&sort=pushed&per_page=100&page=${pagination}`,
@@ -61,7 +66,10 @@ const RepoModal: React.FC<RepoModalProps> = ({
         .catch((err) => console.log(err));
 
       //already exists as project checker needed here , condition it in filter
-      const refinedRes = res.filter((repo: any) => repo.permissions.admin);
+      const refinedRes = res.filter(
+        (repo: any) =>
+          repo.permissions.admin && !existingRepos.includes(repo.html_url)
+      );
 
       if (refinedRes.length === 0 && affiliation === 'owner') {
         affiliation = 'collaborator';
@@ -129,7 +137,30 @@ const RepoModal: React.FC<RepoModalProps> = ({
     };
   }, [search, repos, orgRepos, collaboratorRepos]);
 
+  const createExistingArray = async () => {
+    setIsLoading(true);
+    return await axios
+      .get('https://api-v1.defi-os.com/projects/minified', {
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        const existing = res.data;
+        const arr: string[] = [];
+        existing.forEach((item: any) => {
+          arr.push(item?.project_url);
+        });
+        return arr;
+      })
+      .catch((err) => {
+        console.log(err);
+        return [];
+      });
+  };
+
   useEffect(() => {
+    if (firebase_jwt === null || firebase_jwt === '') return;
     if (
       session &&
       (session as any)?.accessToken &&
@@ -146,7 +177,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
         ? repoSearch.orgRepos
         : repoSearch.collaboratorRepos
     );
-  }, [session, reposState, repoSearch]);
+  }, [session, reposState, repoSearch, firebase_jwt]);
 
   return (
     <div className="flex h-full w-full flex-col p-3 xl:p-4 3xl:p-5">

@@ -21,50 +21,6 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
   item,
 }) => {
   const [chartData, setChartData] = useState<any>(null);
-  const [tokenImgUrl, setTokenImgUrl] = useState('');
-
-  useEffect(() => {
-    const _url = item?.project_token?.token_image_url;
-    if (_url.includes('gateway.pinata.cloud')) {
-      const IpfsNewGateway = _url.replace('gateway.pinata.cloud', 'ipfs.io');
-      axios
-        .get(IpfsNewGateway)
-        .then((res) => {
-          if (typeof res.data === 'object') {
-            if (res.data.image) {
-              setTokenImgUrl(res.data.image);
-            } else {
-              setTokenImgUrl(item?.project_token?.token_image_url);
-            }
-          } else {
-            setTokenImgUrl(item?.project_token?.token_image_url);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setTokenImgUrl(item?.project_token?.token_image_url);
-        });
-    }
-    if (_url == '') {
-      axios
-        .get(
-          `https://public-api.solscan.io/token/meta?tokenAddress=${item?.project_token?.token_spl_addr}`,
-          {
-            headers: {
-              token: process.env.SOLSCAN_TOKEN,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.icon) {
-            setTokenImgUrl(res.data.icon);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [item]);
 
   useEffect(() => {
     if (typeof item?.project_token?.token_price_feed === 'string') {
@@ -118,10 +74,10 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
               className="mr-1 h-3.5 w-3.5  xl:h-4 xl:w-4 3xl:h-5 3xl:w-5"
             />
             {item?.project_repo_link?.replace('https://github.com', '').length >
-            18
+            24
               ? item?.project_repo_link
                   ?.replace('https://github.com', '')
-                  .slice(0, 18) + '...'
+                  .slice(0, 24) + '...'
               : item?.project_repo_link?.replace('https://github.com', '')}
           </AnchorLink>
         </div>
@@ -140,7 +96,7 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         <div className="flex w-full flex-row items-center justify-between border-t border-dashed border-gray-800 pt-3">
           <CoinTicker
             value={Math.round(item?.project_token?.token_ltp * 100) / 100}
-            coin={{ ...item?.project_token, token_image_url: tokenImgUrl }}
+            coin={item?.project_token}
             change={(
               Math.round(item?.project_token?.token_ltp_24h_change * 100) / 100
             ).toString()}

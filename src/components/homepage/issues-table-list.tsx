@@ -27,14 +27,14 @@ export const IssuesTableList: React.FC<IssuesTableListProps> = ({
     const payload = {
       searchQuery: `id:${item?._id}`,
       setSearchQuery: true,
-      expandFirst: true,
+      expandFirst: false,
       pathname: '/issues',
     };
     dispatch(clicked(payload));
     router.push('/issues');
   };
 
-  let [tokenDecimals, setTokenDecimals] = useState(1);
+  let [tokenDecimals, setTokenDecimals] = useState(0);
 
   const getDecimals = async () => {
     const decimals = await fetchDecimals(item?.issue_stake_token_url);

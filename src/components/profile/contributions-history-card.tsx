@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowUp } from '@/components/icons/long-arrow-up';
@@ -8,6 +8,8 @@ import { ExportIcon } from '@/components/icons/export-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
 import Avatar from 'react-avatar';
+
+import { fetchDecimals } from '@/lib/helpers/metadata';
 
 interface CardProps {
   item: any;
@@ -99,6 +101,17 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
     }
   );
 
+  let [tokenDecimals, setTokenDecimals] = useState(0);
+
+  const getDecimals = async () => {
+    const decimals = await fetchDecimals(item?.token_spl_addr);
+    setTokenDecimals(decimals);
+  };
+
+  useEffect(() => {
+    getDecimals();
+  }, []);
+
   return (
     <div className="rounded-xl bg-light-dark p-4 text-sm shadow-card sm:p-5 md:p-6">
       <div className="flex items-center justify-between border-b border-dashed border-gray-700 pb-3.5 sm:pb-5">
@@ -116,7 +129,7 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
           </div>
         </div>
         <div className=" pl-2 text-xs -tracking-wide text-gray-400 xs:text-sm ">
-          {dateStr}
+          {dateStr} - {timeStr}
         </div>
       </div>
       <div className="grid grid-cols-9 gap-x-3 pt-4 md:gap-x-5 md:pt-6">
@@ -157,9 +170,13 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
             />
           ) : (
             <TrasactionAmountEL
-              transactionAmount={Math.round(item?.contribution_amt * 100) / 100}
+              transactionAmount={
+                Math.round(
+                  (item?.contribution_amt * 100) / 10 ** tokenDecimals
+                ) / 100
+              }
               transactionCoin={item?.contribution_token_symbol}
-              transactionCoinImg={item?.contribution_token_icon}
+              transactionCoinImg={item?.token_image_url}
             />
           )}
         </div>
@@ -169,9 +186,13 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
         <div className="col-span-4  flex flex-col gap-2.5 sm:flex-row sm:gap-x-4 md:flex-col 2xl:flex-row">
           {item?.contribution_type === 'inbound' ? (
             <TrasactionAmountEL
-              transactionAmount={Math.round(item?.contribution_amt * 100) / 100}
+              transactionAmount={
+                Math.round(
+                  (item?.contribution_amt * 100) / 10 ** tokenDecimals
+                ) / 100
+              }
               transactionCoin={item?.contribution_token_symbol}
-              transactionCoinImg={item?.contribution_token_icon}
+              transactionCoinImg={item?.token_image_url}
             />
           ) : (
             <TransactionFromTo
@@ -192,7 +213,13 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
                   target="_blank"
                 >
                   <div className="flex items-center justify-center">
-                    <div>{item?.contribution_link?.includes('pull')?"Pull Request":item?.contribution_link?.includes('issue')?"Issue":null}</div>
+                    <div>
+                      {item?.contribution_link?.includes('pull')
+                        ? 'Pull Request'
+                        : item?.contribution_link?.includes('issue')
+                        ? 'Issue'
+                        : null}
+                    </div>
                     <ExportIcon className="ml-2 h-3 w-3" />
                   </div>
                 </AnchorLink>
