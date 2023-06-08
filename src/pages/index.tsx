@@ -99,7 +99,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
               </div>
             </div>
             <div className="flex w-full gap-4 text-[2vh] font-semibold text-white">
-              {/* {!session && (
+              {!session && (
                 <Button
                   onClick={() =>
                     signIn('github', {
@@ -120,7 +120,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                     <ArrowRightIcon className=" inline-block h-5 w-5" />
                   </Button>
                 </Link>
-              )} */}
+              )}
               <div className="flex gap-2">
                 <Input
                   type="email"
