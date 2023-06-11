@@ -17,7 +17,7 @@ import Spinner from '@/components/custom/spinner';
 import Input from '@/components/ui/forms/input';
 
 import _debounce from 'lodash/debounce';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 import { clicked } from '@/store/notifClickSlice';

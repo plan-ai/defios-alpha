@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { useState, useEffect,useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import ContributionsHistory from '@/components/profile/contributions-history';
 import ProfileProjectCard from '@/components/profile/profile-project-card';
@@ -15,7 +15,7 @@ import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
 
 import _debounce from 'lodash/debounce';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
 import { Close } from '@/components/icons/close';
 
@@ -236,11 +236,7 @@ export default function ProfileTab() {
           projectsData.length !== 0 &&
           typeof projectsData[0]?.project_token?.token_price_feed !==
             'string' && (
-            <div
-              className={cn(
-                'grid gap-4 grid-cols-2 lg:gap-5 xl:gap-6'
-              )}
-            >
+            <div className={cn('grid grid-cols-2 gap-4 lg:gap-5 xl:gap-6')}>
               {projectsData.map((project: any, idx: number) => (
                 <ProfileProjectCard item={project} key={idx} />
               ))}
@@ -273,7 +269,7 @@ export default function ProfileTab() {
       </TabPanel>
       <TabPanel className="focus:outline-none">
         <div className="space-y-8 xl:space-y-9">
-          <div className="w-full mx-4">
+          <div className="mx-4 w-full">
             <GitHubCalendar
               theme={{
                 level0: '#161b22',

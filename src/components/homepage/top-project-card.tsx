@@ -6,7 +6,7 @@ import GithubLogo from '@/assets/images/github-mark-white.svg';
 import CoinTicker from '@/components/custom/coin-ticker';
 import PriceChart from '@/components/ui/chats/price-chart';
 import StatsData from '@/components/custom/stats-data';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppDispatch } from '@/store/store';
 import { clicked } from '@/store/notifClickSlice';
 import { useRouter } from 'next/router';

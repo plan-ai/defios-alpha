@@ -13,7 +13,7 @@ import TopProjectCard from '@/components/homepage/top-project-card';
 
 import OverviewChart from '@/components/ui/chats/overview-chart';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import Spinner from '../custom/spinner';
 import Journey from '@/components/homepage/journey';
 

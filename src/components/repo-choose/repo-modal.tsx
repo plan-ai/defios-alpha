@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Spinner from '../custom/spinner';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setStep2Data } from '@/store/creationSlice';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 interface RepoModalProps {
   repo: string;
   setRepo: (repo: string) => void;
@@ -52,7 +52,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
     const existingRepos: any = await createExistingArray();
 
     while (keepGoing) {
-      const res = await fetch(
+      const res = await axios.get(
         `https://api.github.com/user/repos?affiliation=${affiliation}&sort=pushed&per_page=100&page=${pagination}`,
         {
           method: 'GET',
@@ -62,7 +62,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
           },
         }
       )
-        .then((res) => res.json())
+        .then((res) => res.data)
         .catch((err) => console.log(err));
 
       //already exists as project checker needed here , condition it in filter

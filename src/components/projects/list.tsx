@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SecurityStatus from '@/components/custom/security-status';
 import Image from 'next/image';
 import cn from 'classnames';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 interface ProjectListTypes {
   data: any;
   initExpand?: boolean;
@@ -99,9 +99,7 @@ export default function ProjectList({
           </motion.div>
         )}
       </AnimatePresence>
-      {!last && (
-        <div className='childDiv mx-6 border border-gray-700'></div>
-      )}
+      {!last && <div className="childDiv mx-6 border border-gray-700"></div>}
     </div>
   );
 }

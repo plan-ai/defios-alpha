@@ -224,7 +224,7 @@ export type Defios = {
               {
                 "kind": "arg",
                 "type": "string",
-                "path": "name"
+                "path": "id"
               },
               {
                 "kind": "account",
@@ -346,7 +346,7 @@ export type Defios = {
       ],
       "args": [
         {
-          "name": "name",
+          "name": "id",
           "type": "string"
         },
         {
@@ -462,7 +462,7 @@ export type Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -564,7 +564,7 @@ export type Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -693,7 +693,7 @@ export type Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -843,7 +843,7 @@ export type Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -1010,63 +1010,6 @@ export type Defios = {
           "isSigner": false
         },
         {
-          "name": "routerCreator",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "repositoryCreator",
           "isMut": false,
           "isSigner": false
@@ -1091,7 +1034,7 @@ export type Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -1194,6 +1137,32 @@ export type Defios = {
           }
         },
         {
+          "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "repository"
+              },
+              {
+                "kind": "account",
+                "type": "string",
+                "account": "Repository",
+                "path": "repository_account.id"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account.repository_creator"
+              }
+            ]
+          }
+        },
+        {
           "name": "roadmapVerifiedUser",
           "isMut": false,
           "isSigner": false,
@@ -1266,6 +1235,10 @@ export type Defios = {
           "type": "string"
         },
         {
+          "name": "roadmapImageUrl",
+          "type": "string"
+        },
+        {
           "name": "roadmapOutlook",
           "type": {
             "defined": "RoadmapOutlook"
@@ -1315,6 +1288,32 @@ export type Defios = {
           "name": "objectiveIssue",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "repository"
+              },
+              {
+                "kind": "account",
+                "type": "string",
+                "account": "Repository",
+                "path": "repository_account.id"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account.repository_creator"
+              }
+            ]
+          }
         },
         {
           "name": "objectiveVerifiedUser",
@@ -1429,63 +1428,6 @@ export type Defios = {
           "isMut": true,
           "isSigner": false,
           "isOptional": true
-        },
-        {
-          "name": "objectiveVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "objective_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "child_objective_adder"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -1637,63 +1579,6 @@ export type Defios = {
           "isSigner": false
         },
         {
-          "name": "commitVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "commit_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "commit_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -1708,63 +1593,6 @@ export type Defios = {
           "name": "repositoryCreator",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "repositoryVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "repository_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "repository_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "repositoryCreatorTokenAccount",
@@ -1788,9 +1616,10 @@ export type Defios = {
                 "value": "repository"
               },
               {
-                "kind": "arg",
+                "kind": "account",
                 "type": "string",
-                "path": "repo_name"
+                "account": "Repository",
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -1836,12 +1665,7 @@ export type Defios = {
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "repoName",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
       "name": "acceptPr",
@@ -1850,32 +1674,6 @@ export type Defios = {
           "name": "repositoryCreator",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "repositoryVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "repository_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "repository_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
         },
         {
           "name": "pullRequestAddr",
@@ -1935,63 +1733,6 @@ export type Defios = {
               }
             ]
           }
-        },
-        {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -2100,7 +1841,17 @@ export type Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "rewardsMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
           "isMut": false,
           "isSigner": false
         },
@@ -2166,7 +1917,17 @@ export type Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "buyerTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerUsdcAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -2206,6 +1967,11 @@ export type Defios = {
           }
         },
         {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "defaultSchedule",
           "isMut": false,
           "isSigner": false,
@@ -2242,7 +2008,7 @@ export type Defios = {
       ],
       "args": [
         {
-          "name": "lamportsAmount",
+          "name": "usdcAmount",
           "type": "u64"
         },
         {
@@ -2295,12 +2061,22 @@ export type Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "sellerTokenAccount",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sellerUsdcAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -2333,6 +2109,11 @@ export type Defios = {
               }
             ]
           }
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "defaultSchedule",
@@ -2371,7 +2152,7 @@ export type Defios = {
       ],
       "args": [
         {
-          "name": "lamportsAmount",
+          "name": "usdcAmount",
           "type": "u64"
         },
         {
@@ -2472,32 +2253,6 @@ export type Defios = {
           }
         },
         {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "pullRequestTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -2510,37 +2265,6 @@ export type Defios = {
         {
           "name": "pullRequestStakerTokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -2635,32 +2359,6 @@ export type Defios = {
           }
         },
         {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "pullRequestTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -2673,37 +2371,6 @@ export type Defios = {
         {
           "name": "pullRequestStakerTokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -2753,181 +2420,6 @@ export type Defios = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "swap",
-      "accounts": [
-        {
-          "name": "buyer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "communalDeposit1",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "are_we_conscious"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "is love life ?  "
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "arewemadorinlove"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "rewards_mint1"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "buyerTokenAccount1",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "buyerTokenAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "repositoryAccount1",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rewardsMint1",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "Miners"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "MinerC"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Repository",
-                "path": "repository_account1"
-              }
-            ]
-          }
-        },
-        {
-          "name": "repositoryAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rewardsMint2",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "Miners"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "MinerC"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Repository",
-                "path": "repository_account2"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalDeposit2",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "are_we_conscious"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "is love life ?  "
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "arewemadorinlove"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "rewards_mint2"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalTokenAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "tokenAmount1",
-          "type": "u64"
-        },
-        {
-          "name": "tokenAmount2",
-          "type": "u64"
-        }
-      ]
     }
   ],
   "accounts": [
@@ -3011,7 +2503,7 @@ export type Defios = {
             }
           },
           {
-            "name": "name",
+            "name": "id",
             "type": "string"
           },
           {
@@ -3263,10 +2755,6 @@ export type Defios = {
             "type": "string"
           },
           {
-            "name": "numberOfObjectives",
-            "type": "u64"
-          },
-          {
             "name": "rootObjectiveIds",
             "type": {
               "vec": "publicKey"
@@ -3281,6 +2769,14 @@ export type Defios = {
             "type": {
               "defined": "RoadmapOutlook"
             }
+          },
+          {
+            "name": "roadmapImageUrl",
+            "type": "string"
+          },
+          {
+            "name": "roadmapRepository",
+            "type": "publicKey"
           }
         ]
       }
@@ -3345,6 +2841,10 @@ export type Defios = {
           {
             "name": "objectiveId",
             "type": "string"
+          },
+          {
+            "name": "objectiveRepository",
+            "type": "publicKey"
           }
         ]
       }
@@ -3639,6 +3139,28 @@ export type Defios = {
             "vec": "publicKey"
           },
           "index": false
+        },
+        {
+          "name": "roadmapOutlook",
+          "type": {
+            "defined": "RoadmapOutlook"
+          },
+          "index": false
+        },
+        {
+          "name": "roadmapImageUrl",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "roadmap",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "roadmapRepository",
+          "type": "publicKey",
+          "index": false
         }
       ]
     },
@@ -3773,7 +3295,7 @@ export type Defios = {
           "index": false
         },
         {
-          "name": "name",
+          "name": "id",
           "type": "string",
           "index": false
         },
@@ -3800,6 +3322,13 @@ export type Defios = {
           "name": "tokenMetadataUri",
           "type": {
             "option": "string"
+          },
+          "index": false
+        },
+        {
+          "name": "vestingAccount",
+          "type": {
+            "option": "publicKey"
           },
           "index": false
         }
@@ -4379,7 +3908,7 @@ export const IDL: Defios = {
               {
                 "kind": "arg",
                 "type": "string",
-                "path": "name"
+                "path": "id"
               },
               {
                 "kind": "account",
@@ -4501,7 +4030,7 @@ export const IDL: Defios = {
       ],
       "args": [
         {
-          "name": "name",
+          "name": "id",
           "type": "string"
         },
         {
@@ -4617,7 +4146,7 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -4719,7 +4248,7 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -4848,7 +4377,7 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -4998,7 +4527,7 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -5165,63 +4694,6 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
-          "name": "routerCreator",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "repositoryCreator",
           "isMut": false,
           "isSigner": false
@@ -5246,7 +4718,7 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "string",
                 "account": "Repository",
-                "path": "repository_account.name"
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -5349,6 +4821,32 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "repository"
+              },
+              {
+                "kind": "account",
+                "type": "string",
+                "account": "Repository",
+                "path": "repository_account.id"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account.repository_creator"
+              }
+            ]
+          }
+        },
+        {
           "name": "roadmapVerifiedUser",
           "isMut": false,
           "isSigner": false,
@@ -5421,6 +4919,10 @@ export const IDL: Defios = {
           "type": "string"
         },
         {
+          "name": "roadmapImageUrl",
+          "type": "string"
+        },
+        {
           "name": "roadmapOutlook",
           "type": {
             "defined": "RoadmapOutlook"
@@ -5470,6 +4972,32 @@ export const IDL: Defios = {
           "name": "objectiveIssue",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "type": "string",
+                "value": "repository"
+              },
+              {
+                "kind": "account",
+                "type": "string",
+                "account": "Repository",
+                "path": "repository_account.id"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository_account.repository_creator"
+              }
+            ]
+          }
         },
         {
           "name": "objectiveVerifiedUser",
@@ -5584,63 +5112,6 @@ export const IDL: Defios = {
           "isMut": true,
           "isSigner": false,
           "isOptional": true
-        },
-        {
-          "name": "objectiveVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "objective_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "child_objective_adder"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -5792,63 +5263,6 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
-          "name": "commitVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "commit_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "commit_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -5863,63 +5277,6 @@ export const IDL: Defios = {
           "name": "repositoryCreator",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "repositoryVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "repository_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "repository_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "repositoryCreatorTokenAccount",
@@ -5943,9 +5300,10 @@ export const IDL: Defios = {
                 "value": "repository"
               },
               {
-                "kind": "arg",
+                "kind": "account",
                 "type": "string",
-                "path": "repo_name"
+                "account": "Repository",
+                "path": "repository_account.id"
               },
               {
                 "kind": "account",
@@ -5991,12 +5349,7 @@ export const IDL: Defios = {
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "repoName",
-          "type": "string"
-        }
-      ]
+      "args": []
     },
     {
       "name": "acceptPr",
@@ -6005,32 +5358,6 @@ export const IDL: Defios = {
           "name": "repositoryCreator",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "repositoryVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "repository_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "repository_creator"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
         },
         {
           "name": "pullRequestAddr",
@@ -6090,63 +5417,6 @@ export const IDL: Defios = {
               }
             ]
           }
-        },
-        {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -6255,7 +5525,17 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "rewardsMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "usdcMint",
           "isMut": false,
           "isSigner": false
         },
@@ -6321,7 +5601,17 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "buyerTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "buyerUsdcAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -6361,6 +5651,11 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "defaultSchedule",
           "isMut": false,
           "isSigner": false,
@@ -6397,7 +5692,7 @@ export const IDL: Defios = {
       ],
       "args": [
         {
-          "name": "lamportsAmount",
+          "name": "usdcAmount",
           "type": "u64"
         },
         {
@@ -6450,12 +5745,22 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
+          "name": "communalUsdcAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "sellerTokenAccount",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "repositoryAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sellerUsdcAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -6488,6 +5793,11 @@ export const IDL: Defios = {
               }
             ]
           }
+        },
+        {
+          "name": "usdcMint",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "defaultSchedule",
@@ -6526,7 +5836,7 @@ export const IDL: Defios = {
       ],
       "args": [
         {
-          "name": "lamportsAmount",
+          "name": "usdcAmount",
           "type": "u64"
         },
         {
@@ -6627,32 +5937,6 @@ export const IDL: Defios = {
           }
         },
         {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "pullRequestTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -6665,37 +5949,6 @@ export const IDL: Defios = {
         {
           "name": "pullRequestStakerTokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -6790,32 +6043,6 @@ export const IDL: Defios = {
           }
         },
         {
-          "name": "pullRequestVerifiedUser",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "VerifiedUser",
-                "path": "pull_request_verified_user.user_name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "NameRouter",
-                "path": "name_router_account"
-              }
-            ]
-          }
-        },
-        {
           "name": "pullRequestTokenAccount",
           "isMut": true,
           "isSigner": false
@@ -6828,37 +6055,6 @@ export const IDL: Defios = {
         {
           "name": "pullRequestStakerTokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "nameRouterAccount",
-          "isMut": false,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "type": "string",
-                "account": "NameRouter",
-                "path": "name_router_account.signing_domain"
-              },
-              {
-                "kind": "account",
-                "type": "u8",
-                "account": "NameRouter",
-                "path": "name_router_account.signature_version"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "router_creator"
-              }
-            ]
-          }
-        },
-        {
-          "name": "routerCreator",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -6908,181 +6104,6 @@ export const IDL: Defios = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "swap",
-      "accounts": [
-        {
-          "name": "buyer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "communalDeposit1",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "are_we_conscious"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "is love life ?  "
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "arewemadorinlove"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "rewards_mint1"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "buyerTokenAccount1",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "buyerTokenAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "repositoryAccount1",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rewardsMint1",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "Miners"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "MinerC"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Repository",
-                "path": "repository_account1"
-              }
-            ]
-          }
-        },
-        {
-          "name": "repositoryAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "rewardsMint2",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "Miners"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "MinerC"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Repository",
-                "path": "repository_account2"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalDeposit2",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "are_we_conscious"
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "is love life ?  "
-              },
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "arewemadorinlove"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Mint",
-                "path": "rewards_mint2"
-              }
-            ]
-          }
-        },
-        {
-          "name": "communalTokenAccount2",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "tokenAmount1",
-          "type": "u64"
-        },
-        {
-          "name": "tokenAmount2",
-          "type": "u64"
-        }
-      ]
     }
   ],
   "accounts": [
@@ -7166,7 +6187,7 @@ export const IDL: Defios = {
             }
           },
           {
-            "name": "name",
+            "name": "id",
             "type": "string"
           },
           {
@@ -7418,10 +6439,6 @@ export const IDL: Defios = {
             "type": "string"
           },
           {
-            "name": "numberOfObjectives",
-            "type": "u64"
-          },
-          {
             "name": "rootObjectiveIds",
             "type": {
               "vec": "publicKey"
@@ -7436,6 +6453,14 @@ export const IDL: Defios = {
             "type": {
               "defined": "RoadmapOutlook"
             }
+          },
+          {
+            "name": "roadmapImageUrl",
+            "type": "string"
+          },
+          {
+            "name": "roadmapRepository",
+            "type": "publicKey"
           }
         ]
       }
@@ -7500,6 +6525,10 @@ export const IDL: Defios = {
           {
             "name": "objectiveId",
             "type": "string"
+          },
+          {
+            "name": "objectiveRepository",
+            "type": "publicKey"
           }
         ]
       }
@@ -7794,6 +6823,28 @@ export const IDL: Defios = {
             "vec": "publicKey"
           },
           "index": false
+        },
+        {
+          "name": "roadmapOutlook",
+          "type": {
+            "defined": "RoadmapOutlook"
+          },
+          "index": false
+        },
+        {
+          "name": "roadmapImageUrl",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "roadmap",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "roadmapRepository",
+          "type": "publicKey",
+          "index": false
         }
       ]
     },
@@ -7928,7 +6979,7 @@ export const IDL: Defios = {
           "index": false
         },
         {
-          "name": "name",
+          "name": "id",
           "type": "string",
           "index": false
         },
@@ -7955,6 +7006,13 @@ export const IDL: Defios = {
           "name": "tokenMetadataUri",
           "type": {
             "option": "string"
+          },
+          "index": false
+        },
+        {
+          "name": "vestingAccount",
+          "type": {
+            "option": "publicKey"
           },
           "index": false
         }

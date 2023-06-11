@@ -4,7 +4,7 @@ import Button from '@/components/ui/button/button';
 import cn from 'classnames';
 import AnchorLink from '../ui/links/anchor-link';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
 import Image from 'next/image';
 import { PlusCircle } from '../icons/plus-circle';

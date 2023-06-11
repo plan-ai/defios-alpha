@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onSuccess, onFailure } from '@/store/callLoaderSlice';

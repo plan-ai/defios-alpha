@@ -12,7 +12,7 @@ import Spinner from '@/components/custom/spinner';
 
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { useAppSelector, useAppDispatch } from '@/store/store';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 import {
   calculateBuyAmount,
@@ -42,6 +42,8 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
 
   const [sellSupply, setSellSupply] = useState<BN>(new BN(0));
   const [buySupply, setBuySupply] = useState<BN>(new BN(0));
+  const [sellDecimals, setSellDecimals] = useState(0);
+  const [buyDecimals, setBuyDecimals] = useState(0);
 
   const [sellAmt, setSellAmt] = useState<string>('0');
   const [buyAmt, setBuyAmt] = useState<string>('0');
@@ -55,8 +57,8 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
     const buyAmount = getAmtOfBuy(buySupply, value);
 
     setSellAmt(e.target.value);
-    setSellAmtBN(new BN(sellAmount).mul(new BN(10).pow(new BN(9))));
-    setBuyAmtBN(buyAmount.mul(new BN(10).pow(new BN(9))));
+    setSellAmtBN(new BN(sellAmount).mul(new BN(10).pow(new BN(sellDecimals))));
+    setBuyAmtBN(buyAmount.mul(new BN(10).pow(new BN(buyDecimals))));
     setBuyAmt(parseInt(buyAmount.toString()).toString());
   };
 
@@ -66,8 +68,8 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
     const sellAmount = getAmtOfSell(sellSupply, value);
 
     setBuyAmt(e.target.value);
-    setBuyAmtBN(new BN(buyAmount).mul(new BN(10).pow(new BN(9))));
-    setSellAmtBN(sellAmount.mul(new BN(10).pow(new BN(9))));
+    setBuyAmtBN(new BN(buyAmount).mul(new BN(10).pow(new BN(buyDecimals))));
+    setSellAmtBN(sellAmount.mul(new BN(10).pow(new BN(sellDecimals))));
     setSellAmt(parseInt(sellAmount.toString()).toString());
   };
 
@@ -84,7 +86,9 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       return;
     getSupplyModified(fromCoin.token_spl_addr)
       .then((res) => {
-        setSellSupply(res.div(new BN(10).pow(new BN(9))));
+        const { supplyModified, decimals } = res;
+        setSellSupply(supplyModified.div(new BN(10).pow(new BN(decimals))));
+        setSellDecimals(decimals);
         setSellAmt('0');
         setBuyAmt('0');
         setSellAmtBN(new BN(0));
@@ -99,7 +103,9 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       return;
     getSupplyModified(toCoin.token_spl_addr)
       .then((res) => {
-        setBuySupply(res.div(new BN(10).pow(new BN(9))));
+        const { supplyModified, decimals } = res;
+        setBuySupply(supplyModified.div(new BN(10).pow(new BN(decimals))));
+        setBuyDecimals(decimals);
         setSellAmt('0');
         setBuyAmt('0');
         setSellAmtBN(new BN(0));

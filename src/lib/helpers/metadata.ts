@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 const jwt = process.env.IPFS_JWT as string;
 import { Metaplex } from '@metaplex-foundation/js';
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';

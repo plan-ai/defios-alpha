@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -9,7 +9,7 @@ import { PlusCircle } from '../icons/plus-circle';
 import Input from '@/components/ui/forms/input';
 
 import _debounce from 'lodash/debounce';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { triggerFilter, searchDone } from '@/store/roadmapFilterSlice';
 import { Close } from '@/components/icons/close';

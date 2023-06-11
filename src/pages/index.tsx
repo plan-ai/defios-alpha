@@ -10,7 +10,7 @@ import Button from '@/components/ui/button/button';
 import Input from '@/components/ui/forms/input';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 const Globe = dynamic(import('../components/Globe'), { ssr: false });
 

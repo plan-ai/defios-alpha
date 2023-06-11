@@ -11,7 +11,7 @@ import Spinner from '@/components/custom/spinner';
 
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { useAppSelector, useAppDispatch } from '@/store/store';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 import {
   calculateBuyAmount,
@@ -47,12 +47,14 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
   const [buyAmtBN, setBuyAmtBN] = useState<BN>(new BN(0));
   const [solAmtBN, setSolAmtBN] = useState<BN>(new BN(0));
 
+  const [buyDecimals, setBuyDecimals] = useState(0);
+
   const handleBuyChange = (e: any) => {
     const buyAmount = e.target.value.toString();
     const solAmount = calculateBuyAmount(buySupply, new BN(buyAmount));
 
     setBuyAmt(e.target.value);
-    setBuyAmtBN(new BN(buyAmount).mul(new BN(10).pow(new BN(9))));
+    setBuyAmtBN(new BN(buyAmount).mul(new BN(10).pow(new BN(buyDecimals))));
     setSolAmtBN(solAmount);
     setSolAmt((parseInt(solAmount.toString()) / 10 ** 9).toString());
   };
@@ -67,7 +69,9 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
       return;
     getSupplyModified(toCoin.token_spl_addr)
       .then((res) => {
-        setBuySupply(res.div(new BN(10).pow(new BN(9))));
+        const { supplyModified, decimals } = res;
+        setBuySupply(supplyModified.div(new BN(10).pow(new BN(decimals))));
+        setBuyDecimals(decimals);
         setSolAmt('0');
         setBuyAmt('0');
         setSolAmtBN(new BN(0));

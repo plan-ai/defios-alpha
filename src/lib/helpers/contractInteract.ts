@@ -40,7 +40,7 @@ import {
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 //change
 const nameRouterAccount = new PublicKey(
@@ -539,8 +539,7 @@ export const addPullRequest = (
 export const stakePr = (
   prStaker: PublicKey,
   prAccount: PublicKey,
-  amount: number,
-  userName: string
+  amount: number
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -557,15 +556,6 @@ export const stakePr = (
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
-
-    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
-      [
-        Buffer.from(userName),
-        pullRequestAddr.toBuffer(),
-        nameRouterAccount.toBuffer(),
-      ],
-      program
-    );
 
     const mintKeypair =
       rewardsMint === null
@@ -609,10 +599,7 @@ export const stakePr = (
         pullRequestAddr,
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
-        nameRouterAccount,
-        pullRequestVerifiedUser,
         pullRequestTokenAccount,
-        routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         rewardsMint: mintKeypair,
@@ -631,11 +618,7 @@ export const stakePr = (
   });
 };
 
-export const unstakePr = (
-  prStaker: PublicKey,
-  prAccount: PublicKey,
-  userName: string
-) => {
+export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -651,15 +634,6 @@ export const unstakePr = (
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
-
-    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
-      [
-        Buffer.from(userName),
-        pullRequestAddr.toBuffer(),
-        nameRouterAccount.toBuffer(),
-      ],
-      program
-    );
 
     const mintKeypair =
       rewardsMint === null
@@ -701,10 +675,7 @@ export const unstakePr = (
         pullRequestAddr,
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
-        nameRouterAccount,
-        pullRequestVerifiedUser,
         pullRequestTokenAccount,
-        routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         rewardsMint: mintKeypair,
@@ -723,11 +694,7 @@ export const unstakePr = (
   });
 };
 
-export const acceptPr = (
-  verifiedUserAccount: PublicKey,
-  prAccount: PublicKey,
-  userName: String
-) => {
+export const acceptPr = (prAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -742,18 +709,8 @@ export const acceptPr = (
     );
     const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { repositoryCreator, name } = await program.account.repository.fetch(
-      repository
-    );
-
-    const [pullRequestVerifiedUser] = await get_pda_from_seeds(
-      [
-        Buffer.from(userName),
-        pullRequestAddr.toBuffer(),
-        nameRouterAccount.toBuffer(),
-      ],
-      program
-    );
+    const { repositoryCreator, id: repositoryId } =
+      await program.account.repository.fetch(repository);
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -765,17 +722,13 @@ export const acceptPr = (
     );
 
     program.methods
-      .acceptPr(name)
+      .acceptPr(repositoryId)
       .accounts({
-        nameRouterAccount,
-        repositoryVerifiedUser: verifiedUserAccount,
         pullRequestAddr,
-        pullRequestVerifiedUser,
         pullRequestMetadataAccount,
         repositoryCreator,
         repositoryAccount: repository,
         issue: issueAccount,
-        routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
@@ -790,7 +743,6 @@ export const acceptPr = (
 
 export const claimReward = (
   pullRequestAddr: PublicKey,
-  verifiedUserAccount: PublicKey,
   prAccount: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
@@ -837,9 +789,7 @@ export const claimReward = (
     program.methods
       .claimReward()
       .accounts({
-        nameRouterAccount: nameRouterAccount,
         pullRequestCreator: pullRequestAddr,
-        pullRequestVerifiedUser: verifiedUserAccount,
         pullRequest: pullRequestMetadataAccount,
         pullRequestCreatorRewardAccount,
         repositoryCreator: repositoryCreator,
@@ -848,7 +798,6 @@ export const claimReward = (
         issueAccount: issueAccount,
         issueTokenPoolAccount: issueTokenPoolAccount,
         issueCreator: issueCreator,
-        routerCreator: routerCreator,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_PROGRAM_ID,
         pullRequestTokenAccount: pullRequestTokenAccount,
@@ -874,7 +823,7 @@ export const unlockTokens = (
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
 
-      const { name, rewardsMint } = await program.account.repository.fetch(
+      const { rewardsMint } = await program.account.repository.fetch(
         repositoryAccount
       );
 
@@ -896,24 +845,13 @@ export const unlockTokens = (
         mintKeypair,
         Signer.publicKey
       );
-      const [defaultVestingSchedule] = await get_pda_from_seeds(
-        [
-          Buffer.from('isGodReal?'),
-          Buffer.from('DoULoveMe?'),
-          Buffer.from('SweetChick'),
-        ],
-        program
-      );
 
       await program.methods
-        .unlockTokens(name)
+        .unlockTokens()
         .accounts({
-          nameRouterAccount,
           repositoryAccount,
           repositoryCreatorTokenAccount,
           repositoryCreator,
-          repositoryVerifiedUser: verifiedUserAccount,
-          routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: vestingAccount,
           tokenMint: mintKeypair,
@@ -978,13 +916,15 @@ export const buyTransaction = (
       program
     );
 
-    const supplyModified = await getSupplyModified(rewardsMint.toString());
+    const { supplyModified, decimals } = await getSupplyModified(
+      rewardsMint.toString()
+    );
 
     if (
       !lamports.eq(
         calculateBuyAmount(
-          supplyModified.div(new BN(10).pow(new BN(9))),
-          amount.div(new BN(10).pow(new BN(9)))
+          supplyModified.div(new BN(10).pow(new BN(decimals))),
+          amount.div(new BN(10).pow(new BN(decimals)))
         )
       )
     ) {
@@ -1004,6 +944,9 @@ export const buyTransaction = (
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
+        communalUsdcAccount: communalTokenAccount,
+        buyerUsdcAccount: buyerTokenAccount,
+        usdcMint: rewardsMint,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
@@ -1059,13 +1002,15 @@ export const sellTransaction = (
       program
     );
 
-    const supplyModified = await getSupplyModified(rewardsMint.toString());
+    const { supplyModified, decimals } = await getSupplyModified(
+      rewardsMint.toString()
+    );
 
     if (
       !lamports.eq(
         calculateSellAmount(
-          supplyModified.div(new BN(10).pow(new BN(9))),
-          amount.div(new BN(10).pow(new BN(9)))
+          supplyModified.div(new BN(10).pow(new BN(decimals))),
+          amount.div(new BN(10).pow(new BN(decimals)))
         )
       )
     ) {
@@ -1086,6 +1031,9 @@ export const sellTransaction = (
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
+        communalUsdcAccount: communalTokenAccount,
+        sellerUsdcAccount: sellerTokenAccount,
+        usdcMint: rewardsMint,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
@@ -1170,7 +1118,7 @@ export const getSupplyModified = async (tokenAddress: string) => {
     perVestingAmount.muln(numberOfSchedules)
   );
 
-  return supplyModified;
+  return { supplyModified, decimals: tokenInfo.decimals };
 };
 
 export const swapTransaction = (
@@ -1255,8 +1203,8 @@ export const swapTransaction = (
       perVestingAmount.muln(numberOfSchedules)
     );
     const valueSell = calculateSellAmount(
-      sellSupplyModified.div(new BN(10).pow(new BN(9))),
-      amountSell.div(new BN(10).pow(new BN(9)))
+      sellSupplyModified.div(new BN(10).pow(new BN(sellTokenInfo.decimals))),
+      amountSell.div(new BN(10).pow(new BN(sellTokenInfo.decimals)))
     );
 
     const buyTokenInfo = await fetchTokenMetadata(rewardsMintBuy.toString());
@@ -1266,8 +1214,8 @@ export const swapTransaction = (
     );
 
     const valueBuy = calculateBuyAmount(
-      buySupplyModified.div(new BN(10).pow(new BN(9))),
-      amountBuy.div(new BN(10).pow(new BN(9)))
+      buySupplyModified.div(new BN(10).pow(new BN(buyTokenInfo.decimals))),
+      amountBuy.div(new BN(10).pow(new BN(buyTokenInfo.decimals)))
     );
 
     const ixBuyTokens = await program.methods
@@ -1283,6 +1231,9 @@ export const swapTransaction = (
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
+        communalUsdcAccount: communalTokenBuyAccount,
+        buyerUsdcAccount: buyerTokenAccount,
+        usdcMint: rewardsMintBuy,
       })
       .instruction();
 
@@ -1299,6 +1250,9 @@ export const swapTransaction = (
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
+        communalUsdcAccount: communalTokenSellAccount,
+        sellerUsdcAccount: sellerTokenAccount,
+        usdcMint: rewardsMintSell,
       })
       .postInstructions([ixBuyTokens])
       .rpc({ skipPreflight: false, maxRetries: 3 })

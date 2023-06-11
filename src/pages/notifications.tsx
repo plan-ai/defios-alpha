@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import Button from '@/components/ui/button';

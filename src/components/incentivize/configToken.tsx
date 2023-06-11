@@ -17,7 +17,7 @@ import {
   setStep3Data,
 } from '@/store/creationSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 const sort = [

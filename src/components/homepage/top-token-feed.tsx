@@ -7,7 +7,7 @@ import cn from 'classnames';
 import Image from 'next/image';
 import PriceChart from '@/components/ui/chats/price-chart';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 type TopTokenFeedProps = {
   data: any;
@@ -15,7 +15,7 @@ type TopTokenFeedProps = {
 
 export function TopTokenFeed({ data }: TopTokenFeedProps) {
   const [chartData, setChartData] = useState<any>(null);
-  
+
   useEffect(() => {
     if (typeof data?.token_price_feed === 'string') {
       axios

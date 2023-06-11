@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { getFirebaseJwt } from '@/store/firebaseTokensSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setGithub } from '@/store/userInfoSlice';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 import ContractProcess from '@/components/contract-overlay/contract-process';
 // dynamic imports

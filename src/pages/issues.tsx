@@ -6,7 +6,7 @@ import React, {
   // useRef,
 } from 'react';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import _debounce from 'lodash/debounce';
 
 //layout

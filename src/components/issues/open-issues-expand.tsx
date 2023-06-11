@@ -13,7 +13,7 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { selectUserMapping } from '@/store/userMappingSlice';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setRefetch } from '@/store/refetchSlice';
@@ -259,8 +259,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     stakePr(
       wallet.publicKey as PublicKey,
       new PublicKey(selectedPR.issue_pr_account),
-      PRStakeAmount,
-      selectedPR.issue_pr_github
+      PRStakeAmount
     )
       .then((res) => {
         resCalled = true;
@@ -319,8 +318,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     dispatch(onLoading('Staking tokens on the pull request...'));
     unstakePr(
       wallet.publicKey as PublicKey,
-      new PublicKey(selectedPR.issue_pr_account),
-      selectedPR.issue_pr_github
+      new PublicKey(selectedPR.issue_pr_account)
     )
       .then((res) => {
         resCalled = true;
@@ -487,13 +485,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
       return;
     let resCalled = false;
     dispatch(onLoading('Merging pull request...'));
-    acceptPr(
-      new PublicKey(
-        userMappingState.userMapping?.verifiedUserAccount as string
-      ),
-      new PublicKey(selectedPR.issue_pr_account),
-      selectedPR.issue_pr_github
-    )
+    acceptPr(new PublicKey(selectedPR.issue_pr_account))
       .then((res) => {
         const pullApiUrl = selectedPR.issue_pr_link
           .replace('https://github.com/', '')

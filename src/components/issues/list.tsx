@@ -6,7 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import cn from 'classnames';
 import Button from '@/components/ui/button/button';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
@@ -33,7 +33,7 @@ export default function IssuesList({
   const [tokenSymbol, setTokenSymbol] = useState('');
   useEffect(() => {
     getTokenInfo();
-  },[data]);
+  }, [data]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);

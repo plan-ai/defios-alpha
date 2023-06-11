@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 interface ComingSoonProps {
   header: string;

@@ -9,7 +9,7 @@ import PortfolioCreator from '@/components/profile/portfolio-creator';
 
 import { useAppSelector } from '@/store/store';
 import { useWallet } from '@solana/wallet-adapter-react';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 export default function Profile() {
   const wallet = useWallet();
@@ -64,7 +64,7 @@ export default function Profile() {
   }, [firebase_jwt]);
 
   return (
-    <div className="flex w-full pt-4 md:pt-10 flex-row 4xl:pt-12">
+    <div className="flex w-full flex-row pt-4 md:pt-10 4xl:pt-12">
       <div className="w-[15rem] shrink-0 border-r border-dashed border-gray-700 pr-3  lg:w-[15.75rem] lg:pr-3.5 xl:w-[16.75rem] xl:pr-4 2xl:w-[19.25rem] 2xl:pr-5 3xl:w-[20rem] 3xl:pr-6">
         <div className="text-center md:text-left">
           <h2 className="text-lg font-medium tracking-tighter text-white xl:text-xl 3xl:text-2xl">

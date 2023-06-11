@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { LinkIcon } from '@/components/icons/link-icon';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 

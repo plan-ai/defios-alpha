@@ -4,7 +4,7 @@ import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
 import { useCopyToClipboard } from 'react-use';
 import { Refresh } from '@/components/icons/refresh';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
 
 interface PortfolioCreatorProps {
@@ -69,7 +69,7 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
       )}
       {status && (
         <div className="mt-5 flex flex-row items-center justify-center">
-          <div className="flex h-7 xl:h-8 3xl:h-9 w-[90%] items-center rounded-full bg-light-dark shadow-card">
+          <div className="flex h-7 w-[90%] items-center rounded-full bg-light-dark shadow-card xl:h-8 3xl:h-9">
             <div className="text truncate text-ellipsis bg-center pl-4 text-2xs text-gray-300 xl:text-xs 3xl:text-sm">
               {generatedLink}
             </div>

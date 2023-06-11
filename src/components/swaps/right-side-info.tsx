@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Spinner from '../custom/spinner';
 
 import { useAppSelector } from '@/store/store';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 export default function RightSideInfo({
   className,

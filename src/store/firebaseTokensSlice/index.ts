@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '../rootReducer';
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 
 export interface FirebaseTokensType {
   auth_creds: string | null;

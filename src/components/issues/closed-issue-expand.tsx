@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 
-import axios from 'axios';
+import axios from '@/lib/axiosClient';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 interface ClosedIssueExpandProps {
@@ -65,9 +65,6 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
     dispatch(onLoading('Claiming tokens for solving the issue...'));
     claimReward(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
-      new PublicKey(
-        userMappingState.userMapping?.verifiedUserAccount as string
-      ),
       new PublicKey(winner.issue_pr_account)
     )
       .then((res) => {
