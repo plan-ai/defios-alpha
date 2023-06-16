@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import ReactFlow, {
   useNodesState,
   useEdgesState,
@@ -8,6 +8,8 @@ import ReactFlow, {
 import 'reactflow/dist/base.css';
 
 import CustomNode from '@/components/dag/custom-node';
+
+import { createDAGTree } from '@/components/dag/dagBuilder';
 
 const nodeTypes = {
   custom: CustomNode,
@@ -19,6 +21,8 @@ interface DagProps {
 }
 
 const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
+  const [newNodes, setNewNodes] = useState<any>();
+
   const initNodes = [
     {
       id: '1',
@@ -26,7 +30,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create 1729 Dashboard v1',
       },
-      position: { x: 0, y: 0 },
+      // position: { x: 0, y: 0 },
       selectable: true,
     },
     {
@@ -35,7 +39,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create and Launch v1 of 1729 book',
       },
-      position: { x: 0, y: 200 },
+      // position: { x: 0, y: 200 },
       selectable: true,
     },
     {
@@ -44,7 +48,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Curate curriculum from carious online sources and map it to various levels of expertise',
       },
-      position: { x: 100, y: 500 },
+      // position: { x: 100, y: 500 },
       selectable: true,
     },
     {
@@ -53,7 +57,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create Project to DAOify any github project instantly',
       },
-      position: { x: 200, y: -100 },
+      // position: { x: 200, y: -100 },
       selectable: true,
     },
     {
@@ -62,7 +66,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Extend Dashboard v1 to allow for manual edits in each feild',
       },
-      position: { x: 200, y: 100 },
+      // position: { x: 200, y: 100 },
       selectable: true,
     },
     {
@@ -71,7 +75,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create and Launch v2 of 1729 book',
       },
-      position: { x: 200, y: 300 },
+      // position: { x: 200, y: 300 },
       selectable: true,
     },
     {
@@ -80,7 +84,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create 1729 Dashboard v2',
       },
-      position: { x: 400, y: 0 },
+      // position: { x: 400, y: 0 },
       selectable: true,
     },
     {
@@ -89,7 +93,7 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
       data: {
         name: 'Create platform to generate NFT credentials',
       },
-      position: { x: 400, y: 300 },
+      // position: { x: 400, y: 300 },
       selectable: true,
     },
   ];
@@ -133,8 +137,17 @@ const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
     },
   ];
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(newNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
+
+  useEffect(() => {
+    if (newNodes !== null && newNodes !== undefined) return;
+    const createdDag = createDAGTree(initNodes, initEdges);
+    console.log(JSON.stringify(createdDag));
+    console.log(createdDag);
+    setNewNodes(createdDag);
+    setNodes(createdDag);
+  }, [newNodes]);
 
   // const onConnect = useCallback(
   //   (params: any) => setEdges((eds) => addEdge(params, eds)),

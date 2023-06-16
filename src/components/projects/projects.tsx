@@ -31,6 +31,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { PublicKey } from '@solana/web3.js';
 
+
 const sort = [
   { id: 0, name: 'Hot', order_by: '-num_open_issues' },
   { id: 1, name: 'Urgent', order_by: '-num_open_issues' },
@@ -301,7 +302,6 @@ export default function Projects() {
     unlockTokens(
       new PublicKey(project.project_account),
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
-      new PublicKey(userMappingState.userMapping?.verifiedUserAccount as string)
     )
       .then((res: any) => {
         resCalled = true;

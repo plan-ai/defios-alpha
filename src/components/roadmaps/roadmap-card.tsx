@@ -146,17 +146,19 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             >
               <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
                 <RoadmapDetails
-                  name={RoadmapList[0].name}
-                  creationDate={RoadmapList[0].creationDate}
-                  creator={RoadmapList[0].creator}
-                  creatorImage={RoadmapList[0].creatorImage}
-                  image={RoadmapList[0].image}
+                  name={item.title}
+                  creationDate={item.creation_date}
+                  creator={item.creator}
+                  creatorImage={item.creator_profile_pic}
+                  image={item.cover_image}
                   totalStake={RoadmapList[0].totalStake}
                   details={RoadmapList[0].details || RoadmapList[0].details}
                   deliverable={RoadmapList[0].deliverable}
                   status={RoadmapList[0].status}
                   activeObjectives={RoadmapList[0].activeObjectives}
                   setRoadmap={setRoadmap}
+                  projectId={item.project}
+                  projectAccount={item.project_account}
                 />
               </div>
             </motion.div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Button from '@/components/ui/button';
 import Feeds from '@/components/roadmaps/feeds';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -16,6 +16,12 @@ import { Close } from '@/components/icons/close';
 
 import { Tooltip } from 'flowbite-react';
 import { InfoCircle } from '@/components/icons/info-circle';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { useClickAway } from '@/lib/hooks/use-click-away';
+import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
+
+import RoadmapCreate from '@/components/roadmapCreation/roadmapCreate';
 
 interface SearchProps {
   search: string;
@@ -65,6 +71,13 @@ const Search: React.FC<SearchProps> = ({
 };
 
 export default function Roadmap() {
+  const [createRoadmap, setCreateRoadmap] = useState(false);
+  const modalContainerRef = useRef<HTMLDivElement>(null);
+  useClickAway(modalContainerRef, () => {
+    setCreateRoadmap(false);
+  });
+  useLockBodyScroll(createRoadmap);
+
   const { openDrawer } = useDrawer();
 
   const [search, setSearch] = useState('');
@@ -114,7 +127,9 @@ export default function Roadmap() {
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     if (triggerSearch === true && searchTrigger === true) {
-      const searchParams: any = { ...filterData };
+      const searchParams: any = {
+        //  ...filterData
+      };
       if (search !== '') {
         if (search.includes(';')) {
           const searchArray = search.trim().split(';');
@@ -157,63 +172,93 @@ export default function Roadmap() {
   }, [triggerSearch, searchTrigger, firebase_jwt]);
 
   return (
-    <>
-      <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
-        <div className="hidden border-r border-dashed border-gray-700 pr-8 2xl:block">
-          <Filters />
-        </div>
+    <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
+      <div className="hidden border-r border-dashed border-gray-700 pr-8 2xl:block">
+        <Filters />
+      </div>
 
-        <div className="2xl:pl-8">
-          <div className="relative z-10 mb-6 flex items-center justify-between">
-            <span className="w-3/5 text-xs font-medium text-white sm:text-sm">
-              <Search
-                search={search}
-                setSearch={setSearch}
-                setTriggerSearch={setTriggerSearch}
-              />
-            </span>
+      <div className="2xl:pl-8">
+        <div className="relative z-10 mb-6 flex items-center justify-between">
+          <span className="w-[70%] text-xs font-medium text-white sm:text-sm">
+            <Search
+              search={search}
+              setSearch={setSearch}
+              setTriggerSearch={setTriggerSearch}
+            />
+          </span>
 
-            <div className="flex gap-6 4xl:gap-8">
-              <div className="flex items-center justify-center">
-                <Button shape="rounded" disabled className="!bg-gray-800">
-                  <div className="flex flex-row items-center justify-center gap-2">
-                    <PlusCircle />
-                    Create New Roadmap
-                  </div>
-                </Button>
-                <span className="relative z-[2] ml-2 rounded-full bg-gray-900 px-2 py-0.5 normal-case text-red-700">
+          <div className="flex gap-6 4xl:gap-8">
+            <div className="flex items-center justify-center">
+              <Button
+                onClick={() => setCreateRoadmap(true)}
+                shape="rounded"
+                color="info"
+              >
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <PlusCircle />
+                  Create New Roadmap
+                </div>
+              </Button>
+              {/* <span className="relative z-[2] ml-2 rounded-full bg-gray-900 px-2 py-0.5 normal-case text-red-700">
                   Coming Soon
-                </span>
-              </div>
-              <div className="hidden 4xl:block">
-                <GridSwitcher />
-              </div>
-              <div className="block 2xl:hidden">
-                <Button
-                  shape="rounded"
-                  size="small"
-                  variant="ghost"
-                  color="gray"
-                  onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
-                  className="!h-11 !p-3 hover:!translate-y-0 hover:!shadow-none focus:!translate-y-0 focus:!shadow-none"
-                >
-                  <OptionIcon className="relative h-auto w-[18px]" />
-                </Button>
-              </div>
+                </span> */}
+            </div>
+            <div className="hidden 4xl:block">
+              <GridSwitcher />
+            </div>
+            <div className="block 2xl:hidden">
+              <Button
+                shape="rounded"
+                size="small"
+                variant="ghost"
+                color="gray"
+                onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
+                className="!h-11 !p-3 hover:!translate-y-0 hover:!shadow-none focus:!translate-y-0 focus:!shadow-none"
+              >
+                <OptionIcon className="relative h-auto w-[18px]" />
+              </Button>
             </div>
           </div>
-          <Feeds isLoading={isLoading} data={roadmapsData} />
         </div>
-
-        <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
-          <Button
-            onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
-            fullWidth
-          >
-            Filters
-          </Button>
-        </div>
+        <Feeds isLoading={isLoading} data={roadmapsData} />
       </div>
-    </>
+
+      <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
+        <Button onClick={() => openDrawer('DRAWER_SEARCH', 'right')} fullWidth>
+          Filters
+        </Button>
+      </div>
+      <AnimatePresence>
+        {createRoadmap && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
+          >
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-full align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <motion.div
+              initial={{ scale: 1.05 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              ref={modalContainerRef}
+              className="inline-block text-left align-middle"
+            >
+              <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
+                <RoadmapCreate />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

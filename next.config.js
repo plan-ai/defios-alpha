@@ -24,7 +24,8 @@ module.exports = {
       'raw.githubusercontent.com',
       'foresight.org',
       'gateway.pinata.cloud',
-      'ipfs.io'
+      'ipfs.io',
+      'fuchsia-evolutionary-marlin-251.mypinata.cloud'
     ],
   },
 };

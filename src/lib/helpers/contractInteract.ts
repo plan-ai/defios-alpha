@@ -44,7 +44,7 @@ import axios from '@/lib/axiosClient';
 
 //change
 const nameRouterAccount = new PublicKey(
-  'EDPwJhQv4mxiFMQmZmZLGDjfuvL2ALWs4yCBWthV9CDG'
+  '776zGKsQG8AJEPzLptucnE1px8WADcG6VnAWXy7yb44k'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -226,9 +226,9 @@ export const createRepositoryImported = (
           repoName,
           'Open source revolution',
           repoLink,
-          null,
-          null,
-          null
+          null, //want
+          null, //want
+          null //want
         )
         .accounts({
           nameRouterAccount,
@@ -236,7 +236,7 @@ export const createRepositoryImported = (
           repositoryCreatorTokenAccount: null,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
-          rewardsMint: null,
+          rewardsMint: null, //want
           routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
@@ -815,8 +815,7 @@ export const claimReward = (
 
 export const unlockTokens = (
   repositoryAccount: PublicKey,
-  repositoryCreator: PublicKey,
-  verifiedUserAccount: PublicKey
+  repositoryCreator: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -870,6 +869,308 @@ export const unlockTokens = (
   });
 };
 
+export const addRoadmapData = (
+  roadmapDataAdder: PublicKey,
+  roadmapVerifiedUser: PublicKey,
+  repositoryAccount: PublicKey,
+  roadmapTitle: string,
+  roadmapDescription: string,
+  roadmapImageUrl: string,
+  roadmapOutlook: any
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const [metadataAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('roadmapmetadataadd'),
+          repositoryAccount.toBuffer(),
+          roadmapDataAdder.toBuffer(),
+        ],
+        program
+      );
+
+      await program.methods
+        .addRoadmapData(
+          roadmapTitle,
+          roadmapDescription,
+          roadmapImageUrl,
+          roadmapOutlook
+        )
+        .accounts({
+          nameRouterAccount,
+          metadataAccount,
+          roadmapDataAdder,
+          roadmapVerifiedUser,
+          routerCreator,
+          repositoryAccount: repositoryAccount,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const addObjectiveData = (
+  objectiveDataAddr: PublicKey,
+  objectiveVerifiedUser: PublicKey,
+  repositoryAccount: PublicKey,
+  issueAccount: PublicKey,
+  objectiveId: string,
+  objectiveTitle: string,
+  objectiveDescription: string,
+  objectiveDeliverable: any
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const [objectiveAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('objectivedataadd'),
+          issueAccount.toBuffer(),
+          objectiveDataAddr.toBuffer(),
+          Buffer.from(objectiveId),
+        ],
+        program
+      );
+
+      const objectiveStartUnix = new BN(Date.now());
+
+      await program.methods
+        .addObjectiveData(
+          objectiveId,
+          objectiveTitle,
+          objectiveStartUnix,
+          null,
+          objectiveDescription,
+          objectiveDeliverable
+        )
+        .accounts({
+          nameRouterAccount,
+          objectiveIssue: issueAccount,
+          metadataAccount: objectiveAccount,
+          objectiveDataAddr,
+          objectiveVerifiedUser,
+          repositoryAccount: repositoryAccount,
+          routerCreator,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const addObjectiveToRoadmapRoot = (
+  objectiveDataAddr: PublicKey,
+  objectiveVerifiedUser: PublicKey,
+  repositoryAccount: PublicKey,
+  issueAccount: PublicKey,
+  objectiveId: string,
+  objectiveTitle: string,
+  objectiveDescription: string,
+  objectiveDeliverable: any
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const [objectiveAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('objectivedataadd'),
+          issueAccount.toBuffer(),
+          objectiveDataAddr.toBuffer(),
+          Buffer.from(objectiveId),
+        ],
+        program
+      );
+
+      const [metadataAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('roadmapmetadataadd'),
+          objectiveVerifiedUser.toBuffer(),
+          objectiveDataAddr.toBuffer(),
+        ],
+        program
+      );
+
+      const objectiveStartUnix = new BN(Date.now());
+
+      const ixAddToRoot = await program.methods
+        .addChildObjective()
+        .accounts({
+          roadmapMetadataAccount: metadataAccount,
+          childObjectiveAdder: objectiveDataAddr,
+          parentObjectiveAccount: null,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .remainingAccounts([
+          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
+        ])
+        .instruction();
+
+      await program.methods
+        .addObjectiveData(
+          objectiveId,
+          objectiveTitle,
+          objectiveStartUnix,
+          null,
+          objectiveDescription,
+          objectiveDeliverable
+        )
+        .accounts({
+          nameRouterAccount,
+          objectiveIssue: issueAccount,
+          metadataAccount: objectiveAccount,
+          objectiveDataAddr,
+          objectiveVerifiedUser,
+          repositoryAccount: repositoryAccount,
+          routerCreator,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .postInstructions([ixAddToRoot])
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const addObjectiveToRoadmap = (
+  childObjectiveAdder: PublicKey,
+  objectiveVerifiedUser: PublicKey,
+  issueAccount: PublicKey,
+  objectiveId: string
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const [objectiveAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('objectivedataadd'),
+          issueAccount.toBuffer(),
+          childObjectiveAdder.toBuffer(),
+          Buffer.from(objectiveId),
+        ],
+        program
+      );
+
+      const [metadataAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('roadmapmetadataadd'),
+          objectiveVerifiedUser.toBuffer(),
+          childObjectiveAdder.toBuffer(),
+        ],
+        program
+      );
+
+      await program.methods
+        .addChildObjective()
+        .accounts({
+          roadmapMetadataAccount: metadataAccount,
+          childObjectiveAdder,
+          parentObjectiveAccount: null,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .remainingAccounts([
+          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
+        ])
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const addChildObjectiveToObjective = (
+  childObjectiveAdder: PublicKey,
+  objectiveVerifiedUser: PublicKey,
+  issueAccount: PublicKey,
+  parentObjectiveAccount: PublicKey,
+  objectiveId: string
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const program = await getDefiOsProgram(provider);
+
+      const [objectiveAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('objectivedataadd'),
+          issueAccount.toBuffer(),
+          childObjectiveAdder.toBuffer(),
+          Buffer.from(objectiveId),
+        ],
+        program
+      );
+
+      const [metadataAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('roadmapmetadataadd'),
+          objectiveVerifiedUser.toBuffer(),
+          childObjectiveAdder.toBuffer(),
+        ],
+        program
+      );
+
+      await program.methods
+        .addChildObjective()
+        .accounts({
+          roadmapMetadataAccount: metadataAccount,
+          childObjectiveAdder,
+          parentObjectiveAccount,
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .remainingAccounts([
+          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
+        ])
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 //SWAPS-->
 
 export const buyTransaction = (
@@ -880,6 +1181,30 @@ export const buyTransaction = (
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
+
+    const usdcMint = new PublicKey(
+      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+    );
+    const [communal_account_usdc] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        usdcMint.toBuffer(),
+      ],
+      program
+    );
+
+    const communalUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      communal_account_usdc,
+      true
+    );
+
+    const buyerUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      Signer.publicKey
+    );
 
     const { rewardsMint } = await program.account.repository.fetch(
       repositoryAccount
@@ -944,9 +1269,9 @@ export const buyTransaction = (
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
-        communalUsdcAccount: communalTokenAccount,
-        buyerUsdcAccount: buyerTokenAccount,
-        usdcMint: rewardsMint,
+        communalUsdcAccount,
+        buyerUsdcAccount,
+        usdcMint,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
@@ -966,6 +1291,30 @@ export const sellTransaction = (
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
+
+    const usdcMint = new PublicKey(
+      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+    );
+    const [communal_account_usdc] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        usdcMint.toBuffer(),
+      ],
+      program
+    );
+
+    const communalUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      communal_account_usdc,
+      true
+    );
+
+    const sellerUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      Signer.publicKey
+    );
 
     const { rewardsMint } = await program.account.repository.fetch(
       repositoryAccount
@@ -1031,9 +1380,9 @@ export const sellTransaction = (
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
-        communalUsdcAccount: communalTokenAccount,
-        sellerUsdcAccount: sellerTokenAccount,
-        usdcMint: rewardsMint,
+        communalUsdcAccount,
+        sellerUsdcAccount,
+        usdcMint,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
@@ -1138,6 +1487,30 @@ export const swapTransaction = (
 
     if (rewardsMintBuy === null || rewardsMintSell === null) return;
 
+    const usdcMint = new PublicKey(
+      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+    );
+    const [communal_account_usdc] = await get_pda_from_seeds(
+      [
+        Buffer.from('are_we_conscious'),
+        Buffer.from('is love life ?  '),
+        Buffer.from('arewemadorinlove'),
+        usdcMint.toBuffer(),
+      ],
+      program
+    );
+
+    const communalUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      communal_account_usdc,
+      true
+    );
+
+    const UserUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      Signer.publicKey
+    );
+
     const [communal_account_buy] = await get_pda_from_seeds(
       [
         Buffer.from('are_we_conscious'),
@@ -1231,9 +1604,9 @@ export const swapTransaction = (
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
-        communalUsdcAccount: communalTokenBuyAccount,
-        buyerUsdcAccount: buyerTokenAccount,
-        usdcMint: rewardsMintBuy,
+        communalUsdcAccount,
+        buyerUsdcAccount: UserUsdcAccount,
+        usdcMint,
       })
       .instruction();
 
@@ -1250,9 +1623,9 @@ export const swapTransaction = (
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
         defaultSchedule: defaultVestingSchedule,
-        communalUsdcAccount: communalTokenSellAccount,
-        sellerUsdcAccount: sellerTokenAccount,
-        usdcMint: rewardsMintSell,
+        communalUsdcAccount,
+        sellerUsdcAccount: UserUsdcAccount,
+        usdcMint,
       })
       .postInstructions([ixBuyTokens])
       .rpc({ skipPreflight: false, maxRetries: 3 })
