@@ -226,9 +226,9 @@ export const createRepositoryImported = (
           repoName,
           'Open source revolution',
           repoLink,
-          null, //want
-          null, //want
-          null //want
+          null,
+          null,
+          null
         )
         .accounts({
           nameRouterAccount,
@@ -236,7 +236,7 @@ export const createRepositoryImported = (
           repositoryCreatorTokenAccount: null,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
-          rewardsMint: null, //want
+          rewardsMint: null,
           routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
@@ -358,7 +358,9 @@ export const stakeIssue = (
       true
     );
 
-    const transferAmount = amount * 10 ** 9;
+    const tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+
+    const transferAmount = amount * 10 ** tokenMetadata.decimals;
 
     program.methods
       .stakeIssue(new BN(transferAmount))
@@ -591,7 +593,9 @@ export const stakePr = (
       program
     );
 
-    const transferAmount = amount * 10 ** 9;
+    const tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+
+    const transferAmount = amount * 10 ** tokenMetadata.decimals;
 
     program.methods
       .stakePr(new BN(transferAmount))
@@ -1070,7 +1074,7 @@ export const addObjectiveToRoadmap = (
 export const addChildObjectiveToObjective = (
   childObjectiveAdder: PublicKey,
   parentObjectiveAccount: PublicKey,
-  childObjectiveAccount:PublicKey,
+  childObjectiveAccount: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
