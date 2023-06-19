@@ -3,15 +3,34 @@ import GithubLogo from '@/assets/images/github-mark-white.svg';
 import Image from 'next/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { LinkIcon } from '@/components/icons/link-icon';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import cn from 'classnames';
 
+import { useAppDispatch } from '@/store/store';
+import { clicked } from '@/store/notifClickSlice';
+import { useRouter } from 'next/router';
+
 interface IssueItemProps {
-  issue: any;
+  issue?: any;
   setIssue: React.Dispatch<React.SetStateAction<any>>;
   data: any;
 }
 
 const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const onClickHandler = () => {
+    const payload = {
+      searchQuery: `id:${data?._id}`,
+      setSearchQuery: true,
+      expandFirst: false,
+      pathname: '/issues',
+    };
+    dispatch(clicked(payload));
+    router.push('/issues');
+  };
+
   return (
     <div
       className={cn(
@@ -31,13 +50,19 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
             {data?.issue_gh_url?.replace('https://github.com', '')}
           </div>
         </div>
-        <AnchorLink
-          onClick={(e) => e.stopPropagation()}
-          href={data?.issue_gh_url || ''}
-          target="_blank"
-        >
-          <LinkIcon />
-        </AnchorLink>
+        <div className="flex items-center gap-5">
+          <ArrowRightIcon
+            className="h-6 w-6 cursor-pointer text-white"
+            onClick={onClickHandler}
+          />
+          <AnchorLink
+            onClick={(e) => e.stopPropagation()}
+            href={data?.issue_gh_url || ''}
+            target="_blank"
+          >
+            <LinkIcon />
+          </AnchorLink>
+        </div>
       </div>
       <div className="mb-1 w-full px-2 text-2xs font-semibold xl:text-xs 3xl:text-sm">
         {data?.issue_title && data?.issue_title.length > 50

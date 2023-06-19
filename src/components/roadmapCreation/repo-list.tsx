@@ -5,7 +5,7 @@ import cn from 'classnames';
 
 interface RepoListProps {
   data: any;
-  selectedRepo: any;
+  selectedRepo?: any;
   setSelectedRepo: React.Dispatch<React.SetStateAction<any>>;
 }
 

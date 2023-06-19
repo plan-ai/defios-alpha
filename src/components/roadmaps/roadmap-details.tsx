@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
+import { clicked } from '@/store/notifClickSlice';
+import { useRouter } from 'next/router';
 
 import Spinner from '@/components/custom/spinner';
 import Image from '@/components/ui/image';
@@ -18,13 +20,17 @@ import Dag from '@/components/dag/dag';
 import ObjectiveCreate from '@/components/roadmapCreation/objectiveCreate';
 import ObjectiveLink from '@/components/roadmapCreation/objectiveLink';
 
-type RoadmapDetailsProps = {
+import ObjectiveDetails from '@/components/roadmaps/objectiveDetails';
+
+import RepoList from '@/components/roadmapCreation/repo-list';
+
+interface RoadmapDetailsProps {
   roadmapData: any;
   setRoadmap: any;
   projectId: string;
   projectAccount: string;
   roadmapAccount: string;
-};
+}
 
 const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   roadmapData,
@@ -50,6 +56,45 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
+
+  const [project, setProject] = useState<any>();
+  const [projectsData, setProjectsData] = useState<any>([]);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const onClickHandler = () => {
+    const payload = {
+      searchQuery: `id:${projectsData?.[0]?._id}`,
+      setSearchQuery: true,
+      expandFirst: false,
+      pathname: '/projects',
+    };
+    dispatch(clicked(payload));
+    router.push('/projects');
+  };
+
+  useEffect(() => {
+    if (firebase_jwt === '' || firebase_jwt === null) return;
+    const searchParams: any = {
+      'filter.pageno': '1',
+      'filter.pagesize': 1,
+      'search.project_account': projectAccount,
+    };
+    axios
+      .get('https://api-v1.defi-os.com/projects', {
+        params: searchParams,
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        setProjectsData(res.data.projects);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, [firebase_jwt, projectAccount]);
 
   useEffect(() => {
     if (nodeSelected !== undefined && nodeSelected !== null) {
@@ -134,7 +179,13 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
       </div>
 
       <div className="flex h-full w-[40%] flex-col justify-between overflow-y-auto">
-        {(nodeSelected === null || nodeSelected === undefined) &&
+        {objectiveSelected !== null &&
+          objectiveSelected !== undefined &&
+          !createObjective &&
+          !linkObjective && (
+            <ObjectiveDetails objectiveSelected={objectiveSelected} />
+          )}
+        {(objectiveSelected === null || objectiveSelected === undefined) &&
           !createObjective &&
           !linkObjective && (
             <div className="flex h-full w-full flex-col">
@@ -160,7 +211,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   : 'No Description Available'}
               </div>
               <div className="mb-3 flex items-center gap-2">
-                <div className="text-xs xl:text-sm 3xl:text-base">Outlook:</div>
+                <div className="text-sm xl:text-base 3xl:text-lg">Outlook:</div>
                 <ListCard
                   item={{
                     name: roadmapData?.outlook,
@@ -170,7 +221,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                 />
               </div>
               <div className="mb-3 flex items-center gap-2">
-                <div className="text-xs xl:text-sm 3xl:text-base">
+                <div className="text-sm xl:text-base 3xl:text-lg">
                   Created by:
                 </div>
                 <ListCard
@@ -188,7 +239,15 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   className="rounded-full bg-black px-3 py-2"
                 />
               </div>
-              <div className="flex w-full flex-col items-center justify-center gap-3 rounded-lg border border-gray-600 p-6 text-lg xl:text-xl 3xl:text-2xl">
+              {projectsData.length !== 0 && (
+                <div onClick={onClickHandler}>
+                  <RepoList
+                    data={projectsData[0]}
+                    setSelectedRepo={setProject}
+                  />
+                </div>
+              )}
+              <div className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-600 p-4 text-base xl:text-lg 3xl:text-xl">
                 <div className="flex flex-col items-center justify-center">
                   <div>Select an Objective</div>
                   <div>to View Details</div>

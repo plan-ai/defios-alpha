@@ -20,6 +20,11 @@ import { BookOpenIcon } from '@/components/icons/book-open';
 import { CloudIcon } from '@/components/icons/cloud';
 import { ArchiveBoxIcon } from '@/components/icons/archive-box';
 
+import { LockIcon } from '@/components/icons/lock';
+import { ClockIcon } from '@/components/icons/clock';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
 export const deliverableList = [
   {
     name: 'Infrastructure',
@@ -40,6 +45,25 @@ export const deliverableList = [
   {
     name: 'Other',
     element: <ArchiveBoxIcon />,
+  },
+];
+
+export const stateList = [
+  {
+    name: 'Locked',
+    element: <LockIcon />,
+  },
+  {
+    name: 'InProgress',
+    element: <ClockIcon />,
+  },
+  {
+    name: 'Closed',
+    element: <XMarkIcon className="h-6 w-6 text-white" />,
+  },
+  {
+    name: 'Deprecated',
+    element: <ExclamationTriangleIcon className="h-6 w-6 text-white" />,
   },
 ];
 
@@ -192,7 +216,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                   ? parentObjective.objective_description
                   : objectiveSelected.objective_description}
               </div>
-              <div className="mt-2 w-[40%]">
+              <div className="mt-2 flex gap-2">
                 <ListCard
                   item={{
                     name:
@@ -208,7 +232,24 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                       );
                     })[0].element,
                   }}
-                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                  className="rounded-full bg-black p-2 pr-4"
+                />
+                <ListCard
+                  item={{
+                    name:
+                      parentObjective !== null
+                        ? parentObjective.objective_state
+                        : objectiveSelected.objective_state,
+                    element: stateList.filter((item) => {
+                      return (
+                        item.name ===
+                        (parentObjective !== null
+                          ? parentObjective.objective_state
+                          : objectiveSelected.objective_state)
+                      );
+                    })[0].element,
+                  }}
+                  className="rounded-full bg-black p-2 pr-4"
                 />
               </div>
             </>
@@ -270,7 +311,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                   ? childObjective.objective_description
                   : objectiveSelected.objective_description}
               </div>
-              <div className="mt-2 w-[40%]">
+              <div className="mt-2 flex gap-2">
                 <ListCard
                   item={{
                     name:
@@ -286,7 +327,24 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                       );
                     })[0].element,
                   }}
-                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                  className="rounded-full bg-black p-2 pr-4"
+                />
+                <ListCard
+                  item={{
+                    name:
+                      childObjective !== null
+                        ? childObjective.objective_state
+                        : objectiveSelected.objective_state,
+                    element: stateList.filter((item) => {
+                      return (
+                        item.name ===
+                        (childObjective !== null
+                          ? childObjective.objective_state
+                          : objectiveSelected.objective_state)
+                      );
+                    })[0].element,
+                  }}
+                  className="rounded-full bg-black p-2 pr-4"
                 />
               </div>
             </>

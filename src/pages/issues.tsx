@@ -268,11 +268,11 @@ const IssuesPage: NextPageWithLayout = () => {
     if (searchQuery !== '' && setSearchQuery && clickPathname === '/issues') {
       setSearch(searchQuery);
       setInitExpand(expandFirst);
-      setTriggerSearch(true);
+      setFetchTrigger(fetchTrigger + 1);
       dispatch(reset());
     }
     if (refetchPart === 'issue') {
-      setTriggerSearch(true);
+      setFetchTrigger(fetchTrigger + 1);
       dispatch(resetRefetch());
     }
   }, [

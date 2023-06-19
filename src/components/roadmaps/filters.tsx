@@ -248,15 +248,6 @@ const CheckBoxList: React.FC<CheckBoxListProps> = ({
   );
 };
 
-const OrderByValues = [
-  'Newest',
-  'Public Goods',
-  'Defi Protocols',
-  'Web3 Infra',
-  'Longevity',
-  'Deep Tech',
-];
-
 const OutlookValues = [
   'Long-term Public',
   'Good (>5yrs+)',
@@ -292,9 +283,6 @@ export function Filters() {
     if (triggerSet) {
       const data = {
         'filter.roadmap_outlook': outlook,
-        'filter.roadmap_outcome_types':
-          outcome.length > 0 ? outcome.join(',') : '',
-        'filter.roadmap_total_stake': `${priceRange.min},${priceRange.max}`,
         'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
       };
       dispatch(setFilters(data));
@@ -311,27 +299,16 @@ export function Filters() {
           setRange={setActiveObjectivesRange}
         />
       </Collapse>
-      <Collapse label="Amount Staked (USD)" initialOpen>
-        <RangeFilter
-          min={0}
-          max={1000}
-          range={priceRange}
-          setRange={setPriceRange}
-        />
-      </Collapse>
-      {/* <Collapse label="Creator" initialOpen>
-        <CollectionSelect onSelect={(value) => console.log(value)} />
-      </Collapse> */}
       <Collapse label="Outlook" initialOpen>
         <Status plan={outlook} setPlan={setOutlook} values={OutlookValues} />
       </Collapse>
-      <Collapse label="Outcome" initialOpen>
+      {/* <Collapse label="Outcome" initialOpen>
         <CheckBoxList
           selectedValues={outcome}
           setSelectedValues={setOutcome}
           list={OutcomeValues}
         />
-      </Collapse>
+      </Collapse> */}
     </>
   );
 }
