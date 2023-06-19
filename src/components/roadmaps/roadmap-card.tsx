@@ -12,6 +12,7 @@ import { detailsType, RoadmapList } from '@/data/static/roadmap-list';
 import cn from 'classnames';
 
 import EmptyList from '@/components/icons/EmptyList';
+import { ClockIcon } from '@/components/icons/clock';
 
 import { StaticImageData } from 'next/image';
 import Avatar from 'react-avatar';
@@ -57,7 +58,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
           >
             <Image
               src={item?.cover_image || ''}
-              alt=""
+              alt={item?.title || ''}
               fill
               className="object-cover object-cover"
             />
@@ -82,21 +83,17 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
               />
             </div>
             <div className=" mt-1.5 flex items-center gap-2">
-              <div className="text-2xs xl:text-xs 3xl:text-sm">
-                Total Staked:
-              </div>
-              <div className="text-base font-semibold text-white xl:text-lg 3xl:text-xl">
-                {'$' + Math.round(item?.total_stake * 100) / 100}
-              </div>
+              <div className="text-2xs xl:text-xs 3xl:text-sm">Outlook:</div>
+              <ListCard
+                item={{
+                  name: item?.outlook,
+                  element: <ClockIcon/>
+                }}
+                className="rounded-full bg-black px-3 py-2"
+              />
             </div>
             <div className=" mt-1.5 flex items-center gap-2">
-              <div className="text-2xs xl:text-xs 3xl:text-sm">
-                Active Objectives:
-              </div>
-              <div>{item?.active_objectives}</div>
-            </div>
-            <div className=" mt-1.5 flex items-center gap-2">
-              <div className="text-2xs xl:text-xs 3xl:text-sm">Created</div>
+              <div className="text-2xs xl:text-xs 3xl:text-sm">Created on: </div>
               <div className="text-sm text-gray-500">{datestr}</div>
             </div>
           </div>
@@ -146,19 +143,11 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             >
               <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
                 <RoadmapDetails
-                  name={item.title}
-                  creationDate={item.creation_date}
-                  creator={item.creator}
-                  creatorImage={item.creator_profile_pic}
-                  image={item.cover_image}
-                  totalStake={RoadmapList[0].totalStake}
-                  details={RoadmapList[0].details || RoadmapList[0].details}
-                  deliverable={RoadmapList[0].deliverable}
-                  status={RoadmapList[0].status}
-                  activeObjectives={RoadmapList[0].activeObjectives}
+                  roadmapData={item}
                   setRoadmap={setRoadmap}
                   projectId={item.project}
                   projectAccount={item.project_account}
+                  roadmapAccount={item.roadmap_key}
                 />
               </div>
             </motion.div>

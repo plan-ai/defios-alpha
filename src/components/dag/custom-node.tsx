@@ -3,9 +3,7 @@ import { Handle, Position } from 'reactflow';
 import cn from 'classnames';
 
 interface CustomNodeProps {
-  data: {
-    name: string;
-  };
+  data: any;
   selected?: boolean;
 }
 
@@ -21,9 +19,9 @@ const CustomNode: React.FC<CustomNodeProps> = ({ data, selected }) => {
     >
       <div className="flex">
         <div className="text-center text-xs">
-          {data?.name.length < 60
-            ? data?.name
-            : data?.name.slice(0, 57) + '...'}
+          {data?.objective_title.length < 60
+            ? data?.objective_title
+            : data?.objective_title.slice(0, 57) + '...'}
         </div>
       </div>
 

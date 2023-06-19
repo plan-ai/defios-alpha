@@ -1,5 +1,5 @@
 export const contractAddresses = {
-  defios: '2yy6PjZyFbpqvyarotGgTqrjjPbNFE8tpyvj1yJugqKS',
+  defios: '4UwHr76zjJaLxtbCmFmrWbkaZVVSujcumXjsFNhkBw3s',
 };
 
 export const staticAddresses = {

@@ -23,7 +23,7 @@ const AttachIssue: React.FC<AttachIssueProps> = ({
   useLockBodyScroll(modalOpen);
 
   return (
-    <div className="mt-4 flex w-full  flex-col rounded-xl bg-light-dark shadow-card transition-all">
+    <div className="mt-4 flex w-full  flex-col rounded-xl border border-gray-600 bg-light-dark shadow-card transition-all">
       <div className="flex w-full cursor-pointer items-start justify-between px-5 py-2">
         <div
           onClick={() => {

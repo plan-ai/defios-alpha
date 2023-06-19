@@ -17,137 +17,39 @@ const nodeTypes = {
 
 interface DagProps {
   nodeSelected: any;
-  setNodeSelected: React.Dispatch<any>;
+  setNodeSelected: React.Dispatch<React.SetStateAction<any>>;
+  initNodes: any;
+  setInitNodes: React.Dispatch<React.SetStateAction<any>>;
+  initEdges: any;
+  setInitEdges: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const Dag: React.FC<DagProps> = ({ nodeSelected, setNodeSelected }) => {
+const Dag: React.FC<DagProps> = ({
+  nodeSelected,
+  setNodeSelected,
+  initNodes,
+  setInitNodes,
+  initEdges,
+  setInitEdges,
+}) => {
   const [newNodes, setNewNodes] = useState<any>();
-
-  const initNodes = [
-    {
-      id: '1',
-      type: 'custom',
-      data: {
-        name: 'Create 1729 Dashboard v1',
-      },
-      // position: { x: 0, y: 0 },
-      selectable: true,
-    },
-    {
-      id: '2',
-      type: 'custom',
-      data: {
-        name: 'Create and Launch v1 of 1729 book',
-      },
-      // position: { x: 0, y: 200 },
-      selectable: true,
-    },
-    {
-      id: '3',
-      type: 'custom',
-      data: {
-        name: 'Curate curriculum from carious online sources and map it to various levels of expertise',
-      },
-      // position: { x: 100, y: 500 },
-      selectable: true,
-    },
-    {
-      id: '4',
-      type: 'custom',
-      data: {
-        name: 'Create Project to DAOify any github project instantly',
-      },
-      // position: { x: 200, y: -100 },
-      selectable: true,
-    },
-    {
-      id: '5',
-      type: 'custom',
-      data: {
-        name: 'Extend Dashboard v1 to allow for manual edits in each feild',
-      },
-      // position: { x: 200, y: 100 },
-      selectable: true,
-    },
-    {
-      id: '6',
-      type: 'custom',
-      data: {
-        name: 'Create and Launch v2 of 1729 book',
-      },
-      // position: { x: 200, y: 300 },
-      selectable: true,
-    },
-    {
-      id: '7',
-      type: 'custom',
-      data: {
-        name: 'Create 1729 Dashboard v2',
-      },
-      // position: { x: 400, y: 0 },
-      selectable: true,
-    },
-    {
-      id: '8',
-      type: 'custom',
-      data: {
-        name: 'Create platform to generate NFT credentials',
-      },
-      // position: { x: 400, y: 300 },
-      selectable: true,
-    },
-  ];
-
-  const initEdges = [
-    {
-      id: 'e1-5',
-      source: '1',
-      target: '5',
-      // animated: true
-    },
-    {
-      id: 'e2-6',
-      source: '2',
-      target: '6',
-    },
-    {
-      id: 'e4-7',
-      source: '4',
-      target: '7',
-    },
-    {
-      id: 'e5-7',
-      source: '5',
-      target: '7',
-    },
-    {
-      id: 'e6-8',
-      source: '6',
-      target: '8',
-    },
-    {
-      id: 'e3-8',
-      source: '3',
-      target: '8',
-    },
-    {
-      id: 'e8-7',
-      source: '8',
-      target: '7',
-    },
-  ];
 
   const [nodes, setNodes, onNodesChange] = useNodesState(newNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
 
   useEffect(() => {
+    if (
+      initNodes === null ||
+      initEdges === null ||
+      initNodes === undefined ||
+      initEdges === undefined
+    )
+      return;
     if (newNodes !== null && newNodes !== undefined) return;
     const createdDag = createDAGTree(initNodes, initEdges);
-    console.log(JSON.stringify(createdDag));
-    console.log(createdDag);
     setNewNodes(createdDag);
     setNodes(createdDag);
-  }, [newNodes]);
+  }, [newNodes, initNodes, initEdges]);
 
   // const onConnect = useCallback(
   //   (params: any) => setEdges((eds) => addEdge(params, eds)),

@@ -44,7 +44,7 @@ import axios from '@/lib/axiosClient';
 
 //change
 const nameRouterAccount = new PublicKey(
-  '776zGKsQG8AJEPzLptucnE1px8WADcG6VnAWXy7yb44k'
+  'GPFbj81u5sxrjJCsMUw5hFqVHk54vZW2rULnzy3GvBkZ'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -980,7 +980,7 @@ export const addObjectiveData = (
   });
 };
 
-export const addObjectiveToRoadmapRoot = (
+export const addObjectiveToRoadmap = (
   objectiveDataAddr: PublicKey,
   objectiveVerifiedUser: PublicKey,
   repositoryAccount: PublicKey,
@@ -988,7 +988,8 @@ export const addObjectiveToRoadmapRoot = (
   objectiveId: string,
   objectiveTitle: string,
   objectiveDescription: string,
-  objectiveDeliverable: any
+  objectiveDeliverable: any,
+  parentObjectiveAccount: any
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -1008,20 +1009,24 @@ export const addObjectiveToRoadmapRoot = (
       const [metadataAccount] = await get_pda_from_seeds(
         [
           Buffer.from('roadmapmetadataadd'),
-          objectiveVerifiedUser.toBuffer(),
+          repositoryAccount.toBuffer(),
           objectiveDataAddr.toBuffer(),
         ],
         program
       );
 
-      const objectiveStartUnix = new BN(Date.now());
+      const objectiveStartUnix = new BN(Date.now() / 1000);
 
       const ixAddToRoot = await program.methods
         .addChildObjective()
         .accounts({
-          roadmapMetadataAccount: metadataAccount,
+          roadmapMetadataAccount:
+            parentObjectiveAccount !== null ? null : metadataAccount,
           childObjectiveAdder: objectiveDataAddr,
-          parentObjectiveAccount: null,
+          parentObjectiveAccount:
+            parentObjectiveAccount !== null
+              ? new PublicKey(parentObjectiveAccount)
+              : null,
           systemProgram: web3.SystemProgram.programId,
         })
         .remainingAccounts([
@@ -1062,101 +1067,26 @@ export const addObjectiveToRoadmapRoot = (
   });
 };
 
-export const addObjectiveToRoadmap = (
-  childObjectiveAdder: PublicKey,
-  objectiveVerifiedUser: PublicKey,
-  issueAccount: PublicKey,
-  objectiveId: string
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const provider = await getProvider(Connection, Signer);
-      const program = await getDefiOsProgram(provider);
-
-      const [objectiveAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('objectivedataadd'),
-          issueAccount.toBuffer(),
-          childObjectiveAdder.toBuffer(),
-          Buffer.from(objectiveId),
-        ],
-        program
-      );
-
-      const [metadataAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('roadmapmetadataadd'),
-          objectiveVerifiedUser.toBuffer(),
-          childObjectiveAdder.toBuffer(),
-        ],
-        program
-      );
-
-      await program.methods
-        .addChildObjective()
-        .accounts({
-          roadmapMetadataAccount: metadataAccount,
-          childObjectiveAdder,
-          parentObjectiveAccount: null,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .remainingAccounts([
-          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
-        ])
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
 export const addChildObjectiveToObjective = (
   childObjectiveAdder: PublicKey,
-  objectiveVerifiedUser: PublicKey,
-  issueAccount: PublicKey,
   parentObjectiveAccount: PublicKey,
-  objectiveId: string
+  childObjectiveAccount:PublicKey,
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
 
-      const [objectiveAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('objectivedataadd'),
-          issueAccount.toBuffer(),
-          childObjectiveAdder.toBuffer(),
-          Buffer.from(objectiveId),
-        ],
-        program
-      );
-
-      const [metadataAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('roadmapmetadataadd'),
-          objectiveVerifiedUser.toBuffer(),
-          childObjectiveAdder.toBuffer(),
-        ],
-        program
-      );
-
       await program.methods
         .addChildObjective()
         .accounts({
-          roadmapMetadataAccount: metadataAccount,
+          roadmapMetadataAccount: null,
           childObjectiveAdder,
           parentObjectiveAccount,
           systemProgram: web3.SystemProgram.programId,
         })
         .remainingAccounts([
-          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
+          { pubkey: childObjectiveAccount, isWritable: true, isSigner: false },
         ])
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {

@@ -15,7 +15,7 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
   return (
     <div
       className={cn(
-        'my-2 flex h-28 w-full flex-col rounded-xl border border-gray-600 p-2',
+        'my-2 flex h-32 w-full flex-col rounded-xl border border-gray-600 p-2',
         { 'gradient-border-box': issue?.issue_gh_url === data?.issue_gh_url }
       )}
       onClick={() => setIssue(data)}
@@ -38,6 +38,11 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
         >
           <LinkIcon />
         </AnchorLink>
+      </div>
+      <div className="mb-1 w-full px-2 text-2xs font-semibold xl:text-xs 3xl:text-sm">
+        {data?.issue_title && data?.issue_title.length > 50
+          ? data?.issue_title.slice(0, 50) + '...'
+          : data?.issue_title}
       </div>
       <div className="h-9 w-full px-2 text-3xs xl:text-2xs 3xl:text-xs">
         {data?.issue_summary && data?.issue_summary.length > 140

@@ -82,9 +82,13 @@ export default function Roadmap() {
 
   const [search, setSearch] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false);
+  const [fetchTrigger, setFetchTrigger] = useState(0);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const [roadmapsData, setRoadmapsData] = useState<any>([]);
+
+  const [existingRoadmaps, setExistingRoadmaps] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
 
@@ -100,8 +104,31 @@ export default function Roadmap() {
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setIsLoading(true);
+    const searchParams: any = {
+      //  ...filterData
+    };
+    if (search !== '') {
+      if (search.includes(';')) {
+        const searchArray = search.trim().split(';');
+        searchArray.map((item) => {
+          const [key, value] = item.trim().split(':');
+          if (key === 'creator') {
+            searchParams['search.roadmap_creator_gh_name'] = value;
+          }
+        });
+      } else if (search.includes(':') && !search.includes(';')) {
+        const [key, value] = search.trim().split(':');
+        if (key === 'creator') {
+          searchParams['search.roadmap_creator_gh_name'] = value;
+        }
+      } else if (!search.includes(':') && !search.includes(';')) {
+        searchParams['search.roadmap_title'] = search.trim();
+      }
+    }
+
     axios
       .get('https://api-v1.defi-os.com/roadmaps', {
+        params: searchParams,
         headers: {
           Authorization: firebase_jwt,
         },
@@ -109,67 +136,30 @@ export default function Roadmap() {
       .then((res) => {
         setRoadmapsData(res.data);
         setIsLoading(false);
+        setTriggerSearch(false);
+        dispatch(searchDone());
+        const existingRoadmapAcc:string[] = []
+        res.data.forEach((item:any)=>{
+          if(item.project_account){
+            existingRoadmapAcc.push(item.project_account);
+          }
+        })
+        setExistingRoadmaps(existingRoadmapAcc);
       })
       .catch((err) => {
         console.log(err.message);
         setIsLoading(false);
+        setTriggerSearch(false);
+        dispatch(searchDone());
       });
-  }, [firebase_jwt]);
+  }, [fetchTrigger, firebase_jwt]);
 
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
-    if (triggerSearch === true) {
-      setIsLoading(true);
-      dispatch(triggerFilter());
+    if (triggerSearch||searchTrigger) {
+      setFetchTrigger(fetchTrigger + 1);
     }
-  }, [triggerSearch, firebase_jwt]);
-
-  useEffect(() => {
-    if (firebase_jwt === '' || firebase_jwt === null) return;
-    if (triggerSearch === true && searchTrigger === true) {
-      const searchParams: any = {
-        //  ...filterData
-      };
-      if (search !== '') {
-        if (search.includes(';')) {
-          const searchArray = search.trim().split(';');
-          searchArray.map((item) => {
-            const [key, value] = item.trim().split(':');
-            if (key === 'creator') {
-              searchParams['search.roadmap_creator_gh_name'] = value;
-            }
-          });
-        } else if (search.includes(':') && !search.includes(';')) {
-          const [key, value] = search.trim().split(':');
-          if (key === 'creator') {
-            searchParams['search.roadmap_creator_gh_name'] = value;
-          }
-        } else if (!search.includes(':') && !search.includes(';')) {
-          searchParams['search.roadmap_title'] = search.trim();
-        }
-      }
-
-      axios
-        .get('https://api-v1.defi-os.com/roadmaps', {
-          params: searchParams,
-          headers: {
-            Authorization: firebase_jwt,
-          },
-        })
-        .then((res) => {
-          setRoadmapsData(res.data);
-          setIsLoading(false);
-          setTriggerSearch(false);
-          dispatch(searchDone());
-        })
-        .catch((err) => {
-          console.log(err.message);
-          setIsLoading(false);
-          setTriggerSearch(false);
-          dispatch(searchDone());
-        });
-    }
-  }, [triggerSearch, searchTrigger, firebase_jwt]);
+  }, [triggerSearch,searchTrigger, firebase_jwt]);
 
   return (
     <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
@@ -253,7 +243,7 @@ export default function Roadmap() {
               className="inline-block text-left align-middle"
             >
               <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
-                <RoadmapCreate />
+                <RoadmapCreate existingRoadmaps={existingRoadmaps} />
               </div>
             </motion.div>
           </motion.div>

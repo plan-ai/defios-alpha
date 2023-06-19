@@ -1,0 +1,339 @@
+import React, { useState } from 'react';
+import Button from '@/components/ui/button/button';
+import { Close } from '@/components/icons/close';
+import { Check } from '@/components/icons/check';
+import { ArrowDownIcon } from '@heroicons/react/24/solid';
+
+import { useAppSelector, useAppDispatch } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { addChildObjectiveToObjective } from '@/lib/helpers/contractInteract';
+
+import { selectUserMapping } from '@/store/userMappingSlice';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+
+import ListCard from '@/components/ui/list-card';
+
+import { CogIcon } from '@/components/icons/cog';
+import { WenchScrewdriverIcon } from '@/components/icons/wench-screwdriver';
+import { BookOpenIcon } from '@/components/icons/book-open';
+import { CloudIcon } from '@/components/icons/cloud';
+import { ArchiveBoxIcon } from '@/components/icons/archive-box';
+
+export const deliverableList = [
+  {
+    name: 'Infrastructure',
+    element: <CogIcon />,
+  },
+  {
+    name: 'Tooling',
+    element: <WenchScrewdriverIcon />,
+  },
+  {
+    name: 'Publication',
+    element: <BookOpenIcon />,
+  },
+  {
+    name: 'Product',
+    element: <CloudIcon />,
+  },
+  {
+    name: 'Other',
+    element: <ArchiveBoxIcon />,
+  },
+];
+
+interface ObjectiveLinkProps {
+  objectiveSelected: any;
+  setLinkObjectiveModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
+  objectiveSelected,
+  setLinkObjectiveModal,
+}) => {
+  const [chooseType, setChooseType] = useState<'Parent' | 'Child' | 'None'>(
+    'None'
+  );
+
+  const [parentObjective, setParentObjective] = useState<any>(null);
+  const [childObjective, setChildObjective] = useState<any>(null);
+
+  const wallet = useWallet();
+  const userMappingState = useAppSelector(selectUserMapping);
+
+  const dispatch = useAppDispatch();
+
+  const handleResetSelect = () => {
+    setParentObjective(null);
+    setChildObjective(null);
+    setChooseType('None');
+  };
+
+  const handleSetParent = () => {
+    if (chooseType === 'Parent' && objectiveSelected !== null) {
+      if (
+        childObjective !== null &&
+        childObjective.objective_key === objectiveSelected.objective_key
+      )
+        return;
+      setParentObjective({ ...objectiveSelected });
+      setChooseType('None');
+    }
+  };
+
+  const handleSetChild = () => {
+    if (chooseType === 'Child' && objectiveSelected !== null) {
+      if (
+        parentObjective !== null &&
+        parentObjective.objective_key === objectiveSelected.objective_key
+      )
+        return;
+      setChildObjective({ ...objectiveSelected });
+      setChooseType('None');
+    }
+  };
+
+  const handleObjectiveLink = async () => {
+    if (parentObjective === null || childObjective === null) return;
+    dispatch(onLoading('linking the objectives...'));
+    let resCalled = false;
+    addChildObjectiveToObjective(
+      new PublicKey(userMappingState.userMapping?.userPubkey as string),
+      new PublicKey(parentObjective.objective_key),
+      new PublicKey(childObjective.objective_key)
+    )
+      .then((res) => {
+        resCalled = true;
+        dispatch(
+          onSuccess({
+            label: 'Objectives linked Successfully',
+            description: 'check out linked objectives at',
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+            redirect: '/roadmaps',
+            buttonText: 'Browse Roadmaps',
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        resCalled = true;
+        dispatch(
+          onFailure({
+            label: 'Objectives Linking Failed',
+            description: err.message,
+            link: '',
+            redirect: '/roadmaps',
+            buttonText: 'Browse Other Roadmaps',
+          })
+        );
+      })
+      .finally(() => {
+        if (!resCalled) {
+          dispatch(
+            onSuccess({
+              label: 'Objectives Linked Successfully',
+              description: '',
+              link: '',
+              redirect: '/roadmaps',
+              buttonText: 'Browse Roadmaps',
+            })
+          );
+        }
+      });
+  };
+
+  return (
+    <div className="flex h-full w-full flex-col">
+      <div className="flex justify-between">
+        <div className="mb-2 text-2xl font-bold text-primary xl:text-3xl 3xl:text-4xl">
+          Link Objectives
+        </div>
+        <Close
+          className="h-8 w-8 cursor-pointer font-bold text-white"
+          onClick={() => setLinkObjectiveModal(false)}
+        />
+      </div>
+      <div className="flex h-full w-full flex-col items-center gap-3 overflow-y-auto px-2 pr-5">
+        <div className="relative mt-3 flex h-[35%] w-full flex-col gap-1 overflow-y-auto rounded-lg border border-gray-600 px-5 py-3">
+          <div className="flex justify-between">
+            <div className="flex gap-2">
+              <div className="text-base text-primary xl:text-lg 3xl:text-xl">
+                Parent Objective
+              </div>
+              {chooseType === 'Parent' &&
+                objectiveSelected !== null &&
+                parentObjective === null && (
+                  <Check
+                    className="h-6 w-6 cursor-pointer font-bold text-white"
+                    onClick={handleSetParent}
+                  />
+                )}
+            </div>
+            {chooseType === 'Parent' && parentObjective === null && (
+              <Close
+                className="h-6 w-6 cursor-pointer font-bold text-white"
+                onClick={() => setChooseType('None')}
+              />
+            )}
+          </div>
+          {((objectiveSelected !== null && chooseType === 'Parent') ||
+            parentObjective !== null) && (
+            <>
+              <div className="text-sm font-semibold xl:text-base 3xl:text-lg">
+                {parentObjective !== null
+                  ? parentObjective.objective_title
+                  : objectiveSelected.objective_title}
+              </div>
+              <div className="text-2xs xl:text-xs 3xl:text-sm">
+                {parentObjective !== null
+                  ? parentObjective.objective_description
+                  : objectiveSelected.objective_description}
+              </div>
+              <div className="mt-2 w-[40%]">
+                <ListCard
+                  item={{
+                    name:
+                      parentObjective !== null
+                        ? parentObjective.objective_deliverable
+                        : objectiveSelected.objective_deliverable,
+                    element: deliverableList.filter((item) => {
+                      return (
+                        item.name ===
+                        (parentObjective !== null
+                          ? parentObjective.objective_deliverable
+                          : objectiveSelected.objective_deliverable)
+                      );
+                    })[0].element,
+                  }}
+                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                />
+              </div>
+            </>
+          )}
+          {objectiveSelected === null &&
+            chooseType === 'Parent' &&
+            parentObjective === null && (
+              <>
+                <div className="m-auto text-sm xl:text-base 3xl:text-lg">
+                  Choose Objective from DAG Tree
+                </div>
+              </>
+            )}
+          {chooseType !== 'Parent' && parentObjective === null && (
+            <Button
+              onClick={() => setChooseType('Parent')}
+              shape="rounded"
+              size="mini"
+              color="info"
+              className="mt-auto"
+            >
+              Choose Parent Objective
+            </Button>
+          )}
+        </div>
+        <ArrowDownIcon className="h-10 w-10 text-white" />
+        <div className="relative flex h-[35%] w-full flex-col gap-1 overflow-y-auto rounded-lg border border-gray-600 px-5 py-3">
+          <div className="flex justify-between">
+            <div className="flex gap-2">
+              <div className="text-base text-primary xl:text-lg 3xl:text-xl">
+                Child Objective
+              </div>
+              {chooseType === 'Child' &&
+                objectiveSelected !== null &&
+                childObjective === null && (
+                  <Check
+                    className="h-6 w-6 cursor-pointer font-bold text-white"
+                    onClick={handleSetChild}
+                  />
+                )}
+            </div>
+            {chooseType === 'Child' && childObjective === null && (
+              <Close
+                className="h-6 w-6 cursor-pointer font-bold text-white"
+                onClick={() => setChooseType('None')}
+              />
+            )}
+          </div>
+          {((objectiveSelected !== null && chooseType === 'Child') ||
+            childObjective !== null) && (
+            <>
+              <div className="text-sm font-semibold xl:text-base 3xl:text-lg">
+                {childObjective !== null
+                  ? childObjective.objective_title
+                  : objectiveSelected.objective_title}
+              </div>
+              <div className="text-2xs xl:text-xs 3xl:text-sm">
+                {childObjective !== null
+                  ? childObjective.objective_description
+                  : objectiveSelected.objective_description}
+              </div>
+              <div className="mt-2 w-[40%]">
+                <ListCard
+                  item={{
+                    name:
+                      childObjective !== null
+                        ? childObjective.objective_deliverable
+                        : objectiveSelected.objective_deliverable,
+                    element: deliverableList.filter((item) => {
+                      return (
+                        item.name ===
+                        (childObjective !== null
+                          ? childObjective.objective_deliverable
+                          : objectiveSelected.objective_deliverable)
+                      );
+                    })[0].element,
+                  }}
+                  className="rounded-full p-2 pr-4 text-gray-400 hover:text-white"
+                />
+              </div>
+            </>
+          )}
+          {objectiveSelected === null &&
+            chooseType === 'Child' &&
+            childObjective === null && (
+              <>
+                <div className="m-auto text-sm xl:text-base 3xl:text-lg">
+                  Choose Objective from DAG Tree
+                </div>
+              </>
+            )}
+          {chooseType !== 'Child' && childObjective === null && (
+            <Button
+              onClick={() => setChooseType('Child')}
+              shape="rounded"
+              size="mini"
+              color="info"
+              className="mt-auto"
+            >
+              Choose Child Objective
+            </Button>
+          )}
+        </div>
+        <div className="flex w-full flex-col">
+          <Button
+            onClick={() => handleResetSelect()}
+            shape="rounded"
+            size="small"
+            className="w-[20%]"
+          >
+            Reset
+          </Button>
+          <Button
+            onClick={() => handleObjectiveLink()}
+            shape="rounded"
+            color="info"
+            className="mt-4 w-full"
+            size="small"
+          >
+            Link the Objectives
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ObjectiveLink;

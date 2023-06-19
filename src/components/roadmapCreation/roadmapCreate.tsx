@@ -22,7 +22,6 @@ import { uploadFileToIPFS } from '@/lib/helpers/metadata';
 
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useSession } from 'next-auth/react';
 import { PublicKey } from '@solana/web3.js';
 
 import RepoList from '@/components/roadmapCreation/repo-list';
@@ -130,9 +129,11 @@ const SortList: React.FC<SortListProps> = ({
   );
 };
 
-interface RoadmapCreateProps {}
+interface RoadmapCreateProps {
+  existingRoadmaps: string[];
+}
 
-const RoadmapCreate: React.FC<RoadmapCreateProps> = ({}) => {
+const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
   const router = useRouter();
 
   const [roadmapTitle, setRoadmapTitle] = useState('');
@@ -226,7 +227,10 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({}) => {
         },
       })
       .then((res) => {
-        setProjectsData(res.data.projects);
+        const filteredData = res.data.projects.filter((item: any) => {
+          return !existingRoadmaps.includes(item.project_account);
+        });
+        setProjectsData(filteredData);
         setIsLoading(false);
         setTriggerSearch(false);
       })
@@ -240,7 +244,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({}) => {
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setFetchTrigger(fetchTrigger + 1);
-  }, [triggerSearch, firebase_jwt]);
+  }, [triggerSearch, existingRoadmaps, firebase_jwt]);
 
   const handleRoadmapCreate = async () => {
     if (

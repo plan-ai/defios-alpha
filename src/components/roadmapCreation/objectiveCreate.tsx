@@ -5,22 +5,16 @@ import Button from '@/components/ui/button/button';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import { ChevronDown } from '@/components/icons/chevron-down';
-import { Tooltip } from 'flowbite-react';
-import { InfoCircle } from '@/components/icons/info-circle';
-import { PlusCircle } from '@/components/icons/plus-circle';
-import EmptyList from '@/components/icons/EmptyList';
-import Spinner from '@/components/custom/spinner';
+import { Close } from '@/components/icons/close';
 
 import { useRouter } from 'next/router';
-import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
-import { addObjectiveToRoadmapRoot } from '@/lib/helpers/contractInteract';
+import { addObjectiveToRoadmap } from '@/lib/helpers/contractInteract';
 
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useSession } from 'next-auth/react';
 import { PublicKey } from '@solana/web3.js';
 
 import AttachIssue from '@/components/roadmapCreation/attachIssue';
@@ -92,13 +86,17 @@ const SortList: React.FC<SortListProps> = ({
 };
 
 interface ObjectiveCreateProps {
-  projectId: string;
   projectAccount: string;
+  objectiveSelected: any;
+  setCreateObjectiveModal: React.Dispatch<React.SetStateAction<boolean>>;
+  existingObjIssueAcc: string[];
 }
 
 const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
-  projectId,
   projectAccount,
+  objectiveSelected,
+  setCreateObjectiveModal,
+  existingObjIssueAcc,
 }) => {
   const router = useRouter();
 
@@ -111,11 +109,8 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
 
   const [parentType, setParentType] = useState(sortObjectiveParent[0]);
 
-  const [selectedRepo, setSelectedRepo] = useState<any>();
-
   const wallet = useWallet();
   const userMappingState = useAppSelector(selectUserMapping);
-  const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
 
   const dispatch = useAppDispatch();
 
@@ -140,7 +135,10 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
         },
       })
       .then((res) => {
-        setIssuesData(res.data.issues);
+        const dataFiltered = res.data.issues.filter((item: any) => {
+          return !existingObjIssueAcc.includes(item.issue_account);
+        });
+        setIssuesData(dataFiltered);
       })
       .catch((err) => {
         console.log(err.message);
@@ -155,9 +153,10 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
       objectiveIssue === undefined
     )
       return;
+    if (parentType.name !== 'Root' && objectiveSelected === null) return;
     dispatch(onLoading('Creating and adding Objective to Roadmap...'));
     let resCalled = false;
-    addObjectiveToRoadmapRoot(
+    addObjectiveToRoadmap(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
       new PublicKey(
         userMappingState.userMapping?.verifiedUserAccount as string
@@ -169,7 +168,8 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
       ],
       objectiveTitle,
       objectiveDescription,
-      objectiveDeliverables.data
+      objectiveDeliverables.data,
+      objectiveSelected ? objectiveSelected.objective_key : null
     )
       .then((res) => {
         resCalled = true;
@@ -215,10 +215,16 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="mb-2 text-2xl font-bold text-primary xl:text-3xl 3xl:text-4xl">
-        Add Objective
+      <div className="flex justify-between">
+        <div className="mb-2 text-2xl font-bold text-primary xl:text-3xl 3xl:text-4xl">
+          Add Objective
+        </div>
+        <Close
+          className="h-8 w-8 cursor-pointer font-bold text-white"
+          onClick={() => setCreateObjectiveModal(false)}
+        />
       </div>
-      <div className="flex h-full w-full flex-col gap-1 overflow-y-auto pr-5">
+      <div className="flex h-full w-full flex-col gap-1 overflow-y-auto px-2 pr-5">
         <Input
           id="objectivetitle"
           label="Title"
