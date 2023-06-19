@@ -20,7 +20,7 @@ import { PublicKey } from '@solana/web3.js';
 import AttachIssue from '@/components/roadmapCreation/attachIssue';
 
 const sortDeliverables = [
-  { id: 1, name: 'Infrastructure', data: { infrastucture: {} } },
+  { id: 1, name: 'Infrastructure', data: { infrastructure: {} } },
   { id: 2, name: 'Tooling', data: { tooling: {} } },
   { id: 3, name: 'Publication', data: { publication: {} } },
   { id: 4, name: 'Product', data: { product: {} } },
