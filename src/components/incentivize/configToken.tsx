@@ -18,7 +18,10 @@ import {
 } from '@/store/creationSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from '@/lib/axiosClient';
-import { fetchTokenMetadata } from '@/lib/helpers/metadata';
+import {
+  fetchTokenMetadata,
+  fetchOldSPLMetadata,
+} from '@/lib/helpers/metadata';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -202,11 +205,29 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
         }
       })
       .catch(() => {
-        setImportError('Not a valid SPL Token Address try again.');
-        setSplTokenName('');
-        setSplTokenSymbol('');
-        setSplTokenDecimals(0);
-        setSplTokenAddressConfirm('');
+        fetchOldSPLMetadata(splTokenAddress)
+          .then((resp) => {
+            if (resp) {
+              setSplTokenName(resp.name);
+              setSplTokenSymbol(resp.symbol);
+              setSplTokenDecimals(resp.decimals);
+              setSplTokenAddressConfirm(resp.address);
+              setImportError('');
+            } else {
+              setImportError('Not a valid SPL Token Address try again.');
+              setSplTokenName('');
+              setSplTokenSymbol('');
+              setSplTokenDecimals(0);
+              setSplTokenAddressConfirm('');
+            }
+          })
+          .catch(() => {
+            setImportError('Not a valid SPL Token Address try again.');
+            setSplTokenName('');
+            setSplTokenSymbol('');
+            setSplTokenDecimals(0);
+            setSplTokenAddressConfirm('');
+          });
       });
   };
 
