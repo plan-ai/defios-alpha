@@ -18,10 +18,7 @@ import {
 } from '@/store/creationSlice';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from '@/lib/axiosClient';
-import {
-  fetchTokenMetadata,
-  fetchOldSPLMetadata,
-} from '@/lib/helpers/metadata';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -87,6 +84,9 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   reset,
 }) => {
   const dispatch = useAppDispatch();
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
   const [isExpand, setIsExpand] = useState(false);
   const [tokenType, setTokenType] = useState('Create New Token');
   const userMappingState = useAppSelector(selectUserMapping);
@@ -96,13 +96,13 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   const [importError, setImportError] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [tokenName, setTokenName] = useState('');
-  // const [totalSupply, setTotalSupply] = useState(0);
 
   //Import Existing
   const [splTokenAddress, setSplTokenAddress] = useState('');
   const [splTokenAddressConfirm, setSplTokenAddressConfirm] = useState('');
   const [splTokenName, setSplTokenName] = useState('');
   const [splTokenSymbol, setSplTokenSymbol] = useState('');
+  const [splTokenImage, setSplTokenImage] = useState<any>('');
   const [splTokenDecimals, setSplTokenDecimals] = useState(0);
 
   useEffect(() => {
@@ -118,7 +118,6 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
 
     setTokenSymbol('');
     setTokenName('');
-    // setTotalSupply(0);
     setSplTokenAddress('');
   }, [reset]);
 
@@ -127,12 +126,12 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
       setImportError('');
       setSplTokenName('');
       setSplTokenSymbol('');
+      setSplTokenImage('');
       setSplTokenDecimals(0);
       setSplTokenAddressConfirm('');
     } else {
       setTokenSymbol('');
       setTokenName('');
-      // setTotalSupply(0);
       setSplTokenAddress('');
     }
   }, [tokenType]);
@@ -148,15 +147,14 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
       if (
         tokenSymbol !== '' &&
         tokenName !== ''
-        // && totalSupply !== 0
       ) {
         dispatch(
           setStep3Data({
             tokenIcon: imageFile as File,
             tokenName: tokenName,
             tokenSymbol: tokenSymbol,
-            // totalSupply: totalSupply,
             address: undefined,
+            tokenType: 'create',
           })
         );
         setIsExpand(false);
@@ -168,15 +166,16 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
         splTokenAddressConfirm !== '' &&
         splTokenName !== '' &&
         splTokenDecimals !== 0 &&
-        splTokenSymbol !== ''
+        splTokenSymbol !== '' &&
+        splTokenImage !== ''
       ) {
         dispatch(
           setStep3Data({
-            tokenIcon: undefined,
+            tokenIcon: splTokenImage,
             tokenName: splTokenName,
             tokenSymbol: splTokenSymbol,
-            // totalSupply: 0,
             address: splTokenAddressConfirm,
+            tokenType: 'import',
           })
         );
         setIsExpand(false);
@@ -187,12 +186,14 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
   };
 
   const importTokenHandler = () => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
     if (splTokenAddress === '') return;
     fetchTokenMetadata(splTokenAddress)
       .then((res) => {
         if (res) {
           setSplTokenName(res.name);
           setSplTokenSymbol(res.symbol);
+          setSplTokenImage(res?.json?.image);
           setSplTokenDecimals(res.decimals);
           setSplTokenAddressConfirm(res.address.toBase58());
           setImportError('');
@@ -200,23 +201,34 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
           setImportError('Not a valid SPL Token Address try again.');
           setSplTokenName('');
           setSplTokenSymbol('');
+          setSplTokenImage('');
           setSplTokenDecimals(0);
           setSplTokenAddressConfirm('');
         }
       })
       .catch(() => {
-        fetchOldSPLMetadata(splTokenAddress)
-          .then((resp) => {
-            if (resp) {
-              setSplTokenName(resp.name);
-              setSplTokenSymbol(resp.symbol);
-              setSplTokenDecimals(resp.decimals);
-              setSplTokenAddressConfirm(resp.address);
+        axios
+          .get('https://api-v1.defi-os.com/tokens', {
+            headers: {
+              Authorization: firebase_jwt,
+            },
+            params: {
+              token_addr: splTokenAddress,
+            },
+          })
+          .then((resp: any) => {
+            if (Object.keys(resp.data).length !== 0) {
+              setSplTokenName(resp.data.token_name);
+              setSplTokenSymbol(resp.data.token_symbol);
+              setSplTokenDecimals(resp.data.token_decimals);
+              setSplTokenImage(resp.data.token_image_url);
+              setSplTokenAddressConfirm(resp.data.token_spl_addr);
               setImportError('');
             } else {
               setImportError('Not a valid SPL Token Address try again.');
               setSplTokenName('');
               setSplTokenSymbol('');
+              setSplTokenImage('');
               setSplTokenDecimals(0);
               setSplTokenAddressConfirm('');
             }
@@ -225,6 +237,7 @@ const ConfigToken: React.FC<ConfigTokenProps> = ({
             setImportError('Not a valid SPL Token Address try again.');
             setSplTokenName('');
             setSplTokenSymbol('');
+            setSplTokenImage('');
             setSplTokenDecimals(0);
             setSplTokenAddressConfirm('');
           });

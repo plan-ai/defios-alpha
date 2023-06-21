@@ -4,8 +4,6 @@ import { Metaplex } from '@metaplex-foundation/js';
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
 import { getMint } from '@solana/spl-token';
 
-import solanaTokenList from '@/config/solana-tokenlist';
-
 export const uploadFileToIPFS = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -52,13 +50,6 @@ export const fetchTokenMetadata = async (tokenID: string) => {
     ...mintInfo,
   };
 };
-
-export const fetchOldSPLMetadata = async(tokenID:string)=>{
-  const tokenInfo = solanaTokenList.tokens.find((item: any) => {
-    return item.address === tokenID;
-  });
-  return tokenInfo;
-}
 
 export const fetchDecimals = async (tokenID: string) => {
   const connection = new Connection(clusterApiUrl('devnet'));

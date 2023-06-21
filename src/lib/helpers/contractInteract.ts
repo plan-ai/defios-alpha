@@ -197,7 +197,12 @@ export const createRepositoryImported = (
   repositoryCreator: PublicKey,
   repoName: string,
   repoLink: string,
-  repositoryVerifiedUser: PublicKey
+  repositoryVerifiedUser: PublicKey,
+  tokenAddress: string,
+  tokenName: string,
+  tokenSymbol: string,
+  tokenImage: string,
+  firebase_jwt: string
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -247,6 +252,24 @@ export const createRepositoryImported = (
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then(() => {
+          let data = JSON.stringify({
+            name: tokenName,
+            symbol: tokenSymbol,
+            image: tokenImage,
+            spl_addr: tokenAddress,
+          });
+
+          let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: `https://api-v1.defi-os.com/projects?project_key=${repositoryAccount.toString()}`,
+            headers: {
+              Authorization: firebase_jwt,
+              'Content-Type': 'application/json',
+            },
+            data: data,
+          };
+          axios(config);
           resolve(repositoryAccount);
         })
         .catch((e) => {

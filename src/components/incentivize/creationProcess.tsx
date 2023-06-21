@@ -29,6 +29,9 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
   const [isExpand, setIsExpand] = useState(false);
   const [step, setStep] = useState(0);
   const creationState = useAppSelector(selectCreation);
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
   const userMappingState = useAppSelector(selectUserMapping);
   useEffect(() => {
     setIsExpand(false);
@@ -53,11 +56,12 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
 
   useEffect(() => {
     if (isExpand) {
+      if (firebase_jwt === null || firebase_jwt === undefined) return;
       dispatch(onLoading('Creating Project Repository...'));
       setStep(1);
       let resCalled = false;
 
-      if (!creationState.step3.tokenSpecs.address) {
+      if (creationState.step3.tokenSpecs.tokenType === 'create') {
         AddTokenDataToIPFS()
           .then((data) => {
             createRepository(
@@ -122,7 +126,14 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
           creationState.step2.repoLink,
           new PublicKey(
             userMappingState.userMapping?.verifiedUserAccount as string
-          )
+          ),
+          creationState.step3.tokenSpecs.address || '',
+          creationState.step3.tokenSpecs.tokenName,
+          creationState.step3.tokenSpecs.tokenSymbol,
+          typeof creationState.step3.tokenSpecs.tokenIcon === 'string'
+            ? creationState.step3.tokenSpecs.tokenIcon
+            : '',
+          firebase_jwt
         )
           .then((res) => {
             resCalled = true;
@@ -167,7 +178,7 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
           });
       }
     }
-  }, [isExpand]);
+  }, [isExpand, firebase_jwt]);
 
   return (
     <div className="mb-4 flex w-[80%] flex-col rounded-xl bg-light-dark shadow-card transition-all">
