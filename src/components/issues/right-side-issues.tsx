@@ -87,7 +87,8 @@ export default function RightSideIssues({ className }: { className?: string }) {
             new PublicKey(repo.account),
             new PublicKey(
               userMappingState.userMapping?.verifiedUserAccount as string
-            )
+            ),
+            new PublicKey(repo.token_address)
           )
             .then((res) => {
               resCalled = true;

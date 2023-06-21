@@ -115,6 +115,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
   const wallet = useWallet();
   const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const { data: session } = useSession();
@@ -142,13 +145,16 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   });
 
   const handleIssueStake = () => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
     if (stakeAmount <= 0) return;
     let resCalled = false;
     dispatch(onLoading('Staking tokens on the issue...'));
     stakeIssue(
       wallet.publicKey as PublicKey,
       new PublicKey(account),
-      stakeAmount
+      stakeAmount,
+      new PublicKey(issueTokenAddress),
+      firebase_jwt
     )
       .then((res) => {
         resCalled = true;
@@ -199,7 +205,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const handleIssueUnstake = () => {
     let resCalled = false;
     dispatch(onLoading('Unstaking tokens on the issue...'));
-    unstakeIssue(wallet.publicKey as PublicKey, new PublicKey(account))
+    unstakeIssue(
+      wallet.publicKey as PublicKey,
+      new PublicKey(account),
+      new PublicKey(issueTokenAddress)
+    )
       .then((res) => {
         resCalled = true;
         setStakeAmount(0);
@@ -247,6 +257,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   };
 
   const handlePRStake = () => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
     if (selectedPR === undefined || selectedPR === null) return;
     if (
       selectedPR.issue_pr_account === null ||
@@ -259,7 +270,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     stakePr(
       wallet.publicKey as PublicKey,
       new PublicKey(selectedPR.issue_pr_account),
-      PRStakeAmount
+      PRStakeAmount,
+      new PublicKey(issueTokenAddress),
+      firebase_jwt
     )
       .then((res) => {
         resCalled = true;
@@ -318,7 +331,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     dispatch(onLoading('Staking tokens on the pull request...'));
     unstakePr(
       wallet.publicKey as PublicKey,
-      new PublicKey(selectedPR.issue_pr_account)
+      new PublicKey(selectedPR.issue_pr_account),
+      new PublicKey(issueTokenAddress)
     )
       .then((res) => {
         resCalled = true;
@@ -415,7 +429,8 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             ),
             latestCommit.commit.tree.sha,
             latestCommit.sha,
-            res.data.html_url
+            res.data.html_url,
+            new PublicKey(issueTokenAddress)
           )
             .then((resp: any) => {
               resCalled = true;

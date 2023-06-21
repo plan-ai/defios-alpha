@@ -20,6 +20,10 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
 
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+
   const wallet = useWallet();
   const userMappingState = useAppSelector(selectUserMapping);
 
@@ -35,9 +39,23 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
 
   const getTokenInfo = async () => {
     const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
-    setTokenImageUrl(response.json.image);
-    setTokenSymbol(response.symbol);
-    setTokenDecimals(response.decimals);
+    if (!response.decimals) {
+      setTokenImageUrl(response.json.image);
+      setTokenSymbol(response.symbol);
+      setTokenDecimals(response.decimals);
+    } else {
+      const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
+        headers: {
+          Authorization: firebase_jwt,
+        },
+        params: {
+          token_addr: data?.issue_stake_token_url,
+        },
+      });
+      setTokenImageUrl(resp.token_image_url);
+      setTokenSymbol(resp.token_symbol);
+      setTokenDecimals(resp.token_decimals);
+    }
   };
 
   useEffect(() => {
@@ -65,7 +83,8 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
     dispatch(onLoading('Claiming tokens for solving the issue...'));
     claimReward(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
-      new PublicKey(winner.issue_pr_account)
+      new PublicKey(winner.issue_pr_account),
+      new PublicKey(data?.issue_stake_token_url)
     )
       .then((res) => {
         resCalled = true;

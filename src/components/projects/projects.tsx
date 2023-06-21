@@ -300,7 +300,8 @@ export default function Projects() {
     dispatch(onLoading('Claiming Pending Tokens on the Project...'));
     unlockTokens(
       new PublicKey(project.project_account),
-      new PublicKey(userMappingState.userMapping?.userPubkey as string)
+      new PublicKey(userMappingState.userMapping?.userPubkey as string),
+      new PublicKey(project.project_token.token_spl_addr)
     )
       .then((res: any) => {
         resCalled = true;

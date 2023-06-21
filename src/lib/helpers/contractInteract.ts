@@ -285,14 +285,17 @@ export const createIssue = (
   issueCreator: PublicKey,
   issueURI: string,
   repositoryAccount: PublicKey,
-  issueVerifiedUser: PublicKey
+  issueVerifiedUser: PublicKey,
+  tokenAddress: PublicKey
 ) => {
   return new Promise<PublicKey>(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { repositoryCreator, rewardsMint } =
-      await program.account.repository.fetch(repositoryAccount);
+    const {
+      repositoryCreator,
+      // , rewardsMint
+    } = await program.account.repository.fetch(repositoryAccount);
 
     const { issueIndex } = await program.account.repository.fetch(
       repositoryAccount
@@ -308,10 +311,7 @@ export const createIssue = (
       program
     );
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
       issueAccount,
@@ -347,7 +347,9 @@ export const createIssue = (
 export const stakeIssue = (
   issueStaker: PublicKey,
   issueAccount: PublicKey,
-  amount: number
+  amount: number,
+  tokenAddress: PublicKey,
+  firebase_jwt: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -365,10 +367,7 @@ export const stakeIssue = (
       program
     );
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -381,8 +380,26 @@ export const stakeIssue = (
       true
     );
 
-    const tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
-
+    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    if (!tokenMetadata.decimals) {
+      tokenMetadata = await axios
+        .get('https://api-v1.defi-os.com/tokens', {
+          headers: {
+            Authorization: firebase_jwt,
+          },
+          params: {
+            token_addr: mintKeypair.toString(),
+          },
+        })
+        .then((res) => {
+          const response = { ...res.data };
+          response.decimals = res.data.token_decimals;
+          return response;
+        });
+    }
+    if (!tokenMetadata.decimals) {
+      reject('cannot find decimals of token');
+    }
     const transferAmount = amount * 10 ** tokenMetadata.decimals;
 
     program.methods
@@ -411,7 +428,8 @@ export const stakeIssue = (
 
 export const unstakeIssue = (
   issueStaker: PublicKey,
-  issueAccount: PublicKey
+  issueAccount: PublicKey,
+  tokenAddress: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -429,10 +447,7 @@ export const unstakeIssue = (
       program
     );
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const issueStakerTokenAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -474,7 +489,8 @@ export const addPullRequest = (
   commitVerifiedUser: PublicKey,
   treeHashUnsliced: string,
   commitHashUnsliced: string,
-  metadataURI: string
+  metadataURI: string,
+  tokenAddress: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -496,10 +512,7 @@ export const addPullRequest = (
       program
     );
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -564,7 +577,9 @@ export const addPullRequest = (
 export const stakePr = (
   prStaker: PublicKey,
   prAccount: PublicKey,
-  amount: number
+  amount: number,
+  tokenAddress: PublicKey,
+  firebase_jwt: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -582,10 +597,7 @@ export const stakePr = (
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -616,8 +628,26 @@ export const stakePr = (
       program
     );
 
-    const tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
-
+    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    if (!tokenMetadata.decimals) {
+      tokenMetadata = await axios
+        .get('https://api-v1.defi-os.com/tokens', {
+          headers: {
+            Authorization: firebase_jwt,
+          },
+          params: {
+            token_addr: mintKeypair.toString(),
+          },
+        })
+        .then((res) => {
+          const response = { ...res.data };
+          response.decimals = res.data.token_decimals;
+          return response;
+        });
+    }
+    if (!tokenMetadata.decimals) {
+      reject('cannot find decimals of token');
+    }
     const transferAmount = amount * 10 ** tokenMetadata.decimals;
 
     program.methods
@@ -645,7 +675,11 @@ export const stakePr = (
   });
 };
 
-export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
+export const unstakePr = (
+  prStaker: PublicKey,
+  prAccount: PublicKey,
+  tokenAddress: PublicKey
+) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -662,10 +696,7 @@ export const unstakePr = (prStaker: PublicKey, prAccount: PublicKey) => {
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { rewardsMint } = await program.account.repository.fetch(repository);
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -770,7 +801,8 @@ export const acceptPr = (prAccount: PublicKey) => {
 
 export const claimReward = (
   pullRequestAddr: PublicKey,
-  prAccount: PublicKey
+  prAccount: PublicKey,
+  tokenAddress: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -788,10 +820,7 @@ export const claimReward = (
     const { repositoryCreator, rewardsMint } =
       await program.account.repository.fetch(repository);
 
-    const mintKeypair =
-      rewardsMint === null
-        ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-        : rewardsMint;
+    const mintKeypair = tokenAddress;
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
@@ -842,7 +871,8 @@ export const claimReward = (
 
 export const unlockTokens = (
   repositoryAccount: PublicKey,
-  repositoryCreator: PublicKey
+  repositoryCreator: PublicKey,
+  tokenAddress: PublicKey
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -853,10 +883,7 @@ export const unlockTokens = (
         repositoryAccount
       );
 
-      const mintKeypair =
-        rewardsMint === null
-          ? new PublicKey('E1r1HeJdpNuAfKDyBXoLG3i79cTretrCHoXWhhSKGUPt')
-          : rewardsMint;
+      const mintKeypair = tokenAddress;
 
       const [vestingAccount] = await get_pda_from_seeds(
         [Buffer.from('vesting'), repositoryAccount.toBuffer()],
