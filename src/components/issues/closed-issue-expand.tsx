@@ -39,11 +39,14 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
 
   const getTokenInfo = async () => {
     const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
-    if (!response.decimals) {
+    console.log(response);
+    if (response.decimals) {
+      console.log('in');
       setTokenImageUrl(response.json.image);
       setTokenSymbol(response.symbol);
       setTokenDecimals(response.decimals);
     } else {
+      console.log('else');
       const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
         headers: {
           Authorization: firebase_jwt,
@@ -52,9 +55,11 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
           token_addr: data?.issue_stake_token_url,
         },
       });
-      setTokenImageUrl(resp.token_image_url);
-      setTokenSymbol(resp.token_symbol);
-      setTokenDecimals(resp.token_decimals);
+      if (resp.token_decimals) {
+        setTokenImageUrl(resp.token_image_url);
+        setTokenSymbol(resp.token_symbol);
+        setTokenDecimals(resp.token_decimals);
+      }
     }
   };
 
