@@ -12,7 +12,7 @@ rewards by staking tokens on specific issues.
 Ecosystem
 ---
 
-[`defios-rust-core`](https://github.com/defi-os/defios-rust-core) [`defios-roadmap-rust`](https://github.com/defi-os/defios-roadmap-rust) [`defios-python-apis`](https://github.com/defi-os/defios-python-apis)  
+[`defios-rust-core`](https://github.com/defi-os/defios-rust-core) [`defios-nodejs-api`](https://github.com/defi-os/defios-nodejs-api.git) [`defios-python-apis`](https://github.com/defi-os/defios-python-apis)  
 
 
 
