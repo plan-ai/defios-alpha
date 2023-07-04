@@ -15,7 +15,7 @@ import OverviewChart from '@/components/ui/chats/overview-chart';
 
 import axios from '@/lib/axiosClient';
 import Spinner from '../custom/spinner';
-import Journey from '@/components/homepage/journey';
+// import Journey from '@/components/homepage/journey';
 
 export default function ModernScreen() {
   const [homeData, setHomeData] = useState<any>(null);
@@ -50,7 +50,8 @@ export default function ModernScreen() {
       />
       {!isLoading && homeData !== null && (
         <>
-          <div className="flex w-[73%] w-full flex-col items-center justify-center gap-5">
+          {/* w-73% with journey */}
+          <div className="flex w-full w-full flex-col items-center justify-center gap-5">
             <div className="w-full">
               <TopTokenFeedSlider TopTokenFeeds={homeData?.tokens} />
             </div>
@@ -72,7 +73,7 @@ export default function ModernScreen() {
               <OverviewChart className="scale-y-90" />
             </div>
           </div>
-          <Journey data={homeData?.paths} />
+          {/* <Journey data={homeData?.paths} /> */}
         </>
       )}
       {isLoading && (

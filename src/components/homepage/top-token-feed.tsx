@@ -58,7 +58,7 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
               1<span className="ml-3">{data?.token_symbol}</span>
             </div>
 
-            <div className="flex items-center text-2xs font-medium xl:text-xs 3xl:text-sm">
+            {/* <div className="flex items-center text-2xs font-medium xl:text-xs 3xl:text-sm">
               <span className="mr-5 truncate tracking-tighter text-gray-400 2xl:w-24 4xl:w-auto">
                 $ {Math.round(data?.token_ltp * 10000) / 10000}
               </span>
@@ -79,7 +79,7 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
                 </span>
                 {Math.round(Math.abs(data?.token_ltp_24h_change * 100)) / 100}%
               </span>
-            </div>
+            </div> */}
           </div>
           {chartData !== null && (
             <PriceChart
@@ -106,7 +106,7 @@ export default function TopTokenFeedSlider({
     <Swiper
       modules={[A11y]}
       spaceBetween={20}
-      slidesPerView={2}
+      slidesPerView={3}
       observer={true}
       dir="ltr"
     >
