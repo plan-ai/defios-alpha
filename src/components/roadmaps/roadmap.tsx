@@ -23,6 +23,11 @@ import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 
 import RoadmapCreate from '@/components/roadmapCreation/roadmapCreate';
 
+import { useWallet } from '@solana/wallet-adapter-react';
+import ErrorDarkImage from '@/assets/images/404-dark.svg';
+import Image from 'next/image';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 interface SearchProps {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -71,6 +76,14 @@ const Search: React.FC<SearchProps> = ({
 };
 
 export default function Roadmap() {
+
+  const wallet = useWallet();
+
+  let userMappingIsLoading = useAppSelector(
+    (state) => state.userMapping.isLoading
+  );
+  let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
+
   const [createRoadmap, setCreateRoadmap] = useState(false);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
@@ -242,8 +255,29 @@ export default function Roadmap() {
               ref={modalContainerRef}
               className="inline-block text-left align-middle"
             >
-              <div className="h-[90vh] w-[80vw] rounded-2xl bg-dark">
+              <div className="relative h-[90vh] w-[80vw] rounded-2xl bg-dark">
                 <RoadmapCreate existingRoadmaps={existingRoadmaps} />
+                {(userMappingIsLoading ||
+                  userMappingIsError ||
+                  wallet.publicKey === null) && (
+                  <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+                    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl text-center">
+                      <Image
+                        src={ErrorDarkImage}
+                        className="w-80"
+                        alt="404 Error"
+                      />
+                      <div>
+                        {wallet.publicKey === null
+                          ? 'Connect Wallet to Continue'
+                          : userMappingIsLoading
+                          ? 'Loading...'
+                          : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+                      </div>
+                      <WalletMultiButton className="rounded-full bg-new-blue" />
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

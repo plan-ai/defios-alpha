@@ -54,7 +54,14 @@ export const getUserMapping = createAsyncThunk(
 export const userMappingSlice = createSlice({
   name: 'userMapping',
   initialState,
-  reducers: {},
+  reducers: {
+    resetMapping: (state) => {
+      state.userMapping = null;
+      state.isLoading = false;
+      state.error = 'Wallet not Connected';
+      state.isError = true;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserMapping.pending, (state) => {
       state.isLoading = true;
@@ -69,9 +76,11 @@ export const userMappingSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.error = action.error.message;
+      state.userMapping = null;
     });
   },
 });
 
 export default userMappingSlice.reducer;
 export const selectUserMapping = (state: AppState) => state.userMapping;
+export const { resetMapping } = userMappingSlice.actions;

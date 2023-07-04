@@ -11,7 +11,11 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import routes from '@/config/routes';
 import { setSigner, setConnection } from '@/lib/helpers/wallet';
 import { useAppSelector, useAppDispatch } from '@/store/store';
-import { selectUserMapping, getUserMapping } from '@/store/userMappingSlice';
+import {
+  selectUserMapping,
+  getUserMapping,
+  resetMapping,
+} from '@/store/userMappingSlice';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
@@ -64,6 +68,9 @@ function HeaderRightArea() {
           userPubkey: wallet.publicKey.toBase58(),
         })
       );
+    } else if (!wallet.publicKey) {
+      console.log('entered else if');
+      dispatch(resetMapping());
     }
     //@ts-ignore
   }, [wallet.publicKey, session?.accessToken, session?.user.id]);

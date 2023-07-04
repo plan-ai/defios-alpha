@@ -25,7 +25,13 @@ module.exports = {
       'foresight.org',
       'gateway.pinata.cloud',
       'ipfs.io',
-      'fuchsia-evolutionary-marlin-251.mypinata.cloud'
+      'fuchsia-evolutionary-marlin-251.mypinata.cloud',
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
 };

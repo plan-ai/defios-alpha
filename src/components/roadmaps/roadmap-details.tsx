@@ -56,6 +56,8 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
+  let userMapping = useAppSelector((state) => state.userMapping.userMapping);
+
   const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
 
   const [project, setProject] = useState<any>();
@@ -253,30 +255,30 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   <div>Select an Objective</div>
                   <div>to View Details</div>
                 </div>
-                {githubInfo.id.toString() ===
-                  roadmapData.creator.toString() && (
-                  <>
-                    <div>OR</div>
-                    <div className="flex items-center justify-between gap-2">
-                      <Button
-                        onClick={() => setCreateObjective(true)}
-                        shape="rounded"
-                        size="medium"
-                        color="info"
-                      >
-                        Create an Objective
-                      </Button>
-                      <Button
-                        onClick={() => setLinkObjective(true)}
-                        shape="rounded"
-                        size="medium"
-                        color="info"
-                      >
-                        Link Objectives
-                      </Button>
-                    </div>
-                  </>
-                )}
+                {githubInfo.id.toString() === roadmapData.creator.toString() &&
+                  userMapping !== null && (
+                    <>
+                      <div>OR</div>
+                      <div className="flex items-center justify-between gap-2">
+                        <Button
+                          onClick={() => setCreateObjective(true)}
+                          shape="rounded"
+                          size="medium"
+                          color="info"
+                        >
+                          Create an Objective
+                        </Button>
+                        <Button
+                          onClick={() => setLinkObjective(true)}
+                          shape="rounded"
+                          size="medium"
+                          color="info"
+                        >
+                          Link Objectives
+                        </Button>
+                      </div>
+                    </>
+                  )}
               </div>
             </div>
           )}

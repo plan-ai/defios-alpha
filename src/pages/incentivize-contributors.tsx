@@ -13,10 +13,16 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useAppSelector } from '@/store/store';
 
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
   const wallet = useWallet();
+
+  let userMappingIsLoading = useAppSelector(
+    (state) => state.userMapping.isLoading
+  );
+  let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
 
   const [stepOfCreation, setStepOfCreation] = useState(1);
   const [reset, setReset] = useState(0);
@@ -67,11 +73,19 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
           stepOfCreation={stepOfCreation}
           reset={reset}
         />
-        {wallet.publicKey === null && (
+        {(userMappingIsLoading ||
+          userMappingIsError ||
+          wallet.publicKey === null) && (
           <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-10 text-xl shadow-2xl">
+            <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl">
               <Image src={ErrorDarkImage} className="w-80" alt="404 Error" />
-              <div>Connect Wallet to Continue</div>
+              <div>
+                {wallet.publicKey === null
+                  ? 'Connect Wallet to Continue'
+                  : userMappingIsLoading
+                  ? 'Loading...'
+                  : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+              </div>
               <WalletMultiButton className="rounded-full bg-new-blue" />
             </div>
           </div>

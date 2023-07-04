@@ -30,6 +30,10 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const { data: session } = useSession();
   const { closeDrawer } = useDrawer();
   const userMappingState = useAppSelector(selectUserMapping);
+  let userMappingIsLoading = useAppSelector(
+    (state) => state.userMapping.isLoading
+  );
+  let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
 
   const [tags, setTags] = useState<string[]>([]);
   const [issueTitle, setIssueTitle] = useState('');
@@ -212,51 +216,22 @@ export default function RightSideIssues({ className }: { className?: string }) {
               >
                 Create Issue
               </Button>
-              {/* <div className="flex w-full flex-row items-center ">
-                <Input
-                  placeholder="Amount"
-                  type="number"
-                  className="my-2 w-full text-2xs lg:text-xs 2xl:text-sm"
-                  inputClassName="!h-10"
-                />
-                <div className="ml-2 flex h-full items-center gap-1">
-                  <Button
-                    size="mini"
-                    shape="rounded"
-                    className="!text-2xs lg:!text-xs 2xl:!text-sm"
-                  >
-                    50%
-                  </Button>
-                  <Button
-                    size="mini"
-                    shape="rounded"
-                    className="!text-2xs lg:!text-xs 2xl:!text-sm"
-                  >
-                    100%
-                  </Button>
-                </div>
-              </div>
-              <Button
-                className="my-2 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
-                shape="rounded"
-              >
-                Approve DIC Spend
-              </Button>
-              <Button
-                className="my-2 w-full !text-2xs lg:!text-xs 2xl:!text-sm"
-                shape="rounded"
-                color="success"
-              >
-                Stake DIC
-              </Button> */}
             </div>
           </div>
         </Scrollbar>
-        {wallet.publicKey === null && (
+        {(userMappingIsLoading ||
+          userMappingIsError ||
+          wallet.publicKey === null) && (
           <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 text-lg shadow-2xl ">
+            <div className="flex flex-col items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-3 text-center text-lg text-xs shadow-2xl xl:p-4 xl:text-sm 3xl:p-5 3xl:text-base ">
               <Image src={ErrorDarkImage} className="w-52" alt="404 Error" />
-              <div>Connect Wallet to Continue</div>
+              <div>
+                {wallet.publicKey === null
+                  ? 'Connect Wallet to Continue'
+                  : userMappingIsLoading
+                  ? 'Loading...'
+                  : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+              </div>
               <WalletMultiButton className="rounded-full bg-new-blue" />
             </div>
           </div>

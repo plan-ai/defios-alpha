@@ -8,6 +8,7 @@ import cn from 'classnames';
 import Button from '@/components/ui/button/button';
 import axios from '@/lib/axiosClient';
 
+import { useAppSelector } from '@/store/store';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
 interface IssuesListTypes {
@@ -27,6 +28,11 @@ export default function IssuesList({
   let [isExpand, setIsExpand] = useState(initExpand || false);
   let [issueTags, setIssueTags] = useState<string[]>([]);
   const wallet = useWallet();
+
+  let userMappingIsLoading = useAppSelector(
+    (state) => state.userMapping.isLoading
+  );
+  let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
 
   let [tokenDecimals, setTokenDecimals] = useState(0);
 
@@ -110,10 +116,18 @@ export default function IssuesList({
           >
             <div className="relative border-t border-dashed border-gray-700 px-6">
               {children}
-              {wallet.publicKey === null && (
+              {(userMappingIsLoading ||
+                userMappingIsError ||
+                wallet.publicKey === null) && (
                 <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                  <div className="flex items-center justify-center gap-5 rounded-xl border-2 border-white bg-dark p-5 px-10  text-xl shadow-2xl">
-                    <div>Connect Wallet to Continue</div>
+                  <div className="flex items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-base shadow-2xl xl:gap-4 xl:p-5 xl:text-lg 3xl:gap-5 3xl:p-6 3xl:text-xl text-center">
+                    <div>
+                      {wallet.publicKey === null
+                        ? 'Connect Wallet to Continue'
+                        : userMappingIsLoading
+                        ? 'Loading...'
+                        : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+                    </div>
                     <WalletMultiButton className="rounded-full bg-new-blue" />
                   </div>
                 </div>

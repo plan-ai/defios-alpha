@@ -52,23 +52,32 @@ const RepoModal: React.FC<RepoModalProps> = ({
     const existingRepos: any = await createExistingArray();
 
     while (keepGoing) {
-      const res = await axios.get(
-        `https://api.github.com/user/repos?affiliation=${affiliation}&sort=pushed&per_page=100&page=${pagination}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${(session as any)?.accessToken}`,
-            Accept: 'application/vnd.github.v3+json',
-          },
-        }
-      )
+      const res = await axios
+        .get(
+          `https://api.github.com/user/repos?affiliation=${affiliation}&sort=pushed&per_page=100&page=${pagination}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${(session as any)?.accessToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
+          }
+        )
         .then((res) => res.data)
         .catch((err) => console.log(err));
 
-      //already exists as project checker needed here , condition it in filter
+      //filter conditions added
+      // 1) admin controls
+      // 2) public repo
+      // 3) if not a fork (as cant create issues on forked repos)
+      // 4) existing project on defios
+
       const refinedRes = res.filter(
         (repo: any) =>
-          repo.permissions.admin && !existingRepos.includes(repo.html_url)
+          repo.permissions.admin &&
+          repo.visibility === 'public' &&
+          !repo.fork &&
+          !existingRepos.includes(repo.html_url)
       );
 
       if (refinedRes.length === 0 && affiliation === 'owner') {
