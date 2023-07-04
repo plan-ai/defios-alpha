@@ -190,7 +190,7 @@ export default function Roadmap() {
             />
           </span>
 
-          <div className="flex gap-6 4xl:gap-8">
+          <div className="flex gap-4 4xl:gap-5">
             <div className="flex items-center justify-center">
               <Button
                 onClick={() => setCreateRoadmap(true)}

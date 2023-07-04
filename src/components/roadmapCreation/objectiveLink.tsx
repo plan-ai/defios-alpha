@@ -190,10 +190,19 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               {chooseType === 'Parent' &&
                 objectiveSelected !== null &&
                 parentObjective === null && (
-                  <Check
-                    className="h-6 w-6 cursor-pointer font-bold text-white"
+                  // <Check
+                  //   className="h-6 w-6 cursor-pointer font-bold text-white"
+                  //   onClick={handleSetParent}
+                  // />
+                  <Button
+                    size="mini"
+                    color="info"
+                    className="!h-7"
+                    shape="rounded"
                     onClick={handleSetParent}
-                  />
+                  >
+                    Confirm
+                  </Button>
                 )}
             </div>
             {chooseType === 'Parent' && parentObjective === null && (
@@ -201,6 +210,11 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                 className="h-6 w-6 cursor-pointer font-bold text-white"
                 onClick={() => setChooseType('None')}
               />
+            )}
+            {parentObjective !== null && (
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-new-blue">
+                <Check />
+              </div>
             )}
           </div>
           {((objectiveSelected !== null && chooseType === 'Parent') ||
@@ -285,10 +299,15 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               {chooseType === 'Child' &&
                 objectiveSelected !== null &&
                 childObjective === null && (
-                  <Check
-                    className="h-6 w-6 cursor-pointer font-bold text-white"
+                  <Button
+                    size="mini"
+                    color="info"
+                    className="!h-7"
+                    shape="rounded"
                     onClick={handleSetChild}
-                  />
+                  >
+                    Confirm
+                  </Button>
                 )}
             </div>
             {chooseType === 'Child' && childObjective === null && (
@@ -296,6 +315,11 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                 className="h-6 w-6 cursor-pointer font-bold text-white"
                 onClick={() => setChooseType('None')}
               />
+            )}
+            {childObjective !== null && (
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-new-blue">
+                <Check />
+              </div>
             )}
           </div>
           {((objectiveSelected !== null && chooseType === 'Child') ||
