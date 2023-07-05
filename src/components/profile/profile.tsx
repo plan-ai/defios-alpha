@@ -90,7 +90,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-8 xl:gap-8 xl:py-6">
+        {/* <div className="mt-6 flex flex-wrap items-center justify-center gap-6 border-y border-dashed border-gray-700 py-5 text-center md:justify-start md:text-left xl:mt-8 xl:gap-8 xl:py-6">
           <div>
             <div className="mb-1.5 text-sm font-medium tracking-tighter text-white xl:text-base 3xl:text-lg">
               {sidebarData?.issues_solved}
@@ -127,8 +127,8 @@ export default function Profile() {
           <div className="mt-4 text-2xs tracking-tighter text-gray-400 xl:text-xs 3xl:text-sm">
             Last Synced Date : {authorData.syncDate}
           </div>
-        </div>
-        <div className="border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:py-6">
+        </div> */}
+        <div className="mt-6 border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:mt-8 xl:py-6">
           <div className="mb-4 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
             Portfolio
           </div>

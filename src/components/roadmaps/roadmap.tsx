@@ -11,7 +11,7 @@ import Input from '@/components/ui/forms/input';
 import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
-import { triggerFilter, searchDone } from '@/store/roadmapFilterSlice';
+import { searchDone } from '@/store/roadmapFilterSlice';
 import { Close } from '@/components/icons/close';
 
 import { Tooltip } from 'flowbite-react';
@@ -76,7 +76,6 @@ const Search: React.FC<SearchProps> = ({
 };
 
 export default function Roadmap() {
-
   const wallet = useWallet();
 
   let userMappingIsLoading = useAppSelector(
@@ -118,7 +117,7 @@ export default function Roadmap() {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setIsLoading(true);
     const searchParams: any = {
-      //  ...filterData
+      ...filterData,
     };
     if (search !== '') {
       if (search.includes(';')) {
@@ -151,12 +150,12 @@ export default function Roadmap() {
         setIsLoading(false);
         setTriggerSearch(false);
         dispatch(searchDone());
-        const existingRoadmapAcc:string[] = []
-        res.data.forEach((item:any)=>{
-          if(item.project_account){
+        const existingRoadmapAcc: string[] = [];
+        res.data.forEach((item: any) => {
+          if (item.project_account) {
             existingRoadmapAcc.push(item.project_account);
           }
-        })
+        });
         setExistingRoadmaps(existingRoadmapAcc);
       })
       .catch((err) => {
@@ -169,10 +168,10 @@ export default function Roadmap() {
 
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
-    if (triggerSearch||searchTrigger) {
+    if (triggerSearch || searchTrigger) {
       setFetchTrigger(fetchTrigger + 1);
     }
-  }, [triggerSearch,searchTrigger, firebase_jwt]);
+  }, [triggerSearch, searchTrigger, firebase_jwt]);
 
   return (
     <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
@@ -190,7 +189,7 @@ export default function Roadmap() {
             />
           </span>
 
-          <div className="flex gap-4 4xl:gap-5">
+          <div className="flex gap-3 4xl:gap-4">
             <div className="flex items-center justify-center">
               <Button
                 onClick={() => setCreateRoadmap(true)}
@@ -261,7 +260,7 @@ export default function Roadmap() {
                   userMappingIsError ||
                   wallet.publicKey === null) && (
                   <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl text-center">
+                    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl">
                       <Image
                         src={ErrorDarkImage}
                         className="w-80"

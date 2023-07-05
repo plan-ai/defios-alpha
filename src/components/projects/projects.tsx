@@ -479,7 +479,7 @@ export default function Projects() {
                 onClick={() => {
                   if (project?._id) {
                     const payload = {
-                      searchQuery: `issue_project_id:${project?._id};state:open`,
+                      searchQuery: `issue_project_id:${project?.project_account};state:open`,
                       setSearchQuery: true,
                       expandFirst: false,
                       pathname: '/issues',

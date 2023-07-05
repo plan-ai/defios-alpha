@@ -15,7 +15,7 @@ import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
 import { Check } from '@/components/icons/check';
 
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { setFilters, reset } from '@/store/roadmapFilterSlice';
+import { setFilters, reset, triggerFilter } from '@/store/roadmapFilterSlice';
 
 export function GridSwitcher() {
   const { isGridCompact, setIsGridCompact } = useGridSwitcher();
@@ -233,7 +233,10 @@ const CheckBoxList: React.FC<CheckBoxListProps> = ({
       {list.length !== 0 &&
         list.map((item, idx) => {
           return (
-            <div className="flex w-full flex-row 3xl:text-base xl:text-sm text-xs" key={idx}>
+            <div
+              className="flex w-full flex-row text-xs xl:text-sm 3xl:text-base"
+              key={idx}
+            >
               <div
                 onClick={() => handleCheck(item)}
                 className="mr-2 flex h-6 w-6 items-center justify-center rounded-sm bg-gray-600"
@@ -249,28 +252,18 @@ const CheckBoxList: React.FC<CheckBoxListProps> = ({
 };
 
 const OutlookValues = [
-  'Long-term Public',
-  'Good (>5yrs+)',
-  'Next 2 yrs',
-  'Next 5 yrs',
-];
-
-const OutcomeValues = [
-  'Infrastructure',
-  'Tooling',
-  'Publication',
-  'Product',
-  'Other',
+  'Long-Term Public Good',
+  'More than 5 Yrs',
+  'Next 2 Years',
+  'Next 5 Years',
 ];
 
 export function Filters() {
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [activeObjectivesRange, setActiveObjectivesRange] = useState({
     min: 0,
     max: 100,
   });
   const [outlook, setOutlook] = useState('');
-  const [outcome, setOutcome] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
   const triggerSet = useAppSelector((state) => state.roadmapFilter.triggerSet);
@@ -281,13 +274,19 @@ export function Filters() {
 
   useEffect(() => {
     if (triggerSet) {
-      const data = {
-        'filter.roadmap_outlook': outlook,
-        'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
+      const data: any = {
+        // 'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
       };
+      if (outlook !== '') {
+        data['filter.roadmap_outlook'] = outlook;
+      }
       dispatch(setFilters(data));
     }
   }, [triggerSet, dispatch]);
+
+  useEffect(() => {
+    dispatch(triggerFilter());
+  }, [outlook, activeObjectivesRange]);
 
   return (
     <>
@@ -302,13 +301,19 @@ export function Filters() {
       <Collapse label="Outlook" initialOpen>
         <Status plan={outlook} setPlan={setOutlook} values={OutlookValues} />
       </Collapse>
-      {/* <Collapse label="Outcome" initialOpen>
-        <CheckBoxList
-          selectedValues={outcome}
-          setSelectedValues={setOutcome}
-          list={OutcomeValues}
-        />
-      </Collapse> */}
+      <Button
+        size="small"
+        shape="rounded"
+        onClick={() => {
+          setActiveObjectivesRange({
+            min: 0,
+            max: 100,
+          });
+          setOutlook('');
+        }}
+      >
+        Reset
+      </Button>
     </>
   );
 }
@@ -318,10 +323,10 @@ export default function DrawerFilters() {
   return (
     <div className="relative w-full max-w-full bg-dark xs:w-80">
       <div className="flex h-20 items-center justify-between overflow-hidden px-6 py-4">
-        <h2 className="text-base xl:text-lg 3xl:text-xl font-medium uppercase tracking-wider text-white">
+        <h2 className="text-base font-medium uppercase tracking-wider text-white xl:text-lg 3xl:text-xl">
           Filters
         </h2>
-        <Button shape="circle" size='small' onClick={closeDrawer}>
+        <Button shape="circle" size="small" onClick={closeDrawer}>
           <Close className="h-auto w-3" />
         </Button>
       </div>
