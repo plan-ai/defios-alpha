@@ -227,14 +227,14 @@ const IssuesPage: NextPageWithLayout = () => {
         },
       })
       .then((res) => {
-        if (res.data.issues.length !== 0) {
+        // if (res.data.issues.length !== 0) {
           //first page
           // if (page === 1) {
           setIssuesData(res.data.issues);
           // } else {
           //   setIssuesData([...issuesData, ...res.data.issues]);
           // }
-        }
+        // }
         //no more data to fetch end pagination
         // if (res.data.issues.length === 0) {
         //   setDonePagination(true);
