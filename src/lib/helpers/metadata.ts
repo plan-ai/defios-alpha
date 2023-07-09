@@ -11,7 +11,9 @@ export const uploadFileToIPFS = async (file: File) => {
   const auth =
     'Basic ' +
     Buffer.from(
-      process.env.INFURA_IPFS_API_KEY + ':' + process.env.INFURA_IPFS_API_SECRET
+      process.env.NEXT_PUBLIC_INFURA_IPFS_API_KEY +
+        ':' +
+        process.env.NEXT_PUBLIC_INFURA_IPFS_API_SECRET
     ).toString('base64');
 
   const resFile = await axios({
@@ -32,7 +34,9 @@ export const uploadMetadataToIPFS = async (metadata: any) => {
   const auth =
     'Basic ' +
     Buffer.from(
-      process.env.INFURA_IPFS_API_KEY + ':' + process.env.INFURA_IPFS_API_SECRET
+      process.env.NEXT_PUBLIC_INFURA_IPFS_API_KEY +
+        ':' +
+        process.env.NEXT_PUBLIC_INFURA_IPFS_API_SECRET
     ).toString('base64');
 
   const res = await axios({

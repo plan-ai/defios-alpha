@@ -9,6 +9,12 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = withPWA({
   reactStrictMode: true,
+  env: {
+    NEXT_PUBLIC_INFURA_IPFS_API_KEY:
+      process.env.NEXT_PUBLIC_INFURA_IPFS_API_KEY,
+    NEXT_PUBLIC_INFURA_IPFS_API_SECRET:
+      process.env.NEXT_PUBLIC_INFURA_IPFS_API_SECRET,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
