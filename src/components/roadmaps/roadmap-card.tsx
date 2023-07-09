@@ -57,7 +57,12 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             className="relative block h-80 w-full"
           >
             <Image
-              src={item?.cover_image || ''}
+              src={
+                item?.cover_image?.replace(
+                  'https://ipfs.io',
+                  'https://defi-os.infura-ipfs.io'
+                ) || ''
+              }
               alt={item?.title || ''}
               fill
               className="object-cover object-cover"
@@ -87,13 +92,15 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
               <ListCard
                 item={{
                   name: item?.outlook,
-                  element: <ClockIcon/>
+                  element: <ClockIcon />,
                 }}
                 className="rounded-full bg-black px-3 py-2"
               />
             </div>
             <div className=" mt-1.5 flex items-center gap-2">
-              <div className="text-2xs xl:text-xs 3xl:text-sm">Created on: </div>
+              <div className="text-2xs xl:text-xs 3xl:text-sm">
+                Created on:{' '}
+              </div>
               <div className="text-sm text-gray-500">{datestr}</div>
             </div>
           </div>

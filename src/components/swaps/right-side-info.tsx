@@ -114,7 +114,12 @@ export default function RightSideInfo({
               <div className="w-full w-full">
                 {coinInfo?.token_image_url && (
                   <Image
-                    src={coinInfo?.token_image_url || ''}
+                    src={
+                      coinInfo?.token_image_url?.replace(
+                        'https://ipfs.io',
+                        'https://defi-os.infura-ipfs.io'
+                      ) || ''
+                    }
                     alt={coinInfo?.token_symbol || ''}
                     width={80}
                     height={80}

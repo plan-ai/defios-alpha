@@ -40,7 +40,12 @@ export function TopTokenFeed({ data }: TopTokenFeedProps) {
           <div className="mb-2 flex items-center">
             <div className="relative h-6 w-6 xl:h-7 xl:w-7 3xl:h-8 3xl:w-8 ">
               <Image
-                src={data?.token_image_url || ''}
+                src={
+                  data?.token_image_url?.replace(
+                    'https://ipfs.io',
+                    'https://defi-os.infura-ipfs.io'
+                  ) || ''
+                }
                 alt={data?.token_symbol || ''}
                 fill
                 className="rounded-full object-cover"

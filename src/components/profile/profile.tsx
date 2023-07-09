@@ -128,7 +128,7 @@ export default function Profile() {
             Last Synced Date : {authorData.syncDate}
           </div>
         </div> */}
-        <div className="mt-6 border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:mt-8 xl:py-6">
+        {/* <div className="mt-6 border-y border-dashed border-gray-700 py-5 text-center md:text-left xl:mt-8 xl:py-6">
           <div className="mb-4 text-2xs font-medium uppercase tracking-wider text-white xl:text-xs 3xl:text-sm">
             Portfolio
           </div>
@@ -140,7 +140,7 @@ export default function Profile() {
             setStateChoosen={setPortfolioType}
           />
           <PortfolioCreator portfolioType={portfolioType} isGenerated={false} />
-        </div>
+        </div> */}
       </div>
       <div className="grow pt-6 pb-9 md:-mt-2.5 md:pt-1.5 md:pb-0 md:pl-7 lg:pl-10 4xl:pl-14">
         <ProfileTab />

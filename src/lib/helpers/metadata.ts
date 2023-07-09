@@ -8,35 +8,42 @@ export const uploadFileToIPFS = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
 
+  const auth =
+    'Basic ' +
+    Buffer.from(
+      process.env.INFURA_IPFS_API_KEY + ':' + process.env.INFURA_IPFS_API_SECRET
+    ).toString('base64');
+
   const resFile = await axios({
     method: 'post',
-    url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+    url: 'https://ipfs.infura.io:5001/api/v0/add',
     data: formData,
     headers: {
-      // Authorization: `Bearer ${jwt}`,
-      pinata_api_key: 'b72b90653dbea5420f6b',
-      pinata_secret_api_key:
-        '84756bad08381666878067891d9d3e6d427ae5be8d278715b55776ac63d5881e',
-      'Content-Type': 'multipart/form-data',
+      authorization: auth,
     },
   });
-  return resFile.data.IpfsHash;
+  return resFile.data.Hash;
 };
 
 export const uploadMetadataToIPFS = async (metadata: any) => {
+  const formData = new FormData();
+  formData.append('file', metadata);
+
+  const auth =
+    'Basic ' +
+    Buffer.from(
+      process.env.INFURA_IPFS_API_KEY + ':' + process.env.INFURA_IPFS_API_SECRET
+    ).toString('base64');
+
   const res = await axios({
     method: 'post',
-    url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+    url: 'https://ipfs.infura.io:5001/api/v0/add',
     headers: {
-      // Authorization: `Bearer ${jwt}`,
-      pinata_api_key: 'b72b90653dbea5420f6b',
-      pinata_secret_api_key:
-        '84756bad08381666878067891d9d3e6d427ae5be8d278715b55776ac63d5881e',
-      'Content-Type': 'application/json',
+      authorization: auth,
     },
     data: metadata,
   });
-  return res.data.IpfsHash;
+  return res.data.Hash;
 };
 
 export const fetchTokenMetadata = async (tokenID: string) => {

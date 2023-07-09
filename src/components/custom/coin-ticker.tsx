@@ -19,7 +19,14 @@ const CoinTicker: React.FC<CoinTickerProps> = ({
     <div className={cn('flex items-center', className)}>
       <div className="relative h-10 w-10 rounded-full xl:h-11 xl:w-11 3xl:h-12 3xl:w-12">
         <Image
-          src={coin?.token_image_url || ''}
+          src={
+            coin?.token_new === true
+              ? coin?.token_image_url?.replace(
+                  'https://ipfs.io',
+                  'https://defi-os.infura-ipfs.io'
+                ) || ''
+              : coin?.token_image_url || ''
+          }
           alt={coin?.token_name || ''}
           fill
           className="rounded-full object-cover"

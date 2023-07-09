@@ -195,7 +195,12 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
               <div className="flex items-center">
                 <div className="relative mr-6 h-12 w-12 rounded-full">
                   <Image
-                    src={roadmapData?.cover_image || ''}
+                    src={
+                      roadmapData?.cover_image?.replace(
+                        'https://ipfs.io',
+                        'https://defi-os.infura-ipfs.io'
+                      ) || ''
+                    }
                     alt={roadmapData?.title || ''}
                     fill
                     className="rounded-full object-cover object-cover"

@@ -19,18 +19,18 @@ interface HomepageProps {}
 const Homepage: React.FC<HomepageProps> = ({}) => {
   const { data: session } = useSession();
 
-  const [email, setEmail] = useState('');
-  const onSubmitHandler = () => {
-    if (email === '' || !email.includes('@')) return;
-    axios
-      .post(
-        `https://api-v1.defi-os.com/waitlist/jobs?email=${email}&wl_type=jobs`
-      )
-      .then((res) => {
-        setEmail('');
-      })
-      .catch((err) => console.log(err));
-  };
+  // const [email, setEmail] = useState('');
+  // const onSubmitHandler = () => {
+  //   if (email === '' || !email.includes('@')) return;
+  //   axios
+  //     .post(
+  //       `https://api-v1.defi-os.com/waitlist/jobs?email=${email}&wl_type=jobs`
+  //     )
+  //     .then((res) => {
+  //       setEmail('');
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <div className="h-screen">
@@ -121,7 +121,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                   </Button>
                 </Link>
               )}
-              <div className="flex gap-2">
+              {/* <div className="flex gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -132,7 +132,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
                 <Button onClick={onSubmitHandler} shape="rounded" color="info">
                   Join Waitlist
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

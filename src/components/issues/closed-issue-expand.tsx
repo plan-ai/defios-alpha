@@ -157,7 +157,7 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
               ' ' +
               tokenSymbol || ''
           }
-          coin={tokenImageUrl}
+          coin={tokenImageUrl || ''}
         />
       </div>
       {/* <div className="flex w-full flex-row items-center justify-between">

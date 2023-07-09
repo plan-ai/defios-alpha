@@ -17,7 +17,7 @@ const RepoList: React.FC<RepoListProps> = ({
   return (
     <div
       className={cn(
-        'parentDiv relative overflow-hidden rounded-xl bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl border-2 border-light-dark mb-2',
+        'parentDiv relative mb-2 overflow-hidden rounded-xl border-2 border-light-dark bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
         { 'gradient-border-box': selectedRepo === data }
       )}
       onClick={() => setSelectedRepo(data)}
@@ -27,10 +27,12 @@ const RepoList: React.FC<RepoListProps> = ({
           <div className="relative h-9 w-9 xl:h-10 xl:w-10 2xl:h-12 2xl:w-12">
             <Image
               src={
-                data?.project_token?.token_image_url.replace(
-                  'ipfs.io',
-                  'fuchsia-evolutionary-marlin-251.mypinata.cloud'
-                ) || ''
+                data?.project_token?.token_new === true
+                  ? data?.project_token?.token_image_url?.replace(
+                      'https://ipfs.io',
+                      'https://defi-os.infura-ipfs.io'
+                    ) || ''
+                  : data?.project_token?.token_image_url || ''
               }
               alt={data?.project_token?.token_symbol || ''}
               fill

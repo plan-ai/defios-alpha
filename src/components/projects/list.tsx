@@ -46,7 +46,14 @@ export default function ProjectList({
           <div className="flex items-center">
             <div className="relative h-9 w-9 xl:h-10 xl:w-10 2xl:h-12 2xl:w-12">
               <Image
-                src={data?.project_token?.token_image_url || ''}
+                src={
+                  data?.project_token?.token_new === true
+                    ? data?.project_token?.token_image_url?.replace(
+                        'https://ipfs.io',
+                        'https://defi-os.infura-ipfs.io'
+                      ) || ''
+                    : data?.project_token?.token_image_url || ''
+                }
                 alt={data?.project_token?.token_symbol || ''}
                 fill
                 className="rounded-full object-cover"
