@@ -29,7 +29,7 @@ export const uploadFileToIPFS = async (file: File) => {
 
 export const uploadMetadataToIPFS = async (metadata: any) => {
   const formData = new FormData();
-  formData.append('file', metadata);
+  formData.append('file', JSON.stringify(metadata));
 
   const auth =
     'Basic ' +
