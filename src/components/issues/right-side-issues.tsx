@@ -54,8 +54,11 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [repo, setRepo] = useState<any>(null);
   const modalContainerRef = useRef<HTMLDivElement>(null);
+  const callPopupState = useAppSelector((state) => state.callLoader.callState);
   useClickAway(modalContainerRef, () => {
-    setModalOpen(false);
+    if (callPopupState === 'none') {
+      setModalOpen(false);
+    }
   });
   useLockBodyScroll(modalOpen);
 

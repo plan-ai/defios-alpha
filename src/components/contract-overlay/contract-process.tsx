@@ -57,13 +57,20 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
   if (callStatus !== 'none') {
     return (
-      <div className="fixed top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30">
+      <div className="fixed top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30" onClick={()=>{
+        if(callStatus==='success'){
+          dispatch(resetLoader());
+        }
+      }}>
         {/* loading */}
         {callStatus === 'loading' && <Spinner label={loadingLabel} />}
 
         {/* success */}
         {callStatus === 'success' && (
-          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10">
+          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10"
+          onClick={(e)=>{
+            e.stopPropagation();
+          }}>
             <div className="flex flex-col items-center justify-center gap-5">
               <CheckBadgeIcon className="h-12 w-12 text-new-blue xl:h-14 xl:w-14 3xl:h-16 3xl:w-16" />
               <div className="text-center text-sm xl:text-base 3xl:text-lg">

@@ -1,3 +1,4 @@
+import React,{useState,useEffect} from 'react';
 import cn from 'classnames';
 import RoadmapCard from '@/components/roadmaps/roadmap-card';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
@@ -14,6 +15,10 @@ export default function Feeds({
   className?: string;
 }) {
   const { isGridCompact } = useGridSwitcher();
+  const [roadmap, setRoadmap] = useState('');
+  useEffect(()=>{
+    console.log('roadmap: ',roadmap)
+  },[roadmap]);
   return (
     <>
       {!isLoading && data.length !== 0 && (
@@ -28,7 +33,7 @@ export default function Feeds({
         >
           {data.length !== 0 &&
             data.map((item: any, idx: number) => (
-              <RoadmapCard key={idx} item={item} />
+              <RoadmapCard roadmap={roadmap} setRoadmap={setRoadmap} key={idx} item={item} />
             ))}
         </div>
       )}

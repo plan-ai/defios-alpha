@@ -272,7 +272,7 @@ const IssuesPage: NextPageWithLayout = () => {
       dispatch(reset());
     }
     if (refetchPart === 'issue') {
-      setFetchTrigger(fetchTrigger + 1);
+      setTimeout(() => setFetchTrigger(fetchTrigger + 1), 1500);
       dispatch(resetRefetch());
     }
   }, [

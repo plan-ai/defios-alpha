@@ -5,30 +5,38 @@ import { Verified } from '@/components/icons/verified';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
+import { useAppSelector } from '@/store/store';
 import routes from '@/config/routes';
 import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import ListCard from '../ui/list-card';
-import { detailsType, RoadmapList } from '@/data/static/roadmap-list';
 import cn from 'classnames';
 
 import EmptyList from '@/components/icons/EmptyList';
 import { ClockIcon } from '@/components/icons/clock';
 
-import { StaticImageData } from 'next/image';
 import Avatar from 'react-avatar';
 
 type RoadmapCardProps = {
   item: any;
   className?: string;
+  setRoadmap: React.Dispatch<React.SetStateAction<string>>;
+  roadmap: string;
 };
 
-export default function RoadmapCard({ item, className }: RoadmapCardProps) {
-  const [roadmap, setRoadmap] = useState('');
+export default function RoadmapCard({
+  item,
+  className,
+  roadmap,
+  setRoadmap,
+}: RoadmapCardProps) {
+  const callPopupState = useAppSelector((state) => state.callLoader.callState);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
-    setRoadmap('');
+    if (callPopupState === 'none') {
+      setRoadmap('');
+    }
   });
-  useLockBodyScroll(roadmap !== '');
+  useLockBodyScroll(roadmap === item?.roadmap_key);
   const datestr = new Date(
     item?.creation_date?.split(':').slice(0, 2).join(':')
   ).toLocaleDateString('en-IN', {
@@ -53,7 +61,7 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
             </div>
           </div>
           <div
-            onClick={(e) => setRoadmap(item?.title)}
+            onClick={(e) => setRoadmap(item?.roadmap_key)}
             className="relative block h-80 w-full"
           >
             <Image
@@ -125,13 +133,13 @@ export default function RoadmapCard({ item, className }: RoadmapCardProps) {
         </div>
       )}
       <AnimatePresence>
-        {roadmap !== '' && (
+        {roadmap === item?.roadmap_key && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
+            className="fixed inset-0 z-[50] overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
           >
             {/* This element is to trick the browser into centering the modal contents. */}
             <span

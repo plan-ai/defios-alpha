@@ -84,11 +84,14 @@ export default function Roadmap() {
     (state) => state.userMapping.isLoading
   );
   let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
+  const callPopupState = useAppSelector((state) => state.callLoader.callState);
 
   const [createRoadmap, setCreateRoadmap] = useState(false);
   const modalContainerRef = useRef<HTMLDivElement>(null);
   useClickAway(modalContainerRef, () => {
-    setCreateRoadmap(false);
+    if (callPopupState === 'none') {
+      setCreateRoadmap(false);
+    }
   });
   useLockBodyScroll(createRoadmap);
 
@@ -193,10 +196,10 @@ export default function Roadmap() {
       dispatch(reset());
     }
     if (refetchPart === 'roadmaps') {
-      setFetchTrigger(fetchTrigger + 1);
+      setTimeout(() => setFetchTrigger(fetchTrigger + 1), 1500);
       dispatch(resetRefetch());
     }
-  }, [triggerSearch, searchTrigger, firebase_jwt]);
+  }, [triggerSearch, searchTrigger, refetchPart, firebase_jwt]);
 
   return (
     <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
@@ -280,7 +283,7 @@ export default function Roadmap() {
               className="inline-block text-left align-middle"
             >
               <div className="relative h-[90vh] w-[80vw] rounded-2xl bg-dark">
-                <RoadmapCreate existingRoadmaps={existingRoadmaps} />
+                <RoadmapCreate existingRoadmaps={existingRoadmaps} setCreateRoadmap={setCreateRoadmap} />
                 {(userMappingIsLoading ||
                   userMappingIsError ||
                   wallet.publicKey === null) && (

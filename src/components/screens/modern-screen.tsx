@@ -19,6 +19,7 @@ import Spinner from '../custom/spinner';
 
 export default function ModernScreen() {
   const [homeData, setHomeData] = useState<any>(null);
+  const [roadmap,setRoadmap] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
@@ -62,7 +63,7 @@ export default function ModernScreen() {
                 className="scale-y-90"
               />
               <div className="relative">
-                <RoadmapCard item={homeData?.roadmap} className="scale-y-90" />
+                <RoadmapCard item={homeData?.roadmap} roadmap={roadmap} setRoadmap={setRoadmap} className="scale-y-90" />
                 <ListCard
                   item={{
                     name: '🔥 Hot',

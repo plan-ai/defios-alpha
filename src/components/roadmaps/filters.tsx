@@ -275,7 +275,7 @@ export function Filters() {
   useEffect(() => {
     if (triggerSet) {
       const data: any = {
-        // 'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
+        'filter.roadmap_active_objectives': `${activeObjectivesRange.min},${activeObjectivesRange.max}`,
       };
       if (outlook !== '') {
         data['filter.roadmap_outlook'] = outlook;

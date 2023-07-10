@@ -193,18 +193,19 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
           </Button>
         </AnchorLink>
         {userMappingState.userMapping?.userPubkey?.toString() ===
-          winner?.issue_pr_author?.toString() && (
-          <Button
-            color="success"
-            className="ml-2 w-1/2"
-            size="small"
-            shape="rounded"
-            onClick={handleClaim}
-            isLoading={stateLoading === 'loading'}
-          >
-            Claim Reward
-          </Button>
-        )}
+          winner?.issue_pr_author?.toString() &&
+          data?.issue_stake_amount + winner?.issue_vote_amount > 0 && (
+            <Button
+              color="success"
+              className="ml-2 w-1/2"
+              size="small"
+              shape="rounded"
+              onClick={handleClaim}
+              isLoading={stateLoading === 'loading'}
+            >
+              Claim Reward
+            </Button>
+          )}
       </div>
     </div>
   );

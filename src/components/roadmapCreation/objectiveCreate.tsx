@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { setRefetch } from '@/store/refetchSlice';
 import { addObjectiveToRoadmap } from '@/lib/helpers/contractInteract';
 
 import { selectUserMapping } from '@/store/userMappingSlice';
@@ -180,10 +181,11 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
-            redirect: '/roadmaps',
+            redirect: null,
             buttonText: 'Browse Roadmaps',
           })
         );
+        dispatch(setRefetch('objective'));
       })
       .catch((err) => {
         console.log(err);
@@ -205,10 +207,11 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
               label: 'Objective Added Successfully',
               description: '',
               link: '',
-              redirect: '/roadmaps',
+              redirect: null,
               buttonText: 'Browse Roadmaps',
             })
           );
+          dispatch(setRefetch('objective'));
         }
       });
   };

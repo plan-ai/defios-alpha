@@ -6,6 +6,7 @@ import { ArrowDownIcon } from '@heroicons/react/24/solid';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { setRefetch } from '@/store/refetchSlice';
 import { addChildObjectiveToObjective } from '@/lib/helpers/contractInteract';
 
 import { selectUserMapping } from '@/store/userMappingSlice';
@@ -136,10 +137,11 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
-            redirect: '/roadmaps',
+            redirect: null,
             buttonText: 'Browse Roadmaps',
           })
         );
+        dispatch(setRefetch('objective'));
       })
       .catch((err) => {
         console.log(err);
@@ -161,10 +163,11 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               label: 'Objectives Linked Successfully',
               description: '',
               link: '',
-              redirect: '/roadmaps',
+              redirect: null,
               buttonText: 'Browse Roadmaps',
             })
           );
+          dispatch(setRefetch('objective'));
         }
       });
   };

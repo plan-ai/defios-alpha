@@ -132,9 +132,10 @@ const SortList: React.FC<SortListProps> = ({
 
 interface RoadmapCreateProps {
   existingRoadmaps: string[];
+  setCreateRoadmap: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
+const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreateRoadmap }) => {
   const router = useRouter();
 
   const [roadmapTitle, setRoadmapTitle] = useState('');
@@ -279,10 +280,11 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
-            redirect: '/roadmaps',
+            redirect: null,
             buttonText: 'Browse Roadmaps',
           })
         );
+        setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
       })
       .catch((err) => {
@@ -293,10 +295,11 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
             label: 'Roadmap Creation Failed',
             description: err.message,
             link: '',
-            redirect: '/roadmaps',
+            redirect: null,
             buttonText: 'Browse Other Roadmaps',
           })
         );
+        setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
       })
       .finally(() => {
@@ -306,10 +309,11 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
               label: 'Roadmap Creation Success',
               description: '',
               link: '',
-              redirect: '/roadmaps',
+              redirect: null,
               buttonText: 'Browse Roadmaps',
             })
           );
+          setCreateRoadmap(false);
           dispatch(setRefetch('roadmaps'));
         }
       });

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { clicked } from '@/store/notifClickSlice';
+import { resetRefetch } from '@/store/refetchSlice';
 import { useRouter } from 'next/router';
 
 import Spinner from '@/components/custom/spinner';
@@ -65,6 +66,9 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
+  const [fetchAgain, setFetchAgain] = useState(0);
 
   const onClickHandler = () => {
     const payload = {
@@ -154,7 +158,18 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
         console.log(err.message);
         setIsLoading(false);
       });
-  }, [firebase_jwt]);
+  }, [firebase_jwt, fetchAgain]);
+
+  useEffect(() => {
+    if (refetchPart === 'objective') {
+      setCreateObjective(false);
+      setLinkObjective(false);
+      setObjectiveSelected(null);
+      setNodeSelected(null);
+      setTimeout(() => setFetchAgain(fetchAgain + 1), 1500);
+      dispatch(resetRefetch());
+    }
+  }, [refetchPart]);
 
   return (
     <div className="mx-auto flex h-full w-full flex-row justify-between overflow-y-hidden rounded-xl p-6 transition-all xl:p-8 3xl:p-10">
@@ -255,7 +270,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   />
                 </div>
               )}
-              <div className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-600 p-4 text-base xl:text-lg 3xl:text-xl">
+              <div className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-600 p-2 xl:p-3 3xl:p-4 text-base xl:text-lg 3xl:text-xl">
                 <div className="flex flex-col items-center justify-center">
                   <div>Select an Objective</div>
                   <div>to View Details</div>
@@ -271,7 +286,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                           size="medium"
                           color="info"
                         >
-                          Create an Objective
+                          Create Objective
                         </Button>
                         <Button
                           onClick={() => setLinkObjective(true)}
