@@ -45,7 +45,7 @@ export const uploadMetadataToIPFS = async (metadata: any) => {
     headers: {
       authorization: auth,
     },
-    data: metadata,
+    data: formData,
   });
   return res.data.Hash;
 };
