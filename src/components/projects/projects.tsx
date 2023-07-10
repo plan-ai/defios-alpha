@@ -470,14 +470,29 @@ export default function Projects() {
               </div>
             </div>
             <div className="mb-6 grid grid-cols-3 gap-3 text-sm">
-              <ActiveLink href={routes.projects}>
-                <Button shape="rounded" fullWidth size="medium" color="info">
-                  Explore Related Roadmaps
-                </Button>
-              </ActiveLink>
               <Button
                 onClick={() => {
-                  if (project?._id) {
+                  if (project?.project_account) {
+                    const payload = {
+                      searchQuery: `project_account:${project?.project_account}`,
+                      setSearchQuery: true,
+                      expandFirst: false,
+                      pathname: '/roadmaps',
+                    };
+                    dispatch(clicked(payload));
+                  }
+                  router.push('/roadmaps');
+                }}
+                shape="rounded"
+                fullWidth
+                size="medium"
+                color="info"
+              >
+                Explore Related Roadmaps
+              </Button>
+              <Button
+                onClick={() => {
+                  if (project?.project_account) {
                     const payload = {
                       searchQuery: `issue_project_id:${project?.project_account};state:open`,
                       setSearchQuery: true,

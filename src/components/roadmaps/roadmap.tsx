@@ -12,6 +12,8 @@ import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import { searchDone } from '@/store/roadmapFilterSlice';
+import { reset } from '@/store/notifClickSlice';
+import { resetRefetch } from '@/store/refetchSlice';
 import { Close } from '@/components/icons/close';
 
 import { Tooltip } from 'flowbite-react';
@@ -98,6 +100,14 @@ export default function Roadmap() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  //redirect to page and query search
+  const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
+  const setSearchQuery = useAppSelector(
+    (state) => state.notifClick.setSearchQuery
+  );
+  const clickPathname = useAppSelector((state) => state.notifClick.pathname);
+  const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
+
   const [roadmapsData, setRoadmapsData] = useState<any>([]);
 
   const [existingRoadmaps, setExistingRoadmaps] = useState<string[]>([]);
@@ -127,11 +137,17 @@ export default function Roadmap() {
           if (key === 'creator') {
             searchParams['search.roadmap_creator_gh_name'] = value;
           }
+          if (key === 'project_account') {
+            searchParams['search.roadmap_project'] = value;
+          }
         });
       } else if (search.includes(':') && !search.includes(';')) {
         const [key, value] = search.trim().split(':');
         if (key === 'creator') {
           searchParams['search.roadmap_creator_gh_name'] = value;
+        }
+        if (key === 'project_account') {
+          searchParams['search.roadmap_project'] = value;
         }
       } else if (!search.includes(':') && !search.includes(';')) {
         searchParams['search.roadmap_title'] = search.trim();
@@ -170,6 +186,15 @@ export default function Roadmap() {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     if (triggerSearch || searchTrigger) {
       setFetchTrigger(fetchTrigger + 1);
+    }
+    if (searchQuery !== '' && setSearchQuery && clickPathname === '/roadmaps') {
+      setSearch(searchQuery);
+      setFetchTrigger(fetchTrigger + 1);
+      dispatch(reset());
+    }
+    if (refetchPart === 'roadmaps') {
+      setFetchTrigger(fetchTrigger + 1);
+      dispatch(resetRefetch());
     }
   }, [triggerSearch, searchTrigger, firebase_jwt]);
 

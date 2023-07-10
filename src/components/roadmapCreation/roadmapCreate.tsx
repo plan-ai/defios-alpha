@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
+import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { addRoadmapData } from '@/lib/helpers/contractInteract';
 import { uploadFileToIPFS } from '@/lib/helpers/metadata';
@@ -282,6 +283,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
             buttonText: 'Browse Roadmaps',
           })
         );
+        dispatch(setRefetch('roadmaps'));
       })
       .catch((err) => {
         console.log(err);
@@ -295,6 +297,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
             buttonText: 'Browse Other Roadmaps',
           })
         );
+        dispatch(setRefetch('roadmaps'));
       })
       .finally(() => {
         if (!resCalled) {
@@ -307,6 +310,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps }) => {
               buttonText: 'Browse Roadmaps',
             })
           );
+          dispatch(setRefetch('roadmaps'));
         }
       });
   };
