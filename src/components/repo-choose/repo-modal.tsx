@@ -259,7 +259,7 @@ const RepoModal: React.FC<RepoModalProps> = ({
             dispatch(
               setStep2Data({
                 repoLink: selectedRepo,
-                repoName: repoInfo[0].full_name,
+                repoName: repoInfo[0]?.id?.toString(),
               })
             );
             setModalOpen(false);

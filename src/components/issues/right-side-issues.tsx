@@ -65,7 +65,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
   const handleCreateIssue = async () => {
     if (repo === null || issueTitle === '' || repo?.project_url === '') return;
     if ((session as any).accessToken) {
-      const ownerRepo = repo?.project_name;
+      const repo_id = repo?.project_github_id;
       dispatch(onLoading('Creating the Issue on Github...'));
 
       const data = JSON.stringify({
@@ -77,7 +77,7 @@ export default function RightSideIssues({ className }: { className?: string }) {
       var config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `https://api.github.com/repos/${ownerRepo}/issues`,
+        url: `https://api.github.com/repositories/${repo_id}/issues`,
         headers: {
           Authorization: `Bearer ${(session as any).accessToken}`,
           'Content-Type': 'application/json',
