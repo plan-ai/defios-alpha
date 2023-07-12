@@ -20,6 +20,8 @@ import { PublicKey } from '@solana/web3.js';
 
 import AttachIssue from '@/components/roadmapCreation/attachIssue';
 
+import mixpanel from 'mixpanel-browser';
+
 const sortDeliverables = [
   { id: 1, name: 'Infrastructure', data: { infrastructure: {} } },
   { id: 2, name: 'Tooling', data: { tooling: {} } },
@@ -185,6 +187,25 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
             buttonText: 'Browse Roadmaps',
           })
         );
+        mixpanel.track('Objective Creation Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          project_account: projectAccount,
+          issue_account: objectiveIssue.issue_account,
+          objective_id:
+            objectiveIssue.issue_gh_url.split('/')[
+              objectiveIssue.issue_gh_url.split('/').length - 1
+            ],
+          objective_title: objectiveTitle,
+          objective_description: objectiveDescription,
+          objective_deliverables: objectiveDeliverables.name,
+          objective_parent: objectiveSelected
+            ? objectiveSelected.objective_key
+            : null,
+        });
         dispatch(setRefetch('objective'));
       })
       .catch((err) => {
@@ -199,6 +220,11 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
             buttonText: 'Browse Other Roadmaps',
           })
         );
+        mixpanel.track('Objective Creation Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -211,6 +237,10 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
               buttonText: 'Browse Roadmaps',
             })
           );
+          mixpanel.track('Objective Creation Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('objective'));
         }
       });

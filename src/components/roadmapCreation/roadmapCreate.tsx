@@ -27,6 +27,8 @@ import { PublicKey } from '@solana/web3.js';
 
 import RepoList from '@/components/roadmapCreation/repo-list';
 
+import mixpanel from 'mixpanel-browser'
+
 interface SearchProps {
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -284,6 +286,20 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
             buttonText: 'Browse Roadmaps',
           })
         );
+        mixpanel.track('Roadmap Creation Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          project_account: selectedRepo.project_account,
+          repo_github_id: selectedRepo.project_github_id,
+          repo_github_url: selectedRepo.project_repo_link,
+          roadmap_title: roadmapTitle,
+          roadmap_description: roadmapDescription,
+          roadmap_image_url: `https://ipfs.io/ipfs/${imageHash}`,
+          roadmapOutlook: roadmapOutlook.name
+        });
         setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
       })
@@ -299,6 +315,11 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
             buttonText: 'Browse Other Roadmaps',
           })
         );
+        mixpanel.track('Roadmap Creation Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message
+        });
         setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
       })
@@ -313,6 +334,10 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
               buttonText: 'Browse Roadmaps',
             })
           );
+          mixpanel.track('Roadmap Creation Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           setCreateRoadmap(false);
           dispatch(setRefetch('roadmaps'));
         }

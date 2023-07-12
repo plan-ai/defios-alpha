@@ -14,6 +14,8 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { uploadFileToIPFS, uploadMetadataToIPFS } from '@/lib/helpers/metadata';
 
+import mixpanel from 'mixpanel-browser';
+
 interface CreationProcessProps {
   stepOfCreation: number;
   setStepOfCreation: React.Dispatch<React.SetStateAction<number>>;
@@ -88,6 +90,16 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                     buttonText: 'Browse Projects',
                   })
                 );
+                mixpanel.track('Project Creation Success', {
+                  github_id: userMappingState.userMapping?.userName,
+                  user_pubkey: userMappingState.userMapping?.userPubkey,
+                  tx_link: res
+                    ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                    : '',
+                  repo_github_id: creationState.step2.repoName,
+                  repo_github_link: creationState.step2.repoLink,
+                  token_metadata_uri: data,
+                });
                 setStep(2);
               })
               .catch((err) => {
@@ -102,6 +114,11 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                     buttonText: 'Browse Other Projects',
                   })
                 );
+                mixpanel.track('Project Creation Failed', {
+                  github_id: userMappingState.userMapping?.userName,
+                  user_pubkey: userMappingState.userMapping?.userPubkey,
+                  error: err.message,
+                });
               })
               .finally(() => {
                 if (!resCalled) {
@@ -114,6 +131,10 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                       buttonText: 'Browse Projects',
                     })
                   );
+                  mixpanel.track('Project Creation Success', {
+                    github_id: userMappingState.userMapping?.userName,
+                    user_pubkey: userMappingState.userMapping?.userPubkey,
+                  });
                   setStep(2);
                 }
               });

@@ -8,7 +8,11 @@ import Button from '@/components/ui/button';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 
+import mixpanel from 'mixpanel-browser';
+
 const ErrorPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
+
   const isMounted = useIsMounted();
   return (
     <>

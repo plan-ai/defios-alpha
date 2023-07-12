@@ -11,8 +11,11 @@ import RightSideInfo from '@/components/swaps/right-side-info';
 import Spinner from '@/components/custom/spinner';
 
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { selectUserMapping } from '@/store/userMappingSlice';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
+
+import mixpanel from 'mixpanel-browser'
 
 import {
   calculateBuyAmount,
@@ -33,6 +36,8 @@ interface SwapConsoleProps {
 const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
+  const userMappingState = useAppSelector(selectUserMapping);
+
   const wallet = useWallet();
 
   const [toggleCoin, setToggleCoin] = useState(false);
@@ -155,6 +160,10 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
               : '',
           })
         );
+        mixpanel.track('Swap Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+        });
       })
       .catch((err) => {
         resCalled = true;
@@ -167,6 +176,11 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
             link: '',
           })
         );
+        mixpanel.track('Swap Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error:err.message
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -179,6 +193,10 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
               link: '',
             })
           );
+          mixpanel.track('Swap Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
         }
       });
   };

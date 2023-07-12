@@ -25,6 +25,8 @@ import { createIssue } from '@/lib/helpers/contractInteract';
 import { selectUserMapping } from '@/store/userMappingSlice';
 import { PublicKey } from '@solana/web3.js';
 
+import mixpanel from 'mixpanel-browser';
+
 export default function RightSideIssues({ className }: { className?: string }) {
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
@@ -86,11 +88,11 @@ export default function RightSideIssues({ className }: { className?: string }) {
       };
 
       axios(config)
-        .then((res) => {
+        .then((resp) => {
           let resCalled = false;
           createIssue(
             wallet.publicKey as PublicKey,
-            res.data?.html_url,
+            resp.data?.html_url,
             new PublicKey(repo.account),
             new PublicKey(
               userMappingState.userMapping?.verifiedUserAccount as string
@@ -108,6 +110,16 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
                 })
               );
+              mixpanel.track('Issue Creation Success', {
+                github_id: userMappingState.userMapping?.userName,
+                user_pubkey: userMappingState.userMapping?.userPubkey,
+                tx_link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
+                issue_github_url: resp.data?.html_url,
+                token_address: repo.token_address,
+                repo_account: repo.account,
+                repo_github_id: repo.project_github_id,
+                repo_github_link: repo.project_url,
+              });
               dispatch(setRefetch('issue'));
               closeDrawer();
             })
@@ -122,6 +134,11 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   link: '',
                 })
               );
+              mixpanel.track('Issue Creation Failed', {
+                github_id: userMappingState.userMapping?.userName,
+                user_pubkey: userMappingState.userMapping?.userPubkey,
+                error: err.message,
+              });
               closeDrawer();
             })
             .finally(() => {
@@ -135,6 +152,10 @@ export default function RightSideIssues({ className }: { className?: string }) {
                     link: '',
                   })
                 );
+                mixpanel.track('Issue Creation Success', {
+                  github_id: userMappingState.userMapping?.userName,
+                  user_pubkey: userMappingState.userMapping?.userPubkey,
+                });
                 dispatch(setRefetch('issue'));
                 closeDrawer();
               }
@@ -150,6 +171,11 @@ export default function RightSideIssues({ className }: { className?: string }) {
               link: '',
             })
           );
+          mixpanel.track('Issue Creation GH Failed', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+            error: err.messagem,
+          });
           closeDrawer();
         });
     }

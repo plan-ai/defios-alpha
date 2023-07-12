@@ -14,6 +14,8 @@ const nextConfig = withPWA({
       process.env.NEXT_PUBLIC_INFURA_IPFS_API_KEY,
     NEXT_PUBLIC_INFURA_IPFS_API_SECRET:
       process.env.NEXT_PUBLIC_INFURA_IPFS_API_SECRET,
+    NEXT_PUBLIC_MIXPANEL_PROJECT_KEY:
+      process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_KEY,
   },
   typescript: {
     ignoreBuildErrors: true,

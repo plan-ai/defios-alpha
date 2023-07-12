@@ -10,7 +10,11 @@ import RootLayout from '@/layouts/_root-layout';
 import { useAppSelector } from '@/store/store';
 import Spinner from '@/components/custom/spinner';
 
+import mixpanel from 'mixpanel-browser'
+
 const NotificationPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
+
   const [notificationList, setNotificationList] = useState([]);
   const [loading, setLoading] = useState(true);
   const firebase_jwt = useAppSelector(

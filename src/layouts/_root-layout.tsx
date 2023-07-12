@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setGithub } from '@/store/userInfoSlice';
 import axios from '@/lib/axiosClient';
 
+import mixpanel from 'mixpanel-browser';
+
 import ContractProcess from '@/components/contract-overlay/contract-process';
 // dynamic imports
 const ModernLayout = dynamic(() => import('@/layouts/_modern'), {
@@ -22,6 +24,12 @@ function FallbackLoader() {
     </div>
   );
 }
+
+mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_KEY as string, {
+  debug: true,
+  track_pageview: true,
+  persistence: 'localStorage',
+});
 
 export default function RootLayout({
   children,
@@ -44,6 +52,8 @@ export default function RootLayout({
       session?.accessToken
     ) {
       const notifToken = sessionStorage.getItem('browser-notif-token');
+      //@ts-ignore
+      mixpanel.identify(session.user.id);
       dispatch(
         getFirebaseJwt({
           //@ts-ignore

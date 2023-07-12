@@ -26,6 +26,8 @@ import { ClockIcon } from '@/components/icons/clock';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
+import mixpanel from 'mixpanel-browser';
+
 export const deliverableList = [
   {
     name: 'Infrastructure',
@@ -141,6 +143,18 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             buttonText: 'Browse Roadmaps',
           })
         );
+        mixpanel.track('Objective Link Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          parent_objective_account: parentObjective.objective_key,
+          parent_objective_issue_account:
+            parentObjective.objective_issue_account,
+          child_objective_account: childObjective.objective_key,
+          child_objective_issue_account: childObjective.objective_issue_account,
+        });
         dispatch(setRefetch('objective'));
       })
       .catch((err) => {
@@ -155,6 +169,11 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             buttonText: 'Browse Other Roadmaps',
           })
         );
+        mixpanel.track('Objective Link Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -167,6 +186,10 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               buttonText: 'Browse Roadmaps',
             })
           );
+          mixpanel.track('Objective Link Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('objective'));
         }
       });

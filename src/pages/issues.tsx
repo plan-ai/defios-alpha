@@ -42,6 +42,8 @@ import { useAppSelector, useAppDispatch } from '@/store/store';
 import { reset } from '@/store/notifClickSlice';
 import { resetRefetch } from '@/store/refetchSlice';
 
+import mixpanel from 'mixpanel-browser';
+
 interface searchProps {
   placeholder?: string;
   search: string;
@@ -93,6 +95,7 @@ const Search: React.FC<searchProps> = ({
 };
 
 const IssuesPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
   //right sidebar (new issue) trigger
   const { openDrawer } = useDrawer();
 

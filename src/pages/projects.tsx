@@ -4,7 +4,10 @@ import RootLayout from '@/layouts/_root-layout';
 
 import Projects from '@/components/projects/projects';
 
+import mixpanel from 'mixpanel-browser'
+
 const ProjectsPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
   return (
     <>
       <NextSeo

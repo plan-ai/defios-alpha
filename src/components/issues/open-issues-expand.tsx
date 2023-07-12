@@ -28,6 +28,8 @@ import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
 
+import mixpanel from 'mixpanel-browser';
+
 const sort = [
   { id: 1, name: 'Repository creator' },
   { id: 2, name: 'By amount of code contributed (minified)' },
@@ -170,6 +172,17 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               : '',
           })
         );
+        mixpanel.track('Issue Staking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          token_address: issueTokenAddress,
+          stake_amount: stakeAmount,
+          issue_github_link: link,
+        });
         dispatch(setRefetch('issue'));
       })
       .catch((err) => {
@@ -184,6 +197,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('Issue Staking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -197,6 +215,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               link: '',
             })
           );
+          mixpanel.track('Issue Staking Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('issue'));
         }
       });
@@ -224,6 +246,16 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               : '',
           })
         );
+        mixpanel.track('Issue Unstaking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          token_address: issueTokenAddress,
+          issue_github_link: link,
+        });
         dispatch(setRefetch('issue'));
       })
       .catch((err) => {
@@ -238,6 +270,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('Issue Unstaking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -251,6 +288,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               link: '',
             })
           );
+          mixpanel.track('Issue Unstaking Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('issue'));
         }
       });
@@ -288,6 +329,19 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               : '',
           })
         );
+        mixpanel.track('PR Staking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          issue_github_link: link,
+          token_address: issueTokenAddress,
+          stake_amount: stakeAmount,
+          PR_account: selectedPR.issue_pr_account,
+          PR_github_link: selectedPR.issue_pr_github,
+        });
         dispatch(setRefetch('issue'));
       })
       .catch((err) => {
@@ -302,6 +356,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('PR Staking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -315,6 +374,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               link: '',
             })
           );
+          mixpanel.track('PR Staking Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('issue'));
         }
       });
@@ -348,6 +411,18 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               : '',
           })
         );
+        mixpanel.track('PR Untaking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          issue_github_link: link,
+          token_address: issueTokenAddress,
+          PR_account: selectedPR.issue_pr_account,
+          PR_github_link: selectedPR.issue_pr_github,
+        });
         dispatch(setRefetch('issue'));
       })
       .catch((err) => {
@@ -362,6 +437,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('PR Untaking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -375,6 +455,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               link: '',
             })
           );
+          mixpanel.track('PR Untaking Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           dispatch(setRefetch('issue'));
         }
       });
@@ -440,11 +524,24 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   description: 'Check out your commit submit at',
                   buttonText: 'Browse Issues',
                   redirect: null,
-                  link: res
+                  link: resp
                     ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
                     : '',
                 })
               );
+              mixpanel.track('PR Submit Success', {
+                github_id: userMappingState.userMapping?.userName,
+                user_pubkey: userMappingState.userMapping?.userPubkey,
+                tx_link: resp
+                  ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
+                  : '',
+                issue_account: account,
+                issue_github_link: link,
+                token_address: issueTokenAddress,
+                PR_github_link: res.data.html_url,
+                tree_hash_unsliced: latestCommit.commit.tree.sha,
+                commit_hash_unsliced: latestCommit.sha,
+              });
               dispatch(setRefetch('issue'));
             })
             .catch((err) => {
@@ -458,6 +555,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   link: '',
                 })
               );
+              mixpanel.track('PR Submit Failed', {
+                github_id: userMappingState.userMapping?.userName,
+                user_pubkey: userMappingState.userMapping?.userPubkey,
+                error: err.message,
+              });
             })
             .finally(() => {
               if (!resCalled) {
@@ -470,6 +572,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     link: '',
                   })
                 );
+                mixpanel.track('PR Submit Success', {
+                  github_id: userMappingState.userMapping?.userName,
+                  user_pubkey: userMappingState.userMapping?.userPubkey,
+                });
                 dispatch(setRefetch('issue'));
               }
             });
@@ -485,6 +591,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('PR Submit GH Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       });
   };
 
@@ -530,6 +641,18 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   : '',
               })
             );
+            mixpanel.track('PR Merge Success', {
+              github_id: userMappingState.userMapping?.userName,
+              user_pubkey: userMappingState.userMapping?.userPubkey,
+              tx_link: res
+                ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+                : '',
+              issue_account: account,
+              issue_github_link: link,
+              token_address: issueTokenAddress,
+              PR_account: selectedPR.issue_pr_account,
+              PR_github_link: selectedPR.issue_pr_github,
+            });
             dispatch(setRefetch('issue'));
           })
           .catch((err) => {
@@ -543,6 +666,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 link: '',
               })
             );
+            mixpanel.track('PR Merge Failed', {
+              github_id: userMappingState.userMapping?.userName,
+              user_pubkey: userMappingState.userMapping?.userPubkey,
+              error: err.message,
+            });
           })
           .finally(() => {
             if (!resCalled) {
@@ -555,6 +683,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   link: '',
                 })
               );
+              mixpanel.track('PR Merge Success', {
+                github_id: userMappingState.userMapping?.userName,
+                user_pubkey: userMappingState.userMapping?.userPubkey,
+              });
               dispatch(setRefetch('issue'));
             }
           });
@@ -570,6 +702,11 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             link: '',
           })
         );
+        mixpanel.track('PR Merge GH Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
       })
       .finally(() => {
         if (!resCalled) {

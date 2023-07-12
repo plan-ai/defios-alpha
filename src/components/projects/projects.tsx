@@ -31,6 +31,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { PublicKey } from '@solana/web3.js';
 
+import mixpanel from 'mixpanel-browser';
+
 const sort = [
   { id: 0, name: 'Hot', order_by: '-num_open_issues' },
   { id: 1, name: 'Urgent', order_by: '-num_open_issues' },
@@ -316,6 +318,18 @@ export default function Projects() {
               : '',
           })
         );
+        mixpanel.track('Token Unlock Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          project_account: project.project_account,
+          repo_github_id: project.project_github_id,
+          repo_github_url: project.project_repo_link,
+          token_address: project.project_token.token_spl_addr,
+          token_symbol: project.project_token.token_symbol
+        });
         setTriggerSearch(true);
       })
       .catch((err: any) => {
@@ -329,6 +343,11 @@ export default function Projects() {
             link: '',
           })
         );
+        mixpanel.track('Token Unlock Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
         setTriggerSearch(true);
       })
       .finally(() => {
@@ -342,6 +361,10 @@ export default function Projects() {
               link: '',
             })
           );
+          mixpanel.track('Token Unlock Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
           setTriggerSearch(true);
         }
       });

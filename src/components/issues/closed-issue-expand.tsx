@@ -12,6 +12,8 @@ import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from '@/lib/axiosClient';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
+import mixpanel from 'mixpanel-browser'
+
 interface ClosedIssueExpandProps {
   data: any;
 }
@@ -104,6 +106,20 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
               : '',
           })
         );
+        mixpanel.track('Issue Reward Claim Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: data?.issue_account,
+          issue_github_link: data?.issue_gh_url,
+          token_address: data?.issue_stake_token_url,
+          PR_account: winner?.issue_pr_account,
+          PR_github_link: winner?.issue_pr_github,
+          reward_amount: data?.issue_stake_amount + winner?.issue_vote_amount,
+          rewardee: data?.rewardee,
+        });
       })
       .catch((err) => {
         resCalled = true;
@@ -116,6 +132,11 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
             link: '',
           })
         );
+        mixpanel.track('Issue Reward Claim Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -128,6 +149,10 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
               link: '',
             })
           );
+          mixpanel.track('Issue Reward Claim Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
         }
       });
   };

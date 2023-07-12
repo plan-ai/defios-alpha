@@ -10,8 +10,11 @@ import RightSideInfo from '@/components/swaps/right-side-info';
 import Spinner from '@/components/custom/spinner';
 
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { selectUserMapping } from '@/store/userMappingSlice';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
+
+import mixpanel from 'mixpanel-browser';
 
 import {
   calculateBuyAmount,
@@ -29,6 +32,8 @@ interface BuyConsoleProps {
 const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
   const dispatch = useAppDispatch();
   const stateLoading = useAppSelector((state) => state.callLoader.callState);
+  const userMappingState = useAppSelector(selectUserMapping);
+
   const wallet = useWallet();
 
   const [coinList, setCoinList] = useState<any>([]);
@@ -112,6 +117,10 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
               : '',
           })
         );
+        mixpanel.track('Buy Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+        });
       })
       .catch((err) => {
         resCalled = true;
@@ -124,6 +133,11 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
             link: '',
           })
         );
+        mixpanel.track('Buy Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error:err.message
+        });
       })
       .finally(() => {
         if (!resCalled) {
@@ -136,6 +150,10 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
               link: '',
             })
           );
+          mixpanel.track('Buy Success', {
+            github_id: userMappingState.userMapping?.userName,
+            user_pubkey: userMappingState.userMapping?.userPubkey,
+          });
         }
       });
   };

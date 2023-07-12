@@ -15,7 +15,11 @@ import Image from 'next/image';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useAppSelector } from '@/store/store';
 
+import mixpanel from 'mixpanel-browser'
+
 const IncentivizeContributorsPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
+
   const dispatch = useAppDispatch();
   const wallet = useWallet();
 

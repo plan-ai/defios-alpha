@@ -6,7 +6,11 @@ import RootLayout from '@/layouts/_root-layout';
 import SwapConsole from '@/components/swaps/SwapConsole';
 import BuyConsole from '@/components/swaps/BuyConsole';
 
+import mixpanel from 'mixpanel-browser';
+
 const SwapPage: NextPageWithLayout = () => {
+  mixpanel.track_pageview();
+
   const [consoleType, setConsoleType] = useState<'swap' | 'buy'>('swap');
 
   return (
