@@ -40,28 +40,28 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
   const [toCoin, setToCoin] = useState<any>(null);
   const fromCoin = {
     token_image_url:
-      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
-    token_symbol: 'SOL',
+      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU/logo.png',
+    token_symbol: 'USDC',
   };
 
   const [buySupply, setBuySupply] = useState<BN>(new BN(0));
 
-  const [solAmt, setSolAmt] = useState<string>('0');
+  const [usdcAmt, setUsdcAmt] = useState<string>('0');
   const [buyAmt, setBuyAmt] = useState<string>('0');
 
   const [buyAmtBN, setBuyAmtBN] = useState<BN>(new BN(0));
-  const [solAmtBN, setSolAmtBN] = useState<BN>(new BN(0));
+  const [usdcAmtBN, setUsdcAmtBN] = useState<BN>(new BN(0));
 
   const [buyDecimals, setBuyDecimals] = useState(0);
 
   const handleBuyChange = (e: any) => {
     const buyAmount = e.target.value.toString();
-    const solAmount = calculateBuyAmount(buySupply, new BN(buyAmount));
+    const usdcAmount = calculateBuyAmount(buySupply, new BN(buyAmount));
 
     setBuyAmt(e.target.value);
     setBuyAmtBN(new BN(buyAmount).mul(new BN(10).pow(new BN(buyDecimals))));
-    setSolAmtBN(solAmount);
-    setSolAmt((parseInt(solAmount.toString()) / 10 ** 9).toString());
+    setUsdcAmtBN(usdcAmount);
+    setUsdcAmt((parseInt(usdcAmount.toString()) / 10 ** 6).toString());
   };
 
   const auth_cred = useAppSelector(
@@ -77,9 +77,9 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
         const { supplyModified, decimals } = res;
         setBuySupply(supplyModified.div(new BN(10).pow(new BN(decimals))));
         setBuyDecimals(decimals);
-        setSolAmt('0');
+        setUsdcAmt('0');
         setBuyAmt('0');
-        setSolAmtBN(new BN(0));
+        setUsdcAmtBN(new BN(0));
         setBuyAmtBN(new BN(0));
       })
       .catch((err) => console.log(err));
@@ -100,10 +100,10 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
   }, [auth_cred]);
 
   const handleBuyTransaction = () => {
-    if (buyAmtBN.eq(new BN(0)) || solAmtBN.eq(new BN(0))) return;
+    if (buyAmtBN.eq(new BN(0)) || usdcAmtBN.eq(new BN(0))) return;
     let resCalled = false;
     dispatch(onLoading(`Buying ${buyAmt} ${toCoin.token_symbol} ...`));
-    buyTransaction(new PublicKey(toCoin.repository), buyAmtBN, solAmtBN)
+    buyTransaction(new PublicKey(toCoin.repository), buyAmtBN, usdcAmtBN)
       .then((res) => {
         resCalled = true;
         dispatch(
@@ -120,6 +120,18 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
         mixpanel.track('Buy Success', {
           github_id: userMappingState.userMapping?.userName,
           user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          buy_token_repository_account: toCoin.repository,
+          buy_token_address: toCoin.token_spl_addr,
+          buy_token_symbol: toCoin.token_symbol,
+          buy_token_decimals: buyDecimals,
+          buy_token_amt: buyAmt,
+          buy_token_amount_BN: buyAmtBN.toString(),
+          buy_token_supply_BN: buySupply.toString(),
+          usdc_token_amt: usdcAmt,
+          usdc_token_amount_BN: usdcAmtBN.toString(),
         });
       })
       .catch((err) => {
@@ -177,7 +189,7 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
           {coinList.length !== 0 ? (
             <div className={cn('relative flex flex-col gap-3')}>
               <CoinInput
-                label={'From'}
+                label={'Buy'}
                 exchangeRate={0.0}
                 value={buyAmt}
                 type="number"
@@ -199,9 +211,9 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
                 </Button>
               </div>
               <CoinInput
-                label={'To'}
+                label={'From'}
                 exchangeRate={0.0}
-                value={solAmt}
+                value={usdcAmt}
                 type="number"
                 defaultCoinIndex={1}
                 getCoinValue={(data) => console.log('Coin changed')}

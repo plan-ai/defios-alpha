@@ -163,6 +163,23 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
         mixpanel.track('Swap Success', {
           github_id: userMappingState.userMapping?.userName,
           user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          buy_token_repository_account: toCoin.repository,
+          buy_token_address: toCoin.token_spl_addr,
+          buy_token_symbol: toCoin.token_symbol,
+          buy_token_decimals: buyDecimals,
+          buy_token_amt: buyAmt,
+          buy_token_amount_BN: buyAmtBN.toString(),
+          buy_token_supply_BN: buySupply.toString(),
+          sell_token_repository_account: fromCoin.repository,
+          sell_token_address: fromCoin.token_spl_addr,
+          sell_token_symbol: fromCoin.token_symbol,
+          sell_token_decimals: sellDecimals,
+          sell_token_amt: sellAmt,
+          sell_token_amount_BN: sellAmtBN.toString(),
+          sell_token_supply_BN: sellSupply.toString(),
         });
       })
       .catch((err) => {
