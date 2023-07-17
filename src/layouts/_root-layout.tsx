@@ -26,10 +26,10 @@ function FallbackLoader() {
 }
 
 mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_KEY as string, {
-  debug: true,
+  debug: false,
   track_pageview: true,
   persistence: 'localStorage',
-  // api_host: process.env.NEXT_PUBLIC_MIXPANEL_HOST,
+  api_host: process.env.NEXT_PUBLIC_MIXPANEL_HOST,
 });
 
 export default function RootLayout({
