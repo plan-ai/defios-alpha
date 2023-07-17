@@ -43,7 +43,7 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
         <div className="z-20 flex h-[7vh] w-full flex-row items-center justify-between pt-[2%]">
           <Image src={LogoFull} alt="logo" height={60} />
           <div className="flex h-full w-full flex-row items-center justify-end">
-            <a
+            {/* <a
               href="#"
               target="_blank"
               className="mx-[2%] text-[2vh] font-bold text-[#90A9FC]"
@@ -58,9 +58,9 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
             </a>
             <a href="#" target="_blank" className="mx-[2%] text-[2vh]">
               For Enterprise 🏦
-            </a>
+            </a> */}
             <a
-              href="mailto:abhi@defi-os.com?Subject=Product%20Query"
+              href="mailto:hellodefios@gmail.com?Subject=Product%20Query"
               className="mx-[2%] text-[2vh]"
             >
               Contact Us
