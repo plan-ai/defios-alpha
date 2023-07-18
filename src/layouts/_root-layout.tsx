@@ -55,6 +55,9 @@ export default function RootLayout({
       const notifToken = sessionStorage.getItem('browser-notif-token');
       //@ts-ignore
       mixpanel.identify(session.user.id);
+      if (wallet.publicKey) {
+        mixpanel.people.set({ PubKey: wallet.publicKey.toString() });
+      }
       dispatch(
         getFirebaseJwt({
           //@ts-ignore
@@ -85,7 +88,13 @@ export default function RootLayout({
             Authorization: `Bearer ${session?.accessToken}`,
           },
         })
-        .then((res) => dispatch(setGithub(res.data)))
+        .then((res) => {
+          mixpanel.people.set({
+            Name: res.data.name,
+            github_name: res.data.login,
+          });
+          dispatch(setGithub(res.data));
+        })
         .catch((err) => console.log(err));
     }
   }, [session, dispatch]);
