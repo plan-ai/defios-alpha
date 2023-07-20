@@ -63,13 +63,20 @@ export default function ModernScreen() {
                 className="scale-y-90"
               />
               <div className="relative">
-                <RoadmapCard item={homeData?.roadmap} roadmap={roadmap} setRoadmap={setRoadmap} className="scale-y-90" />
-                <ListCard
-                  item={{
-                    name: '🔥 Hot',
-                  }}
-                  className="absolute top-28 right-3 rounded-full border-2 border-gray-700 bg-dark p-2 pr-4 text-white"
+                <RoadmapCard
+                  item={homeData?.roadmap}
+                  roadmap={roadmap}
+                  setRoadmap={setRoadmap}
+                  className="scale-y-90"
                 />
+                {Object.keys(homeData.roadmap).length>0 && (
+                  <ListCard
+                    item={{
+                      name: '🔥 Hot',
+                    }}
+                    className="absolute top-28 right-3 rounded-full border-2 border-gray-700 bg-dark p-2 pr-4 text-white"
+                  />
+                )}
               </div>
               <OverviewChart className="scale-y-90" />
             </div>

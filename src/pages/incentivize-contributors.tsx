@@ -42,7 +42,7 @@ const IncentivizeContributorsPage: NextPageWithLayout = () => {
         title="Incentivize Contributors"
         description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
-      <div className="relative flex h-full w-full flex-col items-center justify-between py-10 px-5">
+      <div className="relative flex h-full w-full flex-col items-center justify-between pb-10 px-5">
         <div className="mb-5 w-[80%]">
           <Button
             shape="rounded"

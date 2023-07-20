@@ -165,18 +165,56 @@ export default function Header({ className }: { className?: string }) {
             <PageHeader
               title="projects"
               description={[
-                'get rewarded when you contribute to a project.',
-                'create your own project to incentivize contributors.',
+                'claim the tokens for your own project.',
+                'explore what other projects are working on and how communities are working.',
               ]}
             />
           )}
-          {router.pathname === '/swap' && <PageHeader title="swap" />}
-          {router.pathname === '/roadmaps' && <PageHeader title="roadmaps" />}
-          {router.pathname === '/issues' && <PageHeader title="issues" />}
-          {router.pathname === '/incentivize-contributors' && (
-            <PageHeader title="create a project" />
+          {router.pathname === '/swap' && (
+            <PageHeader
+              title="swap"
+              description={[
+                'purchase and HODL your favorite tokens.',
+                'swap with project tokens of new projects that you want to support.',
+              ]}
+            />
           )}
-          {router.pathname === '/profile' && <PageHeader title="profile" />}
+          {router.pathname === '/roadmaps' && (
+            <PageHeader
+              title="roadmaps"
+              description={[
+                'plan how projects pan out as a community.',
+                'use your staked tokens to drive the direction of your favorite projects.',
+              ]}
+            />
+          )}
+          {router.pathname === '/issues' && (
+            <PageHeader
+              title="issues"
+              description={[
+                'solve issues to earn tokens.',
+                'stake tokens on issues to incentivize contributors.',
+              ]}
+            />
+          )}
+          {router.pathname === '/incentivize-contributors' && (
+            <PageHeader
+              title="create a project"
+              description={[
+                'tokenize your github repository.',
+                'onboard new contributors on your project seamlessly.',
+              ]}
+            />
+          )}
+          {router.pathname === '/profile' && (
+            <PageHeader
+              title="profile"
+              description={[
+                'explore and analyse your contributions.',
+                'build your proof of work to showcase your skills.',
+              ]}
+            />
+          )}
           {router.pathname === '/jobs' && <PageHeader title="jobs" />}
         </div>
         <HeaderRightArea />
