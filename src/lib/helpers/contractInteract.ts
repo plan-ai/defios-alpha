@@ -70,6 +70,20 @@ export const getDefiOsProgram = async (provider: AnchorProvider) => {
   return program;
 };
 
+export const solAirdrop = async (address: PublicKey) => {
+  return new Promise<any>(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    provider.connection
+      .requestAirdrop(address, 2 * web3.LAMPORTS_PER_SOL)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
 export const get_pda_from_seeds = async (seeds: any, program: any) => {
   return await web3.PublicKey.findProgramAddressSync(seeds, program.programId);
 };

@@ -5,6 +5,8 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
 import { ExportIcon } from '@/components/icons/export-icon';
+import { Twitter } from '@/components/icons/brands/twitter';
+
 import Button from '@/components/ui/button/button';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
@@ -26,6 +28,8 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
   useLockBodyScroll(callStatus !== 'none');
 
   // success
+  const successState = useAppSelector((state) => state.callLoader.success);
+
   const successLabel = useAppSelector(
     (state) => state.callLoader.success.label
   );
@@ -57,20 +61,25 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
   if (callStatus !== 'none') {
     return (
-      <div className="fixed top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30" onClick={()=>{
-        if(callStatus==='success'){
-          dispatch(resetLoader());
-        }
-      }}>
+      <div
+        className="fixed top-0 left-0 z-[200] flex h-screen w-screen items-center justify-center bg-black bg-opacity-30"
+        onClick={() => {
+          if (callStatus === 'success') {
+            dispatch(resetLoader());
+          }
+        }}
+      >
         {/* loading */}
         {callStatus === 'loading' && <Spinner label={loadingLabel} />}
 
         {/* success */}
         {callStatus === 'success' && (
-          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10"
-          onClick={(e)=>{
-            e.stopPropagation();
-          }}>
+          <div
+            className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <div className="flex flex-col items-center justify-center gap-5">
               <CheckBadgeIcon className="h-12 w-12 text-new-blue xl:h-14 xl:w-14 3xl:h-16 3xl:w-16" />
               <div className="text-center text-sm xl:text-base 3xl:text-lg">
@@ -89,18 +98,30 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                 </AnchorLink>
               )}
             </div>
-            <Button
-              onClick={() => {
-                dispatch(resetLoader());
-                if (successRedirect !== null) {
-                  router.push(successRedirect);
-                }
-              }}
-              size="medium"
-              shape="rounded"
-            >
-              {successBtnText !== '' ? successBtnText : 'Continue'}
-            </Button>
+            <div className="flex items-center justify-center gap-4">
+              <Button
+                onClick={() => {
+                  dispatch(resetLoader());
+                  if (successRedirect !== null) {
+                    router.push(successRedirect);
+                  }
+                }}
+                size="medium"
+                shape="rounded"
+              >
+                {successBtnText !== '' ? successBtnText : 'Continue'}
+              </Button>
+              {successState.tweetLink && (
+                <AnchorLink
+                  className="flex items-center justify-center gap-2 rounded-full bg-[#0c7abf] py-2 px-5 text-sm text-white xl:text-base 3xl:text-lg"
+                  href={successState.tweetLink}
+                  target="_blank"
+                >
+                  <Twitter className="w-6" />
+                  <div>Tweet</div>
+                </AnchorLink>
+              )}
+            </div>
           </div>
         )}
 

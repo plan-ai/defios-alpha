@@ -7,6 +7,7 @@ type messageType = {
   link: string;
   redirect: string | null;
   buttonText: string;
+  tweetLink?: string;
 };
 
 export interface callLoaderState {
