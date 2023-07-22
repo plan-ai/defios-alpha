@@ -40,7 +40,7 @@ export default function CoinSelectView({
     }
   }
   return (
-    <div className="w-full rounded-xl bg-dark text-2xs shadow-large xl:text-xs w-[20rem] xl:w-[21.5rem] 2xl:w-[23.5rem] 3xl:w-[25rem] 3xl:text-sm">
+    <div className="w-full w-[20rem] rounded-xl bg-dark text-2xs shadow-large xl:w-[21.5rem] xl:text-xs 2xl:w-[23.5rem] 3xl:w-[25rem] 3xl:text-sm">
       <h2 className="p-6 text-sm font-medium uppercase text-white xl:text-base 3xl:text-lg">
         Pay with
       </h2>
@@ -63,13 +63,14 @@ export default function CoinSelectView({
               onKeyDown={(event) => handleSelectedCoinOnKeyDown(event, item)}
               className="flex cursor-pointer items-center gap-2 py-3 px-6 outline-none hover:bg-gray-800 focus:bg-gray-900"
             >
-              <Image
-                src={item.token_image_url || ''}
-                alt={item.token_symbol || ''}
-                width={20}
-                height={20}
-                className="rounded-full"
-              />
+              <div className="relative h-6 w-6 overflow-hidden rounded-full">
+                <Image
+                  src={item.token_image_url || ''}
+                  alt={item.token_symbol || ''}
+                  fill
+                  className="object-cover"
+                />
+              </div>
               <span className="uppercase">{item.token_symbol}</span>
             </li>
           ))

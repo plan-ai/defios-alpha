@@ -10,6 +10,8 @@ import axios from '@/lib/axiosClient';
 import { useAppDispatch } from '@/store/store';
 import { clicked } from '@/store/notifClickSlice';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import Button from '@/components/ui/button';
 
 interface TopProjectCardProps {
   item: any;
@@ -58,8 +60,13 @@ export const TopProjectCard: React.FC<TopProjectCardProps> = ({
         className="relative top-0 left-0 z-[5] flex aspect-[8/11] h-full w-full flex-col justify-between bg-gradient-to-t from-black to-slate-900 p-5 md:p-6"
         onClick={onClickHandler}
       >
-        <div className="text-base uppercase xl:text-lg 3xl:text-xl">
-          Most Trending Project
+        <div className="text-base uppercase flex flex-col xl:text-lg 3xl:text-xl">
+          <div>Most Trending Project</div>
+          <Link href="/projects">
+            <Button shape="rounded" color="info" size='small' className="mt-3">
+              create a project
+            </Button>
+          </Link>
         </div>
         <div className="flex justify-between gap-3">
           <AnchorLink

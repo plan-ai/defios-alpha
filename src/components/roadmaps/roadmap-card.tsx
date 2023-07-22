@@ -7,9 +7,11 @@ import { useClickAway } from '@/lib/hooks/use-click-away';
 import { useLockBodyScroll } from '@/lib/hooks/use-lock-body-scroll';
 import { useAppSelector } from '@/store/store';
 import routes from '@/config/routes';
+import Button from '@/components/ui/button';
 import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import ListCard from '../ui/list-card';
 import cn from 'classnames';
+import Link from 'next/link';
 
 import EmptyList from '@/components/icons/EmptyList';
 import { ClockIcon } from '@/components/icons/clock';
@@ -45,7 +47,7 @@ export default function RoadmapCard({
     month: 'long',
   });
   return (
-    <div className="relative overflow-hidden transition-all duration-200">
+    <div className="relative h-full overflow-hidden transition-all duration-200">
       {Object.keys(item).length !== 0 && (
         <div
           className={cn(
@@ -117,11 +119,11 @@ export default function RoadmapCard({
       {Object.keys(item).length === 0 && (
         <div
           className={cn(
-            'rounded-xl bg-light-dark shadow-card hover:shadow-large',
+            'h-full rounded-xl bg-light-dark shadow-card hover:shadow-large',
             className
           )}
         >
-          <div className="flex h-[30rem] w-full flex-col items-center justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-center">
             <EmptyList />
             <div className="text-center text-sm text-gray-500 xl:text-base 3xl:text-lg">
               No Roadmap Available
@@ -129,6 +131,11 @@ export default function RoadmapCard({
             <div className="text-center text-sm text-gray-500 xl:text-base 3xl:text-lg">
               Stay Tuned for Roadmaps!
             </div>
+            <Link href="/roadmaps">
+              <Button shape="rounded" size="small" color="info" className="mt-5">
+                create a roadmap
+              </Button>
+            </Link>
           </div>
         </div>
       )}

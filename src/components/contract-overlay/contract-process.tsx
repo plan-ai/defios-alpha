@@ -5,6 +5,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
 import { ExportIcon } from '@/components/icons/export-icon';
+import { Close } from '@/components/icons/close';
 import { Twitter } from '@/components/icons/brands/twitter';
 
 import Button from '@/components/ui/button/button';
@@ -75,7 +76,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
         {/* success */}
         {callStatus === 'success' && (
           <div
-            className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10"
+            className="relative flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[31rem] xl:p-8 3xl:w-[34rem] 3xl:p-10"
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -86,6 +87,14 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                 {successLabel}
               </div>
             </div>
+            <Close
+              onClick={() => {
+                if (callStatus === 'success') {
+                  dispatch(resetLoader());
+                }
+              }}
+              className="absolute top-6 right-6 h-6 w-6 cursor-pointer font-bold text-white"
+            />
             <div className="text-xs text-gray-400 xl:text-sm 3xl:text-base">
               {successDescription}
               {successLink !== '' && (
@@ -99,18 +108,20 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
               )}
             </div>
             <div className="flex items-center justify-center gap-4">
-              <Button
-                onClick={() => {
-                  dispatch(resetLoader());
-                  if (successRedirect !== null) {
-                    router.push(successRedirect);
-                  }
-                }}
-                size="medium"
-                shape="rounded"
-              >
-                {successBtnText !== '' ? successBtnText : 'Continue'}
-              </Button>
+              {successRedirect !== null && (
+                <Button
+                  onClick={() => {
+                    dispatch(resetLoader());
+                    if (successRedirect !== null) {
+                      router.push(successRedirect);
+                    }
+                  }}
+                  size="medium"
+                  shape="rounded"
+                >
+                  {successBtnText !== '' ? successBtnText : 'Continue'}
+                </Button>
+              )}
               {successState.tweetLink && (
                 <AnchorLink
                   className="flex items-center justify-center gap-2 rounded-full bg-[#0c7abf] py-2 px-5 text-sm text-white xl:text-base 3xl:text-lg"

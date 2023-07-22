@@ -159,7 +159,13 @@ export default function Header({ className }: { className?: string }) {
             <Logo />
           </div> */}
           {router.pathname === '/home' && (
-            <PageHeader title="welcome to defios!" />
+            <PageHeader
+              title="welcome"
+              description={[
+                "we're still in beta and on devnet!",
+                'thank you for supporting open-source!',
+              ]}
+            />
           )}
           {router.pathname === '/projects' && (
             <PageHeader

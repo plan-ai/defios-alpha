@@ -69,7 +69,7 @@ export default function ModernScreen() {
                   setRoadmap={setRoadmap}
                   className="scale-y-90"
                 />
-                {Object.keys(homeData.roadmap).length>0 && (
+                {Object.keys(homeData.roadmap).length > 0 && (
                   <ListCard
                     item={{
                       name: '🔥 Hot',
@@ -78,7 +78,7 @@ export default function ModernScreen() {
                   />
                 )}
               </div>
-              <OverviewChart className="scale-y-90" />
+              <OverviewChart comingSoon={true} className="scale-y-90" />
             </div>
           </div>
           {/* <Journey data={homeData?.paths} /> */}

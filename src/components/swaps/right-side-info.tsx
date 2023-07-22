@@ -113,18 +113,19 @@ export default function RightSideInfo({
             {coinInfo !== null ? (
               <div className="w-full w-full">
                 {coinInfo?.token_image_url && (
-                  <Image
-                    src={
-                      coinInfo?.token_image_url?.replace(
-                        'https://ipfs.io',
-                        'https://defi-os.infura-ipfs.io'
-                      ) || ''
-                    }
-                    alt={coinInfo?.token_symbol || ''}
-                    width={80}
-                    height={80}
-                    className="mx-auto mb-6 rounded-full"
-                  />
+                  <div className="relative mx-auto mb-6 h-14 w-14 overflow-hidden rounded-full xl:h-16 xl:w-16 3xl:h-20 3xl:w-20">
+                    <Image
+                      src={
+                        coinInfo?.token_image_url?.replace(
+                          'https://ipfs.io',
+                          'https://defi-os.infura-ipfs.io'
+                        ) || ''
+                      }
+                      alt={coinInfo?.token_symbol || ''}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 )}
                 <div className="m-3.5 text-center text-xs xl:m-4 xl:text-sm 2xl:my-5 2xl:text-base">
                   {coinInfo?.token_name} - {coinInfo?.token_symbol}

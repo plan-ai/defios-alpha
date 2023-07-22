@@ -77,18 +77,19 @@ export default function CoinInput({
             }}
             className="flex items-center text-xs font-medium text-gray-100 outline-none xl:text-sm 3xl:text-base"
           >
-            <Image
-              src={
-                selectedCoin?.token_image_url?.replace(
-                  'https://ipfs.io',
-                  'https://defi-os.infura-ipfs.io'
-                ) || ''
-              }
-              alt={selectedCoin?.token_symbol || ''}
-              width={20}
-              height={20}
-              className="rounded-full"
-            />
+            <div className="relative h-6 w-6 overflow-hidden rounded-full">
+              <Image
+                src={
+                  selectedCoin?.token_image_url?.replace(
+                    'https://ipfs.io',
+                    'https://defi-os.infura-ipfs.io'
+                  ) || ''
+                }
+                alt={selectedCoin?.token_symbol || ''}
+                fill
+                className="object-cover"
+              />
+            </div>
             <span className="ml-2">{selectedCoin?.token_symbol} </span>
             <ChevronDown className="ml-1.5" />
           </button>
