@@ -99,7 +99,6 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
           onSuccess({
             label: 'Issue Reward Claiming Successful',
             description: 'check out the tx at',
-            buttonText: 'Browse Issues',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -128,7 +127,6 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
             label: 'Issue Reward Claiming Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -144,7 +142,6 @@ const ClosedIssueExpand: React.FC<ClosedIssueExpandProps> = ({ data }) => {
             onSuccess({
               label: 'Issue Reward Claiming Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })

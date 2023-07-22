@@ -283,7 +283,6 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
             redirect: null,
-            buttonText: 'Browse Roadmaps',
           })
         );
         mixpanel.track('Roadmap Creation Success', {
@@ -312,7 +311,6 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
             description: err.message,
             link: '',
             redirect: null,
-            buttonText: 'Browse Other Roadmaps',
           })
         );
         mixpanel.track('Roadmap Creation Failed', {
@@ -331,7 +329,6 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
               description: '',
               link: '',
               redirect: null,
-              buttonText: 'Browse Roadmaps',
             })
           );
           mixpanel.track('Roadmap Creation Success', {

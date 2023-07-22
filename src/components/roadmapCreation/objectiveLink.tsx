@@ -140,7 +140,6 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
             redirect: null,
-            buttonText: 'Browse Roadmaps',
           })
         );
         mixpanel.track('Objective Link Success', {
@@ -166,7 +165,6 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             description: err.message,
             link: '',
             redirect: '/roadmaps',
-            buttonText: 'Browse Other Roadmaps',
           })
         );
         mixpanel.track('Objective Link Failed', {
@@ -183,7 +181,6 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               description: '',
               link: '',
               redirect: null,
-              buttonText: 'Browse Roadmaps',
             })
           );
           mixpanel.track('Objective Link Success', {

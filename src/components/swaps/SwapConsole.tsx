@@ -153,7 +153,6 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
           onSuccess({
             label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
             description: 'check out the tx at',
-            buttonText: 'Continue',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -189,7 +188,6 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
             label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Failed`,
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -205,7 +203,6 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
             onSuccess({
               label: `Swapping ${sellAmt} ${fromCoin.token_symbol} --> ${buyAmt} ${toCoin.token_symbol} Successful`,
               description: '',
-              buttonText: 'Continue',
               redirect: null,
               link: '',
             })

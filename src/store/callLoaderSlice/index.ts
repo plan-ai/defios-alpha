@@ -6,7 +6,6 @@ type messageType = {
   description: string;
   link: string;
   redirect: string | null;
-  buttonText: string;
   tweetLink?: string;
 };
 
@@ -25,14 +24,12 @@ const initialState: callLoaderState = {
     description: '',
     link: '',
     redirect: null,
-    buttonText: 'Continue',
   },
   failure: {
     label: '',
     description: '',
     link: '',
     redirect: null,
-    buttonText: 'Continue',
   },
 };
 
@@ -60,14 +57,12 @@ export const callLoaderSlice = createSlice({
         description: '',
         link: '',
         redirect: null,
-        buttonText: 'Continue',
       };
       state.failure = {
         label: '',
         description: '',
         link: '',
         redirect: null,
-        buttonText: 'Continue',
       };
     },
   },

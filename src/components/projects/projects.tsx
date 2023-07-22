@@ -311,7 +311,6 @@ export default function Projects() {
           onSuccess({
             label: 'Pending Token Claim Successful',
             description: 'Check out your token claim at',
-            buttonText: 'Browse Projects',
             redirect: null,
             link: res
               ? `https://solscan.io/tx/${res.toString()}?cluster=devnet`
@@ -339,7 +338,6 @@ export default function Projects() {
             label: 'Pending Token Claim Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -356,7 +354,6 @@ export default function Projects() {
             onSuccess({
               label: 'Pending Token Claim Successful',
               description: '',
-              buttonText: 'Browse Projects',
               redirect: null,
               link: '',
             })

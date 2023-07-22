@@ -105,7 +105,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
                 onSuccess({
                   label: 'Issue Creation Successful',
                   description: 'Check out the Issue you created',
-                  buttonText: 'Browse Issues',
                   redirect: null,
                   link: `https://solscan.io/account/${res.toString()}?cluster=devnet`,
                 })
@@ -130,7 +129,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   label: 'Issue Creation Failed',
                   description: err.message,
                   redirect: null,
-                  buttonText: 'Continue',
                   link: '',
                 })
               );
@@ -147,7 +145,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
                   onSuccess({
                     label: 'Issue Creation Successful',
                     description: '',
-                    buttonText: 'Browse Issues',
                     redirect: null,
                     link: '',
                   })
@@ -167,7 +164,6 @@ export default function RightSideIssues({ className }: { className?: string }) {
               label: 'Issue Creation Failed',
               description: err.message,
               redirect: null,
-              buttonText: 'Continue',
               link: '',
             })
           );

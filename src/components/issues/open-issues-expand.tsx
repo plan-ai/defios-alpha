@@ -165,7 +165,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           onSuccess({
             label: 'Issue Staking Successful',
             description: 'Check out your staking at',
-            buttonText: 'Browse Issues',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -193,7 +192,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Issue Staking Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -210,7 +208,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             onSuccess({
               label: 'Issue Staking Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })
@@ -239,7 +236,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           onSuccess({
             label: 'Issue Unstaking Successful',
             description: 'Check out your unstaking at',
-            buttonText: 'Browse Issues',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -266,7 +262,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Issue Unstaking Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -283,7 +278,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             onSuccess({
               label: 'Issue Unstaking Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })
@@ -322,7 +316,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           onSuccess({
             label: 'Pull Request Staking Successful',
             description: 'Check out your staking at',
-            buttonText: 'Browse Issues',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -352,7 +345,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Pull Request Staking Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -369,7 +361,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             onSuccess({
               label: 'Pull Request Staking Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })
@@ -404,7 +395,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           onSuccess({
             label: 'Pull Request Staking Successful',
             description: 'Check out your staking at',
-            buttonText: 'Browse Issues',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -433,7 +423,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Pull Request Staking Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -450,7 +439,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             onSuccess({
               label: 'Pull Request Staking Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })
@@ -522,7 +510,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 onSuccess({
                   label: 'Issue Submit Pull Request Successful',
                   description: 'Check out your commit submit at',
-                  buttonText: 'Browse Issues',
                   redirect: null,
                   link: resp
                     ? `https://solscan.io/account/${resp.toString()}?cluster=devnet`
@@ -551,7 +538,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   label: 'Issue Submit Pull Request Failed',
                   description: err.message,
                   redirect: null,
-                  buttonText: 'Continue',
                   link: '',
                 })
               );
@@ -567,7 +553,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   onSuccess({
                     label: 'Issue Submit Pull Request Successful',
                     description: '',
-                    buttonText: 'Browse Issues',
                     redirect: null,
                     link: '',
                   })
@@ -587,7 +572,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Issue Submit Pull Request Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -634,7 +618,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               onSuccess({
                 label: 'Pull Request merging Successful',
                 description: 'Check out your merging at',
-                buttonText: 'Browse Issues',
                 redirect: null,
                 link: res
                   ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -662,7 +645,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 label: 'Pull Request Merging Failed',
                 description: err.message,
                 redirect: null,
-                buttonText: 'Continue',
                 link: '',
               })
             );
@@ -678,7 +660,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 onSuccess({
                   label: 'Pull Request Merging Successful',
                   description: '',
-                  buttonText: 'Browse Issues',
                   redirect: null,
                   link: '',
                 })
@@ -698,7 +679,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             label: 'Pull Request Merging Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -714,7 +694,6 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
             onSuccess({
               label: 'Pull Request Merging Successful',
               description: '',
-              buttonText: 'Browse Issues',
               redirect: null,
               link: '',
             })

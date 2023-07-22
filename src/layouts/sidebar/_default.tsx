@@ -37,7 +37,6 @@ export default function Sidebar({ className }: { className?: string }) {
           onSuccess({
             label: 'Airdop Devnet SOL Successful',
             description: 'check out the tx at',
-            buttonText: 'Continue',
             redirect: null,
             link: res
               ? `https://solscan.io/tx/${res.toString()}?cluster=devnet`
@@ -58,7 +57,6 @@ export default function Sidebar({ className }: { className?: string }) {
             label: 'Airdop Devnet SOL Failed',
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -73,7 +71,6 @@ export default function Sidebar({ className }: { className?: string }) {
             onSuccess({
               label: 'Airdop Devnet SOL Successful',
               description: '',
-              buttonText: 'Continue',
               redirect: null,
               link: '',
             })

@@ -184,7 +184,6 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
               : '',
             redirect: null,
-            buttonText: 'Browse Roadmaps',
           })
         );
         mixpanel.track('Objective Creation Success', {
@@ -217,7 +216,6 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
             description: err.message,
             link: '',
             redirect: '/roadmaps',
-            buttonText: 'Browse Other Roadmaps',
           })
         );
         mixpanel.track('Objective Creation Failed', {
@@ -234,7 +232,6 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
               description: '',
               link: '',
               redirect: null,
-              buttonText: 'Browse Roadmaps',
             })
           );
           mixpanel.track('Objective Creation Success', {

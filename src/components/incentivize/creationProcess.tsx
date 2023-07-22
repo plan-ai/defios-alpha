@@ -87,7 +87,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                       ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
                       : '',
                     redirect: '/projects',
-                    buttonText: 'Browse Projects',
                   })
                 );
                 mixpanel.track('Project Creation Success', {
@@ -111,7 +110,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                     description: err.message,
                     link: '',
                     redirect: '/projects',
-                    buttonText: 'Browse Other Projects',
                   })
                 );
                 mixpanel.track('Project Creation Failed', {
@@ -128,7 +126,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                       description: '',
                       link: '',
                       redirect: '/projects',
-                      buttonText: 'Browse Projects',
                     })
                   );
                   mixpanel.track('Project Creation Success', {
@@ -166,7 +163,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                   ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
                   : '',
                 redirect: '/projects',
-                buttonText: 'Browse Projects',
               })
             );
             setStep(2);
@@ -179,7 +175,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                 description: err.message,
                 link: '',
                 redirect: '/projects',
-                buttonText: 'Browse Other Projects',
               })
             );
           })
@@ -191,7 +186,6 @@ const CreationProcess: React.FC<CreationProcessProps> = ({
                   description: '',
                   link: '',
                   redirect: '/projects',
-                  buttonText: 'Browse Projects',
                 })
               );
               setStep(2);

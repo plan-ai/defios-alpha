@@ -110,7 +110,6 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
           onSuccess({
             label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
             description: 'check out the tx at',
-            buttonText: 'Continue',
             redirect: null,
             link: res
               ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
@@ -141,7 +140,6 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
             label: `Buy Fail: ${buyAmt} ${toCoin.token_symbol}`,
             description: err.message,
             redirect: null,
-            buttonText: 'Continue',
             link: '',
           })
         );
@@ -157,7 +155,6 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
             onSuccess({
               label: `Buy Successful: ${buyAmt} ${toCoin.token_symbol}`,
               description: '',
-              buttonText: 'Continue',
               redirect: null,
               link: '',
             })

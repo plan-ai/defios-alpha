@@ -41,9 +41,6 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
   const successRedirect = useAppSelector(
     (state) => state.callLoader.success.redirect
   );
-  const successBtnText = useAppSelector(
-    (state) => state.callLoader.success.buttonText
-  );
 
   // failure
   const failureLabel = useAppSelector(
@@ -55,9 +52,6 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
   const failureLink = useAppSelector((state) => state.callLoader.failure.link);
   const failureRedirect = useAppSelector(
     (state) => state.callLoader.failure.redirect
-  );
-  const failureBtnText = useAppSelector(
-    (state) => state.callLoader.failure.buttonText
   );
 
   if (callStatus !== 'none') {
@@ -89,8 +83,9 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
             </div>
             <Close
               onClick={() => {
-                if (callStatus === 'success') {
-                  dispatch(resetLoader());
+                dispatch(resetLoader());
+                if (successRedirect !== null) {
+                  router.push(successRedirect);
                 }
               }}
               className="absolute top-6 right-6 h-6 w-6 cursor-pointer font-bold text-white"
@@ -107,21 +102,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                 </AnchorLink>
               )}
             </div>
-            <div className="flex items-center justify-center gap-4">
-              {successRedirect !== null && (
-                <Button
-                  onClick={() => {
-                    dispatch(resetLoader());
-                    if (successRedirect !== null) {
-                      router.push(successRedirect);
-                    }
-                  }}
-                  size="medium"
-                  shape="rounded"
-                >
-                  {successBtnText !== '' ? successBtnText : 'Continue'}
-                </Button>
-              )}
+            <div className="flex items-center justify-center">
               {successState.tweetLink && (
                 <AnchorLink
                   className="flex items-center justify-center gap-2 rounded-full bg-[#0c7abf] py-2 px-5 text-sm text-white xl:text-base 3xl:text-lg"
@@ -138,13 +119,22 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
 
         {/* failure */}
         {callStatus === 'failure' && (
-          <div className="flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[30rem] xl:p-8 3xl:w-[34rem] 3xl:p-10">
+          <div className="relative flex w-[28rem] flex-col items-center justify-between gap-5 rounded-xl bg-light-dark p-6 shadow-xl xl:w-[30rem] xl:p-8 3xl:w-[34rem] 3xl:p-10">
             <div className="flex flex-col items-center justify-center gap-5">
               <ExclamationTriangleIcon className="h-12 w-12 text-red-600 xl:h-14 xl:w-14 3xl:h-16 3xl:w-16" />
               <div className="text-center text-sm xl:text-base 3xl:text-lg">
                 {failureLabel}
               </div>
             </div>
+            <Close
+              onClick={() => {
+                dispatch(resetLoader());
+                if (failureRedirect !== null) {
+                  router.push(failureRedirect);
+                }
+              }}
+              className="absolute top-6 right-6 h-6 w-6 cursor-pointer font-bold text-white"
+            />
             <div className=" text-center text-xs text-gray-400 xl:text-sm 3xl:text-base">
               {failureDescription}
               {failureLink !== '' && (
@@ -157,18 +147,6 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                 </AnchorLink>
               )}
             </div>
-            <Button
-              onClick={() => {
-                dispatch(resetLoader());
-                if (failureRedirect !== null) {
-                  router.push(failureRedirect);
-                }
-              }}
-              size="small"
-              shape="rounded"
-            >
-              {failureBtnText !== '' ? failureBtnText : 'Continue'}
-            </Button>
           </div>
         )}
       </div>
