@@ -6,6 +6,7 @@ import TransactionInfo from '@/components/ui/transaction-info';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import Trade from '@/components/ui/trade';
 
+import AnchorLink from '@/components/ui/links/anchor-link';
 import RightSideInfo from '@/components/swaps/right-side-info';
 import Spinner from '@/components/custom/spinner';
 
@@ -244,6 +245,89 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
         </Button>
       </Trade>
       <RightSideInfo coin={toCoin} />
+      {/* remove below later */}
+      <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-start justify-center backdrop-blur-sm">
+        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center shadow-2xl xl:gap-4 xl:p-6 3xl:gap-5 3xl:p-8">
+          <div className="text-2xl font-semibold xl:text-3xl 3xl:text-4xl">
+            Announcement
+          </div>
+          <div className="text-sm xl:text-base 3xl:text-lg">
+            Between 24th July and 31st July the following devnet tokens
+          </div>
+          <div className="flex items-center text-xs xl:text-sm 3xl:text-base">
+            <AnchorLink
+              href={
+                'https://solscan.io/token/91tB1NHt4yi3bgyqc45vLq1VdXcubpMyJhsS5aL71JEn?cluster=devnet'
+              }
+              target="_blank"
+              className="text-primary"
+            >
+              DefiOS-Alpha (DOSA)
+            </AnchorLink>
+            <div>, </div>
+            <AnchorLink
+              href={
+                'https://solscan.io/token/78CTpXRFkJXuP4fc4SoF93SfMRPSfTAJH5TGaxX4LmNz?cluster=devnet'
+              }
+              target="_blank"
+              className="text-primary"
+            >
+              Pyth (DPY)
+            </AnchorLink>
+            <div>, </div>
+            <AnchorLink
+              href={
+                'https://solscan.io/token/FYtjpyggagzonTH9gnQ9KWQrAeTbaiXbLWpw1PDG8JcG?cluster=devnet'
+              }
+              target="_blank"
+              className="text-primary"
+            >
+              RUS (Rustly)
+            </AnchorLink>
+            <div>, </div>
+            <AnchorLink
+              href={
+                'https://solscan.io/token/79Cndqbk46LcoqtmTjNx8DShTcJX1RE2azb3enkbuqWM?cluster=devnet'
+              }
+              target="_blank"
+              className="text-primary"
+            >
+              GHB (GithubBot)
+            </AnchorLink>
+            <div>, </div>
+            <AnchorLink
+              href={
+                'https://solscan.io/token/7sJpmcAoETYFHBoJyKRCLjVkK1Nw3WJaq1nSJGwuJR8p?cluster=devnet'
+              }
+              target="_blank"
+              className="text-primary"
+            >
+              NodeJS-API (NJA)
+            </AnchorLink>
+          </div>
+          <div className="text-sm xl:text-base 3xl:text-lg">
+            are exchangeable at rate of 0.16 Solana Mainnet USDC per token
+          </div>
+          <div className="flex gap-2 text-sm xl:text-base 3xl:text-lg">
+            <div>please message</div>
+            <AnchorLink
+              href={'https://twitter.com/defiOSofficial'}
+              target="_blank"
+              className="text-primary"
+            >
+              @defiOSofficial
+            </AnchorLink>
+            <div>or </div>
+            <AnchorLink
+              href={'https://twitter.com/chained_alchemy'}
+              target="_blank"
+              className="text-primary"
+            >
+              @chained_alchemy
+            </AnchorLink>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
