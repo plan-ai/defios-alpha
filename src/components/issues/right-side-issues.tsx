@@ -72,7 +72,9 @@ export default function RightSideIssues({ className }: { className?: string }) {
 
       const data = JSON.stringify({
         title: issueTitle,
-        body: issueDescription,
+        body:
+          issueDescription +
+          '\n\nThis issue was created at https://www.defi-os.com , please login/signup on it to get cash rewards for solving it.',
         labels: tags,
       });
 
