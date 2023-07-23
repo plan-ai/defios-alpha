@@ -303,14 +303,14 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       <RightSideInfo coin={toCoin} />
       {/* remove below later */}
       <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-start justify-center backdrop-blur-sm">
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center shadow-2xl xl:gap-4 xl:p-6 3xl:gap-5 3xl:p-8">
-          <div className="text-2xl font-semibold xl:text-3xl 3xl:text-4xl">
+        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-white bg-dark p-4 text-center shadow-2xl xl:gap-4 xl:p-6 3xl:gap-5 3xl:p-8">
+          <div className="mb-4 text-2xl font-semibold xl:text-3xl 3xl:text-4xl">
             Announcement
           </div>
-          <div className="text-sm xl:text-base 3xl:text-lg">
+          <div className="mb-2 text-sm xl:text-base 3xl:text-lg">
             Between 24th July and 31st July the following devnet tokens
           </div>
-          <div className="flex items-center text-xs xl:text-sm 3xl:text-base">
+          <div className="mb-2 flex items-center text-xs xl:text-sm 3xl:text-base">
             <AnchorLink
               href={
                 'https://solscan.io/token/91tB1NHt4yi3bgyqc45vLq1VdXcubpMyJhsS5aL71JEn?cluster=devnet'
@@ -361,7 +361,7 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
               NodeJS-API (NJA)
             </AnchorLink>
           </div>
-          <div className="text-sm xl:text-base 3xl:text-lg">
+          <div className="mb-4 text-sm xl:text-base 3xl:text-lg">
             are exchangeable at rate of 0.16 Solana Mainnet USDC per token
           </div>
           <div className="flex gap-2 text-sm xl:text-base 3xl:text-lg">
