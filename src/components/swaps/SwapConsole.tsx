@@ -304,7 +304,7 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       {/* remove below later */}
       <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-start justify-center backdrop-blur-sm">
         <div className="flex flex-col items-center justify-center rounded-xl border-2 border-white bg-dark p-4 text-center shadow-2xl xl:p-6 3xl:p-8">
-          <div className="mb-4 text-2xl font-semibold xl:mb-5 xl:text-3xl 3xl:mb-6 3xl:text-4xl">
+          <div className="mb-6 text-2xl font-semibold xl:mb-7 xl:text-3xl 3xl:mb-8 3xl:text-4xl">
             Announcement
           </div>
           <div className="mb-1 text-sm xl:mb-1.5 xl:text-base 3xl:mb-2 3xl:text-lg">
@@ -361,7 +361,7 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
               NodeJS-API (NJA)
             </AnchorLink>
           </div>
-          <div className="mb-2.5 text-sm xl:mb-3 xl:text-base 3xl:mb-4 3xl:text-lg">
+          <div className="mb-4 text-sm xl:mb-5 xl:text-base 3xl:mb-6 3xl:text-lg">
             are exchangeable at rate of 0.16 Solana Mainnet USDC per token
           </div>
           <div className="flex gap-2 text-sm xl:text-base 3xl:text-lg">
