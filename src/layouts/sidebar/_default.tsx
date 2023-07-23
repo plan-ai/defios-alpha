@@ -107,7 +107,7 @@ export default function Sidebar({ className }: { className?: string }) {
       </div>
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
-        <div className="px-6 pb-5 2xl:px-7 3xl:px-8 h-full">
+        <div className="h-full px-6 pb-5 2xl:px-7 3xl:px-8">
           <Link href="/profile">
             <AuthorCard
               image={githubInfo?.avatar_url || ''}
@@ -135,7 +135,7 @@ export default function Sidebar({ className }: { className?: string }) {
               onClick={handleAirdrop}
               isLoading={stateLoading === 'loading'}
               color="info"
-              className='mt-20'
+              className="mt-10 xl:mt-12 3xl:mt-16"
             >
               Airdrop Devnet SOL
             </Button>
