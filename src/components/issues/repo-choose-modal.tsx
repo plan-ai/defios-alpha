@@ -39,13 +39,14 @@ const RepoItem: React.FC<RepoItemProps> = ({
         }
       )}
     >
-      <Image
-        src={item?.token_url || ''}
-        alt="token"
-        width={24}
-        height={24}
-        className="rounded-full"
-      />
+      <div className="relative h-6 w-6 overflow-hidden rounded-full">
+        <Image
+          src={item?.token_url || ''}
+          alt="token"
+          fill
+          className="object-cover"
+        />
+      </div>
       <span className="ml-2 normal-case">{item?.project_name}</span>
     </div>
   );

@@ -776,10 +776,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
         <div className="flex w-full justify-between gap-5 py-5 text-xs xl:text-sm 3xl:text-base">
           <div className="flex w-1/2 flex-col gap-3">
             <strong>Description</strong>
-            <div className="tracking-wider">
+            <div className="whitespace-pre-line">
               {issueDesc.length === 0 && 'No Description available'}
-              {issueDesc.length > 250
-                ? issueDesc.slice(0, 240) + '...'
+              {issueDesc.length > 260
+                ? issueDesc.slice(0, 260) + '...'
                 : issueDesc}
             </div>
             <AnchorLink href={link} target="_blank">
