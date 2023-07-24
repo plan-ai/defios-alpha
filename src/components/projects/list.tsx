@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SecurityStatus from '@/components/custom/security-status';
 import Image from 'next/image';
 import cn from 'classnames';
 import axios from '@/lib/axiosClient';
+
+import { useAppSelector } from '@/store/store';
+import { fetchTokenMetadata } from '@/lib/helpers/metadata';
+
 interface ProjectListTypes {
   data: any;
   initExpand?: boolean;
@@ -19,6 +23,20 @@ export default function ProjectList({
   first,
 }: React.PropsWithChildren<ProjectListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
+
+  let [tokenDecimals, setTokenDecimals] = useState(0);
+
+  useEffect(() => {
+    getTokenInfo();
+  }, [data]);
+
+  const getTokenInfo = async () => {
+    const response: any = await fetchTokenMetadata(
+      data?.project_token?.token_spl_addr
+    );
+    setTokenDecimals(response.decimals);
+  };
+
   return (
     <div
       className={cn(
@@ -60,23 +78,29 @@ export default function ProjectList({
               />
             </div>
 
-            <div className="ml-3 text-3xs xl:text-xs 2xl:text-sm">
+            <div className="ml-3 text-3xs 2xl:text-xs 3xl:text-sm">
               <div className="mb-1 flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Staked</div>
                 <div>
-                  {data?.coins_staked} {data?.project_token?.token_symbol}
+                  {Math.round(
+                    (data?.coins_staked * 100) / 10 ** tokenDecimals
+                  ) / 100}{' '}
+                  {data?.project_token?.token_symbol}
                 </div>
               </div>
               <div className="flex items-center justify-start ">
                 <div className="mr-2 text-gray-500">#Rewarded</div>
                 <div>
-                  {data?.coins_rewarded} {data?.project_token?.token_symbol}
+                  {Math.round(
+                    (data?.coins_rewarded * 100) / 10 ** tokenDecimals
+                  ) / 100}{' '}
+                  {data?.project_token?.token_symbol}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-span-2 px-6  font-medium tracking-wider text-white">
+        <div className="col-span-2 px-6 text-3xs font-medium tracking-wider text-white 2xl:text-xs 3xl:text-sm">
           <div>
             {data.top_builder_name}
             <span className="text-gray-500">(Builder🛠️)</span>

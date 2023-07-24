@@ -64,13 +64,14 @@ export const TrasactionAmountEL: React.FC<TrasactionAmountELProps> = ({
   return (
     <div className="flex items-center lg:w-1/2">
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-600/5 text-gray-400 md:h-9 md:w-9 xl:h-10 xl:w-10">
-        <Image
-          src={transactionCoinImg || ''}
-          alt={transactionCoin || ''}
-          width={48}
-          height={48}
-          className="rounded-full"
-        />
+        <div className="relative h-12 w-12 overflow-hidden rounded-full ">
+          <Image
+            src={transactionCoinImg || ''}
+            alt={transactionCoin || ''}
+            className="object-cover"
+            fill
+          />
+        </div>
       </div>
       <div className="ml-2.5 flex flex-col  xl:ml-4">
         <span className="mb-0.5 text-xs text-gray-400">
