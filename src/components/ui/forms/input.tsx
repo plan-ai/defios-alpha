@@ -12,6 +12,7 @@ type InputProps = React.DetailedHTMLProps<
   inputClassName?: string;
   useUppercaseLabel?: boolean;
   search?: boolean;
+  searchLeft?: boolean;
 };
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -23,6 +24,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       className,
       inputClassName,
       search,
+      searchLeft,
       useUppercaseLabel = true,
       ...props
     },
@@ -60,6 +62,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         />
         {search && (
           <SearchIcon className="absolute left-3.5 top-[35%] h-3.5 w-3.5 text-gray-500 xl:h-4 xl:w-4 3xl:h-5 3xl:w-5" />
+        )}
+        {searchLeft && (
+          <SearchIcon className="absolute right-5 top-[35%] h-3.5 w-3.5 text-gray-500 xl:h-4 xl:w-4 3xl:h-5 3xl:w-5" />
         )}
       </label>
       {error && (

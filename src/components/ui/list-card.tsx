@@ -43,7 +43,7 @@ export default function ListCard({
   return (
     <div
       className={cn(
-        'flex items-center justify-between bg-light-dark 3xl:text-sm xl:text-xs text-2xs font-medium shadow-card',
+        'flex items-center justify-between bg-light-dark text-2xs font-medium shadow-card xl:text-xs 3xl:text-sm',
         className
       )}
     >
@@ -60,7 +60,12 @@ export default function ListCard({
           </div>
         )}
         {element !== undefined && (
-          <div className={cn('rounded-full pl-1', variants[variant])}>
+          <div
+            className={cn(
+              'flex items-center justify-center rounded-full pl-1',
+              variants[variant]
+            )}
+          >
             {element}
           </div>
         )}
@@ -68,7 +73,7 @@ export default function ListCard({
         <div className="ml-3">
           {name}
           {coinType && (
-            <span className="block pt-0.5 3xl:text-xs xl:text-2xs text-3xs font-normal capitalize text-gray-400">
+            <span className="block pt-0.5 text-3xs font-normal capitalize text-gray-400 xl:text-2xs 3xl:text-xs">
               {coinType}
             </span>
           )}

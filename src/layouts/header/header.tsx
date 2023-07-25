@@ -139,12 +139,15 @@ export default function Header({ className }: { className?: string }) {
         // isMounted && windowScroll.y
         //   ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
         //   : '',
+        {
+          'hidden !h-[5rem]': router.pathname === '/learn',
+        },
         className
       )}
     >
       <div className="flex h-full items-start justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <div className="mr-5 block lg:hidden">
+          <div className="m-5 ml-0 block lg:hidden">
             <Hamburger
               isOpen={false}
               variant="solid"

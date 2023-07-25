@@ -9,47 +9,51 @@ import { CompassIcon } from '@/components/icons/compass';
 import { BriefcaseIcon } from '@/components/icons/briefcase';
 import { BuildingIcon } from '@/components/icons/building';
 
-export const menuItems = [
+export const menuItems:any = {
+  contributor:[{
+    name: 'learn',
+    icon: <HomeIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
+    href: routes.learn,
+  },
   {
     name: 'home',
-    icon: <HomeIcon />,
+    icon: <HomeIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
     href: routes.home,
   },
   {
     name: 'projects',
-    icon: <FarmIcon />,
+    icon: <FarmIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
     href: routes.projects,
   },
   {
     name: 'swap',
-    icon: <ExchangeIcon />,
+    icon: (
+      <ExchangeIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />
+    ),
     href: routes.swap,
-  },
-  {
+  }],
+  repoOwner:[
+    {
     name: 'roadmaps',
-    icon: <CompassIcon />,
+    icon: <CompassIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
     href: routes.roadmaps,
   },
   {
     name: 'issues',
-    icon: <PoolIcon />,
+    icon: <PoolIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
     href: routes.issues,
   },
   {
     name: 'create a project',
-    icon: <PlusCircle />,
+    icon: <PlusCircle className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />,
     href: routes.incentivizeContributors,
   },
   {
     name: 'jobs',
-    icon: <BriefcaseIcon />,
+    icon: (
+      <BriefcaseIcon className="h-3 w-3 xl:h-3.5 xl:w-3.5 3xl:h-4 3xl:w-4" />
+    ),
     href: routes.jobs,
     comingSoon: true,
-  },
-  // {
-  //   name: 'enterprise',
-  //   icon: <BuildingIcon />,
-  //   href: routes.enterprise,
-  //   comingSoon: true,
-  // },
-];
+  }] 
+};

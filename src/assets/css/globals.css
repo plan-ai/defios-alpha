@@ -75,6 +75,14 @@ input::-webkit-inner-spin-button {
   background-clip: padding-box, border-box;
 }
 
+.gradient-border-box-hover:hover {
+  border: 2px double transparent;
+  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .parentDiv:hover .childDiv{
   border: 1px double transparent;
   background-image: linear-gradient(theme('colors.body'), theme('colors.body')),

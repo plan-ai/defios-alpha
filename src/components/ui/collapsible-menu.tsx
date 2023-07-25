@@ -41,7 +41,7 @@ export function MenuItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="mb-1.5 list-none last:mb-0 2xl:mb-2">
+    <div className="mb-0.5 list-none last:mb-0 xl:mb-1 3xl:mb-1.5">
       {dropdownItems?.length ? (
         <>
           <div
@@ -84,7 +84,7 @@ export function MenuItem({
                     href={{
                       pathname: item.href,
                     }}
-                    className="flex items-center rounded-xl p-3 pl-6 text-sm text-gray-500 transition-all before:mr-5 before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-white"
+                    className="flex items-center rounded-xl p-3 pl-6 text-2xs text-gray-500 transition-all before:mr-5 before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-white xl:text-xs 3xl:text-sm"
                     activeClassName=" !text-white before:!bg-white before:!w-2 before:!h-2 before:-ml-0.5 before:!mr-[18px]  !font-medium"
                   >
                     {item.name}
@@ -100,7 +100,7 @@ export function MenuItem({
             pathname: href,
           }}
           className={cn(
-            'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-xs  text-gray-500 transition-all hover:text-white 2xl:h-12 2xl:text-sm',
+            'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-2xs text-gray-500  transition-all hover:text-white xl:text-xs 2xl:h-12 3xl:text-sm'
           )}
           activeClassName="!text-primary"
         >

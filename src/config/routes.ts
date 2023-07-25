@@ -1,4 +1,5 @@
 const routes = {
+  learn: '/learn',
   home: '/home',
   projects: '/projects',
   swap: '/swap',
