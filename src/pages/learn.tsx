@@ -1,7 +1,7 @@
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
-import Learn from '@/components/learn/learn';
+import Learn from '@/components/learn/learnPost';
 import mixpanel from 'mixpanel-browser';
 
 const LearnPage: NextPageWithLayout = () => {

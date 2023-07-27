@@ -28,7 +28,9 @@ const SpotlightProject: React.FC<SpotlightProjectProps> = ({}) => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint sed
             omnis explicabo assumenda incidunt voluptas quaerat, saepe expedita
             fugit, perferendis itaque distinctionnnnnn itaque distinctio ....
-            Click to Read More
+            <strong>
+              <u>Click to Read More</u>
+            </strong>
           </div>
         </div>
         <div className="flex h-full gap-6 rounded-lg bg-body py-3 px-6">
