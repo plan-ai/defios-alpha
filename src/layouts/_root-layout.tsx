@@ -92,6 +92,7 @@ export default function RootLayout({
           mixpanel.people.set({
             Name: res.data.name,
             github_name: res.data.login,
+            user_type: localStorage.getItem('user_type'),
           });
           dispatch(setGithub(res.data));
         })

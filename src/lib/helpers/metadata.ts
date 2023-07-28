@@ -2,7 +2,8 @@ import axios from '@/lib/axiosClient';
 const jwt = process.env.IPFS_JWT as string;
 import { Metaplex } from '@metaplex-foundation/js';
 import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
-import { getMint } from '@solana/spl-token';
+import { getMint, getAssociatedTokenAddress } from '@solana/spl-token';
+import { Signer } from './wallet';
 
 export const uploadFileToIPFS = async (file: File) => {
   const formData = new FormData();
@@ -67,4 +68,22 @@ export const fetchDecimals = async (tokenID: string) => {
   const mintAddress = new PublicKey(tokenID);
   const mintInfo = await getMint(connection, mintAddress);
   return mintInfo.decimals;
+};
+
+export const getTokenBalance = async (tokenAddress: string) => {
+  const connection = new Connection(clusterApiUrl('devnet'));
+
+  const tokenAccount = await getAssociatedTokenAddress(
+    new PublicKey(tokenAddress),
+    Signer.publicKey
+  );
+
+  let tokenAccountBalance = await connection.getTokenAccountBalance(
+    tokenAccount
+  ).then((res)=>{
+    return res.value;
+  }).catch((err)=>{
+    return null;
+  });
+  return tokenAccountBalance;
 };

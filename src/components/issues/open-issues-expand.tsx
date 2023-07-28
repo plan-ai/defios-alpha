@@ -22,7 +22,7 @@ import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import EmptyList from '@/components/icons/EmptyList';
 import PRSlider from '@/components/issues/pr-slider';
 
-import { uploadMetadataToIPFS } from '@/lib/helpers/metadata';
+import { uploadMetadataToIPFS, getTokenBalance } from '@/lib/helpers/metadata';
 
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
@@ -131,6 +131,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const [selectedPR, setSelectedPR] = useState<any>();
 
   const userInfo = useAppSelector((state) => state.userInfo.githubInfo);
+  const [userTokenInfo, setUserTokenInfo] = useState<any>(null);
+
+  const refetchPart = useAppSelector((state)=> state.refetch.refetchPart);
 
   const [PRSort, setPRSort] = useState<any>([
     {
@@ -747,10 +750,24 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
     setPRSort(_listPRs);
   };
 
+  const setTokenStakingState = async () => {
+    const tokenBalanceData = await getTokenBalance(issueTokenAddress);
+    setUserTokenInfo(tokenBalanceData);
+  };
+
   useEffect(() => {
+    setTokenStakingState();
     if (!link.includes('github.com')) return;
     getPRsToSelect();
   }, [link]);
+
+  useEffect(() => {
+    if(refetchPart==='issue'){
+      setTokenStakingState();
+      setStakeAmount(0);
+      setPRStakeAmount(0);
+    }
+  }, [refetchPart]);
 
   return (
     <div className="mt-4 flex w-full flex-col">
@@ -788,7 +805,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           </div>
           <div className="flex w-1/2 flex-col gap-3">
             <div className="flex-flex-col w-full">
-              <div className="mb-2">stake on the issue</div>
+              <div className="mb-2">stake project token on the issue</div>
               <div className="flex w-full items-center justify-center gap-2">
                 <Input
                   type="text"
@@ -805,6 +822,12 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   shape="rounded"
                   onClick={handleIssueStake}
                   isLoading={stateLoading === 'loading'}
+                  disabled={
+                    userTokenInfo === null ||
+                    parseInt(userTokenInfo.amount) /
+                      10 ** userTokenInfo.decimals ===
+                      0
+                  }
                 >
                   Stake
                 </Button>
@@ -814,9 +837,20 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   shape="rounded"
                   onClick={handleIssueUnstake}
                   isLoading={stateLoading === 'loading'}
+                  disabled={userTokenInfo === null}
                 >
                   Unstake
                 </Button>
+              </div>
+              <div className="mt-3">
+                {userTokenInfo === null
+                  ? "User doesn't have tokens."
+                  : userTokenInfo.amount && userTokenInfo.decimals
+                  ? `Balance: ${
+                      parseInt(userTokenInfo.amount) /
+                      10 ** userTokenInfo.decimals
+                    }`
+                  : null}
               </div>
             </div>
           </div>
@@ -845,7 +879,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
           <div className="flex w-full items-end justify-center gap-5">
             {PRData.length > 0 && (
               <div className="flex-flex-col w-full">
-                <div className="mb-2">stake on the pull request</div>
+                <div className="mb-2">
+                  stake project tokens on the pull request
+                </div>
                 <div className="flex items-center gap-2">
                   <Input
                     type="text"
@@ -862,6 +898,12 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     shape="rounded"
                     onClick={handlePRStake}
                     isLoading={stateLoading === 'loading'}
+                    disabled={
+                      userTokenInfo === null ||
+                      parseInt(userTokenInfo.amount) /
+                        10 ** userTokenInfo.decimals ===
+                        0
+                    }
                   >
                     Stake
                   </Button>
@@ -871,9 +913,20 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     shape="rounded"
                     onClick={handlePRUnstake}
                     isLoading={stateLoading === 'loading'}
+                    disabled={userTokenInfo === null}
                   >
                     Unstake
                   </Button>
+                </div>
+                <div className="mt-3">
+                  {userTokenInfo === null
+                    ? "User doesn't have tokens."
+                    : userTokenInfo.amount && userTokenInfo.decimals
+                    ? `Balance: ${
+                        parseInt(userTokenInfo.amount) /
+                        10 ** userTokenInfo.decimals
+                      }`
+                    : null}
                 </div>
               </div>
             )}

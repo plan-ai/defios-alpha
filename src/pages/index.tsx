@@ -101,11 +101,15 @@ const Homepage: React.FC<HomepageProps> = ({}) => {
             <div className="flex w-full gap-4 text-[2vh] font-semibold text-white">
               {!session && (
                 <Button
-                  onClick={() =>
+                  onClick={() =>{
+                    const user_type = localStorage.getItem('user_type');
                     signIn('github', {
-                      callbackUrl: `${window.location.origin}/home`,
-                    })
-                  }
+                      callbackUrl:
+                        (user_type === null)
+                          ? `${window.location.origin}/onboarding`
+                          : `${window.location.origin}/home`,
+                    });
+                  }}
                   shape="rounded"
                   color="info"
                 >
