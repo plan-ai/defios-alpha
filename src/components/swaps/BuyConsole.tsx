@@ -252,7 +252,7 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
             Announcement
           </div>
           <div className="mb-1 text-sm xl:mb-1.5 xl:text-base 3xl:mb-2 3xl:text-lg">
-            Between 24th July and 31st July the following devnet tokens
+            Between 24th July and 4th August the following devnet tokens
           </div>
           <div className="mb-1 flex items-center text-xs xl:mb-1.5 xl:text-sm 3xl:mb-2 3xl:text-base">
             <AnchorLink

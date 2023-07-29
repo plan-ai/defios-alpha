@@ -131,9 +131,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   const [selectedPR, setSelectedPR] = useState<any>();
 
   const userInfo = useAppSelector((state) => state.userInfo.githubInfo);
-  const [userTokenInfo, setUserTokenInfo] = useState<any>(null);
+  const [userTokenInfo, setUserTokenInfo] = useState<any>();
 
-  const refetchPart = useAppSelector((state)=> state.refetch.refetchPart);
+  const refetchPart = useAppSelector((state) => state.refetch.refetchPart);
 
   const [PRSort, setPRSort] = useState<any>([
     {
@@ -762,8 +762,10 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
   }, [link]);
 
   useEffect(() => {
-    if(refetchPart==='issue'){
-      setTokenStakingState();
+    if (refetchPart === 'issue') {
+      setTimeout(() => {
+        setTokenStakingState();
+      }, 1000);
       setStakeAmount(0);
       setPRStakeAmount(0);
     }
@@ -822,12 +824,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                   shape="rounded"
                   onClick={handleIssueStake}
                   isLoading={stateLoading === 'loading'}
-                  disabled={
-                    userTokenInfo === null ||
-                    parseInt(userTokenInfo.amount) /
-                      10 ** userTokenInfo.decimals ===
-                      0
-                  }
+                  disabled={userTokenInfo === null}
                 >
                   Stake
                 </Button>
@@ -845,10 +842,12 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
               <div className="mt-3">
                 {userTokenInfo === null
                   ? "User doesn't have tokens."
-                  : userTokenInfo.amount && userTokenInfo.decimals
+                  : userTokenInfo !== undefined &&
+                    userTokenInfo.amount &&
+                    userTokenInfo.decimals
                   ? `Balance: ${
-                      parseInt(userTokenInfo.amount) /
-                      10 ** userTokenInfo.decimals
+                      parseInt(userTokenInfo?.amount) /
+                      10 ** userTokenInfo?.decimals
                     }`
                   : null}
               </div>
@@ -898,12 +897,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                     shape="rounded"
                     onClick={handlePRStake}
                     isLoading={stateLoading === 'loading'}
-                    disabled={
-                      userTokenInfo === null ||
-                      parseInt(userTokenInfo.amount) /
-                        10 ** userTokenInfo.decimals ===
-                        0
-                    }
+                    disabled={userTokenInfo === null}
                   >
                     Stake
                   </Button>
@@ -921,7 +915,9 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 <div className="mt-3">
                   {userTokenInfo === null
                     ? "User doesn't have tokens."
-                    : userTokenInfo.amount && userTokenInfo.decimals
+                    : userTokenInfo !== undefined &&
+                      userTokenInfo?.amount &&
+                      userTokenInfo?.decimals
                     ? `Balance: ${
                         parseInt(userTokenInfo.amount) /
                         10 ** userTokenInfo.decimals

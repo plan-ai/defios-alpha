@@ -105,7 +105,7 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
               Contributor
             </div>
             <div className="text-wrap xl:w-68 w-64 text-center text-xs xl:text-sm 3xl:w-72 3xl:text-base">
-              Best if you are working on existing open source projects or
+              if you are working on existing open source projects or
               staking money on open issues.
             </div>
           </div>
@@ -130,7 +130,7 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
               Repo Owner
             </div>
             <div className="text-wrap xl:w-68 w-64 text-center text-xs xl:text-sm 3xl:w-72 3xl:text-base">
-              Best for people who own and operate multiple open source
+              For people who own and operate multiple open source
               repositories and want a management console.
             </div>
           </div>
@@ -141,7 +141,7 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
           setUserRole('unchoosen');
           handleSumbitType();
         }}
-        className="absolute top-5 right-5 text-sm text-gray-400 xl:text-base 3xl:text-lg"
+        className="absolute top-5 right-5 cursor-pointer text-sm text-gray-400 xl:text-base 3xl:text-lg"
       >
         Skip
       </div>
