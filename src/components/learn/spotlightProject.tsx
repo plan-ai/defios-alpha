@@ -1,5 +1,5 @@
 import React from 'react';
-import { GitIcon } from '@/components/icons/git';
+import { GithubIssueIcon } from '@/components/icons/github-issue';
 import { StarIcon } from '@heroicons/react/24/outline';
 import { UserGroupIcon } from '@heroicons/react/24/outline';
 import LangTags from '@/components/ui/tags/lang-tags';
@@ -12,7 +12,7 @@ const SpotlightProject: React.FC<SpotlightProjectProps> = ({}) => {
   return (
     <>
       <div className="ml-2 text-sm xl:text-lg 3xl:text-xl">Featured:</div>
-      <div className="gradient-border-box-hover flex  items-center justify-between rounded-lg border border-gray-700 bg-body p-3 transition-all hover:scale-[102%] lg:border-2 xl:p-3.5 3xl:p-4">
+      <div className="gradient-border-box-hover flex w-full items-center justify-between rounded-lg border border-gray-700 bg-body p-3 transition-all hover:scale-[102%] lg:border-2 xl:p-3.5 3xl:p-4">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             <div className="mr-2 text-base font-semibold xl:text-lg 3xl:text-xl">
@@ -33,9 +33,11 @@ const SpotlightProject: React.FC<SpotlightProjectProps> = ({}) => {
             </strong>
           </div>
         </div>
-        <div className="flex h-full gap-6 rounded-lg bg-body py-3 px-6">
+        <div className="flex h-full gap-6 rounded-lg bg-gray-900 py-3 px-6">
           <div className="flex flex-col items-center justify-between gap-1 text-sm xl:text-base 3xl:text-lg">
-            <GitIcon />
+            <div className="flex h-8 w-8 items-center justify-center">
+              <GithubIssueIcon />
+            </div>
             <div>240</div>
           </div>
           <div className="flex flex-col items-center justify-between gap-1 text-sm xl:text-base 3xl:text-lg">

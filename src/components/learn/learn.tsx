@@ -95,7 +95,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
   const [triggerSearch, setTriggerSearch] = useState(false);
 
   return (
-    <div className="mx-auto w-full">
+    <div className="w-full overflow-y-auto overflow-x-hidden px-3.5 pb-4">
       <div className="mb-5 w-full flex-col items-center justify-between">
         <div className="w-full">
           <Search
