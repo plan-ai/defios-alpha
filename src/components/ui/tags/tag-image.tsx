@@ -2,7 +2,9 @@ import React from 'react';
 import cn from 'classnames';
 import Image from '@/components/ui/image';
 
-interface LangTagsProps {
+import GithubImage from '@/assets/images/github-mark-white.svg';
+
+interface TagImageProps {
   tag: string;
   assign?: true;
   handleRemove?: any;
@@ -15,7 +17,7 @@ const variants = {
   large: 'w-10 h-10 sm:w-12 sm:h-12',
 };
 
-const LangTags: React.FC<LangTagsProps> = ({
+const TagImage: React.FC<TagImageProps> = ({
   tag,
   assign,
   handleRemove,
@@ -42,7 +44,7 @@ const LangTags: React.FC<LangTagsProps> = ({
         >
           <Image
             alt="icon"
-            src={`https://raw.githubusercontent.com/tandpfun/skill-icons/59059d9d1a2c092696dc66e00931cc1181a4ce1f/icons/${tag}.svg`}
+            src={GithubImage || ''}
             className="object-cover"
             fill
           />
@@ -55,4 +57,4 @@ const LangTags: React.FC<LangTagsProps> = ({
   );
 };
 
-export default LangTags;
+export default TagImage;

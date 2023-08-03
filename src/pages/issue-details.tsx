@@ -1,24 +1,26 @@
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
 import RootLayout from '@/layouts/_root-layout';
-import Learn from '@/components/learn/learn';
+
+import IssueDetails from '@/components/issue-details/IssueDetails';
+
 import mixpanel from 'mixpanel-browser';
 
-const LearnPage: NextPageWithLayout = () => {
+const IssueDetailsPage: NextPageWithLayout = () => {
   mixpanel.track_pageview();
   return (
     <>
       <NextSeo
-        title="Learn"
+        title="Issue Details"
         description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
-      <Learn />
+      <IssueDetails />
     </>
   );
 };
 
-LearnPage.getLayout = function getLayout(page) {
+IssueDetailsPage.getLayout = function getLayout(page) {
   return <RootLayout>{page}</RootLayout>;
 };
 
-export default LearnPage;
+export default IssueDetailsPage;
