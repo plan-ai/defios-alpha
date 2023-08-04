@@ -1,13 +1,35 @@
 import React from 'react';
-
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { GithubOutlineIcon } from '@/components/icons/github-outline';
 
 interface SigninBtnProps {}
 
 export const SigninBtn: React.FC<SigninBtnProps> = ({}) => {
+  const router = useRouter();
+  const { data: session } = useSession();
   return (
-    <div className="group relative flex items-center justify-center">
+    <div
+      onClick={() => {
+        const user_type = localStorage.getItem('user_type');
+        if (session) {
+          if (user_type === null || user_type === undefined) {
+            router.push('/onboarding');
+          } else {
+            router.push('/home');
+          }
+        } else {
+          signIn('github', {
+            callbackUrl:
+              user_type === null
+                ? `${window.location.origin}/onboarding`
+                : `${window.location.origin}/home`,
+          });
+        }
+      }}
+      className="group relative flex items-center justify-center"
+    >
       <div className="absolute z-[20] flex cursor-pointer items-center justify-start gap-3 whitespace-nowrap rounded-full bg-[#0a0a0a] px-[12px] py-2 text-xs transition-all duration-300 xl:px-[16px] xl:py-2.5 xl:text-sm 3xl:px-[18px] 3xl:py-3 3xl:text-base">
         <GithubOutlineIcon />
         <div className="flex w-10 items-center gap-5 overflow-hidden transition-all duration-300 group-hover:w-16 xl:w-11 xl:gap-4 xl:group-hover:w-20 3xl:w-12 3xl:gap-3.5 3xl:group-hover:w-24">

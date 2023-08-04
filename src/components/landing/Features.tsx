@@ -28,12 +28,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ body, title, element }) => {
   );
 };
 
-interface FeaturesProps {}
+interface FeaturesProps {
+  scrollRef: any;
+}
 
-export const Features: React.FC<FeaturesProps> = ({}) => {
+export const Features: React.FC<FeaturesProps> = ({ scrollRef }) => {
   return (
-    <div className="z-[20] flex w-screen flex-col items-center justify-center gap-5 bg-[#0E1320] py-32">
-      <div className="text-center text-4xl font-black tracking-tight text-white 2xl:text-5xl">
+    <div className="z-[20] flex w-screen flex-col items-center justify-center gap-5 bg-[#0E1320] py-32 pt-16">
+      <div
+        ref={scrollRef}
+        className="pt-16 text-center text-4xl font-black tracking-tight text-white 2xl:text-5xl"
+      >
         open source software suffers
         <br /> from a lack of funding
       </div>

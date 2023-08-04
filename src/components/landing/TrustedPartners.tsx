@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from '@/components/ui/image';
+import AnchorLink from '@/components/ui/links/anchor-link';
 
 import Solana from '@/assets/images/trusted1.png';
 import SuperteamEarn from '@/assets/images/trusted2.png';
@@ -15,38 +16,46 @@ export const TrustedPartners: React.FC<TrustedPartnersProps> = ({}) => {
         Trusted by the best open source software teams
       </div>
       <div className="mb-14 mt-20 flex h-7 items-center justify-center gap-10 grayscale">
-        <Image
-          alt="image"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: 'auto', height: '100%' }} // optional
-          src={Solana}
-        />
-        <Image
-          alt="image"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: 'auto', height: '100%' }} // optional
-          src={SuperteamEarn}
-        />
-        <Image
-          alt="image"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: 'auto', height: '100%' }} // optional
-          src={Superteam}
-        />
-        <Image
-          alt="image"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: 'auto', height: '100%' }} // optional
-          src={Pyth}
-        />
+        <AnchorLink href={'https://solana.com/'} target="_blank">
+          <Image
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: 'auto', height: '100%' }} // optional
+            src={Solana}
+          />
+        </AnchorLink>
+        <AnchorLink href={'https://earn.superteam.fun/'} target="_blank">
+          <Image
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: 'auto', height: '100%' }} // optional
+            src={SuperteamEarn}
+          />
+        </AnchorLink>
+        <AnchorLink href={'https://superteam.fun/'} target="_blank">
+          <Image
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: 'auto', height: '100%' }} // optional
+            src={Superteam}
+          />
+        </AnchorLink>
+        <AnchorLink href={'https://pyth.network/'} target="_blank">
+          <Image
+            alt="image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: 'auto', height: '100%' }} // optional
+            src={Pyth}
+          />
+        </AnchorLink>
       </div>
     </div>
   );

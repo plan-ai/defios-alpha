@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Head from 'next/head';
 
 import Nav from '@/components/landing/Nav';
@@ -15,20 +15,26 @@ import LandingFooter from '@/components/landing/LandingFooter';
 interface LandingProps {}
 
 export const Landing: React.FC<LandingProps> = ({}) => {
+  const ref = useRef<null | HTMLDivElement>(null);
+
+  const handleFeatureClick = () => {
+    ref?.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <Head>
         <title>DefiOS - Scaling Layer for Open Source Collaboration.</title>
       </Head>
       <div className="landing-font flex min-h-screen w-screen flex-col items-center overflow-y-auto overflow-x-hidden bg-[#060606]">
-        <Nav />
+        <Nav handleFeatureClick={handleFeatureClick} />
         <div className="mt-20">
           <JoinCommunityBtn />
         </div>
         <HeaderLanding />
         <HeaderScreen />
         <TrustedPartners />
-        <Features />
+        <Features scrollRef={ref} />
         <RoadmapReimagined />
         <ReapRewards />
         <LandingPreFooter />
