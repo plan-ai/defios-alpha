@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '@/assets/images/logo.png';
 import Image from '@/components/ui/image';
-import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import SigninBtn from '@/components/landing/SigninBtn';
 
 interface LandingPreFooterProps {}
 
@@ -23,11 +23,8 @@ export const LandingPreFooter: React.FC<LandingPreFooterProps> = ({}) => {
         <br />
         join defiOS, earn, build and help open source win.
       </div>
-      <div className="flex cursor-pointer items-center justify-start gap-3 rounded-full bg-gradient-to-r from-cyan-900 to-indigo-300 py-3.5 px-8">
-        <div className=" btn-text-gradient text-xs font-semibold xl:text-sm 3xl:text-base">
-          sign in with github
-        </div>
-        <ArrowRightIcon className="h-3.5 text-white xl:h-4 3xl:h-5" />
+      <div className="mt-12">
+        <SigninBtn />
       </div>
     </div>
   );
