@@ -6,7 +6,7 @@ import Avatar from 'react-avatar';
 
 import Profile from '@/components/profile/profile';
 // static data
-import { authorData } from '@/data/static/author';
+import CoverImage from '@/assets/images/profile-cover.jpg';
 import RootLayout from '@/layouts/_root-layout';
 import { useAppSelector } from '@/store/store';
 
@@ -32,7 +32,7 @@ const AuthorProfilePage: NextPageWithLayout<
       />
       <div className="relative mt-3 h-[15rem] w-full overflow-hidden rounded-xl lg:h-[15.5rem] xl:h-[17rem] 2xl:h-[19rem] 3xl:h-[20rem]">
         <Image
-          src={authorData?.cover_image?.thumbnail}
+          src={CoverImage}
           placeholder="blur"
           fill
           alt="Cover Image"

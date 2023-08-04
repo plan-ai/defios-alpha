@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useCopyToClipboard } from 'react-use';
-import { authorData } from '@/data/static/author';
 import { Check } from '@/components/icons/check';
 import { Copy } from '@/components/icons/copy';
 import ProfileTab from '@/components/profile/profile-tab';

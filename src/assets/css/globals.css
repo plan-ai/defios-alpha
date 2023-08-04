@@ -4,6 +4,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @layer base {
   :root {
     --color-brand: 50 55 67;
@@ -59,6 +61,25 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.landing-font{
+  font-family: 'Inter',sans-serif;
+}
+
+.conic-gradient-1{
+  background: conic-gradient(from -13deg at 50.00% 50.00%, #1D606A 52.535998821258545deg, #90AAFA 133.08900117874146deg, #90AAFA 172.46400117874146deg, #FFF 249.44698333740234deg, #1D606A 298.1610059738159deg, #90AAFA 322.4999928474426deg, #90AAFA 322.53599882125854deg, #1D606A 360deg);
+}
+
+.conic-gradient-2{
+  background: conic-gradient(from 180deg at 53.15% 69.46%,#1D606A 10deg, #90AAFA 58.591986894607544deg, #90AAFA 142.0177960395813deg, #1D606A 193.50271224975586deg, #1D606A 319.0849184989929deg);
+}
+
+.btn-text-gradient{
+  background: linear-gradient(326deg, #060606 0%, #FFF 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .gradient-border:focus {
   border: double transparent;
   background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
@@ -69,6 +90,14 @@ input::-webkit-inner-spin-button {
 
 .gradient-border-box {
   border: double transparent;
+  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.gradient-border-box-hover:hover {
+  border: 2px double transparent;
   background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
     linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
   background-origin: border-box;
