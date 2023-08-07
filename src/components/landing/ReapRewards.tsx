@@ -8,17 +8,16 @@ export const ReapRewards: React.FC<ReapRewardsProps> = ({}) => {
   return (
     <div className="flex w-screen flex-col items-center justify-center gap-6 bg-[#181E2D] py-32">
       <div className="text-4xl font-black tracking-tight text-white 2xl:text-5xl">
-        reap the rewards of funding builders early
+        scaling open source with web3 incentives
       </div>
       <div className="text-center text-base text-gray-400 xl:text-lg 3xl:text-xl">
-        by working for a project&apos;s tokens or buying a project&apos;s tokens
-        early (when it&apos;s necessary).
+        by tokenizing open source projects, you gain the ability to grant access
+        to all the utility that a
         <br />
-        as a project succeeds, the demand for its tokens should also increase
-        because of their inherent
+        web3 token provides like voting on relevant issues and PRs through
+        staking, access to token-
         <br />
-        utility of prioritizing project features as well as other project
-        specific utilities.
+        gated communities and additional utility as determined by project owners
       </div>
       <div className="conic-gradient-2 flex w-[55rem] items-end rounded-2xl p-16 pb-0 xl:w-[60rem] 3xl:w-[65rem]">
         <Image
