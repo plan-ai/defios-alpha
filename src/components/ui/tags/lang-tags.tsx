@@ -2,6 +2,35 @@ import React from 'react';
 import cn from 'classnames';
 import Image from '@/components/ui/image';
 
+export const mappingGHSkill:any = {
+  TypeScript: 'TypeScript',
+  JavaScript: 'JavaScript',
+  CSS: 'CSS',
+  Rust: 'Rust',
+  HTML: 'HTML',
+  PowerShell: 'Powershell-Dark',
+  SCSS: 'Sass',
+  'C++': 'CPP',
+  Python: 'Python-Dark',
+  Perl: 'Perl',
+  Ruby: 'Ruby',
+  Clojure: 'Clojure-Dark',
+  PHP: 'PHP-Dark',
+  Julia: 'Julia-Dark',
+  'Visual Basic .NET': 'DotNet',
+  Dockerfile: 'Docker',
+  C: 'C',
+  'C#': 'CS',
+  Pug: 'Pug-Dark',
+  Go: 'GoLang',
+  Java: 'Java-Dark',
+  CoffeeScript: 'CoffeeScript-Dark',
+  R: 'R-Dark',
+  Dart: 'Dart-Dark',
+  Swift: 'Swift',
+  Lua: 'Lua-Dark',
+};
+
 interface LangTagsProps {
   tag: string;
   assign?: true;
@@ -42,7 +71,7 @@ const LangTags: React.FC<LangTagsProps> = ({
         >
           <Image
             alt="icon"
-            src={`https://raw.githubusercontent.com/tandpfun/skill-icons/59059d9d1a2c092696dc66e00931cc1181a4ce1f/icons/${tag}.svg`}
+            src={`https://raw.githubusercontent.com/tandpfun/skill-icons/59059d9d1a2c092696dc66e00931cc1181a4ce1f/icons/${mappingGHSkill[tag]}.svg`}
             className="object-cover"
             fill
           />

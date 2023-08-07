@@ -38,7 +38,7 @@ export default function ProgressBar({
         {completed !== undefined && remaining !== undefined && (
           <div className="flex items-start justify-end whitespace-nowrap text-xs xl:text-sm 3xl:text-base">
             <div>
-              {completed?.value + '/' + (completed?.value + remaining?.value)}{' '}
+              {remaining?.value + '/' + (completed?.value + remaining?.value)}{' '}
               {item} remaining
             </div>
           </div>

@@ -8,6 +8,8 @@ import { useSession } from 'next-auth/react';
 
 import Image from '@/components/ui/image';
 
+import MarkdownRenderer from '@/components/ui/markdown';
+
 interface IssueDescriptionProps {}
 
 export const IssueDescription: React.FC<IssueDescriptionProps> = ({}) => {
@@ -20,7 +22,7 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({}) => {
   useEffect(() => {
     if (!(session as any)?.accessToken) return;
     axios
-      .get('https://api.github.com/repos/defi-os/defios-alpha/issues/68', {
+      .get('https://api.github.com/repos/python/cpython/issues/33157', {
         headers: {
           Authorization: `Bearer ${(session as any)?.accessToken}`,
           Accept: 'application/vnd.github.v3+json',
@@ -32,7 +34,7 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({}) => {
       .catch((err) => console.log(err));
     axios
       .get(
-        'https://api.github.com/repos/defi-os/defios-alpha/issues/68/comments',
+        'https://api.github.com/repos/python/cpython/issues/33157/comments',
         {
           headers: {
             Authorization: `Bearer ${(session as any)?.accessToken}`,
@@ -75,8 +77,12 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({}) => {
             <div>Assignees: </div>
             <TagImage tag="Rohitkk432" />
           </div>
-          <div className="mb-8 w-full whitespace-pre-wrap text-sm xl:text-base 3xl:text-lg">
-            {issueData?.body}
+          <div className="mb-8 w-full text-sm xl:text-base 3xl:text-lg">
+            <MarkdownRenderer
+              className="w-full"
+            >
+              {issueData?.body}
+            </MarkdownRenderer>
           </div>
           <IssueComment commentType="comment" data={issueData} />
           {issueData?.labels?.length > 0 && (

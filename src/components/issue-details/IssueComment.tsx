@@ -5,6 +5,8 @@ import GithubTags from '@/components/ui/tags/github-tags';
 import cn from 'classnames';
 import { useAppSelector } from '@/store/store';
 
+import MarkdownRenderer from '@/components/ui/markdown';
+
 interface IssueCommentProps {
   commentType: string;
   data: any;
@@ -66,8 +68,10 @@ export const IssueComment: React.FC<IssueCommentProps> = ({
                 </div>
               )}
             </div>
-            <div className="w-full whitespace-pre-wrap rounded-b-lg p-4">
-              {data?.body}
+            <div className="w-full rounded-b-lg p-4">
+              <MarkdownRenderer className="w-full">
+                {data?.body}
+              </MarkdownRenderer>
             </div>
           </div>
         </div>

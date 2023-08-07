@@ -5,7 +5,7 @@ import Textarea from '@/components/ui/forms/textarea';
 import cn from 'classnames';
 import { useAppSelector } from '@/store/store';
 
-import ReactMarkdown from 'react-markdown';
+import MarkdownRenderer from '@/components/ui/markdown';
 
 interface IssueCommentCreatorProps {}
 
@@ -65,7 +65,11 @@ export const IssueCommentCreator: React.FC<IssueCommentCreatorProps> = ({}) => {
               />
             )}
             {viewPreview && (
-              <ReactMarkdown className="w-full">{newComment}</ReactMarkdown>
+              <MarkdownRenderer
+                className="w-full"
+              >
+                {newComment}
+              </MarkdownRenderer>
             )}
             <Button shape="rounded" size="small" color="success">
               Comment

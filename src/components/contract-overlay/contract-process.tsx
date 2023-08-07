@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { ExportIcon } from '@/components/icons/export-icon';
 import { Close } from '@/components/icons/close';
-import { Twitter } from '@/components/icons/brands/twitter';
+import { TwitterIcon } from '@/components/icons/brand/twitter';
 
 import Button from '@/components/ui/button/button';
 import AnchorLink from '@/components/ui/links/anchor-link';
@@ -109,7 +109,7 @@ const ContractProcess: React.FC<ContractProcessProps> = ({}) => {
                   href={successState.tweetLink}
                   target="_blank"
                 >
-                  <Twitter className="w-6" />
+                  <TwitterIcon className="w-6" />
                   <div>Tweet</div>
                 </AnchorLink>
               )}
