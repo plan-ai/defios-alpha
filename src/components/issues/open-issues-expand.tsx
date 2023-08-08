@@ -877,7 +877,7 @@ const OpenIssueExpand: React.FC<OpenIssueExpandProps> = ({
                 </div>
               </div>
             )}
-            <div className="flex-flex-col w-full">
+            <div className="flex w-full flex-col">
               <div className="mb-2">submit new pull request</div>
               <div className="flex w-full items-center justify-center gap-2">
                 <SortList

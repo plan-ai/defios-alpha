@@ -140,9 +140,8 @@ export default function Header({ className }: { className?: string }) {
         //   ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
         //   : '',
         {
-          'hidden !h-[5rem]':
-            router.pathname === '/learn' ||
-            router.pathname === '/issue-details',
+          '!h-[5rem]': router.pathname === '/issue-details',
+          '!hidden': router.pathname === '/learn',
         },
         className
       )}

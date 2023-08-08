@@ -11,6 +11,8 @@ import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
+import { useRouter } from 'next/router';
+
 interface IssuesListTypes {
   data: any;
   initExpand?: boolean;
@@ -25,6 +27,8 @@ export default function IssuesList({
   last,
   first,
 }: React.PropsWithChildren<IssuesListTypes>) {
+  const router = useRouter();
+
   let [isExpand, setIsExpand] = useState(initExpand || false);
   let [issueTags, setIssueTags] = useState<string[]>([]);
   const wallet = useWallet();
@@ -69,7 +73,8 @@ export default function IssuesList({
     >
       <div
         className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
-        onClick={() => setIsExpand(!isExpand)}
+        // onClick={() => setIsExpand(!isExpand)}
+        onClick={() => router.push(`/issues/${data?.issue_account}`)}
       >
         <span className="col-span-2 flex items-center justify-start px-6 font-medium tracking-wider text-white">
           {data?.issue_title}
@@ -120,7 +125,7 @@ export default function IssuesList({
                 userMappingIsError ||
                 wallet.publicKey === null) && (
                 <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                  <div className="flex items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-base shadow-2xl xl:gap-4 xl:p-5 xl:text-lg 3xl:gap-5 3xl:p-6 3xl:text-xl text-center">
+                  <div className="flex items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-5 xl:text-lg 3xl:gap-5 3xl:p-6 3xl:text-xl">
                     <div>
                       {wallet.publicKey === null
                         ? 'Connect Wallet to Continue'

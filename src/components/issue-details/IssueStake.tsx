@@ -96,7 +96,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
             <div className="ml-2">Stake on Issue</div>
             <div className="flex flex-col items-end gap-2 rounded-xl bg-gray-900 p-4 text-2xs xl:text-xs 3xl:text-sm">
               <div className="mr-2">Bal: 100.23 USDC</div>
-              <CoinInput
+              {/* <CoinInput
                 label={'From'}
                 exchangeRate={0.0}
                 value={stakeAmount.toString()}
@@ -108,7 +108,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
                 selectedCoin={stakeCoin}
                 setSelectedCoin={setStakeCoin}
                 disabled
-              />
+              /> */}
               <div className="flex items-center gap-2">
                 <Button
                   shape="rounded"

@@ -33,6 +33,8 @@ const LearnIssue: React.FC<LearnIssueProps> = ({ item, setCompleted,setNumClosed
   useEffect(() => {
     if (!(session as any)?.accessToken) return;
     if (item === undefined || item == null || item.url === undefined) return;
+    const repo_url = item.url.split('/issues/')[0];
+
     axios
       .get(item.url + '/timeline', {
         headers: {
@@ -41,21 +43,27 @@ const LearnIssue: React.FC<LearnIssueProps> = ({ item, setCompleted,setNumClosed
         },
       })
       .then((res) => {
-        const filteredData = res.data.filter(
-          (item: any) =>
-            item.event === 'cross-referenced' || item.event === 'closed'
-        );
-
         let solved: boolean = false;
         let _solvedByMe: boolean = false;
         let pull_requests: number = 0;
 
+        const filteredData = res.data.filter((item: any) => {
+          if (item.event === 'cross-referenced') {
+            return item;
+          } else if (item.event === 'closed') {
+            solved = true;
+            return item;
+          }
+        });
+
         filteredData.map((item: any) => {
           if (item.source.type === 'issue') {
-            if (item.source.issue.pull_request) {
+            if (
+              item.source.issue.repository_url === repo_url &&
+              item.source.issue.pull_request
+            ) {
               pull_requests++;
               if (item.source.issue.pull_request.merged_at !== null) {
-                solved = true;
                 setNumClosed((state) => state + 1);
                 if (item.source.issue.user.id === (session as any)?.id) {
                   _solvedByMe = true;
@@ -73,7 +81,7 @@ const LearnIssue: React.FC<LearnIssueProps> = ({ item, setCompleted,setNumClosed
   }, [item, session]);
 
   return (
-    <div className="flex w-full  items-center justify-between gap-4 rounded-lg border border-gray-700 bg-body p-3 lg:border-2 xl:p-3.5 3xl:p-4">
+    <div className="flex w-full  items-start justify-between gap-4 rounded-lg border border-gray-700 bg-body p-3 lg:border-2 xl:p-3.5 3xl:p-4">
       <div className="flex w-[65%] flex-col gap-2">
         <div className="text-base font-semibold xl:text-lg 3xl:text-xl">
           {item?.title}{' '}
@@ -84,7 +92,7 @@ const LearnIssue: React.FC<LearnIssueProps> = ({ item, setCompleted,setNumClosed
           )}
         </div>
         {item?.labels?.length > 0 && (
-          <div className="my-1 flex items-center gap-1">
+          <div className="my-1 flex flex-wrap items-center gap-1">
             {item?.labels?.map((item: any, idx: number) => {
               return <GithubTags tag={item?.name} key={idx} />;
             })}
@@ -110,16 +118,18 @@ const LearnIssue: React.FC<LearnIssueProps> = ({ item, setCompleted,setNumClosed
           {item?.body?.length < 300 ? (
             <MarkdownRenderer>{item?.body}</MarkdownRenderer>
           ) : (
-            <MarkdownRenderer>{item?.body?.slice(0, 300)}</MarkdownRenderer>
+            <>
+              <MarkdownRenderer>{item?.body?.slice(0, 300)}</MarkdownRenderer>
+              <div className="inline">....</div>
+              <AnchorLink
+                href={item?.html_url}
+                target="_blank"
+                className="inline font-bold underline"
+              >
+                Click to Read More
+              </AnchorLink>
+            </>
           )}{' '}
-          ....
-          <AnchorLink
-            href={item?.html_url}
-            target="_blank"
-            className="inline font-bold underline"
-          >
-            Click to Read More
-          </AnchorLink>
         </div>
       </div>
       <div className="flex w-[35%] flex-col gap-4">

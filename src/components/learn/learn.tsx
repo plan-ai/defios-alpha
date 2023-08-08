@@ -10,17 +10,14 @@ import Button from '@/components/ui/button';
 import Spinner from '@/components/custom/spinner';
 
 //Icons
-import { SearchIcon } from '@/components/icons/search';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
-import { ArrowLongDownIcon } from '@heroicons/react/24/solid';
 
 //Components
 import SpotlightProject from '@/components/learn/spotlightProject';
 import LearnIssue from '@/components/learn/learnIssue';
 import LearnContent from '@/components/learn/learnContent';
 import ProgressBar from '@/components/ui/progress-bar';
-import firebaseTokensSlice from '@/store/firebaseTokensSlice';
 
 interface SearchProps {
   search: string;
@@ -98,14 +95,19 @@ const Search: React.FC<SearchProps> = ({
         </div> */}
           {trending.map((text, idx) => {
             return (
-              <ListCard
+              <div 
+                onClick={()=>setSearch(text)}
                 key={idx}
+                className="cursor-pointer"
+               >
+              <ListCard
                 item={{
                   name: text,
                   element: <GlobeAltIcon className="h-8 w-8" />,
                 }}
-                className="rounded-full px-4 py-1.5 transition-transform hover:-translate-y-0.5 xl:py-2 3xl:py-2.5"
+                className="rounded-full cursor-pointer px-4 py-1.5 transition-transform hover:-translate-y-0.5 xl:py-2 3xl:py-2.5"
               />
+              </div>
             );
           })}
         </div>
@@ -138,6 +140,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
   const handleSearch = async () => {
     if (search === '') return;
     setTriggerSearch(false);
+    setErrorMessage('');
     setIsLoading(true);
 
     let data = JSON.stringify({
@@ -170,6 +173,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
           setTriggerSearch(true);
         } else {
           setErrorMessage('Something went wrong try again after some time');
+          setPreSearch(true);
           setIsLoading(false);
         }
       });
@@ -179,7 +183,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
     if (preSearch) {
       setPreSearch(false);
     }
-
+    setErrorMessage('');
     setIsLoading(true);
 
     let config = {
@@ -203,6 +207,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
+        setPreSearch(true);
         setErrorMessage('Something went wrong try again after some time');
       });
   };
