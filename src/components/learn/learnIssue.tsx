@@ -118,12 +118,16 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
             <Verified className="ml-1 h-5 w-5" />
           </div>
         </div> */}
-        <div className="mt-3 text-xs xl:text-sm 3xl:text-base">
-          {item?.body?.length < 300 ? (
-            <MarkdownRenderer>{item?.body}</MarkdownRenderer>
+        <div className="mt-3 w-full text-xs xl:text-sm 3xl:text-base">
+          {item?.body?.length < 350 || item?.body === null ? (
+            <MarkdownRenderer className="w-full whitespace-pre-wrap">
+              {item?.body ?? 'no description'}
+            </MarkdownRenderer>
           ) : (
             <>
-              <MarkdownRenderer>{item?.body?.slice(0, 300)}</MarkdownRenderer>
+              <MarkdownRenderer className="w-full whitespace-pre-wrap">
+                {item?.body?.slice(0, 350)}
+              </MarkdownRenderer>
               <div className="inline">....</div>
               <AnchorLink
                 href={item?.html_url}
