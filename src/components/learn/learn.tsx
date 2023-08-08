@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
+import mixpanel from 'mixpanel-browser';
 
 //UI components
 import Input from '@/components/ui/forms/input';
@@ -165,13 +166,29 @@ const Learn: React.FC<LearnProps> = ({}) => {
         setIsLoading(false);
         setRetries(3);
         setErrorMessage('');
+        mixpanel.track('Learn Search Success', {
+          learnQuery: res?.data?.learn_search_last_query,
+          learnIssuesCount: res?.data?.search_results?.length,
+          learnIssues: res?.data?.search_results,
+          learnContentCount: res?.data?.learning_resources?.length,
+          learnContent: res?.data?.learning_resources,
+        });
       })
       .catch((error) => {
         console.log(error);
         if (retries > 0) {
           setRetries(retries - 1);
+          mixpanel.track('Learn Search Error Retying', {
+            learnQuery: search,
+            error: error.message,
+            retriesLeft: retries,
+          });
           setTriggerSearch(true);
         } else {
+          mixpanel.track('Learn Search Failed', {
+            learnQuery: search,
+            error: error.message,
+          });
           setErrorMessage('Something went wrong try again after some time');
           setPreSearch(true);
           setIsLoading(false);
@@ -203,8 +220,18 @@ const Learn: React.FC<LearnProps> = ({}) => {
         setSearch(res.data.learn_search_last_query);
         setIsLoading(false);
         setErrorMessage('');
+        mixpanel.track('Learn Cached Success', {
+          learnQuery: res?.data?.learn_search_last_query,
+          learnIssuesCount: res?.data?.search_results?.length,
+          learnIssues: res?.data?.search_results,
+          learnContentCount: res?.data?.learning_resources?.length,
+          learnContent: res?.data?.learning_resources,
+        });
       })
       .catch((error) => {
+        mixpanel.track('Learn Cached Failed', {
+          error: error.message,
+        });
         console.log(error);
         setIsLoading(false);
         setPreSearch(true);
