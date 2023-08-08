@@ -136,9 +136,9 @@ export default function Header({ className }: { className?: string }) {
     <nav
       className={cn(
         'relative top-0 right-0 z-30 h-[7rem] w-full transition-all duration-300 lg:h-[8rem] 2xl:h-[11rem]',
-        // isMounted && windowScroll.y
-        //   ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
-        //   : '',
+        {
+          '!hidden': router.pathname === '/learn',
+        },
         className
       )}
     >

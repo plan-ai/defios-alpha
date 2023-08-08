@@ -1,8 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { TrophyIcon } from '@/components/icons/trophy';
 import { CodeIcon } from '@/components/icons/code';
-import { ChartBarIcon } from '@/components/icons/chartbar';
 import { LockIcon } from '@/components/icons/lock';
 interface IssueStateProps {
   state: string;
@@ -23,11 +21,9 @@ const IssueState: React.FC<IssueStateProps> = ({
   return (
     <div
       className={cn(
-        'mx-1 my-0.5 flex items-center justify-between rounded-full bg-black py-1 px-2 text-3xs font-medium tracking-wider shadow-card lg:text-2xs 2xl:py-1.5 2xl:px-2.5 2xl:px-3 2xl:text-xs 3xl:py-2',
+        'mx-1 my-0.5 flex items-center justify-between rounded-full bg-black py-1 px-2 text-xs font-medium tracking-wider shadow-card xl:text-sm 2xl:py-1.5 2xl:px-2.5 2xl:px-3 3xl:py-2 3xl:text-base',
         {
           'text-blue-400': state === 'open',
-          'text-orange-400': state === 'voting',
-          'text-green-400': state === 'winner_declared',
           'text-red-400': state === 'closed',
         },
         className
@@ -41,11 +37,9 @@ const IssueState: React.FC<IssueStateProps> = ({
           )}
         >
           {state === 'open' && <CodeIcon />}
-          {state === 'voting' && <ChartBarIcon />}
-          {state === 'winner_declared' && <TrophyIcon />}
           {state === 'closed' && <LockIcon />}
         </div>
-        <div>{state.replace('_declared', '')}</div>
+        <div>{state[0].toUpperCase() + state.slice(1)}</div>
       </div>
     </div>
   );

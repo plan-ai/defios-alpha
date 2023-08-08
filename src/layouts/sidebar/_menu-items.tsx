@@ -1,5 +1,6 @@
 import routes from '@/config/routes';
 import { HomeIcon } from '@/components/icons/home';
+import { BookOpenIcon } from '@/components/icons/book-open';
 import { FarmIcon } from '@/components/icons/farm';
 import { PoolIcon } from '@/components/icons/pool';
 import { ProfileIcon } from '@/components/icons/profile';
@@ -11,9 +12,9 @@ import { BuildingIcon } from '@/components/icons/building';
 
 export const menuItems = [
   {
-    name: 'home',
-    icon: <HomeIcon />,
-    href: routes.home,
+    name: 'learn',
+    icon: <BookOpenIcon />,
+    href: routes.learn,
   },
   {
     name: 'projects',
