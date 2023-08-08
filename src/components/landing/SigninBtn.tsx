@@ -17,14 +17,14 @@ export const SigninBtn: React.FC<SigninBtnProps> = ({}) => {
           if (user_type === null || user_type === undefined) {
             router.push('/onboarding');
           } else {
-            router.push('/home');
+            router.push('/learn');
           }
         } else {
           signIn('github', {
             callbackUrl:
               user_type === null
                 ? `${window.location.origin}/onboarding`
-                : `${window.location.origin}/home`,
+                : `${window.location.origin}/learn`,
           });
         }
       }}
