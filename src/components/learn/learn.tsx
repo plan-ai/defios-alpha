@@ -97,7 +97,10 @@ const Search: React.FC<SearchProps> = ({
           {trending.map((text, idx) => {
             return (
               <div
-                onClick={() => setSearch(text)}
+                onClick={() => {
+                  setSearch(text);
+                  debounceFn();
+                }}
                 key={idx}
                 className="cursor-pointer"
               >
@@ -173,6 +176,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
           learnContentCount: res?.data?.learning_resources?.length,
           learnContent: res?.data?.learning_resources,
         });
+        localStorage.setItem('learn-used', 'true');
       })
       .catch((error) => {
         console.log(error);
@@ -368,23 +372,26 @@ const Learn: React.FC<LearnProps> = ({}) => {
           {featuredProject !== null && featuredProject !== undefined && (
             <SpotlightProject item={featuredProject} />
           )}
-          <div className="flex w-full items-center justify-between rounded-xl border border-gray-600 bg-body px-4 py-2 text-sm lg:border-2 xl:py-2.5 xl:text-base 3xl:py-3 3xl:text-lg">
-            <div>
-              You seem to have dropped off midway during your last web
-              development learning path.
-            </div>
-            <Button
-              onClick={handleResume}
-              size="small"
-              shape="rounded"
-              color="info"
-            >
-              <div className="flex items-center gap-2">
-                <div>Resume Now</div>
-                <ArrowRightIcon className="h-5 w-5" />
+          {localStorage.getItem('learn-used') !== undefined &&
+            localStorage.getItem('learn-used') !== null && (
+              <div className="flex w-full items-center justify-between rounded-xl border border-gray-600 bg-body px-4 py-2 text-sm lg:border-2 xl:py-2.5 xl:text-base 3xl:py-3 3xl:text-lg">
+                <div>
+                  You seem to have dropped off midway during your last web
+                  development learning path.
+                </div>
+                <Button
+                  onClick={handleResume}
+                  size="small"
+                  shape="rounded"
+                  color="info"
+                >
+                  <div className="flex items-center gap-2">
+                    <div>Resume Now</div>
+                    <ArrowRightIcon className="h-5 w-5" />
+                  </div>
+                </Button>
               </div>
-            </Button>
-          </div>
+            )}
         </div>
       )}
     </div>
