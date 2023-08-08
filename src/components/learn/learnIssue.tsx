@@ -120,12 +120,12 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
         </div> */}
         <div className="mt-3 w-full text-xs xl:text-sm 3xl:text-base">
           {item?.body?.length < 350 || item?.body === null ? (
-            <MarkdownRenderer className="w-full whitespace-pre-wrap">
+            <MarkdownRenderer className="w-full">
               {item?.body ?? 'no description'}
             </MarkdownRenderer>
           ) : (
             <>
-              <MarkdownRenderer className="w-full whitespace-pre-wrap">
+              <MarkdownRenderer className="w-full">
                 {item?.body?.slice(0, 350)}
               </MarkdownRenderer>
               <div className="inline">....</div>
