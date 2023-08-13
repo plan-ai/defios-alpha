@@ -3,44 +3,172 @@ import IssueComment from '@/components/issue-details/IssueComment';
 import IssueCommentCreator from '@/components/issue-details/IssueCommentCreator';
 import Spinner from '@/components/custom/spinner';
 import TagImage from '@/components/ui/tags/tag-image';
+import Image from '@/components/ui/image';
+import Button from '@/components/ui/button/button';
+
+import { stakeIssue, unstakeIssue } from '@/lib/helpers/contractInteract';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { selectUserMapping } from '@/store/userMappingSlice';
 import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { setRefetch } from '@/store/refetchSlice';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import mixpanel from 'mixpanel-browser';
 
 import CoinInput from '@/components/ui/coin-input';
 
 import StakeHolders from '@/components/issue-details/StakeHolders';
 
-import Image from '@/components/ui/image';
-import Button from '@/components/ui/button/button';
+import { getAssociatedTokenAddress } from '@solana/spl-token';
 
-interface IssueStakeProps {}
+const coinList = [
+  {
+    repository: '2c8tDPE7eBy7EJUjuiweCRheH1rQoQMBXBKk5ga8UbJs',
+    token_image_url:
+      'https://ipfs.io/ipfs/QmNeUqucEW5g53mJ1rt5fzvHzNfQo14TGuEuNV2o5LBQte',
+    token_new: true,
+    token_spl_addr: '91tB1NHt4yi3bgyqc45vLq1VdXcubpMyJhsS5aL71JEn',
+    token_symbol: 'DOSA',
+  },
+  {
+    token_image_url:
+      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU/logo.png',
+    token_symbol: 'USDC',
+    token_spl_addr: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',
+  },
+];
 
-export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
+interface IssueStakeProps {
+  account: string;
+  issueTokenAddress: string;
+  link: string;
+}
+
+export const IssueStake: React.FC<IssueStakeProps> = ({
+  account,
+  issueTokenAddress,
+  link,
+}) => {
+  const dispatch = useAppDispatch();
+  const stateLoading = useAppSelector((state) => state.callLoader.callState);
+  const firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
+  const wallet = useWallet();
   const { data: session } = useSession();
+  const userMappingState = useAppSelector(selectUserMapping);
 
-  const [pieChartData, setPieChartData] = useState<any>(null);
-  const [stakeAmount, setStakeAmount] = useState(0);
-
-  const coinList = [
-    {
-      token_image_url:
-        'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU/logo.png',
-      token_symbol: 'USDC',
-      token_spl_addr: '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',
-    },
-    {
-      repository: '2c8tDPE7eBy7EJUjuiweCRheH1rQoQMBXBKk5ga8UbJs',
-      token_image_url:
-        'https://ipfs.io/ipfs/QmNeUqucEW5g53mJ1rt5fzvHzNfQo14TGuEuNV2o5LBQte',
-      token_new: true,
-      token_spl_addr: '91tB1NHt4yi3bgyqc45vLq1VdXcubpMyJhsS5aL71JEn',
-      token_symbol: 'DOSA',
-    },
-  ];
-
+  const [stakeAmount, setStakeAmount] = React.useState<number>(0);
   const [stakeCoin, setStakeCoin] = useState<any>(coinList[0]);
 
+  const [pieChartData, setPieChartData] = useState<any>(null);
+
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleIssueStake = () => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
+    if (stakeAmount <= 0) return;
+    dispatch(onLoading('Staking tokens on the issue...'));
+    stakeIssue(
+      wallet.publicKey as PublicKey,
+      new PublicKey(account),
+      stakeAmount,
+      new PublicKey(issueTokenAddress),
+      firebase_jwt
+    )
+      .then((res) => {
+        setStakeAmount(0);
+        dispatch(
+          onSuccess({
+            label: 'Issue Staking Successful',
+            description: 'Check out your staking at',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
+        mixpanel.track('Issue Staking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          token_address: issueTokenAddress,
+          stake_amount: stakeAmount,
+          issue_github_link: link,
+        });
+        dispatch(setRefetch('issue'));
+      })
+      .catch((err) => {
+        setStakeAmount(0);
+        dispatch(
+          onFailure({
+            label: 'Issue Staking Failed',
+            description: err.message,
+            redirect: null,
+            link: '',
+          })
+        );
+        mixpanel.track('Issue Staking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
+      });
+  };
+
+  const handleIssueUnstake = () => {
+    dispatch(onLoading('Unstaking tokens on the issue...'));
+    unstakeIssue(
+      wallet.publicKey as PublicKey,
+      new PublicKey(account),
+      new PublicKey(issueTokenAddress)
+    )
+      .then((res) => {
+        setStakeAmount(0);
+        dispatch(
+          onSuccess({
+            label: 'Issue Unstaking Successful',
+            description: 'Check out your unstaking at',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
+        mixpanel.track('Issue Unstaking Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: account,
+          token_address: issueTokenAddress,
+          issue_github_link: link,
+        });
+        dispatch(setRefetch('issue'));
+      })
+      .catch((err) => {
+        setStakeAmount(0);
+        dispatch(
+          onFailure({
+            label: 'Issue Unstaking Failed',
+            description: err.message,
+            redirect: null,
+            link: '',
+          })
+        );
+        mixpanel.track('Issue Unstaking Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
+      });
+  };
 
   useEffect(() => {
     setPieChartData(null);
@@ -96,7 +224,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
             <div className="ml-2">Stake on Issue</div>
             <div className="flex flex-col items-end gap-2 rounded-xl bg-gray-900 p-4 text-2xs xl:text-xs 3xl:text-sm">
               <div className="mr-2">Bal: 100.23 USDC</div>
-              {/* <CoinInput
+              <CoinInput
                 label={'From'}
                 exchangeRate={0.0}
                 value={stakeAmount.toString()}
@@ -107,8 +235,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
                 coinList={coinList}
                 selectedCoin={stakeCoin}
                 setSelectedCoin={setStakeCoin}
-                disabled
-              /> */}
+              />
               <div className="flex items-center gap-2">
                 <Button
                   shape="rounded"
@@ -159,7 +286,13 @@ export const IssueStake: React.FC<IssueStakeProps> = ({}) => {
                 <div>1200 USDC</div>
                 <div className="text-gray-500">(~$1200.0)</div>
               </div>
-              <Button fullWidth shape="rounded" size="small" color="info">
+              <Button
+                onClick={handleIssueUnstake}
+                fullWidth
+                shape="rounded"
+                size="small"
+                color="info"
+              >
                 Unstake
               </Button>
             </div>

@@ -282,6 +282,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
                       100,
                   }}
                   item="issues"
+                  type='issues'
                 />
               </div>
             )}

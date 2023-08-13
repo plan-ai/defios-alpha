@@ -10,6 +10,7 @@ const routes = {
   jobs: '/jobs',
   // enterprise: '/enterprise',
   notification: '/notifications',
+  newCreate:'/create',
 };
 
 export default routes;

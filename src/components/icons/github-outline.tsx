@@ -2,11 +2,12 @@ export function GithubOutlineIcon(props: React.SVGAttributes<{}>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="white"
+      fill="none"
       viewBox="0 0 27 27"
       strokeWidth={1.5}
       stroke="currentColor"
       className="h-6 w-6"
+      {...props}
     >
       <path
         d="M13.5 26C20.4035 26 26 20.4035 26 13.5C26 6.59644 20.4035 1 13.5 1C6.59644 1 1 6.59644 1 13.5C1 20.4035 6.59644 26 13.5 26Z"

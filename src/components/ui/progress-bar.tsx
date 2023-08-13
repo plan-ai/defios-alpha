@@ -11,6 +11,7 @@ interface ProgressBarProps {
     percentage: number;
   };
   item?: string;
+  type?: string;
 }
 
 export default function ProgressBar({
@@ -18,10 +19,11 @@ export default function ProgressBar({
   completed,
   remaining,
   item,
+  type,
 }: ProgressBarProps) {
   return (
     <motion.div layout className="mb-2">
-      <h4 className="mb-3 text-base uppercase text-gray-100 xl:text-lg 3xl:text-xl">
+      <h4 className="mb-3 text-base text-gray-100 xl:text-lg 3xl:text-xl">
         {title}
       </h4>
       <div className="flex items-center gap-5">
@@ -35,14 +37,23 @@ export default function ProgressBar({
             width={`${completed?.percentage}%`}
           />
         </svg>
-        {completed !== undefined && remaining !== undefined && (
-          <div className="flex items-start justify-end whitespace-nowrap text-xs xl:text-sm 3xl:text-base">
-            <div>
-              {remaining?.value + '/' + (completed?.value + remaining?.value)}{' '}
-              {item} remaining
+        {completed !== undefined &&
+          remaining !== undefined &&
+          type === 'issues' && (
+            <div className="flex items-start justify-end whitespace-nowrap text-xs xl:text-sm 3xl:text-base">
+              <div>
+                {remaining?.value + '/' + (completed?.value + remaining?.value)}{' '}
+                {item} remaining
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        {completed !== undefined &&
+          remaining !== undefined &&
+          type === 'voting' && (
+            <div className="flex items-start justify-end whitespace-nowrap text-xs xl:text-sm 3xl:text-base">
+              <div>Voting {completed.percentage}% complete</div>
+            </div>
+          )}
       </div>
     </motion.div>
   );

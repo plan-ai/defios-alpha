@@ -31,7 +31,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   //loading spinner
   const [isLoading, setIsLoading] = useState(true);
 
-  const [tabState, setTabState] = useState<tabStateType>('description');
+  const [tabState, setTabState] = useState<tabStateType>('pull requests');
 
   const [issueData, setIssueData] = useState<any>();
 
@@ -60,7 +60,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   }, [firebase_jwt]);
 
   return (
-    <div className="flex w-full flex-col gap-3 overflow-y-auto overflow-x-hidden px-3.5 pb-4">
+    <div className="flex h-full w-full flex-col gap-3 overflow-y-auto overflow-x-hidden px-3.5 pb-4">
       <div className="flex items-center gap-3 text-xs text-gray-500 xl:text-sm 3xl:text-base">
         <ArrowLongLeftIcon className="h-10" />
         <div>Go back to issues</div>
@@ -112,7 +112,13 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       {tabState === 'description' && (
         <IssueDescription issue_url={issueData?.issue_gh_url} />
       )}
-      {tabState === 'stake' && <IssueStake />}
+      {tabState === 'stake' && (
+        <IssueStake
+          account={issueData?.issue_account}
+          issueTokenAddress={issueData?.issue_stake_token_url}
+          link={issueData?.issue_gh_url}
+        />
+      )}
       {tabState === 'impact' && <IssueImpact />}
       {tabState === 'pull requests' && <IssuePullRequests />}
     </div>

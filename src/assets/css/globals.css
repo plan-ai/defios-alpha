@@ -12,11 +12,11 @@
     color: white;
   }
   html {
-    @apply bg-body text-white;
+    @apply bg-newdark text-white;
     -webkit-tap-highlight-color: transparent;
   }
   html.dark {
-    @apply bg-dark text-white;
+    @apply bg-newdark text-white;
   }
   html,
   body {
@@ -65,6 +65,26 @@ input::-webkit-inner-spin-button {
   font-family: 'Inter',sans-serif;
 }
 
+.lineGradient{
+  background: linear-gradient(180deg, rgba(146, 171, 251, 0.00) 0%, #92ABFB 32.83%, rgba(146, 171, 251, 0.941) 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.lineGradientHorizontal{
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #92ABFB 32.83%, rgba(146, 171, 251, 0.941) 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.lineGradientHorizontalGray{
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #595959 32.83%, #595959f0 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.gradient-border-box-bottom {
+  border-bottom: double transparent;
+  background-image: linear-gradient(theme('colors.light-gray'), theme('colors.light-gray')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .conic-gradient-1{
   background: conic-gradient(from -13deg at 50.00% 50.00%, #1D606A 52.535998821258545deg, #90AAFA 133.08900117874146deg, #90AAFA 172.46400117874146deg, #FFF 249.44698333740234deg, #1D606A 298.1610059738159deg, #90AAFA 322.4999928474426deg, #90AAFA 322.53599882125854deg, #1D606A 360deg);
 }
@@ -82,7 +102,7 @@ input::-webkit-inner-spin-button {
 
 .gradient-border:focus {
   border: double transparent;
-  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
+  background-image: linear-gradient(theme('colors.light-gray'), theme('colors.light-gray')),
     linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
   background-origin: border-box;
   background-clip: padding-box, border-box;

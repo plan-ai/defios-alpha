@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Input from '@/components/ui/forms/input';
 import Button from '@/components/ui/button/button';
-
+import ProgressBar from '@/components/ui/progress-bar';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
@@ -22,6 +22,8 @@ import { useSession } from 'next-auth/react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setRefetch } from '@/store/refetchSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+
+import PRBox from '@/components/issue-details/PRBox';
 
 const sort = [
   { id: 1, name: 'Repository creator' },
@@ -120,10 +122,12 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({}) => {
   });
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="mt-4 flex w-full flex-col gap-8 pb-12 text-sm xl:text-base 3xl:text-lg">
       {/* Submit PR */}
-      <div className="flex w-full flex-col">
-        <div className="mb-2">submit new pull request</div>
+      <div className="flex w-full flex-col gap-4">
+        <div className="text-base xl:text-lg 3xl:text-xl">
+          Submit new pull request
+        </div>
         <div className="flex w-full items-center justify-center gap-2">
           <SortList
             sort={PRSort}
@@ -140,6 +144,28 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({}) => {
             Submit
           </Button>
         </div>
+      </div>
+      <div className="flex w-full flex-col gap-4">
+        <div className="text-base xl:text-lg 3xl:text-xl">My Vote</div>
+        <PRBox votingDone={true} percentage={51} />
+      </div>
+      <div className="flex w-full flex-col gap-4">
+        <ProgressBar
+          title="Open PRs"
+          completed={{
+            value: 70,
+            percentage: 70,
+          }}
+          remaining={{
+            value: 30,
+            percentage: 30,
+          }}
+          item="voting"
+          type="voting"
+        />
+        <PRBox winner={true} votingDone={true} percentage={51} />
+        <PRBox votingDone={true} percentage={5} />
+        <PRBox votingDone={true} percentage={14} />
       </div>
     </div>
   );

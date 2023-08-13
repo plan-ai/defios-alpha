@@ -20,9 +20,11 @@ module.exports = {
     extend: {
       colors: {
         brand: 'rgb(var(--color-brand))',
-        body: '#0D1321',
-        dark: '#0D1321',
+        body: '#0D0F14',
+        dark: '#0D0F14',
+        newdark: '#0D0F14',
         'light-dark': '#171e2e',
+        'light-gray': '#24262C',
         'sidebar-body': '#F8FAFC',
         primary: '#90AAFA',
         'primary-green1': '#33A9A2',

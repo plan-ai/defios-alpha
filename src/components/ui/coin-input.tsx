@@ -47,7 +47,12 @@ export default function CoinInput({
   useLockBodyScroll(visibleCoinList);
 
   function handleSelectedCoin(coin: any) {
-    if (setSelectedCoin === undefined) return;
+    if (
+      setSelectedCoin === undefined ||
+      selectedCoin === coin ||
+      coin === undefined
+    )
+      return;
     setSelectedCoin(coin);
     setVisibleCoinList(false);
   }
@@ -56,7 +61,7 @@ export default function CoinInput({
     if (coinList.length !== 0 && setSelectedCoin !== undefined) {
       setSelectedCoin(coinList[0]);
     }
-  }, [coinList]);
+  }, [coinList, setSelectedCoin]);
 
   return (
     <>

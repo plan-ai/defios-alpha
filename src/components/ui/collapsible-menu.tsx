@@ -46,7 +46,7 @@ export function MenuItem({
         <>
           <div
             className={cn(
-              'relative flex h-12 cursor-pointer items-center justify-between whitespace-nowrap  rounded-xl px-4 text-sm transition-all',
+              'relative flex h-12 cursor-pointer items-center justify-between whitespace-nowrap  rounded-xl px-4 text-sm transition-all xl:text-base 3xl:text-lg',
               isChildrenActive ? 'text-white' : 'text-gray-500 hover:text-white'
             )}
             onClick={() => setIsOpen(!isOpen)}
@@ -84,7 +84,7 @@ export function MenuItem({
                     href={{
                       pathname: item.href,
                     }}
-                    className="flex items-center rounded-xl p-3 pl-6 text-2xs text-gray-500 transition-all before:mr-5 before:h-1 before:w-1 before:rounded-full before:bg-gray-500 hover:text-white xl:text-xs 3xl:text-sm"
+                    className="flex items-center rounded-xl p-3 pl-6 text-sm text-gray-500 transition-all before:mr-5 before:h-1 before:w-1 before:rounded-full before:bg-gray-500 xl:text-base 3xl:text-lg"
                     activeClassName=" !text-white before:!bg-white before:!w-2 before:!h-2 before:-ml-0.5 before:!mr-[18px]  !font-medium"
                   >
                     {item.name}
@@ -100,7 +100,7 @@ export function MenuItem({
             pathname: href,
           }}
           className={cn(
-            'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-2xs text-gray-500  transition-all hover:text-white xl:text-xs 2xl:h-12 3xl:text-sm'
+            'relative flex h-10 items-center whitespace-nowrap rounded-xl px-4 text-sm text-gray-500  transition-all hover:text-white xl:text-base 2xl:h-12 3xl:text-lg'
           )}
           activeClassName="!text-primary"
         >

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Button from '@/components/ui/button';
 import cn from 'classnames';
@@ -7,12 +7,14 @@ interface UploaderProps {
   label?: string;
   useUppercaseLabel?: boolean;
   setFile?: (file: any) => void;
+  uploaded?: File | undefined;
 }
 
 const Uploader: React.FC<UploaderProps> = ({
   label,
   useUppercaseLabel = true,
   setFile = () => {},
+  uploaded,
 }) => {
   const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
@@ -21,6 +23,7 @@ const Uploader: React.FC<UploaderProps> = ({
     multiple: false,
     onDrop: (acceptedFiles: any) => {
       setFile(acceptedFiles[0]);
+      console.log('accept: ' + acceptedFiles[0]);
       setFiles(
         acceptedFiles.map((file: any) =>
           Object.assign(file, {
@@ -31,8 +34,14 @@ const Uploader: React.FC<UploaderProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (uploaded === undefined) return;
+    setFile(uploaded);
+    setFiles([uploaded as never]);
+  }, [uploaded, setFile]);
+
   const thumbs = files.map((file: any) => (
-    <div key={file.name} className="h-full w-full">
+    <div key={file.name} className="h-20 w-20 overflow-hidden rounded-full">
       <img
         src={file.preview}
         className="mx-auto max-h-full max-w-full object-contain"
@@ -42,7 +51,7 @@ const Uploader: React.FC<UploaderProps> = ({
   ));
 
   return (
-    <div className="flex w-3/4 flex-col text-xs sm:text-sm">
+    <div className="flex w-full flex-col text-xs sm:text-sm">
       {label && (
         <span
           className={cn(
@@ -53,7 +62,11 @@ const Uploader: React.FC<UploaderProps> = ({
           {label}
         </span>
       )}
-      <div className="w-full rounded-lg border border-solid border-gray-700 bg-light-dark !h-9 2xl:!h-10 3xl:!h-11">
+      <div
+        className={`${
+          files.length > 0 ? 'w-fit rounded-full p-2' : 'w-full rounded-lg'
+        } cursor-pointer border-2 border-dashed border-dark bg-light-gray `}
+      >
         <div
           {...getRootProps({
             className: 'h-full flex items-center justify-center rounded-lg',
@@ -63,13 +76,16 @@ const Uploader: React.FC<UploaderProps> = ({
           {files.length > 0 ? (
             thumbs
           ) : (
-            <div className="flex h-full w-full items-center justify-between text-center">
-              <p className="pl-2 text-3xs xl:text-2xs 3xl:text-xs tracking-tighter text-gray-400">
-                PNG,JPG,SVG. Max 10MB.
-              </p>
-              <Button size="small" className="!h-full" shape="rounded">
-                Upload
-              </Button>
+            <div className="flex h-full w-full flex-col items-center gap-2 p-3 text-center text-2xs xl:text-xs">
+              <div>
+                drag and drop an image file or{' '}
+                <div className="inline text-primary">browse files</div> to
+                upload.
+              </div>
+              <div>
+                only .png format is supported. must be &gt; 5 mb, transparent
+                and circular
+              </div>
             </div>
           )}
         </div>

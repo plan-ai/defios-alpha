@@ -86,10 +86,11 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 bottom-0 z-40 flex h-full w-full w-[15rem] flex-col justify-between overflow-y-auto border-r border-dashed border-gray-700 bg-dark pt-3 lg:pt-5 xl:w-[16.75rem] 2xl:w-[18.75rem] 3xl:w-[20rem]',
+        'fixed top-0 left-0 bottom-0 z-40 flex h-full w-full w-[15rem] flex-col justify-between overflow-y-auto pt-3 lg:pt-5 xl:w-[16.75rem] 2xl:w-[18.75rem] 3xl:w-[20rem]',
         className
       )}
     >
+      <div className="lineGradient absolute top-0 bottom-0 right-0 ml-2 w-0.5"></div>
       <div className="relative flex items-center px-6 3xl:px-8">
         <div className="lg:hidden">
           <Button
@@ -107,23 +108,8 @@ export default function Sidebar({ className }: { className?: string }) {
       </div>
 
       <div className="px-6 pb-5 2xl:px-7 3xl:px-8">
-        <div className="mt-5">
-          <div className="m-2 text-xs text-gray-300 xl:text-sm 3xl:text-base">
-            Contributor
-          </div>
-          {menuItems.contributor.map((item: any, index: number) => (
-            <MenuItem
-              key={'default' + item.name + index}
-              name={item.name}
-              href={item.href}
-              icon={item.icon}
-              comingSoon={item.comingSoon || undefined}
-            />
-          ))}
-          <div className="m-2 text-xs text-gray-300 xl:text-sm 3xl:text-base">
-            Repo Owner
-          </div>
-          {menuItems.repoOwner.map((item: any, index: number) => (
+        <div className="mt-5 flex flex-col gap-2">
+          {menuItems.map((item: any, index: number) => (
             <MenuItem
               key={'default' + item.name + index}
               name={item.name}
@@ -147,8 +133,9 @@ export default function Sidebar({ className }: { className?: string }) {
             </Button>
           )} */}
       </div>
-      <Link href="/profile">
-        <div className="m-4">
+      <Link href="/profile" className="w-full">
+        <div className="mb-4 flex w-full flex-col">
+          <div className="lineGradientHorizontal h-0.5 w-full"></div>
           <AuthorCard
             image={githubInfo?.avatar_url || ''}
             name={githubInfo?.name || ''}
