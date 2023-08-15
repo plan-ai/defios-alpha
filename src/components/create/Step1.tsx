@@ -273,7 +273,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
         }
       }}
     >
-      <div className="text-base font-semibold xl:text-lg 3xl:text-xl ">
+      <div className="text-lg font-semibold xl:text-xl 3xl:text-2xl ">
         project details
       </div>
       <div className="flex flex-col gap-2">

@@ -178,7 +178,253 @@ export const createRepository = (
           defaultSchedule: defaultVestingSchedule,
           metadata: metadataAddress,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+          importedMint: null,
+          rent: web3.SYSVAR_RENT_PUBKEY,
         })
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          let data = JSON.stringify({
+            mintKeypair: mintKeypair.toString(),
+          });
+
+          let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://namespaces.defi-os.com/createCommunalAccount',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: data,
+          };
+
+          axios(config);
+          resolve(repositoryAccount);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export const createRepositoryUnlockIssue = (
+  //repo
+  repositoryCreator: PublicKey,
+  repoName: string,
+  repoLink: string,
+  tokenName: string,
+  tokenSymbol: string,
+  tokenMetadata: string,
+  repositoryVerifiedUser: PublicKey,
+  //issue
+  issueURI: string,
+  //stake
+  tokenAmount: number,
+  usdcAmount: number
+) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const provider = await getProvider(Connection, Signer);
+      const metaplex = await Metaplex.make(Connection);
+      const program = await getDefiOsProgram(provider);
+
+      const [repositoryAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('repository'),
+          Buffer.from(repoName),
+          Signer.publicKey.toBuffer(),
+        ],
+        program
+      );
+      const [mintKeypair] = await get_pda_from_seeds(
+        [
+          Buffer.from('Miners'),
+          Buffer.from('MinerC'),
+          repositoryAccount.toBuffer(),
+        ],
+        program
+      );
+      const metadataAddress = await get_metadata_account(mintKeypair);
+      const [vestingAccount] = await get_pda_from_seeds(
+        [Buffer.from('vesting'), repositoryAccount.toBuffer()],
+        program
+      );
+      const vestingTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        vestingAccount,
+        true
+      );
+      const repositoryCreatorTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        Signer.publicKey
+      );
+      const [defaultVestingSchedule] = await get_pda_from_seeds(
+        [
+          Buffer.from('isGodReal?'),
+          Buffer.from('DoULoveMe?'),
+          Buffer.from('SweetChick'),
+        ],
+        program
+      );
+
+      const ixUnlock = await program.methods
+        .unlockTokens()
+        .accounts({
+          repositoryAccount,
+          repositoryCreatorTokenAccount,
+          repositoryCreator,
+          systemProgram: web3.SystemProgram.programId,
+          vestingAccount: vestingAccount,
+          tokenMint: mintKeypair,
+          vestingTokenAccount: vestingTokenAccount,
+        })
+        .instruction();
+
+      const [issueAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('issue'),
+          Buffer.from('0'),
+          repositoryAccount.toBuffer(),
+          repositoryCreator.toBuffer(),
+        ],
+        program
+      );
+
+      const issueTokenPoolAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        issueAccount,
+        true
+      );
+
+      const ixIssueCreate = await program.methods
+        .addIssue(issueURI)
+        .accounts({
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          issueAccount,
+          issueCreator: repositoryCreator,
+          issueTokenPoolAccount,
+          issueVerifiedUser: repositoryVerifiedUser,
+          nameRouterAccount,
+          repositoryAccount,
+          rewardsMint: mintKeypair,
+          routerCreator: routerCreator,
+          repositoryCreator: repositoryCreator,
+          systemProgram: web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        })
+        .instruction();
+
+      const [issueStakerAccount] = await get_pda_from_seeds(
+        [
+          Buffer.from('issuestaker'),
+          issueAccount.toBuffer(),
+          repositoryCreator.toBuffer(),
+        ],
+        program
+      );
+
+      const issueStakerTokenAccount = await getAssociatedTokenAddress(
+        mintKeypair,
+        repositoryCreator
+      );
+      
+
+      const ixTokenStake = await program.methods
+        .stakeIssue(new BN(tokenAmount))
+        .accounts({
+          issueAccount,
+          repositoryAccount,
+          issueTokenPoolAccount,
+          issueStaker: repositoryCreator,
+          issueStakerAccount,
+          issueStakerTokenAccount: issueStakerTokenAccount,
+          rewardsMint: mintKeypair,
+          systemProgram: web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        }).instruction();
+
+      const usdcMint = new PublicKey(
+        '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+      );
+
+      const issueStakerUsdcAccount = await getAssociatedTokenAddress(
+        usdcMint,
+        repositoryCreator
+      );
+
+      const issueUsdcPoolAccount = await getAssociatedTokenAddress(
+        usdcMint,
+        issueAccount,
+        true
+      );S
+
+      const ixUsdcStake = await program.methods
+        .stakeIssue(new BN(usdcAmount * (10**6)))
+        .accounts({
+          issueAccount,
+          repositoryAccount,
+          issueTokenPoolAccount:issueUsdcPoolAccount,
+          issueStaker: repositoryCreator,
+          issueStakerAccount,
+          issueStakerTokenAccount: issueStakerUsdcAccount,
+          rewardsMint: usdcMint,
+          systemProgram: web3.SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        }).instruction();
+
+      const arrNoStake = [ixUnlock, ixIssueCreate];
+
+      const arrOnlyTokenStake = [ixUnlock, ixIssueCreate,ixTokenStake];
+      const arrOnlyUsdcStake = [ixUnlock, ixIssueCreate, ixUsdcStake];
+
+      const arrAllStake = [ixUnlock, ixIssueCreate, ixTokenStake, ixUsdcStake];
+
+      let postIxs: web3.TransactionInstruction[] = arrNoStake;
+
+      if (tokenAmount > 0 && usdcAmount * 10 ** 6 > 0) {
+        postIxs = arrAllStake;
+      } else if (tokenAmount > 0) {
+        postIxs = arrOnlyTokenStake;
+      } else if (usdcAmount * 10 ** 6 > 0) {
+        postIxs = arrOnlyUsdcStake;
+      }else{
+        postIxs=arrNoStake;
+      }
+      
+      
+
+
+      await program.methods
+        .createRepository(
+          repoName,
+          'Open source revolution',
+          repoLink,
+          tokenName,
+          tokenSymbol,
+          tokenMetadata
+        )
+        .accounts({
+          nameRouterAccount,
+          repositoryAccount,
+          repositoryCreatorTokenAccount,
+          repositoryCreator: repositoryCreator,
+          repositoryVerifiedUser: repositoryVerifiedUser,
+          rewardsMint: mintKeypair,
+          routerCreator: routerCreator,
+          systemProgram: web3.SystemProgram.programId,
+          vestingAccount: vestingAccount,
+          vestingTokenAccount: vestingTokenAccount,
+          defaultSchedule: defaultVestingSchedule,
+          metadata: metadataAddress,
+          tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
+          importedMint: null,
+          rent: web3.SYSVAR_RENT_PUBKEY,
+        })
+        .postInstructions(postIxs)
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
           let data = JSON.stringify({
@@ -263,6 +509,8 @@ export const createRepositoryImported = (
           defaultSchedule: defaultVestingSchedule,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           metadata: null,
+          importedMint: new PublicKey(tokenAddress),
+          rent: web3.SYSVAR_RENT_PUBKEY,
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then(() => {
@@ -294,6 +542,7 @@ export const createRepositoryImported = (
     }
   });
 };
+
 
 export const createIssue = (
   issueCreator: PublicKey,
@@ -550,7 +799,7 @@ export const addPullRequest = (
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
         nameRouterAccount,
-        pullRequestTokenAccount,
+        pullRequestTSokenAccount,
         pullRequestAddr: commitCreator,
         routerCreator: routerCreator,
         systemProgram: web3.SystemProgram.programId,
@@ -578,6 +827,60 @@ export const addPullRequest = (
         systemProgram: web3.SystemProgram.programId,
       })
       .postInstructions([ixAddPr])
+      .rpc({ skipPreflight: false, maxRetries: 3 })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const votePr = (issueStaker: PublicKey, prAccount: PublicKey) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { sentBy, commits } = await program.account.pullRequest.fetch(
+      prAccount
+    );
+    const pullRequestAddr = sentBy;
+    const commitAccount = commits[0];
+    const { issue, commitCreator } = await program.account.commit.fetch(
+      commitAccount
+    );
+    const issueAccount = issue;
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        commitCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const [issueStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueStaker.toBuffer(),
+      ],
+      program
+    );
+
+    program.methods
+      .votePr()
+      .accounts({
+        issueStaker: issueStaker,
+        repository: repository,
+        pullRequestMetadataAccount: pullRequestMetadataAccount,
+        issueAccount: issueAccount,
+        issueStakerAccount: issueStakerAccount,
+        systemProgram: web3.SystemProgram.programId,
+      })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
@@ -664,28 +967,28 @@ export const stakePr = (
     }
     const transferAmount = amount * 10 ** tokenMetadata.decimals;
 
-    program.methods
-      .stakePr(new BN(transferAmount))
-      .accounts({
-        pullRequestAddr,
-        issue: issueAccount,
-        pullRequestMetadataAccount: pullRequestMetadataAccount,
-        pullRequestTokenAccount,
-        systemProgram: web3.SystemProgram.programId,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        rewardsMint: mintKeypair,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        pullRequestStaker: prStaker,
-        pullRequestStakerTokenAccount,
-        pullRequestStakerAccount,
-      })
-      .rpc({ skipPreflight: false, maxRetries: 3 })
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((e) => {
-        reject(e);
-      });
+    // program.methods
+    //   .stakePr(new BN(transferAmount))
+    //   .accounts({
+    //     pullRequestAddr,
+    //     issue: issueAccount,
+    //     pullRequestMetadataAccount: pullRequestMetadataAccount,
+    //     pullRequestTokenAccount,
+    //     systemProgram: web3.SystemProgram.programId,
+    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+    //     rewardsMint: mintKeypair,
+    //     tokenProgram: TOKEN_PROGRAM_ID,
+    //     pullRequestStaker: prStaker,
+    //     pullRequestStakerTokenAccount,
+    //     pullRequestStakerAccount,
+    //   })
+    //   .rpc({ skipPreflight: false, maxRetries: 3 })
+    //   .then((res) => {
+    //     resolve(res);
+    //   })
+    //   .catch((e) => {
+    //     reject(e);
+    //   });
   });
 };
 
@@ -741,28 +1044,28 @@ export const unstakePr = (
       program
     );
 
-    program.methods
-      .unstakePr()
-      .accounts({
-        pullRequestAddr,
-        issue: issueAccount,
-        pullRequestMetadataAccount: pullRequestMetadataAccount,
-        pullRequestTokenAccount,
-        systemProgram: web3.SystemProgram.programId,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        rewardsMint: mintKeypair,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        pullRequestStaker: prStaker,
-        pullRequestStakerTokenAccount,
-        pullRequestStakerAccount,
-      })
-      .rpc({ skipPreflight: false, maxRetries: 3 })
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((e) => {
-        reject(e);
-      });
+    // program.methods
+    //   .unstakePr()
+    //   .accounts({
+    //     pullRequestAddr,
+    //     issue: issueAccount,
+    //     pullRequestMetadataAccount: pullRequestMetadataAccount,
+    //     pullRequestTokenAccount,
+    //     systemProgram: web3.SystemProgram.programId,
+    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+    //     rewardsMint: mintKeypair,
+    //     tokenProgram: TOKEN_PROGRAM_ID,
+    //     pullRequestStaker: prStaker,
+    //     pullRequestStakerTokenAccount,
+    //     pullRequestStakerAccount,
+    //   })
+    //   .rpc({ skipPreflight: false, maxRetries: 3 })
+    //   .then((res) => {
+    //     resolve(res);
+    //   })
+    //   .catch((e) => {
+    //     reject(e);
+    //   });
   });
 };
 

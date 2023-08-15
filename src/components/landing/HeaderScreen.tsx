@@ -23,7 +23,7 @@ export const HeaderScreen: React.FC<HeaderScreenProps> = ({}) => {
             fill="none"
           >
             <g opacity="0.1">
-              <path d="M1 1L168 94" stroke="white" stroke-width="2" />
+              <path d="M1 1L168 94" stroke="white" strokeWidth="2" />
             </g>
           </svg>
         </div>
@@ -36,7 +36,7 @@ export const HeaderScreen: React.FC<HeaderScreenProps> = ({}) => {
             fill="none"
           >
             <g opacity="0.1">
-              <path d="M1.5 1.5L101 84.5" stroke="white" stroke-width="2" />
+              <path d="M1.5 1.5L101 84.5" stroke="white" strokeWidth="2" />
             </g>
           </svg>
         </div>
@@ -52,7 +52,7 @@ export const HeaderScreen: React.FC<HeaderScreenProps> = ({}) => {
               <path
                 d="M1.5 2L64.5 89M155 1L193.5 87M433.5 1L406 87M586 2L524 87M785 2L685 86.5M982.5 20.5L817.5 117.5"
                 stroke="white"
-                stroke-width="2"
+                strokeWidth="2"
               />
             </g>
           </svg>
@@ -69,7 +69,7 @@ export const HeaderScreen: React.FC<HeaderScreenProps> = ({}) => {
               <path
                 d="M187.5 2.5L1 106M357 2.5L192 140.5M487.5 1.5L386.5 140.5M603 1.5L542.5 139"
                 stroke="white"
-                stroke-width="2"
+                strokeWidth="2"
               />
             </g>
           </svg>
@@ -86,7 +86,7 @@ export const HeaderScreen: React.FC<HeaderScreenProps> = ({}) => {
               <path
                 d="M393 1L594.5 118.5M231.5 1L395.5 138M99.5 2L199.5 140.5M1 1.5L47 141.5"
                 stroke="white"
-                stroke-width="2"
+                strokeWidth="2"
               />
             </g>
           </svg>

@@ -14,11 +14,11 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
   
   return (
     <div className="absolute z-[40] flex h-full w-full flex-col justify-between rounded-xl bg-newdark p-8 text-sm xl:text-base 3xl:text-lg">
-      <div className="flex items-center gap-3 text-base font-semibold xl:text-lg 3xl:text-xl">
+      <div className="flex items-center gap-3 text-lg font-semibold xl:text-xl 3xl:text-2xl">
         <div className=" ">final preview</div>
         <QuestionMarkCircleIcon className="h-5 w-5 " />
       </div>
-      <div className="flex w-full flex-col items-center gap-12 px-2 text-2xs xl:text-xs 3xl:text-sm">
+      <div className="flex w-full flex-col items-center gap-12 px-2 text-xs xl:text-sm 3xl:text-base">
         <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
         <div className="flex w-full items-center justify-between">
           <div className="mr-2 whitespace-pre text-primary">repository -</div>
@@ -36,7 +36,7 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
           <div className="flex items-center gap-2">
             <div className="relative h-6 w-6 overflow-hidden rounded-full">
               <Image
-                src={(step1Data.tokenIcon as any).preview || ''}
+                src={(step1Data.tokenIcon as any)?.preview || ''}
                 alt="icon"
                 fill
                 className="object-cover"
@@ -61,7 +61,7 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
             <div>{step2Data.tokenIncentive}</div>
             <div className="relative h-6 w-6 overflow-hidden rounded-full">
               <Image
-                src={(step1Data.tokenIcon as any).preview || ''}
+                src={(step1Data.tokenIcon as any)?.preview || ''}
                 alt="icon"
                 fill
                 className="object-cover"
@@ -86,7 +86,7 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
         <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
       </div>
 
-      <div className="px-6 text-center text-2xs xl:text-xs 3xl:text-sm">
+      <div className="px-6 text-center text-xs xl:text-sm 3xl:text-base">
         make sure you have some $SOL in your Solana wallet to pay for the
         transaction fees on the blockchain. defiOS does not charge any fees for
         creating projects and issues.

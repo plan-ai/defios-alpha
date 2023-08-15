@@ -1,6 +1,23 @@
 export type Defios = {
   "version": "0.1.0",
   "name": "defios",
+  "constants": [
+    {
+      "name": "AUTHORIZED_PUBLIC_KEY",
+      "type": "publicKey",
+      "value": "pubkey ! (\"55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF\")"
+    },
+    {
+      "name": "MAX_INT",
+      "type": "u128",
+      "value": "u128 :: pow (2 , 64) - 1"
+    },
+    {
+      "name": "VOTING_END",
+      "type": "i64",
+      "value": "72 * 60 * 60"
+    }
+  ],
   "instructions": [
     {
       "name": "createNameRouter",
@@ -324,6 +341,12 @@ export type Defios = {
           }
         },
         {
+          "name": "importedMint",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -340,6 +363,11 @@ export type Defios = {
         },
         {
           "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -1006,7 +1034,7 @@ export type Defios = {
         },
         {
           "name": "rewardsMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -1081,11 +1109,6 @@ export type Defios = {
           "isSigner": false
         },
         {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -1125,8 +1148,8 @@ export type Defios = {
               {
                 "kind": "account",
                 "type": "publicKey",
-                "account": "VerifiedUser",
-                "path": "roadmap_verified_user"
+                "account": "Repository",
+                "path": "repository_account"
               },
               {
                 "kind": "account",
@@ -1502,11 +1525,6 @@ export type Defios = {
           }
         },
         {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "nameRouterAccount",
           "isMut": false,
           "isSigner": false,
@@ -1538,22 +1556,7 @@ export type Defios = {
           "isSigner": false
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -2215,15 +2218,15 @@ export type Defios = {
       ]
     },
     {
-      "name": "stakePr",
+      "name": "votePr",
       "accounts": [
         {
-          "name": "pullRequestAddr",
-          "isMut": true,
-          "isSigner": false
+          "name": "issueStaker",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          "name": "issue",
+          "name": "repository",
           "isMut": true,
           "isSigner": false
         },
@@ -2242,99 +2245,19 @@ export type Defios = {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "Issue",
-                "path": "issue"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              }
-            ]
-          }
-        },
-        {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStaker",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "pullRequestStakerTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStakerAccount",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "pullrestaker"
+                "path": "issue_account"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "PullRequest",
-                "path": "pull_request_metadata_account"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_staker"
+                "path": "pull_request_metadata_account.sent_by"
               }
             ]
           }
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "transferAmount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "unstakePr",
-      "accounts": [
-        {
-          "name": "pullRequestAddr",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "issue",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestMetadataAccount",
+          "name": "issueAccount",
           "isMut": false,
           "isSigner": false,
           "pda": {
@@ -2342,79 +2265,56 @@ export type Defios = {
               {
                 "kind": "const",
                 "type": "string",
-                "value": "pullrequestadded"
+                "value": "issue"
+              },
+              {
+                "kind": "account",
+                "type": "u64",
+                "account": "Issue",
+                "path": "issue_account.index"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "Issue",
-                "path": "issue"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
+                "path": "issue_account.issue_creator"
               }
             ]
           }
         },
         {
-          "name": "pullRequestTokenAccount",
+          "name": "issueStakerAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStaker",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "pullRequestStakerTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStakerAccount",
-          "isMut": false,
           "isSigner": false,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
                 "type": "string",
-                "value": "pullrestaker"
+                "value": "issuestaker"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
-                "account": "PullRequest",
-                "path": "pull_request_metadata_account"
+                "account": "Issue",
+                "path": "issue_account"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
-                "path": "pull_request_staker"
+                "path": "issue_staker"
               }
             ]
           }
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -2498,9 +2398,7 @@ export type Defios = {
           },
           {
             "name": "rewardsMint",
-            "type": {
-              "option": "publicKey"
-            }
+            "type": "publicKey"
           },
           {
             "name": "id",
@@ -2589,6 +2487,12 @@ export type Defios = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "firstPrTime",
+            "type": {
+              "option": "i64"
+            }
           }
         ]
       }
@@ -2672,10 +2576,6 @@ export type Defios = {
           },
           {
             "name": "stakedAmount",
-            "type": "u64"
-          },
-          {
-            "name": "stakedAt",
             "type": {
               "vec": "u64"
             }
@@ -2690,13 +2590,23 @@ export type Defios = {
           },
           {
             "name": "issueStakerTokenAccount",
-            "type": "publicKey"
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "prVotingPower",
+            "type": "u64"
+          },
+          {
+            "name": "issueUnstakable",
+            "type": "bool"
           }
         ]
       }
     },
     {
-      "name": "prStaker",
+      "name": "pullRequest",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2705,26 +2615,26 @@ export type Defios = {
             "type": "u8"
           },
           {
-            "name": "stakedAmount",
-            "type": "u64"
+            "name": "sentBy",
+            "type": "publicKey"
           },
           {
-            "name": "stakedAt",
+            "name": "commits",
             "type": {
-              "vec": "u64"
+              "vec": "publicKey"
             }
           },
           {
-            "name": "prStaker",
-            "type": "publicKey"
+            "name": "metadataUri",
+            "type": "string"
           },
           {
-            "name": "pr",
-            "type": "publicKey"
+            "name": "accepted",
+            "type": "bool"
           },
           {
-            "name": "prStakerTokenAccount",
-            "type": "publicKey"
+            "name": "totalVotedAmount",
+            "type": "u64"
           }
         ]
       }
@@ -2844,40 +2754,6 @@ export type Defios = {
           },
           {
             "name": "objectiveRepository",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "pullRequest",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "sentBy",
-            "type": "publicKey"
-          },
-          {
-            "name": "commits",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-          {
-            "name": "metadataUri",
-            "type": "string"
-          },
-          {
-            "name": "accepted",
-            "type": "bool"
-          },
-          {
-            "name": "pullRequestTokenAccount",
             "type": "publicKey"
           }
         ]
@@ -3331,6 +3207,11 @@ export type Defios = {
             "option": "publicKey"
           },
           "index": false
+        },
+        {
+          "name": "tokenImported",
+          "type": "bool",
+          "index": false
         }
       ]
     },
@@ -3365,6 +3246,16 @@ export type Defios = {
         {
           "name": "issueContributionLink",
           "type": "string",
+          "index": false
+        },
+        {
+          "name": "stakedAt",
+          "type": "i64",
+          "index": false
+        },
+        {
+          "name": "prVotingPower",
+          "type": "u64",
           "index": false
         }
       ]
@@ -3488,71 +3379,21 @@ export type Defios = {
       ]
     },
     {
-      "name": "PullRequestStaked",
+      "name": "PRVoted",
       "fields": [
         {
-          "name": "prStaker",
+          "name": "pullRequest",
           "type": "publicKey",
           "index": false
         },
         {
-          "name": "prStakerTokenAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "stakedAmount",
+          "name": "voteAmount",
           "type": "u64",
           "index": false
         },
         {
-          "name": "rewardsMint",
+          "name": "voter",
           "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prContributionLink",
-          "type": "string",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "PullRequestUnstaked",
-      "fields": [
-        {
-          "name": "prStaker",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prStakerTokenAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "stakedAmount",
-          "type": "u64",
-          "index": false
-        },
-        {
-          "name": "rewardsMint",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prContributionLink",
-          "type": "string",
           "index": false
         }
       ]
@@ -3671,13 +3512,38 @@ export type Defios = {
     },
     {
       "code": 6022,
-      "name": "PullRequestClosedAlready",
-      "msg": "Cannot unstake for a closed pull request"
+      "name": "PullRequestVotingClosedAlready",
+      "msg": "Cannot vote on a closed issue"
     },
     {
       "code": 6023,
       "name": "CantAddObjectiveToSomebodiesRoadmap",
       "msg": "Unauthorized objective addition"
+    },
+    {
+      "code": 6024,
+      "name": "CantEnterTimeBelowZero",
+      "msg": "Cant enter time below 0"
+    },
+    {
+      "code": 6025,
+      "name": "NoPRFound",
+      "msg": "No PR on this issue to vote on"
+    },
+    {
+      "code": 6026,
+      "name": "VotingPeriodEnded",
+      "msg": "Voting period has ended"
+    },
+    {
+      "code": 6027,
+      "name": "CantUnstakeAfterVoting",
+      "msg": "Can't unstake after voting"
+    },
+    {
+      "code": 6028,
+      "name": "NoRepoTokenSpecified",
+      "msg": "Either need to import to create a token"
     }
   ]
 };
@@ -3685,6 +3551,23 @@ export type Defios = {
 export const IDL: Defios = {
   "version": "0.1.0",
   "name": "defios",
+  "constants": [
+    {
+      "name": "AUTHORIZED_PUBLIC_KEY",
+      "type": "publicKey",
+      "value": "pubkey ! (\"55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF\")"
+    },
+    {
+      "name": "MAX_INT",
+      "type": "u128",
+      "value": "u128 :: pow (2 , 64) - 1"
+    },
+    {
+      "name": "VOTING_END",
+      "type": "i64",
+      "value": "72 * 60 * 60"
+    }
+  ],
   "instructions": [
     {
       "name": "createNameRouter",
@@ -4008,6 +3891,12 @@ export const IDL: Defios = {
           }
         },
         {
+          "name": "importedMint",
+          "isMut": false,
+          "isSigner": false,
+          "isOptional": true
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -4024,6 +3913,11 @@ export const IDL: Defios = {
         },
         {
           "name": "tokenMetadataProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -4690,7 +4584,7 @@ export const IDL: Defios = {
         },
         {
           "name": "rewardsMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -4765,11 +4659,6 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -4809,8 +4698,8 @@ export const IDL: Defios = {
               {
                 "kind": "account",
                 "type": "publicKey",
-                "account": "VerifiedUser",
-                "path": "roadmap_verified_user"
+                "account": "Repository",
+                "path": "repository_account"
               },
               {
                 "kind": "account",
@@ -5186,11 +5075,6 @@ export const IDL: Defios = {
           }
         },
         {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "nameRouterAccount",
           "isMut": false,
           "isSigner": false,
@@ -5222,22 +5106,7 @@ export const IDL: Defios = {
           "isSigner": false
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -5899,15 +5768,15 @@ export const IDL: Defios = {
       ]
     },
     {
-      "name": "stakePr",
+      "name": "votePr",
       "accounts": [
         {
-          "name": "pullRequestAddr",
-          "isMut": true,
-          "isSigner": false
+          "name": "issueStaker",
+          "isMut": false,
+          "isSigner": true
         },
         {
-          "name": "issue",
+          "name": "repository",
           "isMut": true,
           "isSigner": false
         },
@@ -5926,99 +5795,19 @@ export const IDL: Defios = {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "Issue",
-                "path": "issue"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
-              }
-            ]
-          }
-        },
-        {
-          "name": "pullRequestTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStaker",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "pullRequestStakerTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStakerAccount",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "pullrestaker"
+                "path": "issue_account"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "PullRequest",
-                "path": "pull_request_metadata_account"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_staker"
+                "path": "pull_request_metadata_account.sent_by"
               }
             ]
           }
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "transferAmount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "unstakePr",
-      "accounts": [
-        {
-          "name": "pullRequestAddr",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "issue",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestMetadataAccount",
+          "name": "issueAccount",
           "isMut": false,
           "isSigner": false,
           "pda": {
@@ -6026,79 +5815,56 @@ export const IDL: Defios = {
               {
                 "kind": "const",
                 "type": "string",
-                "value": "pullrequestadded"
+                "value": "issue"
+              },
+              {
+                "kind": "account",
+                "type": "u64",
+                "account": "Issue",
+                "path": "issue_account.index"
+              },
+              {
+                "kind": "account",
+                "type": "publicKey",
+                "account": "Repository",
+                "path": "repository"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
                 "account": "Issue",
-                "path": "issue"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "pull_request_addr"
+                "path": "issue_account.issue_creator"
               }
             ]
           }
         },
         {
-          "name": "pullRequestTokenAccount",
+          "name": "issueStakerAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStaker",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "pullRequestStakerTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "pullRequestStakerAccount",
-          "isMut": false,
           "isSigner": false,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
                 "type": "string",
-                "value": "pullrestaker"
+                "value": "issuestaker"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
-                "account": "PullRequest",
-                "path": "pull_request_metadata_account"
+                "account": "Issue",
+                "path": "issue_account"
               },
               {
                 "kind": "account",
                 "type": "publicKey",
-                "path": "pull_request_staker"
+                "path": "issue_staker"
               }
             ]
           }
         },
         {
-          "name": "rewardsMint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -6182,9 +5948,7 @@ export const IDL: Defios = {
           },
           {
             "name": "rewardsMint",
-            "type": {
-              "option": "publicKey"
-            }
+            "type": "publicKey"
           },
           {
             "name": "id",
@@ -6273,6 +6037,12 @@ export const IDL: Defios = {
           {
             "name": "uri",
             "type": "string"
+          },
+          {
+            "name": "firstPrTime",
+            "type": {
+              "option": "i64"
+            }
           }
         ]
       }
@@ -6356,10 +6126,6 @@ export const IDL: Defios = {
           },
           {
             "name": "stakedAmount",
-            "type": "u64"
-          },
-          {
-            "name": "stakedAt",
             "type": {
               "vec": "u64"
             }
@@ -6374,13 +6140,23 @@ export const IDL: Defios = {
           },
           {
             "name": "issueStakerTokenAccount",
-            "type": "publicKey"
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "prVotingPower",
+            "type": "u64"
+          },
+          {
+            "name": "issueUnstakable",
+            "type": "bool"
           }
         ]
       }
     },
     {
-      "name": "prStaker",
+      "name": "pullRequest",
       "type": {
         "kind": "struct",
         "fields": [
@@ -6389,26 +6165,26 @@ export const IDL: Defios = {
             "type": "u8"
           },
           {
-            "name": "stakedAmount",
-            "type": "u64"
+            "name": "sentBy",
+            "type": "publicKey"
           },
           {
-            "name": "stakedAt",
+            "name": "commits",
             "type": {
-              "vec": "u64"
+              "vec": "publicKey"
             }
           },
           {
-            "name": "prStaker",
-            "type": "publicKey"
+            "name": "metadataUri",
+            "type": "string"
           },
           {
-            "name": "pr",
-            "type": "publicKey"
+            "name": "accepted",
+            "type": "bool"
           },
           {
-            "name": "prStakerTokenAccount",
-            "type": "publicKey"
+            "name": "totalVotedAmount",
+            "type": "u64"
           }
         ]
       }
@@ -6528,40 +6304,6 @@ export const IDL: Defios = {
           },
           {
             "name": "objectiveRepository",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "pullRequest",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "sentBy",
-            "type": "publicKey"
-          },
-          {
-            "name": "commits",
-            "type": {
-              "vec": "publicKey"
-            }
-          },
-          {
-            "name": "metadataUri",
-            "type": "string"
-          },
-          {
-            "name": "accepted",
-            "type": "bool"
-          },
-          {
-            "name": "pullRequestTokenAccount",
             "type": "publicKey"
           }
         ]
@@ -7015,6 +6757,11 @@ export const IDL: Defios = {
             "option": "publicKey"
           },
           "index": false
+        },
+        {
+          "name": "tokenImported",
+          "type": "bool",
+          "index": false
         }
       ]
     },
@@ -7049,6 +6796,16 @@ export const IDL: Defios = {
         {
           "name": "issueContributionLink",
           "type": "string",
+          "index": false
+        },
+        {
+          "name": "stakedAt",
+          "type": "i64",
+          "index": false
+        },
+        {
+          "name": "prVotingPower",
+          "type": "u64",
           "index": false
         }
       ]
@@ -7172,71 +6929,21 @@ export const IDL: Defios = {
       ]
     },
     {
-      "name": "PullRequestStaked",
+      "name": "PRVoted",
       "fields": [
         {
-          "name": "prStaker",
+          "name": "pullRequest",
           "type": "publicKey",
           "index": false
         },
         {
-          "name": "prStakerTokenAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "stakedAmount",
+          "name": "voteAmount",
           "type": "u64",
           "index": false
         },
         {
-          "name": "rewardsMint",
+          "name": "voter",
           "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prContributionLink",
-          "type": "string",
-          "index": false
-        }
-      ]
-    },
-    {
-      "name": "PullRequestUnstaked",
-      "fields": [
-        {
-          "name": "prStaker",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prStakerTokenAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prAccount",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "stakedAmount",
-          "type": "u64",
-          "index": false
-        },
-        {
-          "name": "rewardsMint",
-          "type": "publicKey",
-          "index": false
-        },
-        {
-          "name": "prContributionLink",
-          "type": "string",
           "index": false
         }
       ]
@@ -7355,13 +7062,38 @@ export const IDL: Defios = {
     },
     {
       "code": 6022,
-      "name": "PullRequestClosedAlready",
-      "msg": "Cannot unstake for a closed pull request"
+      "name": "PullRequestVotingClosedAlready",
+      "msg": "Cannot vote on a closed issue"
     },
     {
       "code": 6023,
       "name": "CantAddObjectiveToSomebodiesRoadmap",
       "msg": "Unauthorized objective addition"
+    },
+    {
+      "code": 6024,
+      "name": "CantEnterTimeBelowZero",
+      "msg": "Cant enter time below 0"
+    },
+    {
+      "code": 6025,
+      "name": "NoPRFound",
+      "msg": "No PR on this issue to vote on"
+    },
+    {
+      "code": 6026,
+      "name": "VotingPeriodEnded",
+      "msg": "Voting period has ended"
+    },
+    {
+      "code": 6027,
+      "name": "CantUnstakeAfterVoting",
+      "msg": "Can't unstake after voting"
+    },
+    {
+      "code": 6028,
+      "name": "NoRepoTokenSpecified",
+      "msg": "Either need to import to create a token"
     }
   ]
 };
