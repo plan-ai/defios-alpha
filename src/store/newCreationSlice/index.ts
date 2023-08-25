@@ -57,7 +57,7 @@ const initialState: creationState = {
 };
 
 export const newCreation = createSlice({
-  name: 'creation',
+  name: 'newCreation',
   initialState,
   reducers: {
     setStep1Data: (state, action: PayloadAction<step1Props>) => {

@@ -55,31 +55,9 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({
   }, [session, issue_url]);
 
   return (
-    <div className="mt-5 flex w-full flex-col">
+    <div className="mt-5 flex w-full flex-col px-6">
       {!isLoading && (
         <>
-          <div className="mb-8 flex h-7 w-full items-center gap-4">
-            <Image
-              alt="badge"
-              src={`https://img.shields.io/github/languages/top/${
-                issue_url.split('https://github.com/')[1].split('/issues/')[0]
-              }`}
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: 'auto', height: '100%' }} // optional
-            />
-            <Image
-              alt="badge"
-              src={`https://img.shields.io/github/license/${
-                issue_url.split('https://github.com/')[1].split('/issues/')[0]
-              }`}
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: 'auto', height: '100%' }} // optional
-            />
-          </div>
           <div className="mb-8 flex items-center gap-3 text-sm xl:text-base 3xl:text-lg">
             <div>Assignees: </div>
             <TagImage tag="Rohitkk432" />
@@ -89,15 +67,9 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({
               {issueGHData?.body}
             </MarkdownRenderer>
           </div>
-          <IssueComment commentType="comment" data={issueGHData} />
-          {issueGHData?.labels?.length > 0 && (
-            <IssueComment commentType="label" data={issueGHData} />
-          )}
           {issueComments.length > 0 &&
             issueComments.map((item: any, idx: number) => {
-              return (
-                <IssueComment commentType="comment" data={item} key={idx} />
-              );
+              return <IssueComment data={item} key={idx} />;
             })}
           <IssueCommentCreator />
         </>

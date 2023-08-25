@@ -13,6 +13,8 @@ import {
   Keypair,
   PublicKey,
   Transaction,
+  ComputeBudgetProgram,
+  sendAndConfirmTransaction,
 } from '@solana/web3.js';
 import * as mpl from '@metaplex-foundation/mpl-token-metadata';
 import {
@@ -41,10 +43,11 @@ import {
 } from '@solana/spl-token';
 
 import axios from '@/lib/axiosClient';
+import IssueStake from '@/components/issue-details/IssueStake';
 
 //change
 const nameRouterAccount = new PublicKey(
-  'GPFbj81u5sxrjJCsMUw5hFqVHk54vZW2rULnzy3GvBkZ'
+  '9ypjhXzLipVt4KuEBnv3Q9GNuka4ieDuvzaCZwAhfEdQ'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -165,13 +168,11 @@ export const createRepository = (
           tokenMetadata
         )
         .accounts({
-          nameRouterAccount,
           repositoryAccount,
           repositoryCreatorTokenAccount,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
           rewardsMint: mintKeypair,
-          routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: vestingAccount,
           vestingTokenAccount: vestingTokenAccount,
@@ -180,24 +181,26 @@ export const createRepository = (
           metadata: metadataAddress,
           importedMint: null,
           rent: web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
-          let data = JSON.stringify({
-            mintKeypair: mintKeypair.toString(),
-          });
+          // let data = JSON.stringify({
+          //   mintKeypair: mintKeypair.toString(),
+          // });
 
-          let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://namespaces.defi-os.com/createCommunalAccount',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: data,
-          };
+          // let config = {
+          //   method: 'post',
+          //   maxBodyLength: Infinity,
+          //   url: 'https://namespaces.defi-os.com/createCommunalAccount',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   data: data,
+          // };
 
-          axios(config);
+          // axios(config);
           resolve(repositoryAccount);
         })
         .catch((e) => {
@@ -213,7 +216,7 @@ export const createRepositoryUnlockIssueStake = (
   //repo
   repositoryCreator: PublicKey,
   repoName: string,
-  repoDescription:string,
+  repoDescription: string,
   repoLink: string,
   tokenName: string,
   tokenSymbol: string,
@@ -302,14 +305,10 @@ export const createRepositoryUnlockIssueStake = (
       const ixIssueCreate = await program.methods
         .addIssue(issueURI)
         .accounts({
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           issueAccount,
           issueCreator: repositoryCreator,
           issueVerifiedUser: repositoryVerifiedUser,
-          nameRouterAccount,
           repositoryAccount,
-          routerCreator: routerCreator,
-          repositoryCreator: repositoryCreator,
           systemProgram: web3.SystemProgram.programId,
         })
         .instruction();
@@ -329,7 +328,7 @@ export const createRepositoryUnlockIssueStake = (
       );
 
       const ixTokenStake = await program.methods
-        .stakeIssue(new BN(tokenAmount*10))
+        .stakeIssue(new BN(tokenAmount * 10))
         .accounts({
           issueAccount,
           repositoryAccount,
@@ -341,11 +340,12 @@ export const createRepositoryUnlockIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          pullRequestMetadataAccount: null,
         })
         .instruction();
 
       const usdcMint = new PublicKey(
-        '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
       );
 
       const issueStakerUsdcAccount = await getAssociatedTokenAddress(
@@ -372,6 +372,7 @@ export const createRepositoryUnlockIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          pullRequestMetadataAccount: null,
         })
         .instruction();
 
@@ -404,13 +405,11 @@ export const createRepositoryUnlockIssueStake = (
           tokenMetadata
         )
         .accounts({
-          nameRouterAccount,
           repositoryAccount,
           repositoryCreatorTokenAccount,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
           rewardsMint: mintKeypair,
-          routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: vestingAccount,
           vestingTokenAccount: vestingTokenAccount,
@@ -419,25 +418,27 @@ export const createRepositoryUnlockIssueStake = (
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: null,
           rent: web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .postInstructions(postIxs)
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
-          let data = JSON.stringify({
-            mintKeypair: mintKeypair.toString(),
-          });
+          // let data = JSON.stringify({
+          //   mintKeypair: mintKeypair.toString(),
+          // });
 
-          let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://namespaces.defi-os.com/createCommunalAccount',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            data: data,
-          };
+          // let config = {
+          //   method: 'post',
+          //   maxBodyLength: Infinity,
+          //   url: 'https://namespaces.defi-os.com/createCommunalAccount',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   data: data,
+          // };
 
-          axios(config);
+          // axios(config);
           resolve(repositoryAccount);
         })
         .catch((e) => {
@@ -492,13 +493,11 @@ export const createRepositoryImported = (
           null
         )
         .accounts({
-          nameRouterAccount,
           repositoryAccount,
           repositoryCreatorTokenAccount: null,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
           rewardsMint: null,
-          routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
           vestingTokenAccount: null,
@@ -507,6 +506,8 @@ export const createRepositoryImported = (
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: new PublicKey(tokenAddress),
           rent: web3.SYSVAR_RENT_PUBKEY,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then(() => {
@@ -597,14 +598,10 @@ export const createRepositoryImportedIssueStake = (
       const ixIssueCreate = await program.methods
         .addIssue(issueURI)
         .accounts({
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           issueAccount,
           issueCreator: repositoryCreator,
           issueVerifiedUser: repositoryVerifiedUser,
-          nameRouterAccount,
           repositoryAccount,
-          routerCreator: routerCreator,
-          repositoryCreator: repositoryCreator,
           systemProgram: web3.SystemProgram.programId,
         })
         .instruction();
@@ -658,11 +655,12 @@ export const createRepositoryImportedIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          pullRequestMetadataAccount: null,
         })
         .instruction();
 
       const usdcMint = new PublicKey(
-        '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
       );
 
       const issueStakerUsdcAccount = await getAssociatedTokenAddress(
@@ -689,6 +687,7 @@ export const createRepositoryImportedIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          pullRequestMetadataAccount: null,
         })
         .instruction();
 
@@ -721,13 +720,11 @@ export const createRepositoryImportedIssueStake = (
           null
         )
         .accounts({
-          nameRouterAccount,
           repositoryAccount,
           repositoryCreatorTokenAccount: null,
           repositoryCreator: repositoryCreator,
           repositoryVerifiedUser: repositoryVerifiedUser,
           rewardsMint: null,
-          routerCreator: routerCreator,
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
           vestingTokenAccount: null,
@@ -736,6 +733,7 @@ export const createRepositoryImportedIssueStake = (
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: new PublicKey(tokenAddress),
           rent: web3.SYSVAR_RENT_PUBKEY,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         })
         .postInstructions(postIxs)
         .rpc({ skipPreflight: false, maxRetries: 3 })
@@ -801,19 +799,139 @@ export const createIssue = (
     program.methods
       .addIssue(issueURI)
       .accounts({
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         issueAccount,
         issueCreator: issueCreator,
         issueVerifiedUser,
-        nameRouterAccount,
         repositoryAccount,
-        routerCreator: routerCreator,
-        repositoryCreator: repositoryCreator,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(issueAccount);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const stakeIssueTokens = (
+  issueStaker: PublicKey,
+  issueAccount: PublicKey,
+  tokenAmount: number,
+  usdcAmount: number,
+  firebase_jwt: string
+) => {
+  return new Promise(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
+
+    const mintKeypair = rewardsMint;
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueAccount,
+      true
+    );
+
+    const [issueStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueStaker.toBuffer(),
+      ],
+      program
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueStaker
+    );
+
+    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    if (!tokenMetadata.decimals) {
+      tokenMetadata = await axios
+        .get('https://api-v1.defi-os.com/tokens', {
+          headers: {
+            Authorization: firebase_jwt,
+          },
+          params: {
+            token_addr: mintKeypair.toString(),
+          },
+        })
+        .then((res) => {
+          const response = { ...res.data };
+          response.decimals = res.data.token_decimals;
+          return response;
+        });
+    }
+    if (!tokenMetadata.decimals) {
+      reject('cannot find decimals of token');
+    }
+    const transferAmount = tokenAmount * 10 ** tokenMetadata.decimals;
+
+
+    const ixTokenStake = await program.methods
+      .stakeIssue(new BN(transferAmount))
+      .accounts({
+        issueAccount,
+        repositoryAccount: repository,
+        issueTokenPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerTokenAccount,
+        rewardsMint: mintKeypair,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        pullRequestMetadataAccount: null,
+      })
+      .instruction();
+
+    const usdcMint = new PublicKey(
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+    );
+
+    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueStaker
+    );
+
+    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueAccount,
+      true
+    );
+
+    const ixUsdcStake = await program.methods
+      .stakeIssue(new BN(usdcAmount * 10 ** 6))
+      .accounts({
+        issueAccount,
+        repositoryAccount:repository,
+        issueTokenPoolAccount: issueUsdcPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerUsdcAccount,
+        rewardsMint: usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        pullRequestMetadataAccount: null,
+      })
+      .instruction();
+    
+    const stakeTx = new Transaction();
+
+    if(tokenAmount>0) stakeTx.add(ixTokenStake);
+
+    if(usdcAmount>0) stakeTx.add(ixUsdcStake);
+
+    provider.sendAndConfirm(stakeTx,[Signer],{skipPreflight:false,maxRetries:3})
+      .then((res) => {
+        resolve(res);
       })
       .catch((e) => {
         reject(e);
@@ -902,6 +1020,104 @@ export const stakeIssue = (
       });
   });
 };
+
+export const unstakeIssueTokens = (
+  issueStaker: PublicKey,
+  issueAccount: PublicKey,
+) => {
+  return new Promise(async (resolve,reject)=>{
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { repository } = await program.account.issue.fetch(issueAccount);
+    const { rewardsMint } = await program.account.repository.fetch(repository);
+
+    const mintKeypair = rewardsMint;
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueAccount,
+      true
+    );
+
+    const [issueStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueStaker.toBuffer(),
+      ],
+      program
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueStaker
+    );
+
+    const ixTokenUnstake = await program.methods
+      .unstakeIssue()
+      .accounts({
+        issueAccount,
+        repositoryAccount: repository,
+        issueTokenPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerTokenAccount,
+        rewardsMint: mintKeypair,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .instruction();
+
+    const usdcMint = new PublicKey(
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+    );
+
+    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueStaker
+    );
+
+    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueAccount,
+      true
+    );
+
+    const ixUsdcUnstake = await program.methods
+      .unstakeIssue()
+      .accounts({
+        issueAccount,
+        repositoryAccount: repository,
+        issueTokenPoolAccount: issueUsdcPoolAccount,
+        issueStaker: issueStaker,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerUsdcAccount,
+        rewardsMint: usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .instruction();
+
+    const unstakeTx = new Transaction();
+
+    unstakeTx.add(ixTokenUnstake);
+
+    unstakeTx.add(ixUsdcUnstake);
+
+    provider
+      .sendAndConfirm(unstakeTx, [Signer], {
+        skipPreflight: false,
+        maxRetries: 3,
+      })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  })
+}
 
 export const unstakeIssue = (
   issueStaker: PublicKey,
@@ -1345,8 +1561,9 @@ export const claimReward = (
       commitAccount
     );
     const issueAccount = issue;
-    const { repository, issueTokenPoolAccount, issueCreator } =
-      await program.account.issue.fetch(issueAccount);
+    const { repository, issueCreator } = await program.account.issue.fetch(
+      issueAccount
+    );
 
     const { repositoryCreator, rewardsMint } =
       await program.account.repository.fetch(repository);
@@ -1485,11 +1702,9 @@ export const addRoadmapData = (
           roadmapOutlook
         )
         .accounts({
-          nameRouterAccount,
           metadataAccount,
           roadmapDataAdder,
           roadmapVerifiedUser,
-          routerCreator,
           repositoryAccount: repositoryAccount,
           systemProgram: web3.SystemProgram.programId,
         })
@@ -1543,13 +1758,11 @@ export const addObjectiveData = (
           objectiveDeliverable
         )
         .accounts({
-          nameRouterAccount,
           objectiveIssue: issueAccount,
           metadataAccount: objectiveAccount,
           objectiveDataAddr,
           objectiveVerifiedUser,
           repositoryAccount: repositoryAccount,
-          routerCreator,
           systemProgram: web3.SystemProgram.programId,
         })
         .rpc({ skipPreflight: false, maxRetries: 3 })
@@ -1629,13 +1842,11 @@ export const addObjectiveToRoadmap = (
           objectiveDeliverable
         )
         .accounts({
-          nameRouterAccount,
           objectiveIssue: issueAccount,
           metadataAccount: objectiveAccount,
           objectiveDataAddr,
           objectiveVerifiedUser,
           repositoryAccount: repositoryAccount,
-          routerCreator,
           systemProgram: web3.SystemProgram.programId,
         })
         .postInstructions([ixAddToRoot])
@@ -1698,7 +1909,7 @@ export const buyTransaction = (
     const program = await getDefiOsProgram(provider);
 
     const usdcMint = new PublicKey(
-      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
     );
     const [communal_account_usdc] = await get_pda_from_seeds(
       [
@@ -1808,7 +2019,7 @@ export const sellTransaction = (
     const program = await getDefiOsProgram(provider);
 
     const usdcMint = new PublicKey(
-      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
     );
     const [communal_account_usdc] = await get_pda_from_seeds(
       [
@@ -2003,7 +2214,7 @@ export const swapTransaction = (
     if (rewardsMintBuy === null || rewardsMintSell === null) return;
 
     const usdcMint = new PublicKey(
-      '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
     );
     const [communal_account_usdc] = await get_pda_from_seeds(
       [

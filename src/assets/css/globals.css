@@ -61,8 +61,25 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.textShadow{
+  text-shadow: 0px 0px 15px #92ABFB;
+}
+
+.textShadowWhite{
+  text-shadow: 0px 0px 15px #FFFFFF;
+}
+
+.textShadowGreen{
+  text-shadow: 0px 0px 15px #90FAC7;
+}
+
 .landing-font{
   font-family: 'Inter',sans-serif;
+}
+
+.progressGradient{
+  background: linear-gradient(90deg, theme('colors.primary') 0%, theme('colors.primary') 80% , rgba(146, 171, 251,0) 100% );
+
 }
 
 .lineGradient{

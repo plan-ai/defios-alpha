@@ -1,64 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { VotePoolIcon } from '@/components/icons/vote-pool';
-import TagImage from '@/components/ui/tags/tag-image';
-import { motion, AnimatePresence } from 'framer-motion';
-import Button from '@/components/ui/button/button';
+import { LockClosedIcon,CheckIcon } from '@heroicons/react/24/outline';
+import { GithubOutlineIcon } from '@/components/icons/github-outline';
+import Image from '@/components/ui/image';
+import ProgressBar from '@/components/ui/progress-bar';
 
-import { CrownIcon } from '@/components/icons/crown';
+interface PRBoxProps {}
 
-interface PRBoxProps {
-  votingDone: boolean;
-  winner?: boolean;
-  percentage:number;
-}
-
-export const PRBox: React.FC<PRBoxProps> = ({ votingDone, winner,percentage }) => {
-  const [isExpand, setIsExpand] = useState(false);
+export const PRBox: React.FC<PRBoxProps> = ({}) => {
   return (
-    <div className="relative flex w-full flex-col gap-2">
-      {winner && (
-        <CrownIcon className="absolute -top-8 -left-4 z-[20] h-14 w-14 -rotate-[30deg]" />
-      )}
-      <div
-        onClick={() => {
-          setIsExpand(!isExpand);
-        }}
-        className="relative flex w-full justify-between rounded-lg border border-gray-700 bg-body p-3 lg:border-2 xl:p-3.5 3xl:p-4"
-      >
-        <div className="flex flex-col gap-3">
-          <div className="text-base font-semibold xl:text-lg 3xl:text-xl">
-            Add Selenium testing
-          </div>
-          <div className="flex items-center gap-3">
-            <TagImage tag="Rohitkk432" />
-          </div>
-        </div>
-        <div className="flex h-full items-center gap-4 rounded-lg bg-gray-900 py-3 px-6 text-base xl:text-lg 3xl:text-xl">
-          <VotePoolIcon className="h-12 w-12" />
-          <div>{percentage}%</div>
-        </div>
+    <div className="grid w-full grid-cols-9 items-center gap-12 text-sm xl:text-base 3xl:text-lg">
+      <div className="col-span-4 flex items-center gap-3">
+        <GithubOutlineIcon className="h-10 w-10" />
+        <div>This is a dummy PR Title</div>
       </div>
-      <AnimatePresence initial={false}>
-        {!votingDone && isExpand && (
-          <motion.div
-            key="content"
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: { opacity: 1, height: 'auto' },
-              collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-          >
-            <div className="relative">
-              <Button size="small" shape="rounded" color="success" fullWidth>
-                Submit Vote
-              </Button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="col-span-2 flex items-center gap-3">
+        <div className="relative h-10 w-10 overflow-hidden rounded-full">
+          <Image
+            src={'https://avatars.githubusercontent.com/u/74586376?v=4'}
+            alt="avatar"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div>Rohitkk432</div>
+      </div>
+      <div className="col-span-2">
+        <ProgressBar
+          completed={{ value: 75, percentage: 75 }}
+          remaining={{ value: 25, percentage: 25 }}
+        />
+      </div>
+
+      {/* for contributors */}
+
+      {/* <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-primary bg-newdark py-1 px-6 text-xs font-semibold text-primary xl:text-sm 3xl:text-base">
+        <LockClosedIcon className="h-5 w-5" />
+        <div>vote</div>
+      </div> */}
+      <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
+        <CheckIcon className="h-5 w-5" />
+        <div>voted</div>
+      </div>
+
+      {/* for owners */}
+
+      {/* <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-primary bg-newdark py-1 px-6 text-xs font-semibold text-primary xl:text-sm 3xl:text-base">
+        <div>merge</div>
+      </div> */}
     </div>
   );
 };

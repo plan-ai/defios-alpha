@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 
+import cn from 'classnames';
 import Button from '@/components/ui/button';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 
@@ -10,17 +11,11 @@ import IssueBox from '@/components/issue-details/IssueBox';
 
 import IssueDescription from '@/components/issue-details/IssueDescription';
 import IssueStake from '@/components/issue-details/IssueStake';
-import IssueImpact from '@/components/issue-details/IssueImpact';
 import IssuePullRequests from '@/components/issue-details/IssuePullRequests';
 
 interface IssueDetailsProps {}
 
-type tabStateType =
-  | 'description'
-  | 'stake'
-  | 'pull requests'
-  | 'impact'
-  | 'replicate';
+type tabStateType = 'description' | 'funding' | 'pull requests';
 
 const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   const router = useRouter();
@@ -60,66 +55,64 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   }, [firebase_jwt]);
 
   return (
-    <div className="flex h-full w-full flex-col gap-3 overflow-y-auto overflow-x-hidden px-3.5 pb-4">
-      <div className="flex items-center gap-3 text-xs text-gray-500 xl:text-sm 3xl:text-base">
+    <div className="landing-font flex h-full w-full flex-col gap-3 px-3.5 pb-4">
+      <div className="flex cursor-pointer items-center gap-3 text-xs text-gray-500 xl:text-sm 3xl:text-base">
         <ArrowLongLeftIcon className="h-10" />
         <div>Go back to issues</div>
       </div>
       <IssueBox />
-      <div className="mt-4 flex items-center gap-3">
-        <Button
-          shape="rounded"
-          size="small"
-          onClick={() => setTabState('description')}
-          color={tabState === 'description' ? 'info' : 'primary'}
-        >
-          Description
-        </Button>
-        <Button
-          shape="rounded"
-          size="small"
-          onClick={() => setTabState('stake')}
-          color={tabState === 'stake' ? 'info' : 'primary'}
-        >
-          Stake
-        </Button>
-        <Button
-          shape="rounded"
-          size="small"
-          onClick={() => setTabState('pull requests')}
-          color={tabState === 'pull requests' ? 'info' : 'primary'}
-        >
-          Pull Requests
-        </Button>
-        <Button
-          shape="rounded"
-          size="small"
-          onClick={() => setTabState('impact')}
-          color={tabState === 'impact' ? 'info' : 'primary'}
-        >
-          Impact
-        </Button>
-        <Button
-          shape="rounded"
-          size="small"
-          onClick={() => setTabState('replicate')}
-          color={tabState === 'replicate' ? 'info' : 'primary'}
-        >
-          Replicate
-        </Button>
+      <div className="mt-12 flex w-full flex-col gap-6">
+        <div className="flex w-full items-center justify-between px-6">
+          <div
+            className={cn(
+              'cursor-pointer text-lg font-semibold xl:text-xl 3xl:text-2xl',
+              {
+                'text-white': tabState !== 'description',
+                'textShadow text-primary': tabState === 'description',
+              }
+            )}
+            onClick={() => setTabState('description')}
+          >
+            description
+          </div>
+          <div
+            className={cn(
+              'cursor-pointer text-lg font-semibold xl:text-xl 3xl:text-2xl',
+              {
+                'text-white': tabState !== 'funding',
+                'textShadow text-primary': tabState === 'funding',
+              }
+            )}
+            onClick={() => setTabState('funding')}
+          >
+            funding
+          </div>
+          <div
+            className={cn(
+              'cursor-pointer text-lg font-semibold xl:text-xl 3xl:text-2xl',
+              {
+                'text-white': tabState !== 'pull requests',
+                'textShadow text-primary': tabState === 'pull requests',
+              }
+            )}
+            onClick={() => setTabState('pull requests')}
+          >
+            pull requests
+          </div>
+        </div>
+        <div className="lineGradientHorizontal h-0.5 w-full"></div>
       </div>
 
       {tabState === 'description' && (
         <IssueDescription issue_url={issueData?.issue_gh_url} />
       )}
-      {tabState === 'stake' && (
+      {tabState === 'funding' && (
         <IssueStake
           account={issueData?.issue_account}
           issueTokenAddress={issueData?.issue_stake_token_url}
           link={issueData?.issue_gh_url}
         />
       )}
-      {tabState === 'impact' && <IssueImpact />}
       {tabState === 'pull requests' && <IssuePullRequests />}
     </div>
   );

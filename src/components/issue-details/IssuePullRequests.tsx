@@ -5,7 +5,7 @@ import ProgressBar from '@/components/ui/progress-bar';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
-
+import cn from 'classnames';
 import {
   addPullRequest,
   acceptPr,
@@ -45,16 +45,16 @@ const SortList: React.FC<SortListProps> = ({
   return (
     <div className="relative w-full">
       <Listbox value={selectedSubmitPR} onChange={setSelectedSubmitPR}>
-        <Listbox.Button className="flex !h-9 w-full items-center justify-between rounded-xl border border-gray-700 bg-light-dark px-4 text-2xs text-white xl:text-xs 2xl:!h-10 3xl:!h-11 3xl:text-sm">
+        <Listbox.Button className="flex !h-9 w-full items-center justify-between rounded-xl bg-light-gray px-4 text-2xs text-white xl:text-xs 2xl:!h-10 3xl:!h-11 3xl:text-sm">
           <div>
-            {selectedSubmitPR.title.length > 21
-              ? selectedSubmitPR.title.slice(0, 20) + '...'
+            {selectedSubmitPR.title.length > 60
+              ? selectedSubmitPR.title.slice(0, 60) + '...'
               : selectedSubmitPR.title}
           </div>
           <div className="font-semibold">
             {selectedSubmitPR.id !== -1 ? '#' + selectedSubmitPR.id : null}
           </div>
-          <ChevronDown />
+          <ChevronDown className="w-6 text-gray-400" />
         </Listbox.Button>
         <Transition
           as={Fragment}
@@ -65,18 +65,18 @@ const SortList: React.FC<SortListProps> = ({
           leaveFrom="opacity-100 -translate-y-0"
           leaveTo="opacity-0 translate-y-2"
         >
-          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-xl bg-dark p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
+          <Listbox.Options className="absolute right-0 z-20 mt-2 w-full min-w-[150px] origin-top-right rounded-xl bg-light-gray p-3 px-1.5 shadow-large shadow-gray-900 backdrop-blur">
             {sort.map((item: any) => (
               <Listbox.Option key={item.id} value={item}>
                 {({ selected }) => (
                   <div
                     className={`block flex cursor-pointer items-center justify-between rounded-xl px-3 py-3 text-2xs font-medium text-white transition xl:text-xs 3xl:text-sm  ${
-                      selected ? 'my-1 bg-gray-800' : 'hover:bg-gray-700'
+                      selected ? 'my-1 bg-zinc-900' : 'hover:bg-zinc-700'
                     }`}
                   >
                     <div>
-                      {item.title.length > 21
-                        ? item.title.slice(0, 20) + '...'
+                      {item.title.length > 60
+                        ? item.title.slice(0, 60) + '...'
                         : item.title}
                     </div>
                     <div className="font-semibold">
@@ -105,67 +105,95 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({}) => {
   const { data: session } = useSession();
   const userMappingState = useAppSelector(selectUserMapping);
 
+  const [section, setSection] = useState(2);
+
   const [selectedPR, setSelectedPR] = useState<any>();
 
   const [PRSort, setPRSort] = useState<any>([
     {
       id: -1,
-      title: 'Select Pull Request',
+      title: 'select the pull request that you wish to submit',
       PR_link: '',
     },
   ]);
 
   const [selectedSubmitPR, setSelectedSubmitPR] = useState<any>({
     id: -1,
-    title: 'Select Pull Request',
+    title: 'select the pull request that you wish to submit',
     PR_link: '',
   });
 
   return (
-    <div className="mt-4 flex w-full flex-col gap-8 pb-12 text-sm xl:text-base 3xl:text-lg">
-      {/* Submit PR */}
-      <div className="flex w-full flex-col gap-4">
-        <div className="text-base xl:text-lg 3xl:text-xl">
-          Submit new pull request
+    <div className="mt-16 flex w-full items-center justify-end text-sm xl:text-base 3xl:text-lg">
+      {section === 1 && (
+        <div className="mx-auto flex w-[42rem] w-full flex-col items-center gap-8">
+          <div className="flex w-full items-center justify-between text-3xl xl:text-4xl 3xl:text-5xl">
+            <div className="textShadowWhite">total rewards: </div>
+            <div className="textShadowGreen text-new-green">$5432</div>
+          </div>
+          <div className="my-8 flex flex-col items-center gap-2 text-center text-base xl:text-lg 3xl:text-xl">
+            <div>
+              submit a pull request that solves this issue for a chance to win
+              the reward.
+            </div>
+            <div>
+              if your pull request gets merged, you&apos;ll receive the rewards
+              automatically
+            </div>
+            {/* <div>
+              as the repository owner, you can directly merge your PR that
+              solves this issue to claim all the rewards
+            </div>
+            <div>
+              you can also scroll down & review the current PRs to reward
+              someone else
+            </div> */}
+          </div>
+
+          {/* Submit PR */}
+          <div className="flex w-full items-center justify-center gap-4">
+            <SortList
+              sort={PRSort}
+              selectedSubmitPR={selectedSubmitPR}
+              setSelectedSubmitPR={setSelectedSubmitPR}
+            />
+            <div className="z-[40] w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg">
+              submit
+            </div>
+
+            {/* <div className="z-[40] w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg">
+              merge
+            </div> */}
+          </div>
         </div>
-        <div className="flex w-full items-center justify-center gap-2">
-          <SortList
-            sort={PRSort}
-            selectedSubmitPR={selectedSubmitPR}
-            setSelectedSubmitPR={setSelectedSubmitPR}
-          />
-          <Button
-            color="info"
-            size="small"
-            shape="rounded"
-            // onClick={handlePRSubmit}
-            isLoading={stateLoading === 'loading'}
-          >
-            Submit
-          </Button>
+      )}
+      {section === 2 && (
+        <div className="mx-32 flex w-full flex-col items-center gap-8">
+          <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
+            Vote for a PR
+            {/* Merge a PR */}
+          </div>
+          <PRBox />
+          <PRBox />
+          <PRBox />
         </div>
-      </div>
-      <div className="flex w-full flex-col gap-4">
-        <div className="text-base xl:text-lg 3xl:text-xl">My Vote</div>
-        <PRBox votingDone={true} percentage={51} />
-      </div>
-      <div className="flex w-full flex-col gap-4">
-        <ProgressBar
-          title="Open PRs"
-          completed={{
-            value: 70,
-            percentage: 70,
-          }}
-          remaining={{
-            value: 30,
-            percentage: 30,
-          }}
-          item="voting"
-          type="voting"
-        />
-        <PRBox winner={true} votingDone={true} percentage={51} />
-        <PRBox votingDone={true} percentage={5} />
-        <PRBox votingDone={true} percentage={14} />
+      )}
+      {/* switcher */}
+      <div className="flex flex-col items-center gap-8">
+        <div
+          className={cn('cursor-pointer rounded-full border border-primary', {
+            'h-6 w-6 border-4': section === 1,
+            'h-4 w-4': section !== 1,
+          })}
+          onClick={() => setSection(1)}
+        ></div>
+        <div
+          className={cn('cursor-pointer rounded-full border border-primary', {
+            'h-6 w-6 border-4': section === 2,
+            'h-4 w-4': section !== 2,
+          })}
+          onClick={() => setSection(2)}
+        ></div>
       </div>
     </div>
   );
