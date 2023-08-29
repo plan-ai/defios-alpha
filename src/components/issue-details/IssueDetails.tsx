@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/lib/axiosClient';
 import { useAppSelector, useAppDispatch } from '@/store/store';
-
+import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
@@ -56,11 +56,14 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
 
   return (
     <div className="landing-font flex h-full w-full flex-col gap-3 px-3.5 pb-4">
-      <div className="flex cursor-pointer items-center gap-3 text-xs text-gray-500 xl:text-sm 3xl:text-base">
+      <AnchorLink
+        href={'/issues'}
+        className="flex cursor-pointer items-center gap-3 text-xs text-gray-500 xl:text-sm 3xl:text-base"
+      >
         <ArrowLongLeftIcon className="h-10" />
         <div>Go back to issues</div>
-      </div>
-      <IssueBox />
+      </AnchorLink>
+      <IssueBox data={issueData} />
       <div className="mt-12 flex w-full flex-col gap-6">
         <div className="flex w-full items-center justify-between px-6">
           <div

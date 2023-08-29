@@ -8,7 +8,7 @@ import React, {
 
 import axios from '@/lib/axiosClient';
 import _debounce from 'lodash/debounce';
-
+import cn from 'classnames';
 //layout
 import type { NextPageWithLayout } from '@/types';
 import { NextSeo } from 'next-seo';
@@ -21,6 +21,7 @@ import StackedSwitch from '@/components/custom/stacked-switch';
 import Spinner from '@/components/custom/spinner';
 import { Tooltip } from 'flowbite-react';
 import { useDrawer } from '@/components/drawer-views/context';
+import CreateIssueBtn from '@/components/issues/createIssueBtn';
 
 //Icons
 import { InfoCircle } from '@/components/icons/info-circle';
@@ -36,6 +37,7 @@ import {
 import IssuesList from '@/components/issues/list';
 import OpenIssueExpand from '@/components/issues/open-issues-expand';
 import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
+import IssueBox from '@/components/issue-details/IssueBox';
 
 //redux store
 import { useAppSelector, useAppDispatch } from '@/store/store';
@@ -70,6 +72,7 @@ const Search: React.FC<searchProps> = ({
     <div className="relative flex w-full items-center rounded-full">
       <Input
         className="w-full"
+        inputClassName="!bg-newdark gradient-border-dark"
         placeholder={placeholder || 'Search'}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -106,6 +109,11 @@ const IssuesPage: NextPageWithLayout = () => {
   const [search, setSearch] = useState('');
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [fetchTrigger, setFetchTrigger] = useState(0);
+
+  //issue choose states
+  const [newIssues, setNewIssues] = useState(false);
+  const [myIssues, setMyIssues] = useState(false);
+  const [showClosedIssues, setShowClosedIssues] = useState(false);
 
   //redirect to page and query search
   const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
@@ -350,105 +358,102 @@ const IssuesPage: NextPageWithLayout = () => {
         title="Issues"
         description="DefiOS - Scaling Layer for Open Source Collaboration."
       />
-      <div className="flex items-center justify-start">
+      <div className="landing-font flex items-center justify-start">
         <div className="relative flex h-full w-full flex-col">
-          <div className="mb-2 flex w-full items-center gap-5">
+          <div className="flex h-[15rem] w-full flex-col justify-between rounded-3xl bg-[#7CAA8E] p-12">
+            <div className="w-[50%] text-xl xl:text-2xl 3xl:text-3xl">
+              FEATURED ISSUE SECTION. MUST BE A CLICKABLE BANNER WITH A HEADER
+              LIKE THIS
+            </div>
+            <div className="w-[50%] text-base xl:text-lg 3xl:text-xl">
+              AND A PARAGRAPH SECTION LIKE THIS ETC ETC ETC ETC ETC ETC ETC ETC
+              ETC ETC ETC ETC ETC ETC ETC
+            </div>
+          </div>
+          <div className="my-12">
+            <CreateIssueBtn />
+          </div>
+          <div className="flex w-full items-center gap-8">
+            <div
+              className={cn(
+                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+                {
+                  'text-gray-400': !newIssues,
+                  'textShadow text-primary': newIssues,
+                }
+              )}
+              onClick={() => setNewIssues(!newIssues)}
+            >
+              New Issues
+            </div>
+            <div
+              className={cn(
+                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+                {
+                  'text-gray-400': !myIssues,
+                  'textShadow text-primary': myIssues,
+                }
+              )}
+              onClick={() => setMyIssues(!myIssues)}
+            >
+              My Issues
+            </div>
+            <div
+              className={cn(
+                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+                {
+                  'text-gray-400': !showClosedIssues,
+                  'textShadow text-primary': showClosedIssues,
+                }
+              )}
+              onClick={() => setShowClosedIssues(!showClosedIssues)}
+            >
+              Show Closed Issues
+            </div>
             <Search
               placeholder="search issues"
               search={search}
               setSearch={setSearch}
               setTriggerSearch={setTriggerSearch}
             />
-            <div className="w-52">
-              <StackedSwitch
-                isStacked={isMine}
-                setIsStacked={setIsMine}
-                label="My Issues"
-              />
+            <div
+              className={cn(
+                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+                {
+                  'text-gray-400': !myIssues,
+                  'textShadow text-primary': myIssues,
+                }
+              )}
+              onClick={() => setMyIssues(!myIssues)}
+            >
+              Filter
             </div>
-            <Button
-              onClick={() =>
-                openDrawer('ISSUE_CREATE', 'right', 'transparent-glass')
-              }
-              color="info"
-              shape="rounded"
-              size="small"
+            <div
+              className={cn(
+                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+                {
+                  'text-gray-400': !showClosedIssues,
+                  'textShadow text-primary': showClosedIssues,
+                }
+              )}
+              onClick={() => setShowClosedIssues(!showClosedIssues)}
             >
-              <div className="flex flex-row items-center justify-center gap-2">
-                <PlusCircle />
-                New Issue
-              </div>
-            </Button>
+              Favorites
+            </div>
           </div>
-          <div className="my-3 grid grid-cols-7 items-center gap-6 rounded-xl border-b-3 border-gray-600 bg-light-dark text-2xs uppercase shadow-card xl:text-xs 2xl:text-sm">
-            <span className="col-span-2 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              Issue Title
+          <div className="my-3 grid grid-cols-7 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">
+            <div></div>
+            <span className="col-span-5 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+              issue title
             </span>
-            <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              Issue State
-            </span>
-            <span className="py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              Project Name
-            </span>
-            <span
-              onClick={() => {
-                setStakeOrder(
-                  stakeOrder === '' ? '+' : stakeOrder === '+' ? '-' : ''
-                );
-              }}
-              className="flex py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4"
-            >
-              Staked Tokens
-              {stakeOrder === '' && (
-                <FunnelIcon className="ml-2 h-4 w-4 text-white" />
-              )}
-              {stakeOrder === '+' && (
-                <ChevronDownIcon className="ml-2 h-4 w-4 text-white" />
-              )}
-              {stakeOrder === '-' && (
-                <ChevronUpIcon className="ml-2 h-4 w-4 text-white" />
-              )}
-            </span>
-            <span className="col-span-2 py-3 px-6 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              Tags
+            <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+              <div className="textShadow text-primary">rewards</div>
+              <div className="text-xs xl:text-sm 3xl:text-base">($)</div>
             </span>
           </div>
           {issuesData?.length !== 0 &&
             issuesData.map((issue: any, idx: number) => (
-              <IssuesList
-                data={issue}
-                key={issue._id}
-                initExpand={idx == 0 ? initExapand : false}
-                last={issuesData.length === idx + 1}
-                first={idx === 0}
-              >
-                {issue?.issue_state === 'open' && (
-                  <OpenIssueExpand
-                    issueDesc={issue?.issue_summary}
-                    link={issue?.issue_gh_url}
-                    account={issue?.issue_account}
-                    PRData={issue?.issue_prs}
-                    issueCreatorGH={issue?.issue_creator_gh}
-                    issueTokenAddress={issue?.issue_stake_token_url}
-                  />
-                )}
-                {issue?.issue_state === 'voting' && (
-                  <OpenIssueExpand
-                    issueDesc={issue?.issue_summary}
-                    link={issue?.issue_gh_url}
-                    account={issue?.issue_account}
-                    PRData={issue?.issue_prs}
-                    issueCreatorGH={issue?.issue_creator_gh}
-                    issueTokenAddress={issue?.issue_stake_token_url}
-                  />
-                )}
-                {issue?.issue_state === 'winner_declared' && (
-                  <ClosedIssueExpand data={issue} />
-                )}
-                {issue?.issue_state === 'closed' && (
-                  <ClosedIssueExpand data={issue} />
-                )}
-              </IssuesList>
+              <IssuesList data={issue} key={issue._id} />
             ))}
           {!isLoading && issuesData.length === 0 && (
             <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">

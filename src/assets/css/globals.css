@@ -125,8 +125,16 @@ input::-webkit-inner-spin-button {
   background-clip: padding-box, border-box;
 }
 
+.gradient-border-dark:focus {
+  border: double transparent !important;
+  background-image: linear-gradient(theme('colors.newdark'), theme('colors.newdark')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+}
+
 .gradient-border-box {
-  border: double transparent;
+  border: 2px double transparent;
   background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
     linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
   background-origin: border-box;

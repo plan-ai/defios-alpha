@@ -1,8 +1,5 @@
 import CoverImage from '@/assets/images/profile-cover.jpg';
 import AuthorImage from '@/assets/images/dummy-author.jpg';
-import { Instagram } from '@/components/icons/brands/instagram';
-import { Twitter } from '@/components/icons/brands/twitter';
-import { Facebook } from '@/components/icons/brands/facebook';
 import { Bitcoin } from '@/components/icons/bitcoin';
 import { Ethereum } from '@/components/icons/ethereum';
 import { Tether } from '@/components/icons/tether';
@@ -64,24 +61,6 @@ export const authorData = {
   totalAmount:'250',
   syncDate:'05-02-2023',
   socials: [
-    {
-      id: 1,
-      title: '@dontbesovasya',
-      link: 'https://dontbesovasya.io',
-      icon: <Twitter className="w-4" />,
-    },
-    {
-      id: 2,
-      title: '@dontbesovasya',
-      link: 'https://dontbesovasya.io',
-      icon: <Facebook className="w-4" />,
-    },
-    {
-      id: 2,
-      title: '@dontbesovasya',
-      link: 'https://dontbesovasya.io',
-      icon: <Instagram className="w-4" />,
-    },
   ],
   links: [
     {

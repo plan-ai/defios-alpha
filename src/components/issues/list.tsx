@@ -8,6 +8,11 @@ import cn from 'classnames';
 import Button from '@/components/ui/button/button';
 import axios from '@/lib/axiosClient';
 
+import Image from '@/components/ui/image';
+import { HeartIcon } from '@heroicons/react/24/outline';
+import { GithubIssueIcon } from '@/components/icons/github-issue';
+import PlainTags from '@/components/ui/tags/plain-tags';
+
 import { useAppSelector } from '@/store/store';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
@@ -15,21 +20,11 @@ import { useRouter } from 'next/router';
 
 interface IssuesListTypes {
   data: any;
-  initExpand?: boolean;
-  last?: boolean;
-  first?: boolean;
 }
 
-export default function IssuesList({
-  data,
-  initExpand,
-  children,
-  last,
-  first,
-}: React.PropsWithChildren<IssuesListTypes>) {
+const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
   const router = useRouter();
 
-  let [isExpand, setIsExpand] = useState(initExpand || false);
   let [issueTags, setIssueTags] = useState<string[]>([]);
   const wallet = useWallet();
 
@@ -37,13 +32,20 @@ export default function IssuesList({
     (state) => state.userMapping.isLoading
   );
   let userMappingIsError = useAppSelector((state) => state.userMapping.isError);
+  let firebase_jwt = useAppSelector(
+    (state) => state.firebaseTokens.firebaseTokens.auth_creds
+  );
 
   let [tokenDecimals, setTokenDecimals] = useState(0);
 
   const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tokenImageUrl, setTokenImageUrl] = useState('');
+
   useEffect(() => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
     getTokenInfo();
-  }, [data]);
+    setIssueTags(removeDuplicates(data?.issue_tags));
+  }, [data, firebase_jwt]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -51,97 +53,79 @@ export default function IssuesList({
 
   const getTokenInfo = async () => {
     const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
-    setTokenSymbol(response.symbol);
-    setTokenDecimals(response.decimals);
+    if (response?.decimals) {
+      setTokenImageUrl(response.json.image);
+      setTokenSymbol(response.symbol);
+      setTokenDecimals(response.decimals);
+    } else {
+      const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
+        headers: {
+          Authorization: firebase_jwt,
+        },
+        params: {
+          token_addr: data?.issue_stake_token_url,
+        },
+      });
+      if (resp.token_decimals) {
+        setTokenImageUrl(resp.token_image_url);
+        setTokenSymbol(resp.token_symbol);
+        setTokenDecimals(resp.token_decimals);
+      }
+    }
   };
 
-  useEffect(() => {
-    setIssueTags(removeDuplicates(data?.issue_tags));
-    if (initExpand && initExpand !== undefined) {
-      setIsExpand(initExpand);
-    }
-  }, [initExpand]);
   return (
-    <div
-      className={cn(
-        'parentDiv relative bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
-        {
-          'rounded-b-xl': last,
-          'rounded-t-xl': first,
-        }
-      )}
-    >
+    <div className="flex flex-col items-center">
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-7 items-start items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
-        // onClick={() => setIsExpand(!isExpand)}
         onClick={() => router.push(`/issues/${data?.issue_account}`)}
+        className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-3xl bg-body py-4 px-8 pr-16"
       >
-        <span className="col-span-2 flex items-center justify-start px-6 font-medium tracking-wider text-white">
-          {data?.issue_title}
-        </span>
-        <span className="flex items-center justify-center text-center font-medium tracking-wider text-white">
-          <IssueState state={data?.issue_state} />
-        </span>
-        <span className="flex items-center justify-center text-center font-medium tracking-wider text-white">
-          {data?.issue_project_name}
-        </span>
-        <span className="text-center font-medium tracking-wider text-white">
-          {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
-            100}{' '}
-          {tokenSymbol}
-        </span>
-        <span className="col-span-2 flex flex-nowrap items-center justify-start px-6 text-center font-medium tracking-wider text-white">
-          {issueTags.length !== 0 && <GithubTags tag={issueTags[0]} key={0} />}
-          <div className="group relative">
-            {issueTags.length - 1 > 0 && (
-              <Button size="mini" shape="pill" color="gray">
-                (+{issueTags.length - 1})
-              </Button>
-            )}
-            <div className="absolute top-8 right-2 z-[100] hidden w-[15rem] flex-wrap rounded-xl bg-dark p-2 shadow-xl group-hover:flex xl:p-2.5 3xl:p-3">
-              {issueTags.slice(1).map((tag, idx) => (
-                <GithubTags tag={tag} key={idx + 1} />
-              ))}
+        <div className="mr-8 flex items-center gap-3  text-base xl:text-lg 3xl:text-xl">
+          <HeartIcon className="h-6 w-6" />
+          <div>2</div>
+        </div>
+        <div className="flex w-full flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <div className="text-lg font-semibold xl:text-xl 3xl:text-2xl">
+              {data?.issue_title}
             </div>
+            <GithubIssueIcon
+              className={cn('h-6 w-6', {
+                'text-new-green': data?.issue_state === 'open',
+                'text-new-red': data?.issue_state === 'closed',
+              })}
+            />
+            {issueTags.map((tag: string, idx: number) => {
+              return <PlainTags key={idx} tag={tag} />;
+            })}
           </div>
-        </span>
-      </div>
-      <AnimatePresence initial={false}>
-        {isExpand && (
-          <motion.div
-            key="content"
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
-            variants={{
-              open: { opacity: 1, height: 'auto' },
-              collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-          >
-            <div className="relative border-t border-dashed border-gray-700 px-6">
-              {children}
-              {(userMappingIsLoading ||
-                userMappingIsError ||
-                wallet.publicKey === null) && (
-                <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                  <div className="flex items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-5 xl:text-lg 3xl:gap-5 3xl:p-6 3xl:text-xl">
-                    <div>
-                      {wallet.publicKey === null
-                        ? 'Connect Wallet to Continue'
-                        : userMappingIsLoading
-                        ? 'Loading...'
-                        : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
-                    </div>
-                    <WalletMultiButton className="rounded-full bg-new-blue" />
-                  </div>
-                </div>
+          <div className="flex items-center gap-2">
+            <div className="relative h-8 w-8 overflow-hidden rounded-full">
+              {tokenImageUrl !== '' && (
+                <Image
+                  src={tokenImageUrl.replace(
+                    'https://ipfs.io',
+                    'https://defi-os.infura-ipfs.io'
+                  )}
+                  alt="token image"
+                  fill
+                  className="object-cover"
+                />
               )}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {!last && <div className="childDiv mx-6 border border-gray-500"></div>}
+            <div>
+              {data?.issue_project_name} ({tokenSymbol})
+            </div>
+          </div>
+        </div>
+        <div className="text-base text-new-green xl:text-lg 3xl:text-xl">
+          {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
+            100}
+        </div>
+      </div>
+      <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
     </div>
   );
-}
+};
+
+export default IssuesList;

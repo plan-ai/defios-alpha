@@ -20,8 +20,8 @@ export const Xshare: React.FC<XshareProps> = ({}) => {
         <ArrowRightIcon className="h-3.5 xl:h-4 3xl:h-5" />
       </div>
       <div className="absolute z-[10] flex items-center justify-start gap-3 whitespace-nowrap rounded-full bg-gradient-to-r from-indigo-300 to-cyan-800 px-[12px] py-2 text-xs blur-[16px] transition-all duration-300 xl:px-[16px] xl:py-2.5 xl:text-sm 3xl:px-[18px] 3xl:py-3 3xl:text-base">
-        <XTwitterIcon className="h-10 w-10 text-primary" />
-        <div className="flex w-10 items-center gap-5 overflow-hidden transition-all duration-300 group-hover:w-16 xl:w-11 xl:gap-4 xl:group-hover:w-20 3xl:w-12 3xl:gap-3.5 3xl:group-hover:w-24">
+        <XTwitterIcon className="h-8 w-8 text-primary" />
+        <div className="flex w-11 items-center gap-5 overflow-hidden transition-all duration-300 group-hover:w-16 xl:w-11 xl:gap-4 xl:group-hover:w-20 3xl:w-12 3xl:gap-3.5 3xl:group-hover:w-24">
           <div className="transition-all duration-300 group-hover:-translate-x-14">
             share
           </div>

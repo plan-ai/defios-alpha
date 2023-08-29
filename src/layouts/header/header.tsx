@@ -88,8 +88,8 @@ function HeaderRightArea() {
   return (
     <div className="flex flex-col items-end gap-6 xl:gap-7 2xl:gap-8 3xl:gap-10">
       <div className="relative mt-5 flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8">
-        <NotificationButton />
-        <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
+        {/* <NotificationButton /> */}
+        <WalletMultiButton className="gradient-border-box h-10 rounded-full bg-newdark border-0.5 2xl:h-12" />
       </div>
       {router.pathname === '/projects' && (
         <AnchorLink href="/incentivize-contributors">
@@ -142,7 +142,7 @@ export default function Header({ className }: { className?: string }) {
         {
           '!h-[5rem]':
             router.pathname.includes('/issues/') ||
-            router.pathname === '/create',
+            router.pathname === '/create' || router.pathname.includes('/issues') ,
           '!hidden': router.pathname === '/learn',
         },
         className
@@ -200,7 +200,7 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {router.pathname === '/issues' && (
+          {/* {router.pathname === '/issues' && (
             <PageHeader
               title="issues"
               description={[
@@ -208,7 +208,7 @@ export default function Header({ className }: { className?: string }) {
                 'stake tokens on issues to incentivize contributors.',
               ]}
             />
-          )}
+          )} */}
           {router.pathname === '/incentivize-contributors' && (
             <PageHeader
               title="create a project"

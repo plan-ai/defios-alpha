@@ -47,7 +47,7 @@ import IssueStake from '@/components/issue-details/IssueStake';
 
 //change
 const nameRouterAccount = new PublicKey(
-  '9ypjhXzLipVt4KuEBnv3Q9GNuka4ieDuvzaCZwAhfEdQ'
+  '7PG2xWFzSphpV66ZruD3P7quYzpR5zeGqRmerHMTQTjQ'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -805,6 +805,160 @@ export const createIssue = (
         repositoryAccount,
         systemProgram: web3.SystemProgram.programId,
       })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
+      .then((res) => {
+        resolve(issueAccount);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+export const createIssueStake = (
+  issueCreator: PublicKey,
+  issueURI: string,
+  repositoryAccount: PublicKey,
+  issueVerifiedUser: PublicKey,
+  tokenAmount: number,
+  usdcAmount: number,
+  firebase_jwt: string
+) => {
+  return new Promise<PublicKey>(async (resolve, reject) => {
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+
+    const { rewardsMint } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+
+    const { issueIndex } = await program.account.repository.fetch(
+      repositoryAccount
+    );
+
+    const [issueAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('issue'),
+        Buffer.from(issueIndex.toString()),
+        repositoryAccount.toBuffer(),
+        issueCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const mintKeypair = rewardsMint;
+
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueAccount,
+      true
+    );
+
+    const [issueStakerAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('issuestaker'),
+        issueAccount.toBuffer(),
+        issueCreator.toBuffer(),
+      ],
+      program
+    );
+
+    const issueStakerTokenAccount = await getAssociatedTokenAddress(
+      mintKeypair,
+      issueCreator
+    );
+
+    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    if (!tokenMetadata.decimals) {
+      tokenMetadata = await axios
+        .get('https://api-v1.defi-os.com/tokens', {
+          headers: {
+            Authorization: firebase_jwt,
+          },
+          params: {
+            token_addr: mintKeypair.toString(),
+          },
+        })
+        .then((res) => {
+          const response = { ...res.data };
+          response.decimals = res.data.token_decimals;
+          return response;
+        });
+    }
+    if (!tokenMetadata.decimals) {
+      reject('cannot find decimals of token');
+    }
+    const transferAmount = tokenAmount * 10 ** tokenMetadata.decimals;
+
+    const ixTokenStake = await program.methods
+      .stakeIssue(new BN(transferAmount))
+      .accounts({
+        issueAccount,
+        repositoryAccount: repositoryAccount,
+        issueTokenPoolAccount,
+        issueStaker: issueCreator,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerTokenAccount,
+        rewardsMint: mintKeypair,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        pullRequestMetadataAccount: null,
+      })
+      .instruction();
+
+    const usdcMint = new PublicKey(
+      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+    );
+
+    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueCreator
+    );
+
+    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
+      usdcMint,
+      issueAccount,
+      true
+    );
+
+    const ixUsdcStake = await program.methods
+      .stakeIssue(new BN(usdcAmount * 10 ** 6))
+      .accounts({
+        issueAccount,
+        repositoryAccount: repositoryAccount,
+        issueTokenPoolAccount: issueUsdcPoolAccount,
+        issueStaker: issueCreator,
+        issueStakerAccount,
+        issueStakerTokenAccount: issueStakerUsdcAccount,
+        rewardsMint: usdcMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        pullRequestMetadataAccount: null,
+      })
+      .instruction();
+
+    let ixArr: web3.TransactionInstruction[] = [];
+
+    if (tokenAmount > 0 && usdcAmount > 0) {
+      ixArr = [ixTokenStake, ixUsdcStake];
+    } else if (tokenAmount > 0) {
+      ixArr = [ixTokenStake];
+    } else if (usdcAmount > 0) {
+      ixArr = [ixUsdcStake];
+    }
+
+    program.methods
+      .addIssue(issueURI)
+      .accounts({
+        issueAccount,
+        issueCreator: issueCreator,
+        issueVerifiedUser,
+        repositoryAccount,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .postInstructions(ixArr)
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(issueAccount);
