@@ -1,18 +1,31 @@
 import React from 'react';
+import cn from 'classnames';
 
 interface SpinnerProps {
-  label?: string;
+  label?: string | null;
+  spinnerClass?: string;
+  className?: string;
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({ label }) => {
+export const Spinner: React.FC<SpinnerProps> = ({
+  label,
+  spinnerClass,
+  className,
+}) => {
   return (
     <div
       role="status"
-      className="flex w-full flex-col items-center justify-center"
+      className={cn(
+        'flex w-full flex-col items-center justify-center gap-5',
+        className
+      )}
     >
       <svg
         aria-hidden="true"
-        className="mr-2 inline h-8 w-8 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600"
+        className={cn(
+          'mr-2 inline h-8 w-8 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600',
+          spinnerClass
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +39,7 @@ export const Spinner: React.FC<SpinnerProps> = ({ label }) => {
           fill="currentFill"
         />
       </svg>
-      <span className="mt-5">{label ? label : 'Loading...'}</span>
+      {label !== null && <div className="">{label ? label : 'Loading...'}</div>}
     </div>
   );
 };

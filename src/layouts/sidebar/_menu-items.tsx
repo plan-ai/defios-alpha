@@ -1,56 +1,57 @@
 import routes from '@/config/routes';
-import { HomeIcon } from '@/components/icons/home';
-import { BookOpenIcon } from '@/components/icons/book-open';
-import { FarmIcon } from '@/components/icons/farm';
-import { PoolIcon } from '@/components/icons/pool';
-import { ProfileIcon } from '@/components/icons/profile';
-import { ExchangeIcon } from '@/components/icons/exchange';
-import { PlusCircle } from '@/components/icons/plus-circle';
-import { CompassIcon } from '@/components/icons/compass';
-import { BriefcaseIcon } from '@/components/icons/briefcase';
-import { BuildingIcon } from '@/components/icons/building';
+import {
+  HomeIcon,
+  LightBulbIcon,
+  FolderIcon,
+  ArrowPathRoundedSquareIcon,
+  MapIcon,
+} from '@heroicons/react/24/outline';
+import { HammerIcon } from '@/components/icons/hammer';
 
-export const menuItems = [
+export const menuItems: any = [
+  // {
+  //   name: 'home',
+  //   icon: <HomeIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
+  //   href: routes.home,
+  // },
   {
     name: 'learn',
-    icon: <BookOpenIcon />,
+    icon: <LightBulbIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
     href: routes.learn,
   },
   {
     name: 'projects',
-    icon: <FarmIcon />,
+    icon: <FolderIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
     href: routes.projects,
   },
   {
+    name: 'issues',
+    icon: <HammerIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
+    href: routes.issues,
+  },
+  {
     name: 'swap',
-    icon: <ExchangeIcon />,
+    icon: (
+      <ArrowPathRoundedSquareIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />
+    ),
     href: routes.swap,
   },
   {
     name: 'roadmaps',
-    icon: <CompassIcon />,
+    icon: <MapIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
     href: routes.roadmaps,
   },
-  {
-    name: 'issues',
-    icon: <PoolIcon />,
-    href: routes.issues,
-  },
-  {
-    name: 'create a project',
-    icon: <PlusCircle />,
-    href: routes.incentivizeContributors,
-  },
-  {
-    name: 'jobs',
-    icon: <BriefcaseIcon />,
-    href: routes.jobs,
-    comingSoon: true,
-  },
   // {
-  //   name: 'enterprise',
-  //   icon: <BuildingIcon />,
-  //   href: routes.enterprise,
+  //   name: 'create a project',
+  //   icon: <PlusCircle className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
+  //   href: routes.incentivizeContributors,
+  // },
+  // {
+  //   name: 'jobs',
+  //   icon: (
+  //     <BriefcaseIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />
+  //   ),
+  //   href: routes.jobs,
   //   comingSoon: true,
   // },
 ];

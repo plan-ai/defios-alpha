@@ -26,7 +26,7 @@ export default function Sidebar({ className }: { className?: string }) {
   const wallet = useWallet();
 
   const handleAirdrop = async () => {
-    if(!wallet || wallet.publicKey===null) return;
+    if (!wallet || wallet.publicKey === null) return;
     let resCalled = false;
     dispatch(onLoading('Airdropping 2 Devnet SOL...'));
     solAirdrop(wallet.publicKey)
@@ -80,17 +80,17 @@ export default function Sidebar({ className }: { className?: string }) {
           });
         }
       });
-
-  }
+  };
 
   return (
-    <aside
+    <div
       className={cn(
-        'fixed top-0 left-0 z-40 h-full w-full w-[15rem] border-r border-dashed border-gray-700 bg-dark xl:w-[16.75rem] 2xl:w-[18.75rem] 3xl:w-[20rem]',
+        'fixed top-0 left-0 bottom-0 z-40 flex h-full w-full w-[15rem] flex-col justify-between overflow-y-auto pt-3 lg:pt-5 xl:w-[16.75rem] 2xl:w-[18.75rem] 3xl:w-[20rem] bg-dark',
         className
       )}
     >
-      <div className="relative flex items-center overflow-hidden px-6 py-5 2xl:py-7 3xl:px-8">
+      <div className="lineGradient absolute top-0 bottom-0 right-0 ml-2 w-0.5"></div>
+      <div className="relative flex items-center px-6 3xl:px-8">
         <div className="lg:hidden">
           <Button
             title="Close"
@@ -106,29 +106,20 @@ export default function Sidebar({ className }: { className?: string }) {
         <Logo />
       </div>
 
-      <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
-        <div className="h-full px-6 pb-5 2xl:px-7 3xl:px-8">
-          <Link href="/profile">
-            <AuthorCard
-              image={githubInfo?.avatar_url || ''}
-              name={githubInfo?.name || ''}
-              role={githubInfo?.login || ''}
+      <div className="px-6 pb-5 2xl:px-7 3xl:px-8">
+        <div className="mt-5 flex flex-col gap-2">
+          {menuItems.map((item: any, index: number) => (
+            <MenuItem
+              key={'default' + item.name + index}
+              name={item.name}
+              href={item.href}
+              icon={item.icon}
+              comingSoon={item.comingSoon || undefined}
             />
-          </Link>
+          ))}
+        </div>
 
-          <div className="mt-5">
-            {menuItems.map((item, index) => (
-              <MenuItem
-                key={'default' + item.name + index}
-                name={item.name}
-                href={item.href}
-                icon={item.icon}
-                comingSoon={item.comingSoon || undefined}
-              />
-            ))}
-          </div>
-
-          {wallet && wallet.publicKey !== null && (
+        {/* {wallet && wallet.publicKey !== null && (
             <Button
               size="small"
               shape="rounded"
@@ -139,9 +130,18 @@ export default function Sidebar({ className }: { className?: string }) {
             >
               Airdrop Devnet SOL
             </Button>
-          )}
+          )} */}
+      </div>
+      <Link href="/profile" className="w-full">
+        <div className="mb-4 flex w-full flex-col">
+          <div className="lineGradientHorizontal h-0.5 w-full"></div>
+          <AuthorCard
+            image={githubInfo?.avatar_url || ''}
+            name={githubInfo?.name || ''}
+            role={githubInfo?.login || ''}
+          />
         </div>
-      </Scrollbar>
-    </aside>
+      </Link>
+    </div>
   );
 }

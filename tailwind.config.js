@@ -20,15 +20,18 @@ module.exports = {
     extend: {
       colors: {
         brand: 'rgb(var(--color-brand))',
-        body: '#0D1321',
-        dark: '#0D1321',
-        'light-dark': '#171e2e',
+        body: '#0D0F14',
+        dark: '#0D0F14',
+        newdark: '#0D0F14',
+        'light-dark': '#0D0F14',
+        'light-gray': '#24262C',
         'sidebar-body': '#F8FAFC',
-        primary: '#90AAFA',
+        primary: '#92ABFB',
         'primary-green1': '#33A9A2',
         'primary-green2': '#3EB3B7',
+        'new-red': '#FA9090',
         'new-blue': '#2A4B6B',
-        'new-green': '#1D606A',
+        'new-green': '#90FAC7',
       },
       spacing: {
         13: '3.375rem',

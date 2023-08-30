@@ -88,8 +88,8 @@ function HeaderRightArea() {
   return (
     <div className="flex flex-col items-end gap-6 xl:gap-7 2xl:gap-8 3xl:gap-10">
       <div className="relative mt-5 flex shrink-0 items-center justify-end gap-4 gap-3 2xl:gap-8">
-        <NotificationButton />
-        <WalletMultiButton className="h-10 rounded-full bg-new-blue  2xl:h-12" />
+        {/* <NotificationButton /> */}
+        <WalletMultiButton className="gradient-border-box border-0.5 h-10 rounded-full bg-newdark 2xl:h-12" />
       </div>
       {router.pathname === '/projects' && (
         <AnchorLink href="/incentivize-contributors">
@@ -136,7 +136,13 @@ export default function Header({ className }: { className?: string }) {
     <nav
       className={cn(
         'relative top-0 right-0 z-30 h-[7rem] w-full transition-all duration-300 lg:h-[8rem] 2xl:h-[11rem]',
+        // isMounted && windowScroll.y
+        //   ? 'bg-gradient-to-b from-dark to-dark/80 shadow-card backdrop-blur'
+        //   : '',
         {
+          '!h-[5rem]':
+            router.pathname.includes('/issues/')||
+            router.pathname.includes('/issues'),
           '!hidden': router.pathname === '/learn',
         },
         className
@@ -144,7 +150,7 @@ export default function Header({ className }: { className?: string }) {
     >
       <div className="flex h-full items-start justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <div className="mr-5 block lg:hidden">
+          <div className="m-5 ml-0 block lg:hidden">
             <Hamburger
               isOpen={false}
               variant="solid"
@@ -194,7 +200,7 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {router.pathname === '/issues' && (
+          {/* {router.pathname === '/issues' && (
             <PageHeader
               title="issues"
               description={[
@@ -202,8 +208,8 @@ export default function Header({ className }: { className?: string }) {
                 'stake tokens on issues to incentivize contributors.',
               ]}
             />
-          )}
-          {router.pathname === '/incentivize-contributors' && (
+          )} */}
+          {/* {router.pathname === '/incentivize-contributors' && (
             <PageHeader
               title="create a project"
               description={[
@@ -211,7 +217,7 @@ export default function Header({ className }: { className?: string }) {
                 'onboard new contributors on your project seamlessly.',
               ]}
             />
-          )}
+          )} */}
           {router.pathname === '/profile' && (
             <PageHeader
               title="profile"

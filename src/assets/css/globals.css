@@ -12,11 +12,11 @@
     color: white;
   }
   html {
-    @apply bg-body text-white;
+    @apply bg-newdark text-white;
     -webkit-tap-highlight-color: transparent;
   }
   html.dark {
-    @apply bg-dark text-white;
+    @apply bg-newdark text-white;
   }
   html,
   body {
@@ -61,8 +61,45 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+.textShadow{
+  text-shadow: 0px 0px 15px #92ABFB;
+}
+
+.textShadowWhite{
+  text-shadow: 0px 0px 15px #FFFFFF;
+}
+
+.textShadowGreen{
+  text-shadow: 0px 0px 15px #90FAC7;
+}
+
 .landing-font{
   font-family: 'Inter',sans-serif;
+}
+
+.progressGradient{
+  background: linear-gradient(90deg, theme('colors.primary') 0%, theme('colors.primary') 80% , rgba(146, 171, 251,0) 100% );
+
+}
+
+.lineGradient{
+  background: linear-gradient(180deg, rgba(146, 171, 251, 0.00) 0%, #92ABFB 32.83%, rgba(146, 171, 251, 0.941) 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.lineGradientHorizontal{
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #92ABFB 32.83%, rgba(146, 171, 251, 0.941) 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.lineGradientHorizontalGray{
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #595959 32.83%, #595959f0 81.68%, rgba(146, 171, 251, 0.00) 100%);
+}
+
+.gradient-border-box-bottom {
+  border-bottom: double transparent;
+  background-image: linear-gradient(theme('colors.light-gray'), theme('colors.light-gray')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .conic-gradient-1{
@@ -82,14 +119,22 @@ input::-webkit-inner-spin-button {
 
 .gradient-border:focus {
   border: double transparent;
-  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
+  background-image: linear-gradient(theme('colors.light-gray'), theme('colors.light-gray')),
     linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
 
+.gradient-border-dark:focus {
+  border: double transparent !important;
+  background-image: linear-gradient(theme('colors.newdark'), theme('colors.newdark')),
+    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa) !important;
+  background-origin: border-box !important;
+  background-clip: padding-box, border-box !important;
+}
+
 .gradient-border-box {
-  border: double transparent;
+  border: 2px double transparent;
   background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
     linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
   background-origin: border-box;
