@@ -315,7 +315,6 @@ const Learn: React.FC<LearnProps> = ({}) => {
                         learnRes.search_results.length) *
                       100,
                   }}
-                  item="issues"
                 />
               </div>
             )}
