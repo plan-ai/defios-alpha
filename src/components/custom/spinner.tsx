@@ -23,7 +23,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
       <svg
         aria-hidden="true"
         className={cn(
-          'mr-2 inline h-8 w-8 animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600',
+          'mr-2 inline h-8 w-8 animate-spin fill-gray-600 text-gray-200',
           spinnerClass
         )}
         viewBox="0 0 100 101"

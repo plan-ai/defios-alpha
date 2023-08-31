@@ -13,6 +13,7 @@ import roadmapFilterReducer from './roadmapFilterSlice';
 import callLoaderReducer from './callLoaderSlice';
 import refetchReducer from './refetchSlice';
 import newCreationReducer from './newCreationSlice';
+import issueCreateReducer from './issueCreateSlice'
 
 const appReducer = combineReducers({
   userMapping: userMappingReducer,
@@ -24,6 +25,7 @@ const appReducer = combineReducers({
   callLoader: callLoaderReducer,
   refetch: refetchReducer,
   newCreation: newCreationReducer,
+  issueCreate: issueCreateReducer,
 });
 
 export type AppState = CombinedState<{
@@ -36,6 +38,7 @@ export type AppState = CombinedState<{
   callLoader: ReturnType<typeof callLoaderReducer>;
   refetch: ReturnType<typeof refetchReducer>;
   newCreation: ReturnType<typeof newCreationReducer>;
+  issueCreate: ReturnType<typeof issueCreateReducer>;
 }>;
 
 const rootReducer: Reducer = (state: AppState, action: AnyAction) => {

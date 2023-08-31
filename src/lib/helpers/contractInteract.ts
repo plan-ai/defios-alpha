@@ -1034,8 +1034,7 @@ export const stakeIssueTokens = (
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         pullRequestMetadataAccount: null,
-      })
-      .instruction();
+      });
 
     const usdcMint = new PublicKey(
       'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
@@ -1066,26 +1065,40 @@ export const stakeIssueTokens = (
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         pullRequestMetadataAccount: null,
-      })
-      .instruction();
-
-    const stakeTx = new Transaction();
-
-    if (tokenAmount > 0) stakeTx.add(ixTokenStake);
-
-    if (usdcAmount > 0) stakeTx.add(ixUsdcStake);
-
-    provider
-      .sendAndConfirm(stakeTx, [Signer], {
-        skipPreflight: false,
-        maxRetries: 3,
-      })
-      .then((res) => {
-        resolve(res);
-      })
-      .catch((e) => {
-        reject(e);
       });
+
+    if (tokenAmount > 0 && usdcAmount > 0) {
+      const instUsdc = await ixUsdcStake.instruction();
+      await ixTokenStake
+        .postInstructions([instUsdc])
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } else if (tokenAmount > 0) {
+      await ixTokenStake
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } else if (usdcAmount > 0) {
+      await ixUsdcStake
+        .rpc({ skipPreflight: false, maxRetries: 3 })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    } else {
+      reject('no stake amount');
+    }
   });
 };
 
@@ -1204,20 +1217,17 @@ export const unstakeIssueTokens = (
       issueStaker
     );
 
-    const ixTokenUnstake = await program.methods
-      .unstakeIssue()
-      .accounts({
-        issueAccount,
-        repositoryAccount: repository,
-        issueTokenPoolAccount,
-        issueStaker: issueStaker,
-        issueStakerAccount,
-        issueStakerTokenAccount: issueStakerTokenAccount,
-        rewardsMint: mintKeypair,
-        systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      })
-      .instruction();
+    const ixTokenUnstake = await program.methods.unstakeIssue().accounts({
+      issueAccount,
+      repositoryAccount: repository,
+      issueTokenPoolAccount,
+      issueStaker: issueStaker,
+      issueStakerAccount,
+      issueStakerTokenAccount: issueStakerTokenAccount,
+      rewardsMint: mintKeypair,
+      systemProgram: web3.SystemProgram.programId,
+      tokenProgram: TOKEN_PROGRAM_ID,
+    });
 
     const usdcMint = new PublicKey(
       'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
@@ -1249,17 +1259,9 @@ export const unstakeIssueTokens = (
       })
       .instruction();
 
-    const unstakeTx = new Transaction();
-
-    unstakeTx.add(ixTokenUnstake);
-
-    unstakeTx.add(ixUsdcUnstake);
-
-    provider
-      .sendAndConfirm(unstakeTx, [Signer], {
-        skipPreflight: false,
-        maxRetries: 3,
-      })
+    await ixTokenUnstake
+      // .postInstructions([ixUsdcUnstake])
+      .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
       })

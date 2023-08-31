@@ -2,20 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '../rootReducer';
 
 export interface step1Props {
-  repoName: string;
+  projectName: string;
   repoLink: string;
   repoId: string;
-  selectedRepo: any;
-  projectName: string;
-  projectDescription: string;
+  selectedProject: any;
   tokenSymbol: string;
   tokenName: string;
-  tokenType: string;
-  tokenAddress: string | undefined;
-  tokenIcon: File | undefined;
   tokenImgLink: string;
-}
-export interface step2Props {
   issueType: 'create' | 'import';
   issueTitle: string;
   issueDescription: string;
@@ -27,33 +20,25 @@ export interface step2Props {
   issueLink: string | undefined;
 }
 
-export interface step4Props {
+export interface step3Props {
   repoLink: string;
   issueLink: string;
 }
 
 export interface creationState {
   step1: step1Props;
-  step2: step2Props;
-  step4: step4Props;
+  step3: step3Props;
 }
 
 const initialState: creationState = {
   step1: {
-    repoName: '',
+    projectName: '',
     repoLink: '',
     repoId: '',
-    selectedRepo: undefined,
-    projectName: '',
-    projectDescription: '',
+    selectedProject: undefined,
     tokenSymbol: '',
     tokenName: '',
-    tokenAddress: undefined,
-    tokenType: '',
-    tokenIcon: undefined,
     tokenImgLink: '',
-  },
-  step2: {
     issueType: 'create',
     issueTitle: '',
     issueDescription: '',
@@ -64,41 +49,31 @@ const initialState: creationState = {
     issueNumber: undefined,
     issueLink: undefined,
   },
-  step4: {
-    repoLink: '',
+  step3: {
     issueLink: '',
+    repoLink: '',
   },
 };
 
-export const newCreation = createSlice({
-  name: 'newCreation',
+export const issueCreate = createSlice({
+  name: 'issueCreate',
   initialState,
   reducers: {
     setStep1Data: (state, action: PayloadAction<step1Props>) => {
       state.step1 = action.payload;
     },
-    setStep2Data: (state, action: PayloadAction<step2Props>) => {
-      state.step2 = action.payload;
-    },
-    setStep4Data: (state, action: PayloadAction<step4Props>) => {
-      state.step4 = action.payload;
+    setStep3Data: (state, action: PayloadAction<step3Props>) => {
+      state.step3 = action.payload;
     },
     reset: (state) => {
       state.step1 = {
-        repoName: '',
+        projectName: '',
         repoLink: '',
         repoId: '',
-        selectedRepo: undefined,
-        projectName: '',
-        projectDescription: '',
+        selectedProject: undefined,
         tokenSymbol: '',
         tokenName: '',
-        tokenAddress: undefined,
-        tokenType: '',
-        tokenIcon: undefined,
         tokenImgLink: '',
-      };
-      state.step2 = {
         issueType: 'create',
         issueTitle: '',
         issueDescription: '',
@@ -109,15 +84,14 @@ export const newCreation = createSlice({
         issueNumber: undefined,
         issueLink: undefined,
       };
-      state.step4 = {
-        repoLink: '',
+      state.step3 = {
         issueLink: '',
+        repoLink: '',
       };
     },
   },
 });
 
-export default newCreation.reducer;
-export const selectCreation = (state: AppState) => state.newCreation;
-export const { setStep1Data, setStep2Data, setStep4Data, reset } =
-  newCreation.actions;
+export default issueCreate.reducer;
+export const selectCreation = (state: AppState) => state.issueCreate;
+export const { setStep1Data,setStep3Data, reset } = issueCreate.actions;
