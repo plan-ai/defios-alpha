@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import IssueComment from '@/components/issue-details/IssueComment';
-import IssueCommentCreator from '@/components/issue-details/IssueCommentCreator';
-import Spinner from '@/components/custom/spinner';
-import TagImage from '@/components/ui/tags/tag-image';
 import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
 
+//ui components
+import Spinner from '@/components/custom/spinner';
+import TagImage from '@/components/ui/tags/tag-image';
 import MarkdownRenderer from '@/components/ui/markdown';
 import AnchorLink from '@/components/ui/links/anchor-link';
+
+//components
+import IssueComment from '@/components/issue-details/IssueComment';
+import IssueCommentCreator from '@/components/issue-details/IssueCommentCreator';
+
 
 interface IssueDescriptionProps {
   issue_url: string;
@@ -23,6 +27,7 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [refetch, setRefetch] = useState(0);
 
+  //fetch issue body,tags,assignees
   useEffect(() => {
     if (!(session as any)?.accessToken || issue_url === undefined) return;
     axios
@@ -38,6 +43,7 @@ export const IssueDescription: React.FC<IssueDescriptionProps> = ({
       .catch((err) => console.log(err));
   }, [session, issue_url]);
 
+  //fetch issue comments
   useEffect(() => {
     if (!(session as any)?.accessToken || issue_url === undefined) return;
     axios

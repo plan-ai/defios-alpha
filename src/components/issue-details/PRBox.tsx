@@ -1,14 +1,20 @@
 import React from 'react';
+
+//ui components
+import Image from '@/components/ui/image';
+import ProgressBar from '@/components/ui/progress-bar';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import Spinner from '@/components/custom/spinner';
+
+//icons
 import {
   LockClosedIcon,
   CheckIcon,
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
 import { GithubOutlineIcon } from '@/components/icons/github-outline';
-import Image from '@/components/ui/image';
-import ProgressBar from '@/components/ui/progress-bar';
-import AnchorLink from '@/components/ui/links/anchor-link';
-import Spinner from '@/components/custom/spinner';
+
+//contract utils
 import { useWallet } from '@solana/wallet-adapter-react';
 
 interface PRBoxProps {
@@ -97,6 +103,7 @@ export const PRBox: React.FC<PRBoxProps> = ({
 
       {/* for contributors */}
 
+      {/* not voted  */}
       {!voted && !isOwner && !(isClosed === true) && (
         <div
           onClick={() => {
@@ -106,10 +113,13 @@ export const PRBox: React.FC<PRBoxProps> = ({
           }}
           className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-primary bg-newdark py-1 px-6 text-xs font-semibold text-primary xl:text-sm 3xl:text-base"
         >
+          {/* cant vote */}
           {votingPower === 0 && <LockClosedIcon className="h-5 w-5" />}
           <div>vote</div>
         </div>
       )}
+
+      {/* voted */}
       {voted &&
         !isOwner &&
         !(isClosed === true) &&
@@ -120,12 +130,15 @@ export const PRBox: React.FC<PRBoxProps> = ({
           </div>
         )}
 
+      {/* winner choosen , not you */}
       {isWinner === true && !(claimable === true) && (
         <div className="flex w-fit items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
           <CheckIcon className="h-5 w-5" />
           <div>Winner</div>
         </div>
       )}
+
+      {/* you are winner */}
       {claimable === true && (
         <div
           onClick={claimFunc}
@@ -135,8 +148,9 @@ export const PRBox: React.FC<PRBoxProps> = ({
           <div>Claim</div>
         </div>
       )}
-      {/* for owners */}
 
+
+      {/* for owners */}
       {isOwner && !(isClosed === true) && (
         <div
           onClick={() => {

@@ -1,39 +1,44 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { useSession } from 'next-auth/react';
+import cn from 'classnames';
+import axios from '@/lib/axiosClient';
+import mixpanel from 'mixpanel-browser';
+
+//redux
+import { selectUserMapping } from '@/store/userMappingSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+
+//ui components
 import Spinner from '@/components/custom/spinner';
-import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
-import cn from 'classnames';
+import AnchorLink from '../ui/links/anchor-link';
+
+//icons
+import { ChevronDown } from '@/components/icons/chevron-down';
 import { CheckIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+
+//contract functions
 import {
   addPullRequest,
   claimReward,
   votePr,
 } from '@/lib/helpers/contractInteract';
+
+//contract utils
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { selectUserMapping } from '@/store/userMappingSlice';
-import axios from '@/lib/axiosClient';
-import { useSession } from 'next-auth/react';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
-import mixpanel from 'mixpanel-browser';
 
+//components
 import PRBox from '@/components/issue-details/PRBox';
-import AnchorLink from '../ui/links/anchor-link';
-
-const sort = [
-  { id: 1, name: 'Repository creator' },
-  { id: 2, name: 'By amount of code contributed (minified)' },
-  { id: 3, name: 'By duration of project involvement (compute intensive)' },
-];
 
 interface SortListProps {
   sort: any;
   selectedSubmitPR: any;
   setSelectedSubmitPR: React.Dispatch<React.SetStateAction<any>>;
 }
-
+// shows prs by user on the issue
 const SortList: React.FC<SortListProps> = ({
   sort,
   selectedSubmitPR,
@@ -102,7 +107,6 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
   setRefetch,
 }) => {
   const dispatch = useAppDispatch();
-  const stateLoading = useAppSelector((state) => state.callLoader.callState);
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
@@ -362,6 +366,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
       });
   };
 
+  //fetches prs on issue by user
   const getPRsToSelect = async () => {
     var config = {
       method: 'get',
@@ -374,12 +379,17 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
         Accept: 'application/vnd.github.v3+json',
       },
     };
+    //fetch timeline 
     const timeline = await axios(config)
       .then((res) => res.data)
       .catch((err) => console.log(err));
+
+    //prs have event as cross-referenced
     const allPRs = timeline.filter(
       (item: any) => item.event === 'cross-referenced'
     );
+
+    //my prs out of all users
     const MyPRs = allPRs.filter(
       (item: any) =>
         !issueData?.issue_prs?.some(
@@ -388,6 +398,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
         item.actor.id === userInfo.id &&
         item.source.issue.state === 'open'
     );
+
+    //filter required params
     const _sortlistPRs = MyPRs.map((item: any) => {
       return {
         id: item?.source?.issue?.number,
@@ -395,6 +407,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
         PR_link: item?.source?.issue?.html_url,
       };
     });
+
     const _listPRs = [
       {
         id: -1,
@@ -443,6 +456,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             </div>
           </div>
           <div className="my-8 flex flex-col items-center gap-2 text-center text-base xl:text-lg 3xl:text-xl">
+
+            {/* no winner and not submitted */}
             {!PRSubmitted &&
               (issueData.rewardee === undefined ||
                 issueData.rewardee === '' ||
@@ -458,6 +473,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                   </div>
                 </>
               )}
+
+            {/* no winner but user submitted PR */}
             {PRSubmitted &&
               (issueData.rewardee === undefined ||
                 issueData.rewardee === '' ||
@@ -473,6 +490,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                   </div>
                 </>
               )}
+
+            {/* issue solved / closed , you are not winner */}
             {issueData.rewardee !== undefined &&
               issueData.rewardee !== '' &&
               issueData.rewardee !== null &&
@@ -489,6 +508,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                 </>
               )}
 
+            {/* issue solved / closed and you winner */}
             {issueData.rewardee !== undefined &&
               issueData.rewardee !== '' &&
               issueData.rewardee !== null &&
@@ -507,6 +527,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
           </div>
 
           {/* Submit PR */}
+          {/* no pr submitted by you */}
           {!PRSubmitted &&
             (issueData.rewardee === undefined ||
               issueData.rewardee === '' ||
@@ -535,6 +556,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                 </div>
               </div>
             )}
+
+          {/* pr submitted by you */}
           {PRSubmitted &&
             (issueData.rewardee === undefined ||
               issueData.rewardee === '' ||
@@ -553,6 +576,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                 </AnchorLink>
               </div>
             )}
+
+          {/* issue solved , you are not winner  */}
           {issueData.rewardee !== undefined &&
             issueData.rewardee !== '' &&
             issueData.rewardee !== null &&
@@ -576,6 +601,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
               </div>
             )}
 
+          {/* issue solved you are winner */}
           {issueData.rewardee !== undefined &&
             issueData.rewardee !== '' &&
             issueData.rewardee !== null &&
@@ -605,6 +631,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
       )}
       {section === 2 && (
         <div className="mx-32 flex w-full flex-col items-center gap-8">
+
+          {/* issue not solved */}
           {(issueData.rewardee === undefined ||
             issueData.rewardee === '' ||
             issueData.rewardee === null) && (
@@ -630,6 +658,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                 })}
             </>
           )}
+          {/* issue solved  */}
           {issueData.rewardee !== undefined &&
             issueData.rewardee !== '' &&
             issueData.rewardee !== null && (
@@ -637,6 +666,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                 <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
                   Issue Solved, PR Merged!
                 </div>
+                {/* winner pr  */}
                 {issueData?.issue_prs
                   .filter((_item: any) => {
                     return _item?.issue_pr_author === issueData.rewardee;
@@ -659,6 +689,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                       />
                     );
                   })}
+                {/* rest prs  */}
                 {issueData?.issue_prs
                   .filter((_item: any) => {
                     return _item?.issue_pr_author !== issueData.rewardee;

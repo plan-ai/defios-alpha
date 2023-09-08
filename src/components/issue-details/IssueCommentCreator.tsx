@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Textarea from '@/components/ui/forms/textarea';
 import cn from 'classnames';
-import { useAppSelector } from '@/store/store';
-import Spinner from '@/components/custom/spinner';
-
-import MarkdownRenderer from '@/components/ui/markdown';
 import { useSession } from 'next-auth/react';
 import axios from '@/lib/axiosClient';
+
+//redux
+import { useAppSelector } from '@/store/store';
+
+//ui components
+import Textarea from '@/components/ui/forms/textarea';
+import Spinner from '@/components/custom/spinner';
+import MarkdownRenderer from '@/components/ui/markdown';
 
 interface IssueCommentCreatorProps {
   issueUrl: string;

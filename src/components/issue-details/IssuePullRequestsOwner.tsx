@@ -1,35 +1,38 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import cn from 'classnames';
+import axios from '@/lib/axiosClient';
+import { useSession } from 'next-auth/react';
+import mixpanel from 'mixpanel-browser';
+
+//redux
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+import { selectUserMapping } from '@/store/userMappingSlice';
+
+//ui components
 import Spinner from '@/components/custom/spinner';
-import { ChevronDown } from '@/components/icons/chevron-down';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
-import cn from 'classnames';
+
+//icons
+import { ChevronDown } from '@/components/icons/chevron-down';
 import { CheckIcon } from '@heroicons/react/24/solid';
+
+//contract functions , utils
 import { acceptPr } from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { selectUserMapping } from '@/store/userMappingSlice';
-import axios from '@/lib/axiosClient';
-import { useSession } from 'next-auth/react';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
-import mixpanel from 'mixpanel-browser';
 
+//components
 import PRBox from '@/components/issue-details/PRBox';
 import AnchorLink from '../ui/links/anchor-link';
-
-const sort = [
-  { id: 1, name: 'Repository creator' },
-  { id: 2, name: 'By amount of code contributed (minified)' },
-  { id: 3, name: 'By duration of project involvement (compute intensive)' },
-];
 
 interface SortListProps {
   sort: any;
   selectedSubmitPR: any;
   setSelectedSubmitPR: React.Dispatch<React.SetStateAction<any>>;
 }
-
+//all submitted prs on defi-os.com
 const SortList: React.FC<SortListProps> = ({
   sort,
   selectedSubmitPR,
@@ -119,7 +122,6 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
   setRefetch,
 }) => {
   const dispatch = useAppDispatch();
-  const stateLoading = useAppSelector((state) => state.callLoader.callState);
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
@@ -267,6 +269,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
             </div>
           </div>
           <div className="my-8 flex flex-col items-center gap-2 text-center text-base xl:text-lg 3xl:text-xl">
+
+            {/* no winner */}
             {(issueData.rewardee === undefined ||
               issueData.rewardee === '' ||
               issueData.rewardee === null) && (
@@ -281,6 +285,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                 </div>
               </>
             )}
+
+            {/* winner decided  */}
             {issueData.rewardee !== undefined &&
               issueData.rewardee !== '' &&
               issueData.rewardee !== null && (
@@ -298,6 +304,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
           </div>
 
           {/* Submit PR */}
+
+          {/* no winner  */}
           {(issueData.rewardee === undefined ||
             issueData.rewardee === '' ||
             issueData.rewardee === null) && (
@@ -327,6 +335,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
               </div>
             </div>
           )}
+
+          {/* winner decided */}
           {issueData.rewardee !== undefined &&
             issueData.rewardee !== '' &&
             issueData.rewardee !== null && (
@@ -352,6 +362,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
       )}
       {section === 2 && (
         <div className="mx-32 flex w-full flex-col items-center gap-8">
+
+          {/* no winner */}
           {(issueData.rewardee === undefined ||
             issueData.rewardee === '' ||
             issueData.rewardee === null) && (
@@ -375,6 +387,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
               })}
             </>
           )}
+
+          {/* winner decided */}
           {issueData.rewardee !== undefined &&
             issueData.rewardee !== '' &&
             issueData.rewardee !== null && (
@@ -382,6 +396,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                 <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
                   Issue Solved, PR Merged!
                 </div>
+
+                {/* winner pr */}
                 {issueData?.issue_prs
                   .filter((_item: any) => {
                     return _item?.issue_pr_author === issueData.rewardee;
@@ -400,6 +416,8 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                       />
                     );
                   })}
+
+                {/* rest prs */}
                 {issueData?.issue_prs
                   .filter((_item: any) => {
                     return _item?.issue_pr_author !== issueData.rewardee;

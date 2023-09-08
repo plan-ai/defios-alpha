@@ -1,6 +1,10 @@
 import React from 'react';
-import Image from '@/components/ui/image';
+
+//redux
 import { useAppSelector } from '@/store/store';
+
+//components
+import Image from '@/components/ui/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import MarkdownRenderer from '@/components/ui/markdown';
 

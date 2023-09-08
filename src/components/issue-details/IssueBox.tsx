@@ -1,41 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import Image from '@/components/ui/image';
 import cn from 'classnames';
-import { GithubIssueIcon } from '@/components/icons/github-issue';
-import PlainTags from '@/components/ui/tags/plain-tags';
-
-import { useAppSelector } from '@/store/store';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 import axios from '@/lib/axiosClient';
 
-import AnchorLink from '@/components/ui/links/anchor-link';
+//redux
+import { useAppSelector } from '@/store/store';
 
+//ui components
+import Image from '@/components/ui/image';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import PlainTags from '@/components/ui/tags/plain-tags';
 import Spinner from '@/components/custom/spinner';
+
+//icons
+import { GithubIssueIcon } from '@/components/icons/github-issue';
 
 interface IssueBoxProps {
   data: any;
 }
 
 const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
-  const [issueTags, setIssueTags] = useState<string[]>([]);
 
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
 
+  const [issueTags, setIssueTags] = useState<string[]>([]);
   const [tokenDecimals, setTokenDecimals] = useState(0);
-
-  useEffect(() => {
-    if (firebase_jwt === null || firebase_jwt === undefined) return;
-    if (data === null || data === undefined) return;
-    getTokenInfo();
-    setIssueTags(removeDuplicates(data?.issue_tags));
-  }, [data, firebase_jwt]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
   };
 
+  //fetched token decimals
   const getTokenInfo = async () => {
     if (
       data.issue_token?.token_spl_addr === null ||
@@ -61,6 +58,14 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
       }
     }
   };
+
+  //refetched token decimals , removed tag duplicates on data change
+  useEffect(() => {
+    if (firebase_jwt === null || firebase_jwt === undefined) return;
+    if (data === null || data === undefined) return;
+    getTokenInfo();
+    setIssueTags(removeDuplicates(data?.issue_tags));
+  }, [data, firebase_jwt]);
 
   return (
     <AnchorLink

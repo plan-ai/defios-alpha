@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import cn from 'classnames';
+import mixpanel from 'mixpanel-browser';
+
+//redux
+import { selectUserMapping } from '@/store/userMappingSlice';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
+
+//ui components
 import Spinner from '@/components/custom/spinner';
 import Image from '@/components/ui/image';
-import cn from 'classnames';
 import Input from '@/components/ui/forms/input';
 
+//contract functions , utils
 import {
   stakeIssueTokens,
   unstakeIssueTokens,
 } from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey } from '@solana/web3.js';
-import { selectUserMapping } from '@/store/userMappingSlice';
-import { useSession } from 'next-auth/react';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
-import mixpanel from 'mixpanel-browser';
+import { PublicKey } from '@solana/web3.js'
 
 interface IssueStakeProps {
   issueData: any;
@@ -252,7 +257,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
                 <div>Your current voting power:</div>
                 <div>
                   {Math.round(
-                    (tokenDetails?.votingPower / tokenDetails.totalPower) *
+                    (tokenDetails?.votingPower / tokenDetails?.totalPower) *
                       10000
                   ) / 100}
                   %

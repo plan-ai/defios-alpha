@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '@/lib/axiosClient';
-import { useAppSelector } from '@/store/store';
-import AnchorLink from '@/components/ui/links/anchor-link';
 import cn from 'classnames';
+
+//redux
+import { useAppSelector } from '@/store/store';
+
+//ui components
+import AnchorLink from '@/components/ui/links/anchor-link';
+
+//icons
 import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 
+//components
 import IssueBox from '@/components/issue-details/IssueBox';
-
 import IssueDescription from '@/components/issue-details/IssueDescription';
 import IssueStake from '@/components/issue-details/IssueStake';
 import IssuePullRequests from '@/components/issue-details/IssuePullRequests';
 import IssuePullRequestsOwner from '@/components/issue-details/IssuePullRequestsOwner';
 
+//contract functions
 import {
+  get_pda_from_seeds,
+  getProvider,
+  getDefiOsProgram,
   getSupplyModified,
   calculateSellAmount,
 } from '@/lib/helpers/contractInteract';
 import { getTokenBalance } from '@/lib/helpers/metadata';
 
+//contract utils
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import {
-  Program,
-  AnchorProvider,
-  web3,
   BN,
 } from '@project-serum/anchor';
-import { contractAddresses } from '@/config/addresses';
-import { Defios, IDL } from '@/types/idl/defios';
 import { Signer, Connection } from '@/lib/helpers/wallet';
 
 interface IssueDetailsProps {}
@@ -37,6 +43,7 @@ type tabStateType = 'description' | 'funding' | 'pull requests';
 
 const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   const router = useRouter();
+
   const wallet = useWallet();
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
@@ -54,30 +61,6 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
 
   const [tokenDetails, setTokenDetails] = useState<any>();
 
-  const get_pda_from_seeds = async (seeds: any, program: any) => {
-    return await web3.PublicKey.findProgramAddressSync(
-      seeds,
-      program.programId
-    );
-  };
-
-  const getDefiOsProgram = async (provider: AnchorProvider) => {
-    const program: Program<Defios> = new Program(
-      IDL,
-      contractAddresses.defios,
-      provider
-    );
-    return program;
-  };
-
-  const getProvider = async (
-    connection: web3.Connection,
-    signerWallet: any
-  ) => {
-    const provider = new AnchorProvider(connection, signerWallet, {});
-    return provider;
-  };
-
   const getTokenDetails = async () => {
     if (
       issueData === null ||
@@ -88,6 +71,8 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       issueData.issue_token.token_spl_addr === undefined
     )
       return;
+    
+    //total power calc
     const { supplyModified, decimals, supplyActual } = await getSupplyModified(
       issueData.issue_token.token_spl_addr
     );
@@ -95,6 +80,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
     const total_stake_BN = new BN(issueData.issue_stake_amount);
     const total_power = calculateSellAmount(supplyActual, total_stake_BN);
 
+    //init contract connection
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
@@ -116,12 +102,14 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       repository
     );
 
+    //issue staker acc fetch
     const issueStakerFetch = await program.account.issueStaker
       .fetch(issueStakerAccount)
       .catch((err) => {
         return null;
       });
 
+    //voting,staking
     let myStake = 0;
     let myVotingPower = 0;
     if (issueStakerFetch !== null) {
@@ -133,19 +121,12 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       myVotingPower = parseFloat(issueStakerFetch.prVotingPower.toString());
     }
 
+    //token balance
     const tokenBalanceData = await getTokenBalance(
       issueData?.issue_token?.token_spl_addr
     );
-    console.log({
-      totalPower: parseInt(total_power.toString()),
-      voted: issueStakerFetch !== null ? issueStakerFetch.hasVoted : false,
-      votingPower: myVotingPower,
-      tokenBalance: tokenBalanceData?.uiAmount || 0,
-      stakeByMe: myStake,
-      decimals: decimals,
-      repositoryCreator: repositoryCreator,
-    });
 
+    //fix in a state for nested use in child components
     setTokenDetails({
       totalPower: parseInt(total_power.toString()),
       voted: issueStakerFetch !== null ? issueStakerFetch.hasVoted : false,
@@ -179,6 +160,8 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
         setIsLoading(false);
       });
   };
+
+
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     if (refetch === 0) {
@@ -263,6 +246,8 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
           setRefetch={setRefetch}
         />
       )}
+
+      {/* contributor , staker/voter but not project owner */}
       {tabState === 'pull requests' &&
         wallet?.publicKey?.toString() !==
           tokenDetails?.repositoryCreator?.toString() && (
@@ -272,6 +257,8 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
             setRefetch={setRefetch}
           />
         )}
+
+      {/* project owner */}
       {tabState === 'pull requests' &&
         wallet?.publicKey?.toString() ===
           tokenDetails?.repositoryCreator?.toString() && (
