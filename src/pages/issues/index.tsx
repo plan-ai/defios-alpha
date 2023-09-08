@@ -17,7 +17,6 @@ import RootLayout from '@/layouts/_root-layout';
 //UI components
 import Button from '@/components/ui/button/button';
 import Input from '@/components/ui/forms/input';
-import StackedSwitch from '@/components/custom/stacked-switch';
 import Spinner from '@/components/custom/spinner';
 import { Tooltip } from 'flowbite-react';
 import { useDrawer } from '@/components/drawer-views/context';
@@ -27,17 +26,9 @@ import CreateIssueBtn from '@/components/issues/createIssueBtn';
 import { InfoCircle } from '@/components/icons/info-circle';
 import EmptyList from '@/components/icons/EmptyList';
 import { PlusCircle } from '@/components/icons/plus-circle';
-import {
-  FunnelIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline';
 
 //Components
 import IssuesList from '@/components/issues/list';
-import OpenIssueExpand from '@/components/issues/open-issues-expand';
-import ClosedIssueExpand from '@/components/issues/closed-issue-expand';
-import IssueBox from '@/components/issue-details/IssueBox';
 
 //redux store
 import { useAppSelector, useAppDispatch } from '@/store/store';

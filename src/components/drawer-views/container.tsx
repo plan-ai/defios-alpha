@@ -8,9 +8,6 @@ import { DRAWER_VIEW, useDrawer } from '@/components/drawer-views/context';
 // dynamic imports
 const Sidebar = dynamic(() => import('@/layouts/sidebar/_default'));
 const DrawerFilters = dynamic(() => import('@/components/roadmaps/filters'));
-const RightSideIssues = dynamic(
-  () => import('@/components/issues/right-side-issues')
-);
 
 function renderDrawerContent(view: DRAWER_VIEW | string) {
   switch (view) {
@@ -18,8 +15,6 @@ function renderDrawerContent(view: DRAWER_VIEW | string) {
       return <Sidebar />;
     case 'DRAWER_SEARCH':
       return <DrawerFilters />;
-    case 'ISSUE_CREATE':
-      return <RightSideIssues />;
     default:
       return <Sidebar />;
   }

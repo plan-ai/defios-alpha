@@ -5,8 +5,6 @@ import Spinner from '@/components/custom/spinner';
 import TagImage from '@/components/ui/tags/tag-image';
 import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import Image from '@/components/ui/image';
 
 import MarkdownRenderer from '@/components/ui/markdown';
 import AnchorLink from '@/components/ui/links/anchor-link';

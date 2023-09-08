@@ -29,7 +29,7 @@ function NotificationButton() {
     <AnchorLink
       href={
         router.pathname === routes.notification
-          ? routes.home
+          ? routes.learn
           : routes.notification
       }
     >
@@ -164,15 +164,6 @@ export default function Header({ className }: { className?: string }) {
           >
             <Logo />
           </div> */}
-          {router.pathname === '/home' && (
-            <PageHeader
-              title="welcome"
-              description={[
-                "we're still in beta and on devnet!",
-                'thank you for supporting open-source!',
-              ]}
-            />
-          )}
           {router.pathname === '/projects' && (
             <PageHeader
               title="projects"
@@ -200,24 +191,6 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {/* {router.pathname === '/issues' && (
-            <PageHeader
-              title="issues"
-              description={[
-                'solve issues to earn tokens.',
-                'stake tokens on issues to incentivize contributors.',
-              ]}
-            />
-          )} */}
-          {/* {router.pathname === '/incentivize-contributors' && (
-            <PageHeader
-              title="create a project"
-              description={[
-                'tokenize your github repository.',
-                'onboard new contributors on your project seamlessly.',
-              ]}
-            />
-          )} */}
           {router.pathname === '/profile' && (
             <PageHeader
               title="profile"
@@ -227,7 +200,6 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {router.pathname === '/jobs' && <PageHeader title="jobs" />}
         </div>
         <HeaderRightArea />
       </div>

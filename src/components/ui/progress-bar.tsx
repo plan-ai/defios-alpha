@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-
 interface ProgressBarProps {
   title?: string;
   completed?: {
@@ -28,7 +27,8 @@ export default function ProgressBar({
         </div>
         <div className="flex h-2 w-full items-center overflow-hidden rounded-full border border-primary">
           <div
-            className={`progressGradient h-full w-[${completed?.percentage}%]`}
+            className="progressGradient h-full"
+            style={{ width: `${completed?.percentage}%` }}
           ></div>
         </div>
       </div>

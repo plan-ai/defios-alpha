@@ -43,7 +43,7 @@ export default function ListCard({
   return (
     <div
       className={cn(
-        'flex items-center justify-between bg-light-dark text-2xs font-medium shadow-card xl:text-xs 3xl:text-sm',
+        'flex items-center justify-between bg-gray-900 text-2xs font-medium shadow-card xl:text-xs 3xl:text-sm',
         className
       )}
     >

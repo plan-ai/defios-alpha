@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import IssueState from '@/components/ui/tags/issue-state';
-import GithubTags from '@/components/ui/tags/github-tags';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import cn from 'classnames';
-import Button from '@/components/ui/button/button';
 import axios from '@/lib/axiosClient';
 
 import Image from '@/components/ui/image';
-import { HeartIcon } from '@heroicons/react/24/outline';
 import { GithubIssueIcon } from '@/components/icons/github-issue';
 import PlainTags from '@/components/ui/tags/plain-tags';
 
@@ -38,9 +32,6 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
 
   let [tokenDecimals, setTokenDecimals] = useState(0);
 
-  const [tokenSymbol, setTokenSymbol] = useState('');
-  const [tokenImageUrl, setTokenImageUrl] = useState('');
-
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === undefined) return;
     getTokenInfo();
@@ -52,10 +43,10 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
   };
 
   const getTokenInfo = async () => {
-    const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
+    const response: any = await fetchTokenMetadata(
+      data?.issue_token?.token_spl_addr
+    );
     if (response?.decimals) {
-      setTokenImageUrl(response.json.image);
-      setTokenSymbol(response.symbol);
       setTokenDecimals(response.decimals);
     } else {
       const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
@@ -63,12 +54,10 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
           Authorization: firebase_jwt,
         },
         params: {
-          token_addr: data?.issue_stake_token_url,
+          token_addr: data?.issue_token?.token_spl_addr,
         },
       });
       if (resp.token_decimals) {
-        setTokenImageUrl(resp.token_image_url);
-        setTokenSymbol(resp.token_symbol);
         setTokenDecimals(resp.token_decimals);
       }
     }
@@ -80,10 +69,10 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
         onClick={() => router.push(`/issues/${data?.issue_account}`)}
         className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-3xl bg-body py-4 px-8 pr-16"
       >
-        <div className="mr-8 flex items-center gap-3  text-base xl:text-lg 3xl:text-xl">
+        {/* <div className="mr-8 flex items-center gap-3  text-base xl:text-lg 3xl:text-xl">
           <HeartIcon className="h-6 w-6" />
           <div>2</div>
-        </div>
+        </div> */}
         <div className="flex w-full flex-col gap-4">
           <div className="flex items-center gap-2">
             <div className="text-lg font-semibold xl:text-xl 3xl:text-2xl">
@@ -101,9 +90,9 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
           </div>
           <div className="flex items-center gap-2">
             <div className="relative h-8 w-8 overflow-hidden rounded-full">
-              {tokenImageUrl !== '' && (
+              {data?.issue_token?.token_image_url !== '' && (
                 <Image
-                  src={tokenImageUrl.replace(
+                  src={data?.issue_token?.token_image_url.replace(
                     'https://ipfs.io',
                     'https://defi-os.infura-ipfs.io'
                   )}
@@ -114,7 +103,7 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
               )}
             </div>
             <div>
-              {data?.issue_project_name} ({tokenSymbol})
+              {data?.issue_project_name} ({data?.issue_token?.token_symbol})
             </div>
           </div>
         </div>

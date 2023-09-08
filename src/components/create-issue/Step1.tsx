@@ -13,15 +13,11 @@ import Spinner from '../custom/spinner';
 import cn from 'classnames';
 import Image from '@/components/ui/image';
 
-import { PublicKey } from '@solana/web3.js';
-import { createIssueStake } from '@/lib/helpers/contractInteract';
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
 import { useSession } from 'next-auth/react';
 import { selectUserMapping } from '@/store/userMappingSlice';
-import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { setStep1Data } from '@/store/issueCreateSlice';
-import mixpanel from 'mixpanel-browser';
 
 const tagsList = [
   'bug',
@@ -256,7 +252,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
           },
         }
       )
-      .then((res) => setRepoIssues(res.data))
+      .then((res) => {
+        const filteredIssues = res.data.filter((item: any) => {
+          return !Object.keys(item).includes('pull_request');
+        });
+        setRepoIssues(filteredIssues);
+      })
       .catch((err) => console.log(err))
       .finally(() => setIssuesLoading(false));
   };

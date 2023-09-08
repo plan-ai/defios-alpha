@@ -25,9 +25,6 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
 
   const [tokenDecimals, setTokenDecimals] = useState(0);
 
-  const [tokenSymbol, setTokenSymbol] = useState('');
-  const [tokenImageUrl, setTokenImageUrl] = useState('');
-
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === undefined) return;
     if (data === null || data === undefined) return;
@@ -40,10 +37,15 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
   };
 
   const getTokenInfo = async () => {
-    const response: any = await fetchTokenMetadata(data?.issue_stake_token_url);
+    if (
+      data.issue_token?.token_spl_addr === null ||
+      data.issue_token?.token_spl_addr === undefined
+    )
+      return;
+    const response: any = await fetchTokenMetadata(
+      data?.issue_token?.token_spl_addr
+    );
     if (response.decimals) {
-      setTokenImageUrl(response.json.image);
-      setTokenSymbol(response.symbol);
       setTokenDecimals(response.decimals);
     } else {
       const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
@@ -51,12 +53,10 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
           Authorization: firebase_jwt,
         },
         params: {
-          token_addr: data?.issue_stake_token_url,
+          token_addr: data?.issue_token?.token_spl_addr,
         },
       });
       if (resp.token_decimals) {
-        setTokenImageUrl(resp.token_image_url);
-        setTokenSymbol(resp.token_symbol);
         setTokenDecimals(resp.token_decimals);
       }
     }
@@ -88,9 +88,9 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
               </div>
               <div className="flex items-center gap-2">
                 <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                  {tokenImageUrl !== '' && (
+                  {data?.issue_token?.token_image_url !== '' && (
                     <Image
-                      src={tokenImageUrl.replace(
+                      src={data?.issue_token?.token_image_url.replace(
                         'https://ipfs.io',
                         'https://defi-os.infura-ipfs.io'
                       )}
@@ -101,7 +101,7 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
                   )}
                 </div>
                 <div>
-                  {data?.issue_project_name} ({tokenSymbol})
+                  {data?.issue_project_name} ({data?.issue_token?.token_symbol})
                 </div>
               </div>
             </div>

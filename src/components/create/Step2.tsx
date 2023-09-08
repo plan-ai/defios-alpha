@@ -167,7 +167,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
           },
         }
       )
-      .then((res) => setRepoIssues(res.data))
+      .then((res) => {
+        const filteredIssues = res.data.filter((item: any) => {
+          return !Object.keys(item).includes('pull_request');
+        });
+        setRepoIssues(filteredIssues);
+      })
       .catch((err) => console.log(err))
       .finally(() => setIsLoading(false));
   };

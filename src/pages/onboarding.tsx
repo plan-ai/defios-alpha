@@ -69,7 +69,7 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
         .request(config)
         .then((res) => {
           localStorage.setItem('user_type', res.data.user_type);
-          router.push('/home');
+          router.push('/learn');
         })
         .catch((err) => {
           console.log(err);

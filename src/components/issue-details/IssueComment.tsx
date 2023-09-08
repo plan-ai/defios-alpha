@@ -1,8 +1,5 @@
 import React from 'react';
 import Image from '@/components/ui/image';
-import { TagIcon } from '@heroicons/react/24/outline';
-import GithubTags from '@/components/ui/tags/github-tags';
-import cn from 'classnames';
 import { useAppSelector } from '@/store/store';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import MarkdownRenderer from '@/components/ui/markdown';

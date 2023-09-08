@@ -1,6 +1,5 @@
 import routes from '@/config/routes';
 import {
-  HomeIcon,
   LightBulbIcon,
   FolderIcon,
   ArrowPathRoundedSquareIcon,
@@ -9,11 +8,6 @@ import {
 import { HammerIcon } from '@/components/icons/hammer';
 
 export const menuItems: any = [
-  // {
-  //   name: 'home',
-  //   icon: <HomeIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
-  //   href: routes.home,
-  // },
   {
     name: 'learn',
     icon: <LightBulbIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
@@ -41,17 +35,4 @@ export const menuItems: any = [
     icon: <MapIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
     href: routes.roadmaps,
   },
-  // {
-  //   name: 'create a project',
-  //   icon: <PlusCircle className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
-  //   href: routes.incentivizeContributors,
-  // },
-  // {
-  //   name: 'jobs',
-  //   icon: (
-  //     <BriefcaseIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />
-  //   ),
-  //   href: routes.jobs,
-  //   comingSoon: true,
-  // },
 ];

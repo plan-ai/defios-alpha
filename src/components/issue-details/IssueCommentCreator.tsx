@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Image from '@/components/ui/image';
-import Button from '@/components/ui/button/button';
 import Textarea from '@/components/ui/forms/textarea';
 import cn from 'classnames';
 import { useAppSelector } from '@/store/store';

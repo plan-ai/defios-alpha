@@ -1334,19 +1334,15 @@ export const addPullRequest = (
   commitVerifiedUser: PublicKey,
   treeHashUnsliced: string,
   commitHashUnsliced: string,
-  metadataURI: string,
-  tokenAddress: PublicKey
+  metadataURI: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
     const treeHash = treeHashUnsliced.slice(0, 8);
     const commitHash = commitHashUnsliced.slice(0, 8);
-    const { repository, issueCreator } = await program.account.issue.fetch(
-      issueAccount
-    );
-    const { repositoryCreator, rewardsMint } =
-      await program.account.repository.fetch(repository);
+    const { repository } = await program.account.issue.fetch(issueAccount);
+
     const [commitAccount] = await get_pda_from_seeds(
       [
         Buffer.from('commit'),
@@ -1357,8 +1353,6 @@ export const addPullRequest = (
       program
     );
 
-    const mintKeypair = tokenAddress;
-
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
@@ -1368,54 +1362,38 @@ export const addPullRequest = (
       program
     );
 
-    const pullRequestTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      pullRequestMetadataAccount,
-      true
-    );
+    const ixAddPr = await program.methods
+      .addPr(metadataURI)
+      .accounts({
+        pullRequestVerifiedUser: commitVerifiedUser,
+        issue: issueAccount,
+        pullRequestMetadataAccount: pullRequestMetadataAccount,
+        pullRequestAddr: commitCreator,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .remainingAccounts([
+        { pubkey: commitAccount, isWritable: true, isSigner: false },
+      ])
+      .instruction();
 
-    // const ixAddPr = await program.methods
-    //   .addPr(metadataURI)
-    //   .accounts({
-    //     pullRequestVerifiedUser: commitVerifiedUser,
-    //     issue: issueAccount,
-    //     pullRequestMetadataAccount: pullRequestMetadataAccount,
-    //     nameRouterAccount,
-    //     pullRequestTokenAccount,
-    //     pullRequestAddr: commitCreator,
-    //     routerCreator: routerCreator,
-    //     systemProgram: web3.SystemProgram.programId,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     rewardsMint: mintKeypair,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //   })
-    //   .remainingAccounts([
-    //     { pubkey: commitAccount, isWritable: true, isSigner: false },
-    //   ])
-    //   .instruction();
-
-    // await program.methods
-    //   .addCommit(commitHash, treeHash, metadataURI)
-    //   .accounts({
-    //     commitAccount,
-    //     commitCreator: commitCreator,
-    //     commitVerifiedUser,
-    //     issueAccount,
-    //     issueCreator,
-    //     nameRouterAccount,
-    //     repositoryCreator,
-    //     repositoryAccount: repository,
-    //     routerCreator: routerCreator,
-    //     systemProgram: web3.SystemProgram.programId,
-    //   })
-    //   .postInstructions([ixAddPr])
-    //   .rpc({ skipPreflight: false, maxRetries: 3 })
-    //   .then((res) => {
-    //     resolve(res);
-    //   })
-    //   .catch((e) => {
-    //     reject(e);
-    //   });
+    await program.methods
+      .addCommit(commitHash, treeHash, metadataURI)
+      .accounts({
+        commitAccount,
+        commitCreator: commitCreator,
+        commitVerifiedUser,
+        issueAccount,
+        repositoryAccount: repository,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .postInstructions([ixAddPr])
+      .rpc({ skipPreflight: false, maxRetries: 3 })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
   });
 };
 
@@ -1473,183 +1451,6 @@ export const votePr = (issueStaker: PublicKey, prAccount: PublicKey) => {
   });
 };
 
-export const stakePr = (
-  prStaker: PublicKey,
-  prAccount: PublicKey,
-  amount: number,
-  tokenAddress: PublicKey,
-  firebase_jwt: string
-) => {
-  return new Promise(async (resolve, reject) => {
-    const provider = await getProvider(Connection, Signer);
-    const program = await getDefiOsProgram(provider);
-
-    const { sentBy, commits } = await program.account.pullRequest.fetch(
-      prAccount
-    );
-    const pullRequestAddr = sentBy;
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
-    );
-    const issueAccount = issue;
-    const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
-
-    const mintKeypair = tokenAddress;
-
-    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('pullrequestadded'),
-        issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
-      ],
-      program
-    );
-
-    const pullRequestTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      pullRequestMetadataAccount,
-      true
-    );
-
-    const pullRequestStakerTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      Signer.publicKey
-    );
-
-    const [pullRequestStakerAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('pullrestaker'),
-        pullRequestMetadataAccount.toBuffer(),
-        prStaker.toBuffer(),
-      ],
-      program
-    );
-
-    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
-    if (!tokenMetadata.decimals) {
-      tokenMetadata = await axios
-        .get('https://api-v1.defi-os.com/tokens', {
-          headers: {
-            Authorization: firebase_jwt,
-          },
-          params: {
-            token_addr: mintKeypair.toString(),
-          },
-        })
-        .then((res) => {
-          const response = { ...res.data };
-          response.decimals = res.data.token_decimals;
-          return response;
-        });
-    }
-    if (!tokenMetadata.decimals) {
-      reject('cannot find decimals of token');
-    }
-    const transferAmount = amount * 10 ** tokenMetadata.decimals;
-
-    // program.methods
-    //   .stakePr(new BN(transferAmount))
-    //   .accounts({
-    //     pullRequestAddr,
-    //     issue: issueAccount,
-    //     pullRequestMetadataAccount: pullRequestMetadataAccount,
-    //     pullRequestTokenAccount,
-    //     systemProgram: web3.SystemProgram.programId,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     rewardsMint: mintKeypair,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     pullRequestStaker: prStaker,
-    //     pullRequestStakerTokenAccount,
-    //     pullRequestStakerAccount,
-    //   })
-    //   .rpc({ skipPreflight: false, maxRetries: 3 })
-    //   .then((res) => {
-    //     resolve(res);
-    //   })
-    //   .catch((e) => {
-    //     reject(e);
-    //   });
-  });
-};
-
-export const unstakePr = (
-  prStaker: PublicKey,
-  prAccount: PublicKey,
-  tokenAddress: PublicKey
-) => {
-  return new Promise(async (resolve, reject) => {
-    const provider = await getProvider(Connection, Signer);
-    const program = await getDefiOsProgram(provider);
-
-    const { sentBy, commits } = await program.account.pullRequest.fetch(
-      prAccount
-    );
-    const pullRequestAddr = sentBy;
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
-    );
-    const issueAccount = issue;
-    const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
-
-    const mintKeypair = tokenAddress;
-
-    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('pullrequestadded'),
-        issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
-      ],
-      program
-    );
-
-    const pullRequestTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      pullRequestMetadataAccount,
-      true
-    );
-
-    const pullRequestStakerTokenAccount = await getAssociatedTokenAddress(
-      mintKeypair,
-      Signer.publicKey
-    );
-
-    const [pullRequestStakerAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('pullrestaker'),
-        pullRequestMetadataAccount.toBuffer(),
-        prStaker.toBuffer(),
-      ],
-      program
-    );
-
-    // program.methods
-    //   .unstakePr()
-    //   .accounts({
-    //     pullRequestAddr,
-    //     issue: issueAccount,
-    //     pullRequestMetadataAccount: pullRequestMetadataAccount,
-    //     pullRequestTokenAccount,
-    //     systemProgram: web3.SystemProgram.programId,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     rewardsMint: mintKeypair,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     pullRequestStaker: prStaker,
-    //     pullRequestStakerTokenAccount,
-    //     pullRequestStakerAccount,
-    //   })
-    //   .rpc({ skipPreflight: false, maxRetries: 3 })
-    //   .then((res) => {
-    //     resolve(res);
-    //   })
-    //   .catch((e) => {
-    //     reject(e);
-    //   });
-  });
-};
 
 export const acceptPr = (prAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
@@ -1731,9 +1532,9 @@ export const claimReward = (
       program
     );
 
-    const pullRequestTokenAccount = await getAssociatedTokenAddress(
+    const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
-      pullRequestMetadataAccount,
+      issueAccount,
       true
     );
 
@@ -1742,30 +1543,29 @@ export const claimReward = (
       Signer.publicKey
     );
 
-    // program.methods
-    //   .claimReward()
-    //   .accounts({
-    //     pullRequestCreator: pullRequestAddr,
-    //     pullRequest: pullRequestMetadataAccount,
-    //     pullRequestCreatorRewardAccount,
-    //     repositoryCreator: repositoryCreator,
-    //     rewardsMint: mintKeypair,
-    //     repositoryAccount: repository,
-    //     issueAccount: issueAccount,
-    //     issueTokenPoolAccount: issueTokenPoolAccount,
-    //     issueCreator: issueCreator,
-    //     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //     pullRequestTokenAccount: pullRequestTokenAccount,
-    //     systemProgram: web3.SystemProgram.programId,
-    //   })
-    //   .rpc({ skipPreflight: false, maxRetries: 3 })
-    //   .then((res) => {
-    //     resolve(res);
-    //   })
-    //   .catch((e) => {
-    //     reject(e);
-    //   });
+    program.methods
+      .claimReward()
+      .accounts({
+        pullRequestCreator: pullRequestAddr,
+        pullRequest: pullRequestMetadataAccount,
+        pullRequestCreatorRewardAccount,
+        repositoryCreator: repositoryCreator,
+        rewardsMint: mintKeypair,
+        repositoryAccount: repository,
+        issueAccount: issueAccount,
+        issueTokenPoolAccount: issueTokenPoolAccount,
+        issueCreator: issueCreator,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: web3.SystemProgram.programId,
+      })
+      .rpc({ skipPreflight: false, maxRetries: 3 })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((e) => {
+        reject(e);
+      });
   });
 };
 
@@ -2337,7 +2137,6 @@ export const getSupplyModified = async (tokenAddress: string) => {
     ],
     program
   );
-
   const { numberOfSchedules, perVestingAmount } =
     await program.account.defaultVestingSchedule.fetch(defaultVestingSchedule);
 
@@ -2345,7 +2144,7 @@ export const getSupplyModified = async (tokenAddress: string) => {
     perVestingAmount.muln(numberOfSchedules)
   );
 
-  return { supplyModified, decimals: tokenInfo.decimals };
+  return { supplyModified, decimals: tokenInfo.decimals, supplyActual };
 };
 
 export const swapTransaction = (

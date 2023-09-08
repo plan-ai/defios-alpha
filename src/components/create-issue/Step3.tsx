@@ -9,7 +9,6 @@ import { selectUserMapping } from '@/store/userMappingSlice';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setStep3Data } from '@/store/issueCreateSlice';
 import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
-import { uploadFileToIPFS, uploadMetadataToIPFS } from '@/lib/helpers/metadata';
 import { useSession } from 'next-auth/react';
 import mixpanel from 'mixpanel-browser';
 import axios from '@/lib/axiosClient';

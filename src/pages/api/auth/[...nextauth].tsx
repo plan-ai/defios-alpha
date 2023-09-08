@@ -12,6 +12,7 @@ export default NextAuth({
         params: {
           // I wish to request additional permission scopes.
           scope: 'public_repo read:user user:email notifications',
+          code: process.env.NEXTAUTH_SECRET,
         },
       },
     }),
