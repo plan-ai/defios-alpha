@@ -302,7 +302,7 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
       </Trade>
       <RightSideInfo coin={toCoin} />
       {/* remove below later */}
-      <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-start justify-center backdrop-blur-sm">
+      {/* <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-start justify-center backdrop-blur-sm">
         <div className="flex flex-col items-center justify-center rounded-xl border-2 border-white bg-dark p-4 text-center shadow-2xl xl:p-6 3xl:p-8">
           <div className="mb-6 text-2xl font-semibold xl:mb-7 xl:text-3xl 3xl:mb-8 3xl:text-4xl">
             Announcement
@@ -383,7 +383,7 @@ const SwapConsole: React.FC<SwapConsoleProps> = ({ setConsoleType }) => {
             </AnchorLink>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

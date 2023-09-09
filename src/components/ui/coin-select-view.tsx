@@ -54,7 +54,7 @@ export default function CoinSelectView({
           className="w-full border-y border-x-0 border-dashed border-gray-700 bg-light-dark py-3.5 pl-14 pr-6 text-sm focus:border-gray-600 focus:ring-0"
         />
       </div>
-      <ul className="min-h-[200px] py-3">
+      <ul className="h-[45vh] overflow-auto py-3">
         {coinListData.length > 0 ? (
           coinListData.map((item: any, idx: number) => (
             <li

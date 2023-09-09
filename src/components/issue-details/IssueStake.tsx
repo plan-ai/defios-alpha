@@ -273,16 +273,16 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
                 'z-[40] w-fit rounded-full border bg-newdark py-1 px-4 text-xs font-semibold text-newdark xl:text-sm 3xl:text-base',
                 {
                   'cursor-pointer border-new-red text-new-red':
-                    issueData?.issue_state === 'open' && !tokenDetails.voted,
+                    issueData?.issue_state === 'open' && !tokenDetails?.voted,
                   'cursor-not-allowed border-gray-600 text-gray-600':
-                    issueData?.issue_state !== 'open' || tokenDetails.voted,
+                    issueData?.issue_state !== 'open' || tokenDetails?.voted,
                 }
               )}
               onClick={() => {
                 if (
                   !isUnstaking &&
                   issueData?.issue_state === 'open' &&
-                  !tokenDetails.voted
+                  !tokenDetails?.voted
                 ) {
                   handleIssueUnstake();
                 }
@@ -302,7 +302,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
         </div>
         <div className="absolute left-0 right-0 top-[30%] bottom-[20%] z-[10] rounded-full bg-[#1D606A] blur-[80px]"></div>
       </div>
-      <div className="flex flex-col items-center gap-8">
+      {/* <div className="flex flex-col items-center gap-8">
         <div
           className={cn('cursor-pointer rounded-full border border-primary', {
             'h-6 w-6 border-4': section === 1,
@@ -324,7 +324,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
           })}
           onClick={() => setSection(3)}
         ></div>
-      </div>
+      </div> */}
     </div>
   );
 };

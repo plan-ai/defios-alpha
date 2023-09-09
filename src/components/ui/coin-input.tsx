@@ -67,7 +67,7 @@ export default function CoinInput({
     <>
       <div
         className={cn(
-          'group flex rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600',
+          'group flex w-full rounded-xl border border-gray-700 transition-colors duration-200 hover:border-gray-600',
           className
         )}
       >
@@ -80,7 +80,7 @@ export default function CoinInput({
               if (setSelectedCoin === undefined) return;
               setVisibleCoinList(true);
             }}
-            className="flex items-center text-xs font-medium text-gray-100 outline-none xl:text-sm 3xl:text-base"
+            className="flex w-full items-center text-xs font-medium text-gray-100 outline-none xl:text-sm 3xl:text-base"
           >
             <div className="relative h-6 w-6 overflow-hidden rounded-full">
               <Image
@@ -96,7 +96,7 @@ export default function CoinInput({
               />
             </div>
             <span className="ml-2">{selectedCoin?.token_symbol} </span>
-            <ChevronDown className="ml-1.5" />
+            <ChevronDown className="ml-1.5 h-4 w-4" />
           </button>
         </div>
         <div className="flex flex-1 flex-col text-right">

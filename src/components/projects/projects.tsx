@@ -424,7 +424,7 @@ export default function Projects() {
             last={projectsData.length === idx + 1}
             first={idx === 0}
           >
-            <div className="mb-2 flex flex-row items-center justify-between text-sm">
+            {/* <div className="mb-2 flex flex-row items-center justify-between text-sm">
               <div className="flex w-[30%]">
                 <CoinTicker
                   value={
@@ -488,8 +488,8 @@ export default function Projects() {
                   />
                 </div>
               </div>
-            </div>
-            <div className="mb-6 grid grid-cols-3 gap-3 text-sm">
+            </div> */}
+            <div className="my-6 grid grid-cols-3 gap-3 text-sm">
               <Button
                 onClick={() => {
                   if (project?.project_account) {
@@ -532,7 +532,7 @@ export default function Projects() {
               </Button>
               <Button
                 shape="rounded"
-                color="success"
+                color="info"
                 fullWidth
                 size="medium"
                 onClick={() => {

@@ -264,12 +264,11 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
             <div className="textShadowGreen text-new-green">
               {Math.round(
                 (issueData?.issue_stake_amount * 100) /
-                  10 ** tokenDetails.decimals
+                  10 ** tokenDetails?.decimals
               ) / 100}
             </div>
           </div>
           <div className="my-8 flex flex-col items-center gap-2 text-center text-base xl:text-lg 3xl:text-xl">
-
             {/* no winner */}
             {(issueData.rewardee === undefined ||
               issueData.rewardee === '' ||
@@ -362,7 +361,6 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
       )}
       {section === 2 && (
         <div className="mx-32 flex w-full flex-col items-center gap-8">
-
           {/* no winner */}
           {(issueData.rewardee === undefined ||
             issueData.rewardee === '' ||
@@ -375,7 +373,7 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                 return (
                   <PRBox
                     prData={item}
-                    totalPower={tokenDetails?.totalPower||0}
+                    totalPower={tokenDetails?.totalPower || 0}
                     key={idx}
                     voted={false}
                     votingPower={0}
@@ -398,43 +396,51 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                 </div>
 
                 {/* winner pr */}
-                {issueData?.issue_prs
-                  .filter((_item: any) => {
-                    return _item?.issue_pr_author === issueData.rewardee;
-                  })
-                  .map((item: any, idx: number) => {
-                    return (
-                      <PRBox
-                        prData={item}
-                        totalPower={tokenDetails?.totalPower||0}
-                        key={idx}
-                        voted={false}
-                        votingPower={0}
-                        isOwner={true}
-                        isClosed={true}
-                        isWinner={true}
-                      />
-                    );
-                  })}
+                {issueData !== null &&
+                  issueData !== undefined &&
+                  issueData.issue_prs !== null &&
+                  issueData.issue_prs !== undefined &&
+                  issueData.issue_prs
+                    .filter((_item: any) => {
+                      return _item?.issue_pr_author === issueData.rewardee;
+                    })
+                    .map((item: any, idx: number) => {
+                      return (
+                        <PRBox
+                          prData={item}
+                          totalPower={tokenDetails?.totalPower || 0}
+                          key={idx}
+                          voted={false}
+                          votingPower={0}
+                          isOwner={true}
+                          isClosed={true}
+                          isWinner={true}
+                        />
+                      );
+                    })}
 
                 {/* rest prs */}
-                {issueData?.issue_prs
-                  .filter((_item: any) => {
-                    return _item?.issue_pr_author !== issueData.rewardee;
-                  })
-                  .map((item: any, idx: number) => {
-                    return (
-                      <PRBox
-                        prData={item}
-                        totalPower={tokenDetails?.totalPower||0}
-                        key={idx}
-                        voted={false}
-                        votingPower={0}
-                        isOwner={true}
-                        isClosed={true}
-                      />
-                    );
-                  })}
+                {issueData !== null &&
+                  issueData !== undefined &&
+                  issueData.issue_prs !== null &&
+                  issueData.issue_prs !== undefined &&
+                  issueData.issue_prs
+                    .filter((_item: any) => {
+                      return _item?.issue_pr_author !== issueData.rewardee;
+                    })
+                    .map((item: any, idx: number) => {
+                      return (
+                        <PRBox
+                          prData={item}
+                          totalPower={tokenDetails?.totalPower || 0}
+                          key={idx}
+                          voted={false}
+                          votingPower={0}
+                          isOwner={true}
+                          isClosed={true}
+                        />
+                      );
+                    })}
               </>
             )}
         </div>
