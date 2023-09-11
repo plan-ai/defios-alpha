@@ -105,6 +105,8 @@ const IssuesPage: NextPageWithLayout = () => {
   const [newIssues, setNewIssues] = useState(false);
   const [myIssues, setMyIssues] = useState(false);
   const [showClosedIssues, setShowClosedIssues] = useState(false);
+  const [filter, setFilter] = useState(false);
+  const [favorites, setFavorites] = useState(false);
 
   //redirect to page and query search
   const searchQuery = useAppSelector((state) => state.notifClick.searchQuery);
@@ -411,11 +413,11 @@ const IssuesPage: NextPageWithLayout = () => {
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
                 {
-                  'text-gray-400': !myIssues,
-                  'textShadow text-primary': myIssues,
+                  'text-gray-400': !filter,
+                  'textShadow text-primary': filter,
                 }
               )}
-              onClick={() => setMyIssues(!myIssues)}
+              onClick={() => setFilter(!filter)}
             >
               Filter
             </div>
@@ -423,11 +425,11 @@ const IssuesPage: NextPageWithLayout = () => {
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
                 {
-                  'text-gray-400': !showClosedIssues,
-                  'textShadow text-primary': showClosedIssues,
+                  'text-gray-400': !favorites,
+                  'textShadow text-primary': favorites,
                 }
               )}
-              onClick={() => setShowClosedIssues(!showClosedIssues)}
+              onClick={() => setFavorites(!favorites)}
             >
               Favorites
             </div>

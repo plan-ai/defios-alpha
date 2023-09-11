@@ -238,7 +238,28 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
 
   const getIssues = async () => {
     setIssuesLoading(true);
-    axios
+    const searchParams: any = {
+      'filter.pageno': '1',
+      'filter.pagesize': 50,
+      'search.issue_project_id': selectedProject.account,
+    };
+    const existing_issues = await axios
+      .get('https://api-v1.defi-os.com/issues', {
+        params: searchParams,
+        headers: {
+          Authorization: firebase_jwt,
+        },
+      })
+      .then((res) => {
+        const linkArr = res.data.issues.map((item: any) => {
+          return item.issue_gh_url;
+        });
+        return linkArr;
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    await axios
       .get(
         selectedProject.project_repo_link.replace(
           'https://github.com/',
@@ -254,7 +275,10 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       )
       .then((res) => {
         const filteredIssues = res.data.filter((item: any) => {
-          return !Object.keys(item).includes('pull_request');
+          return (
+            !Object.keys(item).includes('pull_request') &&
+            !existing_issues.includes(item.html_url)
+          );
         });
         setRepoIssues(filteredIssues);
       })
@@ -348,7 +372,6 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
     }
   }, [selectedProject]);
 
-  
   const handleSubmit = () => {
     if (selectedProject === null || selectedProject === undefined) {
       setNextError('select a project repository');
@@ -464,6 +487,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
           >
             {!projectsLoading &&
               ProjectSearch !== undefined &&
+              projectSearch.length > 0 &&
               ProjectSearch.map((_project: any, idx: number) => (
                 <ProjectItem
                   item={_project}
@@ -474,6 +498,16 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
                   key={idx}
                 />
               ))}
+            {!projectSearch &&
+              projectSearch !== undefined &&
+              projectSearch.length === 0 && (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                  <EmptyList />
+                  <div className="text-lg text-gray-500">
+                    No Projects Available
+                  </div>
+                </div>
+              )}
             {projectsLoading && (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <Spinner />
@@ -524,6 +558,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
             </div>
             {!issuesLoading &&
               IssuesSearch !== undefined &&
+              IssuesSearch.length > 0 &&
               IssuesSearch.map((_issue: string, idx: number) => (
                 <IssueItem
                   item={_issue}
@@ -537,6 +572,16 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
                   key={idx}
                 />
               ))}
+            {!IssuesSearch &&
+              IssuesSearch !== undefined &&
+              IssuesSearch.length === 0 && (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                  <EmptyList />
+                  <div className="text-lg text-gray-500">
+                    No Issues Available
+                  </div>
+                </div>
+              )}
             {issuesLoading && (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <Spinner />

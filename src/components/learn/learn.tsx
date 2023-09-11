@@ -378,17 +378,15 @@ const Learn: React.FC<LearnProps> = ({}) => {
                   You seem to have dropped off midway during your last web
                   development learning path.
                 </div>
-                <Button
+                <div
+                  className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                   onClick={handleResume}
-                  size="small"
-                  shape="rounded"
-                  color="info"
                 >
                   <div className="flex items-center gap-2">
                     <div>Resume Now</div>
                     <ArrowRightIcon className="h-5 w-5" />
                   </div>
-                </Button>
+                </div>
               </div>
             )}
         </div>

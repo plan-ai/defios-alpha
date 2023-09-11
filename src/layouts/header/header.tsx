@@ -91,7 +91,7 @@ function HeaderRightArea() {
         {/* <NotificationButton /> */}
         <WalletMultiButton className="gradient-border-box border-0.5 h-10 rounded-full bg-newdark 2xl:h-12" />
       </div>
-      {router.pathname === '/projects' && (
+      {/* {router.pathname === '/projects' && (
         <AnchorLink href="/incentivize-contributors">
           <Button shape="rounded" size="small" color="info">
             <div className="flex items-center gap-2">
@@ -100,7 +100,7 @@ function HeaderRightArea() {
             </div>
           </Button>
         </AnchorLink>
-      )}
+      )} */}
     </div>
   );
 }
@@ -141,8 +141,10 @@ export default function Header({ className }: { className?: string }) {
         //   : '',
         {
           '!h-[5rem]':
-            router.pathname.includes('/issues/')||
-            router.pathname.includes('/issues'),
+            router.pathname.includes('/issues/') ||
+            router.pathname.includes('/issues') ||
+            router.pathname.includes('/projects') ||
+            router.pathname.includes('/roadmaps'),
           '!hidden': router.pathname === '/learn',
         },
         className
@@ -164,7 +166,7 @@ export default function Header({ className }: { className?: string }) {
           >
             <Logo />
           </div> */}
-          {router.pathname === '/projects' && (
+          {/* {router.pathname === '/projects' && (
             <PageHeader
               title="projects"
               description={[
@@ -172,7 +174,7 @@ export default function Header({ className }: { className?: string }) {
                 'explore what other projects are working on and how communities are working.',
               ]}
             />
-          )}
+          )} */}
           {router.pathname === '/swap' && (
             <PageHeader
               title="swap"
@@ -182,7 +184,7 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {router.pathname === '/roadmaps' && (
+          {/* {router.pathname === '/roadmaps' && (
             <PageHeader
               title="roadmaps"
               description={[
@@ -190,7 +192,7 @@ export default function Header({ className }: { className?: string }) {
                 'use your staked tokens to drive the direction of your favorite projects.',
               ]}
             />
-          )}
+          )} */}
           {router.pathname === '/profile' && (
             <PageHeader
               title="profile"

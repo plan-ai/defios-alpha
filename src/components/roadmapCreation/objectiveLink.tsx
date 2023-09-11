@@ -213,19 +213,12 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               {chooseType === 'Parent' &&
                 objectiveSelected !== null &&
                 parentObjective === null && (
-                  // <Check
-                  //   className="h-6 w-6 cursor-pointer font-bold text-white"
-                  //   onClick={handleSetParent}
-                  // />
-                  <Button
-                    size="mini"
-                    color="info"
-                    className="!h-7"
-                    shape="rounded"
+                  <div
+                    className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
                     onClick={handleSetParent}
                   >
                     Confirm
-                  </Button>
+                  </div>
                 )}
             </div>
             {chooseType === 'Parent' && parentObjective === null && (
@@ -301,15 +294,12 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               </>
             )}
           {chooseType !== 'Parent' && parentObjective === null && (
-            <Button
+            <div
+              className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
               onClick={() => setChooseType('Parent')}
-              shape="rounded"
-              size="mini"
-              color="info"
-              className="mt-auto"
             >
               Choose Parent Objective
-            </Button>
+            </div>
           )}
         </div>
         <ArrowDownIcon className="h-10 w-10 text-white" />
@@ -322,15 +312,12 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               {chooseType === 'Child' &&
                 objectiveSelected !== null &&
                 childObjective === null && (
-                  <Button
-                    size="mini"
-                    color="info"
-                    className="!h-7"
-                    shape="rounded"
+                  <div
+                    className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
                     onClick={handleSetChild}
                   >
                     Confirm
-                  </Button>
+                  </div>
                 )}
             </div>
             {chooseType === 'Child' && childObjective === null && (
@@ -406,35 +393,27 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
               </>
             )}
           {chooseType !== 'Child' && childObjective === null && (
-            <Button
+            <div
+              className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
               onClick={() => setChooseType('Child')}
-              shape="rounded"
-              size="mini"
-              color="info"
-              className="mt-auto"
             >
               Choose Child Objective
-            </Button>
+            </div>
           )}
         </div>
         <div className="flex w-full flex-col">
-          <Button
+          <div
+            className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-red py-1 px-8 text-sm font-semibold text-new-red xl:text-base 3xl:text-lg"
             onClick={() => handleResetSelect()}
-            shape="rounded"
-            size="small"
-            className="w-[20%]"
           >
             Reset
-          </Button>
-          <Button
+          </div>
+          <div
+            className="bg-newDark mt-4 flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
             onClick={() => handleObjectiveLink()}
-            shape="rounded"
-            color="info"
-            className="mt-4 w-full"
-            size="small"
           >
             Link the Objectives
-          </Button>
+          </div>
         </div>
       </div>
     </div>

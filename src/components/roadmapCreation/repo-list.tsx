@@ -48,6 +48,7 @@ const RepoList: React.FC<RepoListProps> = ({
           {data?.project_name}
         </div>
       </div>
+      <div className="childDiv h-0.5 w-full"></div>
     </div>
   );
 };

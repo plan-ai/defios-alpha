@@ -20,17 +20,6 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const onClickHandler = () => {
-    const payload = {
-      searchQuery: `id:${data?._id}`,
-      setSearchQuery: true,
-      expandFirst: false,
-      pathname: '/issues',
-    };
-    dispatch(clicked(payload));
-    router.push('/issues');
-  };
-
   return (
     <div
       className={cn(
@@ -51,10 +40,13 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, setIssue, data }) => {
           </div>
         </div>
         <div className="flex items-center gap-5">
-          <ArrowRightIcon
-            className="h-6 w-6 cursor-pointer text-white"
-            onClick={onClickHandler}
-          />
+          <AnchorLink
+            onClick={(e) => e.stopPropagation()}
+            href={`/issues/${data?.issue_account}`}
+            target="_blank"
+          >
+            <ArrowRightIcon className="h-6 w-6 cursor-pointer text-white" />
+          </AnchorLink>
           <AnchorLink
             onClick={(e) => e.stopPropagation()}
             href={data?.issue_gh_url || ''}

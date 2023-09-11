@@ -2,6 +2,7 @@ import Button from '@/components/ui/button';
 import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
 import React, { Fragment, useState, useEffect, useCallback } from 'react';
+import cn from 'classnames';
 import { useRouter } from 'next/router';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
@@ -15,6 +16,7 @@ import StackedSwitch from '@/components/custom/stacked-switch';
 import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
 import Input from '@/components/ui/forms/input';
+import CreateProjectBtn from '@/components/projects/CreateProjectBtn';
 
 import _debounce from 'lodash/debounce';
 import axios from '@/lib/axiosClient';
@@ -144,6 +146,15 @@ export default function Projects() {
   const [isMine, setIsMine] = useState(false);
   const [isNative, setIsNative] = useState(false);
 
+  //new filters
+  const [newProjects, setNewProjects] = useState(false);
+  const [myProjects, setMyProjects] = useState(false);
+  const [duration, setDuration] = useState<'1D' | '7D' | '30D' | 'ALL' | null>(
+    null
+  );
+  const [filter, setFilter] = useState(false);
+  const [favorites, setFavorites] = useState(false);
+
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [fetchTrigger, setFetchTrigger] = useState(0);
 
@@ -252,41 +263,6 @@ export default function Projects() {
     setFetchTrigger(fetchTrigger + 1);
   }, [isNative, isMine, orderBy, triggerSearch, firebase_jwt]);
 
-  const getChartData = async () => {
-    const projects = projectsData;
-    const newProjects = await Promise.all(
-      await projects.map(async (item: any): Promise<any> => {
-        const priceData = await axios
-          .post('/api/chart', {
-            data_url: item?.project_token?.token_price_feed,
-          })
-          .then((res) => res.data)
-          .catch((err) => console.log(err.message));
-        const communityHealthData = await axios
-          .post('/api/chart', { data_url: item?.community_health_graph })
-          .then((res) => res.data)
-          .catch((err) => console.log(err.message));
-        const contributionsData = await axios
-          .post('/api/chart', {
-            data_url: item?.num_contributions_graph,
-          })
-          .then((res) => res.data)
-          .catch((err) => console.log(err.message));
-        item.project_token.token_price_feed = priceData;
-        item.community_health_graph = communityHealthData;
-        item.num_contributions_graph = contributionsData;
-        return item;
-      })
-    );
-    setProjectsData(newProjects);
-  };
-
-  useEffect(() => {
-    if (projectsData.length === 0) return;
-    if (typeof projectsData[0].community_health_graph !== 'string') return;
-    getChartData();
-  }, [projectsData]);
-
   useEffect(() => {
     if (projectsData.length === 0) return;
     if (searchQuery !== '' && setSearchQuery && clickPathname === '/projects') {
@@ -327,7 +303,7 @@ export default function Projects() {
           repo_github_id: project.project_github_id,
           repo_github_url: project.project_repo_link,
           token_address: project.project_token.token_spl_addr,
-          token_symbol: project.project_token.token_symbol
+          token_symbol: project.project_token.token_symbol,
         });
         setTriggerSearch(true);
       })
@@ -368,8 +344,24 @@ export default function Projects() {
   };
 
   return (
-    <div className="mx-auto w-full">
-      <div className="mb-5 flex w-full items-center justify-between">
+    <div className="mx-auto flex w-full flex-col">
+      <div className="flex h-[15rem] w-full flex-col justify-between rounded-3xl bg-[#7CAA8E] p-12">
+        <div className="w-[50%] text-2xl font-bold xl:text-3xl 3xl:text-4xl">
+          projects
+        </div>
+        <div className="w-[50%] text-base xl:text-lg 3xl:text-xl">
+          claim the tokens for your own project.
+          <br />
+          explore what other projects are working
+          <br />
+          on and how communities are working.
+        </div>
+      </div>
+      <div className="my-12">
+        <CreateProjectBtn />
+      </div>
+
+      {/* <div className="mb-5 flex w-full items-center justify-between">
         <div className="w-[50%]">
           <Search
             search={search}
@@ -394,23 +386,118 @@ export default function Projects() {
           </div>
           <SortList selectedItem={orderBy} setSelectedItem={setOrderBy} />
         </div>
+      </div> */}
+
+      <div className="flex w-full items-center gap-8">
+        <div
+          className={cn(
+            'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+            {
+              'text-gray-400': !newProjects,
+              'textShadow text-primary': newProjects,
+            }
+          )}
+          onClick={() => setNewProjects(!newProjects)}
+        >
+          New Projects
+        </div>
+        <div
+          className={cn(
+            'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+            {
+              'text-gray-400': !myProjects,
+              'textShadow text-primary': myProjects,
+            }
+          )}
+          onClick={() => setMyProjects(!myProjects)}
+        >
+          My Projects
+        </div>
+        <div className="flex gap-2 whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg">
+          <div
+            className={cn('cursor-pointer whitespace-pre ', {
+              'text-gray-400': duration !== '1D',
+              'textShadow text-primary': duration === '1D',
+            })}
+            onClick={() => setDuration(duration === '1D' ? null : '1D')}
+          >
+            1D
+          </div>
+          <div
+            className={cn('cursor-pointer whitespace-pre ', {
+              'text-gray-400': duration !== '7D',
+              'textShadow text-primary': duration === '7D',
+            })}
+            onClick={() => setDuration(duration === '7D' ? null : '7D')}
+          >
+            7D
+          </div>
+          <div
+            className={cn('cursor-pointer whitespace-pre ', {
+              'text-gray-400': duration !== '30D',
+              'textShadow text-primary': duration === '30D',
+            })}
+            onClick={() => setDuration(duration === '30D' ? null : '30D')}
+          >
+            30D
+          </div>
+          <div
+            className={cn('cursor-pointer whitespace-pre ', {
+              'text-gray-400': duration !== 'ALL',
+              'textShadow text-primary': duration === 'ALL',
+            })}
+            onClick={() => setDuration(duration === 'ALL' ? null : 'ALL')}
+          >
+            ALL
+          </div>
+        </div>
+        <Search
+          search={search}
+          setSearch={setSearch}
+          setTriggerSearch={setTriggerSearch}
+        />
+        <div
+          className={cn(
+            'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+            {
+              'text-gray-400': !filter,
+              'textShadow text-primary': filter,
+            }
+          )}
+          onClick={() => setFilter(!filter)}
+        >
+          Filter
+        </div>
+        <div
+          className={cn(
+            'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+            {
+              'text-gray-400': !favorites,
+              'textShadow text-primary': favorites,
+            }
+          )}
+          onClick={() => setFavorites(!favorites)}
+        >
+          Favorites
+        </div>
       </div>
 
-      <div className="mb-3 grid grid-cols-8 items-center gap-6 rounded-xl border-b-2 border-gray-500 bg-light-dark text-2xs uppercase shadow-card xl:text-xs 2xl:text-sm">
-        <span className="col-span-2 px-6 py-4 tracking-wider text-gray-300 xl:py-5 3xl:py-6">
-          Name
+      <div className="my-3 grid grid-cols-11 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">
+        <div></div>
+        <span className="col-span-7 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+          project
         </span>
-        <span className="py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6">
-          Open Issues
+        <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+          <div>issues</div>
+          <div className="text-xs xl:text-sm 3xl:text-base">(#,ALL)</div>
         </span>
-        <span className="py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6">
-          Repository Status
+        <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+          <div>staked</div>
+          <div className="text-xs xl:text-sm 3xl:text-base">($,ALL)</div>
         </span>
-        <span className="col-span-2 py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6 ">
-          Liquidity
-        </span>
-        <span className="col-span-2 py-4 text-center tracking-wider text-gray-300 xl:py-5 3xl:py-6 ">
-          Top Contributors
+        <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+          <div>rewarded</div>
+          <div className="text-xs xl:text-sm 3xl:text-base">($,ALL)</div>
         </span>
       </div>
 
@@ -421,8 +508,6 @@ export default function Projects() {
             initExpand={idx === 0 ? initExapand : false}
             key={idx}
             data={project}
-            last={projectsData.length === idx + 1}
-            first={idx === 0}
           >
             {/* <div className="mb-2 flex flex-row items-center justify-between text-sm">
               <div className="flex w-[30%]">
@@ -490,7 +575,49 @@ export default function Projects() {
               </div>
             </div> */}
             <div className="my-6 grid grid-cols-3 gap-3 text-sm">
-              <Button
+              <div
+                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-newDark border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                onClick={() => {
+                  if (project?.project_account) {
+                    const payload = {
+                      searchQuery: `project_account:${project?.project_account}`,
+                      setSearchQuery: true,
+                      expandFirst: false,
+                      pathname: '/roadmaps',
+                    };
+                    dispatch(clicked(payload));
+                  }
+                  router.push('/roadmaps');
+                }}
+              >
+                Explore Related Roadmaps
+              </div>
+              <div
+                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-newDark border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                onClick={() => {
+                  if (project?.project_account) {
+                    const payload = {
+                      searchQuery: `issue_project_id:${project?.project_account};state:open`,
+                      setSearchQuery: true,
+                      expandFirst: false,
+                      pathname: '/issues',
+                    };
+                    dispatch(clicked(payload));
+                  }
+                  router.push('/issues');
+                }}
+              >
+                Explore Open Issues
+              </div>
+              <div
+                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-2 px-8 text-sm font-semibold text-new-green xl:text-base 3xl:text-lg"
+                onClick={() => {
+                  claimPendingTokens(project);
+                }}
+              >
+                Claim Pending Tokens
+              </div>
+              {/* <Button
                 onClick={() => {
                   if (project?.project_account) {
                     const payload = {
@@ -540,7 +667,7 @@ export default function Projects() {
                 }}
               >
                 Claim Pending Tokens
-              </Button>
+              </Button> */}
             </div>
           </ProjectList>
         ))}

@@ -291,14 +291,12 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
           setIssue={setObjectiveIssue}
           issueData={issuesData}
         />
-        <Button
+        <div
+          className="ml-auto mt-auto w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
           onClick={() => handleObjectiveCreate()}
-          shape="rounded"
-          color="info"
-          className="mt-5"
         >
           Add Objective
-        </Button>
+        </div>
       </div>
     </div>
   );

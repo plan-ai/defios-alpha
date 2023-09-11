@@ -301,7 +301,19 @@ export function Filters() {
       <Collapse label="Outlook" initialOpen>
         <Status plan={outlook} setPlan={setOutlook} values={OutlookValues} />
       </Collapse>
-      <Button
+      <div
+        className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-red py-1 px-8 text-sm font-semibold text-new-red xl:text-base 3xl:text-lg"
+        onClick={() => {
+          setActiveObjectivesRange({
+            min: 0,
+            max: 100,
+          });
+          setOutlook('');
+        }}
+      >
+        Reset
+      </div>
+      {/* <Button
         size="small"
         shape="rounded"
         onClick={() => {
@@ -313,7 +325,7 @@ export function Filters() {
         }}
       >
         Reset
-      </Button>
+      </Button> */}
     </>
   );
 }
@@ -334,9 +346,12 @@ export default function DrawerFilters() {
         <Filters />
       </div>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
-        <Button fullWidth onClick={closeDrawer} size="small">
-          DONE
-        </Button>
+        <div
+          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+          onClick={closeDrawer}
+        >
+          Done
+        </div>
       </div>
     </div>
   );

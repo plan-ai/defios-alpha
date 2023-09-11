@@ -270,7 +270,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                   />
                 </div>
               )}
-              <div className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-600 p-2 xl:p-3 3xl:p-4 text-base xl:text-lg 3xl:text-xl">
+              <div className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-gray-600 p-2 text-base xl:p-3 xl:text-lg 3xl:p-4 3xl:text-xl">
                 <div className="flex flex-col items-center justify-center">
                   <div>Select an Objective</div>
                   <div>to View Details</div>
@@ -280,22 +280,18 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     <>
                       <div>OR</div>
                       <div className="flex items-center justify-between gap-2">
-                        <Button
+                        <div
+                          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 whitespace-pre px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                           onClick={() => setCreateObjective(true)}
-                          shape="rounded"
-                          size="medium"
-                          color="info"
                         >
                           Create Objective
-                        </Button>
-                        <Button
+                        </div>
+                        <div
+                          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 whitespace-pre px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                           onClick={() => setLinkObjective(true)}
-                          shape="rounded"
-                          size="medium"
-                          color="info"
                         >
                           Link Objectives
-                        </Button>
+                        </div>
                       </div>
                     </>
                   )}

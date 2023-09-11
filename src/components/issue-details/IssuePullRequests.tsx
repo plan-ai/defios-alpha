@@ -18,6 +18,7 @@ import AnchorLink from '../ui/links/anchor-link';
 //icons
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { CheckIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+import EmptyList from '@/components/icons/EmptyList';
 
 //contract functions
 import {
@@ -379,7 +380,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
         Accept: 'application/vnd.github.v3+json',
       },
     };
-    //fetch timeline 
+    //fetch timeline
     const timeline = await axios(config)
       .then((res) => res.data)
       .catch((err) => console.log(err));
@@ -456,7 +457,6 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             </div>
           </div>
           <div className="my-8 flex flex-col items-center gap-2 text-center text-base xl:text-lg 3xl:text-xl">
-
             {/* no winner and not submitted */}
             {!PRSubmitted &&
               (issueData.rewardee === undefined ||
@@ -631,7 +631,6 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
       )}
       {section === 2 && (
         <div className="mx-32 flex w-full flex-col items-center gap-8">
-
           {/* issue not solved */}
           {(issueData.rewardee === undefined ||
             issueData.rewardee === '' ||
@@ -640,14 +639,12 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
               <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
                 Vote for a PR
               </div>
-              {(issueData.rewardee === undefined ||
-                issueData.rewardee === '' ||
-                issueData.rewardee === null) &&
+              {issueData.issue_prs.length > 0 &&
                 issueData?.issue_prs.map((item: any, idx: number) => {
                   return (
                     <PRBox
                       prData={item}
-                      totalPower={tokenDetails?.totalPower||0}
+                      totalPower={tokenDetails?.totalPower || 0}
                       key={idx}
                       voted={tokenDetails?.voted || false}
                       votingPower={tokenDetails?.votingPower || 0}
@@ -656,6 +653,14 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                     />
                   );
                 })}
+              {issueData.issue_prs.length == 0 && (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                  <EmptyList />
+                  <div className="text-lg text-gray-500">
+                    No Pull Requests Available
+                  </div>
+                </div>
+              )}
             </>
           )}
           {/* issue solved  */}
@@ -675,7 +680,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                     return (
                       <PRBox
                         prData={item}
-                        totalPower={tokenDetails?.totalPower||0}
+                        totalPower={tokenDetails?.totalPower || 0}
                         key={idx}
                         voted={false}
                         votingPower={0}
@@ -698,7 +703,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                     return (
                       <PRBox
                         prData={item}
-                        totalPower={tokenDetails?.totalPower||0}
+                        totalPower={tokenDetails?.totalPower || 0}
                         key={idx}
                         voted={false}
                         votingPower={0}

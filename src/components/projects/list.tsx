@@ -11,16 +11,12 @@ import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 interface ProjectListTypes {
   data: any;
   initExpand?: boolean;
-  last?: boolean;
-  first?: boolean;
 }
 
 export default function ProjectList({
   data,
   initExpand,
   children,
-  last,
-  first,
 }: React.PropsWithChildren<ProjectListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
 
@@ -40,75 +36,48 @@ export default function ProjectList({
   return (
     <div
       className={cn(
-        'parentDiv relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl',
-        {
-          'rounded-b-xl': last,
-          'rounded-t-xl': first,
-        }
+        'parentDiv relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl'
       )}
     >
       <div
-        className="relative my-4 grid h-auto cursor-pointer grid-cols-8 items-start items-center gap-6 text-2xs xl:text-xs 2xl:text-sm"
+        className="relative my-4 grid h-auto cursor-pointer grid-cols-11 items-start items-center gap-6 text-xs xl:text-sm 2xl:text-base"
         onClick={() => setIsExpand(!isExpand)}
       >
-        <div className="col-span-2 px-6  font-medium tracking-wider text-white">
-          {data?.project_name}
+        {/* <div></div> */}
+        <div className="col-span-8 flex items-center gap-5 px-6 font-medium tracking-wider text-white">
+          <div className="relative h-10 w-10 xl:h-12 xl:w-12 2xl:h-16 2xl:w-16">
+            <Image
+              src={
+                data?.project_token?.token_new === true
+                  ? data?.project_token?.token_image_url?.replace(
+                      'https://ipfs.io',
+                      'https://defi-os.infura-ipfs.io'
+                    ) || ''
+                  : data?.project_token?.token_image_url || ''
+              }
+              alt={data?.project_token?.token_symbol || ''}
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="font-bold">{data?.project_name}</div>
+            <div className="text-2xs xl:text-xs 2xl:text-sm">
+              {data?.project_token?.token_name}{' '}
+              {data?.project_token?.token_name
+                ? `(${data?.project_token?.token_name})`
+                : ''}
+            </div>
+          </div>
         </div>
-        <div className="text-center  font-medium uppercase tracking-wider text-white">
+        <div className="text-center font-semibold uppercase tracking-wider text-new-red">
           {data?.num_open_issues}
         </div>
-        <div className="px-6 font-medium  uppercase tracking-wider text-white">
-          <SecurityStatus noIcon={true} security={data?.project_status} />
+        <div className="text-center font-semibold uppercase tracking-wider text-white">
+          {Math.round((data?.coins_staked * 100) / 10 ** tokenDecimals) / 100}
         </div>
-        <div className="col-span-2 px-6  font-medium uppercase tracking-wider text-white">
-          <div className="flex items-center">
-            <div className="relative h-9 w-9 xl:h-10 xl:w-10 2xl:h-12 2xl:w-12">
-              <Image
-                src={
-                  data?.project_token?.token_new === true
-                    ? data?.project_token?.token_image_url?.replace(
-                        'https://ipfs.io',
-                        'https://defi-os.infura-ipfs.io'
-                      ) || ''
-                    : data?.project_token?.token_image_url || ''
-                }
-                alt={data?.project_token?.token_symbol || ''}
-                fill
-                className="rounded-full object-cover"
-              />
-            </div>
-
-            <div className="ml-3 text-3xs 2xl:text-xs 3xl:text-sm">
-              <div className="mb-1 flex items-center justify-start ">
-                <div className="mr-2 text-gray-500">#Staked</div>
-                <div>
-                  {Math.round(
-                    (data?.coins_staked * 100) / 10 ** tokenDecimals
-                  ) / 100}{' '}
-                  {data?.project_token?.token_symbol}
-                </div>
-              </div>
-              <div className="flex items-center justify-start ">
-                <div className="mr-2 text-gray-500">#Rewarded</div>
-                <div>
-                  {Math.round(
-                    (data?.coins_rewarded * 100) / 10 ** tokenDecimals
-                  ) / 100}{' '}
-                  {data?.project_token?.token_symbol}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="col-span-2 px-6 text-3xs font-medium tracking-wider text-white 2xl:text-xs 3xl:text-sm">
-          <div>
-            {data.top_builder_name}
-            <span className="text-gray-500">(Builder🛠️)</span>
-          </div>
-          <div>
-            {data.top_supporter_name}
-            <span className="text-gray-500">(Supporter💰)</span>
-          </div>
+        <div className="text-center font-semibold uppercase tracking-wider text-new-green">
+          {Math.round((data?.coins_rewarded * 100) / 10 ** tokenDecimals) / 100}
         </div>
       </div>
       <AnimatePresence initial={false}>
@@ -130,7 +99,7 @@ export default function ProjectList({
           </motion.div>
         )}
       </AnimatePresence>
-      {!last && <div className="childDiv mx-6 border border-gray-700"></div>}
+      <div className="childDiv h-0.5 w-full"></div>
     </div>
   );
 }

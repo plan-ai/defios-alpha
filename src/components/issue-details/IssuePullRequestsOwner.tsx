@@ -17,6 +17,7 @@ import { Transition } from '@/components/ui/transition';
 //icons
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { CheckIcon } from '@heroicons/react/24/solid';
+import EmptyList from '@/components/icons/EmptyList';
 
 //contract functions , utils
 import { acceptPr } from '@/lib/helpers/contractInteract';
@@ -369,20 +370,29 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
               <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
                 Merge a PR
               </div>
-              {issueData?.issue_prs.map((item: any, idx: number) => {
-                return (
-                  <PRBox
-                    prData={item}
-                    totalPower={tokenDetails?.totalPower || 0}
-                    key={idx}
-                    voted={false}
-                    votingPower={0}
-                    isOwner={true}
-                    mergeFunc={handleAcceptPR}
-                    isMerging={isMerging}
-                  />
-                );
-              })}
+              {issueData.issue_prs.length > 0 &&
+                issueData?.issue_prs.map((item: any, idx: number) => {
+                  return (
+                    <PRBox
+                      prData={item}
+                      totalPower={tokenDetails?.totalPower || 0}
+                      key={idx}
+                      voted={false}
+                      votingPower={0}
+                      isOwner={true}
+                      mergeFunc={handleAcceptPR}
+                      isMerging={isMerging}
+                    />
+                  );
+                })}
+              {issueData.issue_prs.length == 0 && (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                  <EmptyList />
+                  <div className="text-lg text-gray-500">
+                    No Pull Requests Available
+                  </div>
+                </div>
+              )}
             </>
           )}
 

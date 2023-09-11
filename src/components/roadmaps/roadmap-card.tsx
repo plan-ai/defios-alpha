@@ -12,6 +12,7 @@ import RoadmapDetails from '@/components/roadmaps/roadmap-details';
 import ListCard from '../ui/list-card';
 import cn from 'classnames';
 import Link from 'next/link';
+import CreateRoadmapBtn from '@/components/roadmaps/CreateRoadmapBtn';
 
 import EmptyList from '@/components/icons/EmptyList';
 import { ClockIcon } from '@/components/icons/clock';
@@ -131,11 +132,6 @@ export default function RoadmapCard({
             <div className="text-center text-sm text-gray-500 xl:text-base 3xl:text-lg">
               Stay Tuned for Roadmaps!
             </div>
-            <Link href="/roadmaps">
-              <Button shape="rounded" size="small" color="info" className="mt-5">
-                create a roadmap
-              </Button>
-            </Link>
           </div>
         </div>
       )}

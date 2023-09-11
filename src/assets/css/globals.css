@@ -150,12 +150,12 @@ input::-webkit-inner-spin-button {
 }
 
 .parentDiv:hover .childDiv{
-  border: 1px double transparent;
-  background-image: linear-gradient(theme('colors.body'), theme('colors.body')),
-    linear-gradient(to right, #90aafa, #2a4b6b, #90aafa);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #92ABFB 32.83%, rgba(146, 171, 251, 0.941) 81.68%, rgba(146, 171, 251, 0.00) 100%);
 } 
+.parentDiv .childDiv{
+  background: linear-gradient(90deg, rgba(146, 171, 251, 0.00) 0%, #595959 32.83%, #595959f0 81.68%, rgba(146, 171, 251, 0.00) 100%);  
+}
+
 
 .homepageGradient {
   background-image: url('../images/hero.png');

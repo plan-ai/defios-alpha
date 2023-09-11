@@ -29,6 +29,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import ErrorDarkImage from '@/assets/images/404-dark.svg';
 import Image from 'next/image';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import CreateRoadmapBtn from '@/components/roadmaps/CreateRoadmapBtn';
 
 interface SearchProps {
   search: string;
@@ -202,114 +203,122 @@ export default function Roadmap() {
   }, [triggerSearch, searchTrigger, refetchPart, firebase_jwt]);
 
   return (
-    <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
-      <div className="hidden border-r border-dashed border-gray-700 pr-8 2xl:block">
-        <Filters />
+    <div className="flex w-full flex-col">
+      <div className="flex h-[15rem] w-full flex-col justify-between rounded-3xl bg-[#7CAA8E] p-12">
+        <div className="w-[50%] text-2xl font-bold xl:text-3xl 3xl:text-4xl">
+          roadmaps
+        </div>
+        <div className="w-[50%] text-base xl:text-lg 3xl:text-xl">
+          plan how projects pan out as a community.
+          <br />
+          use your staked tokens to drive the direction
+          <br />
+          of your favorite projects.
+        </div>
       </div>
+      <div className="my-12">
+        <CreateRoadmapBtn onClick={() => setCreateRoadmap(true)} />
+      </div>
+      <div className="grid 2xl:grid-cols-[280px_minmax(auto,_1fr)]">
+        <div className="hidden border-r border-dashed border-gray-700 pr-8 2xl:block">
+          <Filters />
+        </div>
 
-      <div className="2xl:pl-8">
-        <div className="relative z-10 mb-6 flex items-center justify-between">
-          <span className="w-[70%] text-xs font-medium text-white sm:text-sm">
-            <Search
-              search={search}
-              setSearch={setSearch}
-              setTriggerSearch={setTriggerSearch}
-            />
-          </span>
+        <div className="2xl:pl-8">
+          <div className="relative z-10 mb-6 flex items-center justify-between">
+            <span className="w-[80%] text-xs font-medium text-white sm:text-sm">
+              <Search
+                search={search}
+                setSearch={setSearch}
+                setTriggerSearch={setTriggerSearch}
+              />
+            </span>
 
-          <div className="flex gap-3 4xl:gap-4">
-            <div className="flex items-center justify-center">
-              <Button
-                onClick={() => setCreateRoadmap(true)}
-                shape="rounded"
-                color="info"
-              >
-                <div className="flex flex-row items-center justify-center gap-2">
-                  <PlusCircle />
-                  Create New Roadmap
-                </div>
-              </Button>
-              {/* <span className="relative z-[2] ml-2 rounded-full bg-gray-900 px-2 py-0.5 normal-case text-red-700">
-                  Coming Soon
-                </span> */}
-            </div>
-            <div className="hidden 4xl:block">
-              <GridSwitcher />
-            </div>
-            <div className="block 2xl:hidden">
-              <Button
-                shape="rounded"
-                size="small"
-                variant="ghost"
-                color="gray"
-                onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
-                className="!h-11 !p-3 hover:!translate-y-0 hover:!shadow-none focus:!translate-y-0 focus:!shadow-none"
-              >
-                <OptionIcon className="relative h-auto w-[18px]" />
-              </Button>
+            <div className="flex gap-3 4xl:gap-4">
+              <div className="hidden 4xl:block">
+                <GridSwitcher />
+              </div>
+              <div className="block 2xl:hidden">
+                <Button
+                  shape="rounded"
+                  size="small"
+                  variant="ghost"
+                  color="gray"
+                  onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
+                  className="!h-11 !p-3 hover:!translate-y-0 hover:!shadow-none focus:!translate-y-0 focus:!shadow-none"
+                >
+                  <OptionIcon className="relative h-auto w-[18px]" />
+                </Button>
+              </div>
             </div>
           </div>
+          <Feeds isLoading={isLoading} data={roadmapsData} />
         </div>
-        <Feeds isLoading={isLoading} data={roadmapsData} />
-      </div>
 
-      <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
-        <Button onClick={() => openDrawer('DRAWER_SEARCH', 'right')} fullWidth>
-          Filters
-        </Button>
-      </div>
-      <AnimatePresence>
-        {createRoadmap && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
+        <div className="fixed bottom-6 left-1/2 z-10 w-full -translate-x-1/2 px-9 sm:hidden">
+          <Button
+            onClick={() => openDrawer('DRAWER_SEARCH', 'right')}
+            fullWidth
           >
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-full align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
+            Filters
+          </Button>
+        </div>
+        <AnimatePresence>
+          {createRoadmap && (
             <motion.div
-              initial={{ scale: 1.05 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 1.05 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              ref={modalContainerRef}
-              className="inline-block text-left align-middle"
+              className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-gray-700 bg-opacity-60 p-4 text-center backdrop-blur xs:p-5"
             >
-              <div className="relative h-[90vh] w-[80vw] rounded-2xl bg-dark">
-                <RoadmapCreate existingRoadmaps={existingRoadmaps} setCreateRoadmap={setCreateRoadmap} />
-                {(userMappingIsLoading ||
-                  userMappingIsError ||
-                  wallet.publicKey === null) && (
-                  <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
-                    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl">
-                      <Image
-                        src={ErrorDarkImage}
-                        className="w-80"
-                        alt="404 Error"
-                      />
-                      <div>
-                        {wallet.publicKey === null
-                          ? 'Connect Wallet to Continue'
-                          : userMappingIsLoading
-                          ? 'Loading...'
-                          : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+              {/* This element is to trick the browser into centering the modal contents. */}
+              <span
+                className="inline-block h-full align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <motion.div
+                initial={{ scale: 1.05 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                ref={modalContainerRef}
+                className="inline-block text-left align-middle"
+              >
+                <div className="relative h-[90vh] w-[80vw] rounded-2xl bg-dark">
+                  <RoadmapCreate
+                    existingRoadmaps={existingRoadmaps}
+                    setCreateRoadmap={setCreateRoadmap}
+                  />
+                  {(userMappingIsLoading ||
+                    userMappingIsError ||
+                    wallet.publicKey === null) && (
+                    <div className="absolute top-0 left-0 z-[100] flex h-full w-full items-center justify-center backdrop-blur-sm">
+                      <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-white bg-dark p-4 text-center text-base shadow-2xl xl:gap-4 xl:p-6 xl:text-lg 3xl:gap-5 3xl:p-8 3xl:text-xl">
+                        <Image
+                          src={ErrorDarkImage}
+                          className="w-80"
+                          alt="404 Error"
+                        />
+                        <div>
+                          {wallet.publicKey === null
+                            ? 'Connect Wallet to Continue'
+                            : userMappingIsLoading
+                            ? 'Loading...'
+                            : 'Connected to Authorized Wallet which is mapped to your Github on DefiOS'}
+                        </div>
+                        <WalletMultiButton className="rounded-full bg-new-blue" />
                       </div>
-                      <WalletMultiButton className="rounded-full bg-new-blue" />
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

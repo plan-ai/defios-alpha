@@ -11,6 +11,7 @@ import { InfoCircle } from '@/components/icons/info-circle';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import EmptyList from '@/components/icons/EmptyList';
 import Spinner from '@/components/custom/spinner';
+import CreateProjectBtn from '@/components/projects/CreateProjectBtn';
 
 import { useRouter } from 'next/router';
 import _debounce from 'lodash/debounce';
@@ -343,8 +344,8 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
 
   return (
     <div className="flex h-full w-full justify-between p-10">
-      <div className="flex w-[48%] flex-col gap-4">
-        <div className="mb-6 text-3xl font-bold text-primary xl:text-4xl 3xl:text-5xl">
+      <div className="flex w-[48%] flex-col gap-8">
+        <div className="mb-2 text-3xl font-bold text-primary xl:text-4xl 3xl:text-5xl">
           Create Roadmap
         </div>
         <Input
@@ -374,14 +375,12 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
             setImageFile(file);
           }}
         />
-        <Button
+        <div
+          className="ml-auto mt-auto w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
           onClick={() => handleRoadmapCreate()}
-          shape="rounded"
-          color="info"
-          className="mt-5"
         >
           Create Roadmap
-        </Button>
+        </div>
       </div>
       <div className="flex h-full w-[48%] flex-col">
         <Search
@@ -389,7 +388,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
           setSearch={setSearch}
           setTriggerSearch={setTriggerSearch}
         />
-        <div className="h-[90%] w-full overflow-y-scroll pr-5">
+        <div className="h-[90%] w-full overflow-y-auto pr-5">
           {!isLoading &&
             projectsData.length !== 0 &&
             projectsData.map((project: any, idx: number) => (
@@ -406,17 +405,9 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
               <div className="mx-10 text-center text-lg text-gray-500">
                 No projects found that match your filter and search settings
               </div>
-              <Button
-                onClick={() => router.push('incentivize-contributors')}
-                shape="rounded"
-                size="small"
-                color="info"
-              >
-                <div className="flex items-center gap-2">
-                  <PlusCircle />
-                  <div>Create New Project</div>
-                </div>
-              </Button>
+              <div className="mt-12">
+                <CreateProjectBtn />
+              </div>
             </div>
           )}
           {isLoading && (

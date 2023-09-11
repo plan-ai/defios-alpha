@@ -169,9 +169,9 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
           </div>
         </div>
         <AnchorLink href={item?.html_url} target="_blank" className="w-full">
-          <Button fullWidth size="small" shape="rounded" color="info">
+          <div className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg">
             Check out the Project
-          </Button>
+          </div>
         </AnchorLink>
       </div>
     </div>
