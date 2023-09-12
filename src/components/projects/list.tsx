@@ -64,8 +64,8 @@ export default function ProjectList({
             <div className="font-bold">{data?.project_name}</div>
             <div className="text-2xs xl:text-xs 2xl:text-sm">
               {data?.project_token?.token_name}{' '}
-              {data?.project_token?.token_name
-                ? `(${data?.project_token?.token_name})`
+              {data?.project_token?.token_symbol
+                ? `(${data?.project_token?.token_symbol})`
                 : ''}
             </div>
           </div>
