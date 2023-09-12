@@ -151,8 +151,9 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
     if (
       issueData !== null &&
       issueData !== undefined &&
-      issueData.issue_gh_url !== null &&
-      issueData.issue_gh_url !== undefined
+      issueData.issue_prs !== null &&
+      issueData.issue_prs !== undefined &&
+      issueData.issue_prs.length > 0
     ) {
       setPRSort([
         {
@@ -321,7 +322,13 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                     handleSelectedMerge();
                   }
                 }}
-                className="z-[40] w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
+                className={cn(
+                  'z-[40] w-fit rounded-full py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg',
+                  {
+                    'cursor-pointer bg-primary': PRSort.length > 1,
+                    'cursor-not-allowed bg-gray-600': PRSort.length <= 1,
+                  }
+                )}
               >
                 {isMerging ? (
                   <Spinner

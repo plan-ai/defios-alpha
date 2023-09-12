@@ -143,7 +143,6 @@ export default function Projects() {
   const githubInfo = useAppSelector((state) => state.userInfo.githubInfo);
   const [search, setSearch] = useState('');
   const [orderBy, setOrderBy] = useState<any>(sort[0]);
-  const [isMine, setIsMine] = useState(false);
   const [isNative, setIsNative] = useState(false);
 
   //new filters
@@ -187,7 +186,7 @@ export default function Projects() {
     if (isNative) {
       searchParams['search.is_token_native'] = true;
     }
-    if (isMine) {
+    if (myProjects) {
       searchParams['filter.mine'] = true;
     }
     if (search !== '') {
@@ -261,7 +260,7 @@ export default function Projects() {
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setFetchTrigger(fetchTrigger + 1);
-  }, [isNative, isMine, orderBy, triggerSearch, firebase_jwt]);
+  }, [isNative, myProjects, orderBy, triggerSearch, firebase_jwt]);
 
   useEffect(() => {
     if (projectsData.length === 0) return;
@@ -360,33 +359,6 @@ export default function Projects() {
       <div className="my-12">
         <CreateProjectBtn />
       </div>
-
-      {/* <div className="mb-5 flex w-full items-center justify-between">
-        <div className="w-[50%]">
-          <Search
-            search={search}
-            setSearch={setSearch}
-            setTriggerSearch={setTriggerSearch}
-          />
-        </div>
-        <div className="flex w-[45%] items-center justify-between gap-3">
-          <div className="w-full">
-            <StackedSwitch
-              isStacked={isMine}
-              setIsStacked={setIsMine}
-              label="My Projects"
-            />
-          </div>
-          <div className="w-full">
-            <StackedSwitch
-              isStacked={isNative}
-              setIsStacked={setIsNative}
-              label="Native Tokens Only"
-            />
-          </div>
-          <SortList selectedItem={orderBy} setSelectedItem={setOrderBy} />
-        </div>
-      </div> */}
 
       <div className="flex w-full items-center gap-8">
         <div
@@ -576,7 +548,7 @@ export default function Projects() {
             </div> */}
             <div className="my-6 grid grid-cols-3 gap-3 text-sm">
               <div
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-newDark border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                 onClick={() => {
                   if (project?.project_account) {
                     const payload = {
@@ -593,7 +565,7 @@ export default function Projects() {
                 Explore Related Roadmaps
               </div>
               <div
-                className="flex w-full cursor-pointer items-center justify-center rounded-full bg-newDark border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                 onClick={() => {
                   if (project?.project_account) {
                     const payload = {

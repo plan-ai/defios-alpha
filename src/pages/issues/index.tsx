@@ -128,7 +128,6 @@ const IssuesPage: NextPageWithLayout = () => {
   const [issuesData, setIssuesData] = useState<any>([]);
 
   //filters
-  const [isMine, setIsMine] = useState(false);
   const [stakeOrder, setStakeOrder] = useState('');
 
   //pagination with intersection observer for infinite scroll
@@ -151,8 +150,11 @@ const IssuesPage: NextPageWithLayout = () => {
         stakeOrder === '-' ? '-' : ''
       }issue_stake_amount`;
     }
-    if (isMine) {
+    if (myIssues) {
       searchParams['filter.mine'] = true;
+    }
+    if (showClosedIssues) {
+      searchParams['search.issue_state'] = 'closed';
     }
     //search multiple
     if (search !== '') {
@@ -264,7 +266,7 @@ const IssuesPage: NextPageWithLayout = () => {
     // setPage(1);
     // setDonePagination(false);
     setFetchTrigger(fetchTrigger + 1);
-  }, [isMine, stakeOrder, triggerSearch, firebase_jwt]);
+  }, [myIssues, stakeOrder, showClosedIssues, triggerSearch, firebase_jwt]);
 
   //redux redirected searches
   useEffect(() => {

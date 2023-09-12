@@ -294,6 +294,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
           reward_amount: issueData?.issue_stake_amount,
           rewardee: issueData?.rewardee,
         });
+        setRefetch((state) => state + 1);
       })
       .catch((err) => {
         dispatch(
@@ -608,11 +609,19 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             issueData.rewardee === wallet.publicKey?.toString() && (
               <div className="flex flex-col items-center justify-center gap-10">
                 <div
-                  onClick={handleClaim}
+                  onClick={() => {
+                    if (issueData?.reward_claimed !== true) {
+                      handleClaim();
+                    }
+                  }}
                   className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-base font-semibold text-new-green xl:text-lg 3xl:text-xl"
                 >
                   <BanknotesIcon className="h-7 w-7" />
-                  <div>Claim Reward</div>
+                  <div>
+                    {issueData?.reward_claimed === true
+                      ? 'Reward Claimed'
+                      : 'Claim Reward'}
+                  </div>
                 </div>
                 <AnchorLink
                   href={
@@ -690,6 +699,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                         claimable={
                           item?.issue_pr_author === wallet.publicKey?.toString()
                         }
+                        claimed={issueData?.reward_claimed}
                         claimFunc={handleClaim}
                       />
                     );

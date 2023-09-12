@@ -30,6 +30,7 @@ interface PRBoxProps {
   claimable?: boolean;
   claimFunc?: any;
   votingFunc?: any;
+  claimed?: boolean;
 }
 
 export const PRBox: React.FC<PRBoxProps> = ({
@@ -45,6 +46,7 @@ export const PRBox: React.FC<PRBoxProps> = ({
   claimable,
   claimFunc,
   votingFunc,
+  claimed,
 }) => {
   const wallet = useWallet();
   return (
@@ -139,7 +141,7 @@ export const PRBox: React.FC<PRBoxProps> = ({
       )}
 
       {/* you are winner */}
-      {claimable === true && (
+      {claimable === true && !(claimed === true) && (
         <div
           onClick={claimFunc}
           className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
@@ -149,6 +151,12 @@ export const PRBox: React.FC<PRBoxProps> = ({
         </div>
       )}
 
+      {claimable === true && claimed === true && (
+        <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
+          <BanknotesIcon className="h-5 w-5" />
+          <div>Claimed</div>
+        </div>
+      )}
 
       {/* for owners */}
       {isOwner && !(isClosed === true) && (
