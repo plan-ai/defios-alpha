@@ -487,7 +487,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
           >
             {!projectsLoading &&
               ProjectSearch !== undefined &&
-              projectSearch.length > 0 &&
+              ProjectSearch.length > 0 &&
               ProjectSearch.map((_project: any, idx: number) => (
                 <ProjectItem
                   item={_project}
@@ -498,9 +498,9 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
                   key={idx}
                 />
               ))}
-            {!projectSearch &&
-              projectSearch !== undefined &&
-              projectSearch.length === 0 && (
+            {!ProjectSearch &&
+              ProjectSearch !== undefined &&
+              ProjectSearch.length === 0 && (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                   <EmptyList />
                   <div className="text-lg text-gray-500">
