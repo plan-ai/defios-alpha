@@ -89,7 +89,7 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
   useEffect(() => {
     if (auth_cred === null) return;
     axios
-      .get('https://api-v1.defi-os.com/swap/list', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/swap/list`, {
         headers: {
           Authorization: auth_cred,
         },

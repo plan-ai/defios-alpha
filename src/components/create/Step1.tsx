@@ -205,7 +205,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
   const createExistingArray = async () => {
     setIsLoading(true);
     return await axios
-      .get('https://api-v1.defi-os.com/projects/minified', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects/minified`, {
         headers: {
           Authorization: firebase_jwt,
         },
@@ -281,7 +281,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       })
       .catch(() => {
         axios
-          .get('https://api-v1.defi-os.com/tokens', {
+          .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
             headers: {
               Authorization: firebase_jwt,
             },

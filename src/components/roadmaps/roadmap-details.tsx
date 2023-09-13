@@ -89,7 +89,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
       'search.project_account': projectAccount,
     };
     axios
-      .get('https://api-v1.defi-os.com/projects', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,
@@ -116,7 +116,7 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
     if (roadmapAccount.length === 0) return;
     setIsLoading(true);
     axios
-      .get('https://api-v1.defi-os.com/roadmaps/objectives', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/roadmaps/objectives`, {
         headers: {
           Authorization: firebase_jwt,
         },

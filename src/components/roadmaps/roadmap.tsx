@@ -159,7 +159,7 @@ export default function Roadmap() {
     }
 
     axios
-      .get('https://api-v1.defi-os.com/roadmaps', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/roadmaps`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,

@@ -225,7 +225,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
       }
     }
     axios
-      .get('https://api-v1.defi-os.com/projects', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,

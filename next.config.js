@@ -17,6 +17,7 @@ const nextConfig = withPWA({
     NEXT_PUBLIC_MIXPANEL_PROJECT_KEY:
       process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_KEY,
     NEXT_PUBLIC_MIXPANEL_HOST: process.env.NEXT_PUBLIC_MIXPANEL_HOST,
+    NEXT_PUBLIC_DEFIOS_SERVER: process.env.NEXT_PUBLIC_DEFIOS_SERVER,
   },
   typescript: {
     ignoreBuildErrors: true,

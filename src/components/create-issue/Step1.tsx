@@ -219,7 +219,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
     setProjectsLoading(true);
     axios
       .get(
-        'https://api-v1.defi-os.com/projects?filter.pageno=1&filter.pagesize=50',
+        `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects?filter.pageno=1&filter.pagesize=50`,
         {
           headers: {
             Authorization: firebase_jwt,
@@ -244,7 +244,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       'search.issue_project_id': selectedProject.account,
     };
     const existing_issues = await axios
-      .get('https://api-v1.defi-os.com/issues', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/issues`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,

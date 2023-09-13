@@ -226,7 +226,7 @@ const IssuesPage: NextPageWithLayout = () => {
       }
     }
     axios
-      .get('https://api-v1.defi-os.com/issues', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/issues`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,

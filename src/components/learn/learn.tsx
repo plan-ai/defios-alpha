@@ -154,7 +154,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://api-v1.defi-os.com/learn/search',
+      url: `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/learn/search`,
       headers: {
         Authorization: firebase_jwt,
         'Content-Type': 'application/json',
@@ -210,7 +210,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'https://api-v1.defi-os.com/learn/search/cached',
+      url: `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/learn/search/cached`,
       headers: {
         Authorization: firebase_jwt,
         'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
 
   const getSpotlight = async () => {
     axios
-      .get('https://api-v1.defi-os.com/daily/featured?daily_featured=repo', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/daily/featured?daily_featured=repo`, {
         headers: {
           Authorization: firebase_jwt,
           'Content-Type': 'application/json',

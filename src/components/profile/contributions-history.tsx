@@ -21,7 +21,7 @@ const ContributionsHistory: React.FC<ContributionsHistoryProps> = ({}) => {
     if (firebase_jwt === null || firebase_jwt === '') return;
     setIsLoading(true);
     axios
-      .get('https://api-v1.defi-os.com/profile/contributions', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/profile/contributions`, {
         headers: {
           Authorization: firebase_jwt,
         },

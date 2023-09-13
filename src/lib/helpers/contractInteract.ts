@@ -520,7 +520,9 @@ export const createRepositoryImported = (
           let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://api-v1.defi-os.com/projects?project_key=${repositoryAccount.toString()}`,
+            url: `${
+              process.env.NEXT_PUBLIC_DEFIOS_SERVER
+            }m/projects?project_key=${repositoryAccount.toString()}`,
             headers: {
               Authorization: firebase_jwt,
               'Content-Type': 'application/json',
@@ -623,7 +625,7 @@ export const createRepositoryImportedIssueStake = (
       let tokenMetadata = await fetchTokenMetadata(tokenAddress);
       if (!tokenMetadata.decimals) {
         tokenMetadata = await axios
-          .get('https://api-v1.defi-os.com/tokens', {
+          .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
             headers: {
               Authorization: firebase_jwt,
             },
@@ -741,7 +743,9 @@ export const createRepositoryImportedIssueStake = (
           let config = {
             method: 'post',
             maxBodyLength: Infinity,
-            url: `https://api-v1.defi-os.com/projects?project_key=${repositoryAccount.toString()}`,
+            url: `${
+              process.env.NEXT_PUBLIC_DEFIOS_SERVER
+            }/projects?project_key=${repositoryAccount.toString()}`,
             headers: {
               Authorization: firebase_jwt,
               'Content-Type': 'application/json',
@@ -864,7 +868,7 @@ export const createIssueStake = (
     let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
     if (!tokenMetadata.decimals) {
       tokenMetadata = await axios
-        .get('https://api-v1.defi-os.com/tokens', {
+        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
           headers: {
             Authorization: firebase_jwt,
           },
@@ -1001,7 +1005,7 @@ export const stakeIssueTokens = (
     let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
     if (!tokenMetadata.decimals) {
       tokenMetadata = await axios
-        .get('https://api-v1.defi-os.com/tokens', {
+        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
           headers: {
             Authorization: firebase_jwt,
           },
@@ -1141,7 +1145,7 @@ export const stakeIssue = (
     let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
     if (!tokenMetadata.decimals) {
       tokenMetadata = await axios
-        .get('https://api-v1.defi-os.com/tokens', {
+        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
           headers: {
             Authorization: firebase_jwt,
           },

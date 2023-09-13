@@ -13,7 +13,7 @@ export default async function handler(
   const { github_id, firebase_uid, user_gh_access_token, pub_key } = req.body;
 
   await axios
-    .post('https://api-v1.defi-os.com/user/setup', {
+    .post(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/user/setup`, {
       github_id,
       firebase_uid,
       user_gh_access_token,

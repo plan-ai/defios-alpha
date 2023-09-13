@@ -141,7 +141,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
   const getIssueDetails = async () => {
     setIsLoading(true);
     axios
-      .get('https://api-v1.defi-os.com/issues', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/issues`, {
         params: {
           'filter.pagesize': 1,
           'filter.pageno': 1,

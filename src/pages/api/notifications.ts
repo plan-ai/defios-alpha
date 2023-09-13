@@ -13,7 +13,7 @@ export default async function handler(
   const { firebase_jwt } = req.headers;
 
   await axios
-    .get('https://api-v1.defi-os.com/notifications', {
+    .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/notifications`, {
       headers: {
         Authorization: firebase_jwt,
       },

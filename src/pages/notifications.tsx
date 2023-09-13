@@ -48,7 +48,7 @@ const NotificationPage: NextPageWithLayout = () => {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://api-v1.defi-os.com/notifications/read',
+      url: `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/notifications/read`,
       headers: {
         Authorization: firebase_jwt,
       },

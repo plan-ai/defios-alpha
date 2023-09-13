@@ -59,7 +59,7 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
       const config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: `https://api-v1.defi-os.com/track/user/type?user_type=${userRole}`,
+        url: `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/track/user/type?user_type=${userRole}`,
         headers: {
           Authorization: firebase_jwt,
         },

@@ -41,7 +41,7 @@ export const getFirebaseJwt = createAsyncThunk(
   }: firebaseJwtApi) => {
     return new Promise<FirebaseTokensType>((resolve, reject) => {
       axios
-        .post('https://api-v1.defi-os.com/user/setup', {
+        .post(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/user/setup`, {
           github_id,
           firebase_uid,
           user_gh_access_token,

@@ -30,7 +30,7 @@ export default function RightSideInfo({
     setCoinInfo(null);
     if (auth_cred === null || coin === null) return;
     axios
-      .get('https://api-v1.defi-os.com/swap/profile', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/swap/profile`, {
         params: {
           token_symbol: coin.token_symbol,
         },

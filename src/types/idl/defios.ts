@@ -3199,6 +3199,26 @@ export type Defios = {
           index: false;
         }
       ];
+    },
+    {
+      name: 'RewardClaimed';
+      fields: [
+        {
+          name: 'rewardClaimmee';
+          type: 'publicKey';
+          index: false;
+        },
+        {
+          name: 'rewardAmount';
+          type: 'u64';
+          index: false;
+        },
+        {
+          name: 'pullRequest';
+          type: 'publicKey';
+          index: false;
+        }
+      ];
     }
   ];
   errors: [
@@ -6552,6 +6572,26 @@ export const IDL: Defios = {
         },
         {
           name: 'voter',
+          type: 'publicKey',
+          index: false,
+        },
+      ],
+    },
+    {
+      name: 'RewardClaimed',
+      fields: [
+        {
+          name: 'rewardClaimmee',
+          type: 'publicKey',
+          index: false,
+        },
+        {
+          name: 'rewardAmount',
+          type: 'u64',
+          index: false,
+        },
+        {
+          name: 'pullRequest',
           type: 'publicKey',
           index: false,
         },

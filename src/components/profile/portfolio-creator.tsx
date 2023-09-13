@@ -39,7 +39,7 @@ const PortfolioCreator: React.FC<PortfolioCreatorProps> = ({
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'https://api-v1.defi-os.com/profile/portfolio',
+      url: `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/profile/portfolio`,
       headers: {
         Authorization: firebase_jwt,
       },

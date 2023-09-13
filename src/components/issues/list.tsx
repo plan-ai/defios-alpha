@@ -49,7 +49,7 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
     if (response?.decimals) {
       setTokenDecimals(response.decimals);
     } else {
-      const resp: any = await axios.get('https://api-v1.defi-os.com/tokens', {
+      const resp: any = await axios.get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
         headers: {
           Authorization: firebase_jwt,
         },

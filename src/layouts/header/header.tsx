@@ -20,9 +20,6 @@ import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 
-import Button from '@/components/ui/button';
-import { PlusCircle } from '@/components/icons/plus-circle';
-
 function NotificationButton() {
   const router = useRouter();
   return (
@@ -91,16 +88,6 @@ function HeaderRightArea() {
         {/* <NotificationButton /> */}
         <WalletMultiButton className="gradient-border-box border-0.5 h-10 rounded-full bg-newdark 2xl:h-12" />
       </div>
-      {/* {router.pathname === '/projects' && (
-        <AnchorLink href="/incentivize-contributors">
-          <Button shape="rounded" size="small" color="info">
-            <div className="flex items-center gap-2">
-              <PlusCircle />
-              <div>Create a Project</div>
-            </div>
-          </Button>
-        </AnchorLink>
-      )} */}
     </div>
   );
 }
@@ -166,15 +153,6 @@ export default function Header({ className }: { className?: string }) {
           >
             <Logo />
           </div> */}
-          {/* {router.pathname === '/projects' && (
-            <PageHeader
-              title="projects"
-              description={[
-                'claim the tokens for your own project.',
-                'explore what other projects are working on and how communities are working.',
-              ]}
-            />
-          )} */}
           {router.pathname === '/swap' && (
             <PageHeader
               title="swap"
@@ -184,15 +162,6 @@ export default function Header({ className }: { className?: string }) {
               ]}
             />
           )}
-          {/* {router.pathname === '/roadmaps' && (
-            <PageHeader
-              title="roadmaps"
-              description={[
-                'plan how projects pan out as a community.',
-                'use your staked tokens to drive the direction of your favorite projects.',
-              ]}
-            />
-          )} */}
           {router.pathname === '/profile' && (
             <PageHeader
               title="profile"

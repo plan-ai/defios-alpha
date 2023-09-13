@@ -81,7 +81,7 @@ const ObjectiveDetails: React.FC<ObjectiveDetailsProps> = ({
       'search.issue_account': objectiveSelected.objective_issue_account,
     };
     axios
-      .get('https://api-v1.defi-os.com/issues', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/issues`, {
         params: searchParams,
         headers: {
           Authorization: firebase_jwt,

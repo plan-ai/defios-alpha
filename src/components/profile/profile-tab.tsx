@@ -102,7 +102,7 @@ export default function ProfileTab() {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setIsLoading(true);
     axios
-      .get('https://api-v1.defi-os.com/projects', {
+      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects`, {
         params: {
           'filter.pageno': '1',
           'filter.pagesize': 30,
@@ -181,7 +181,7 @@ export default function ProfileTab() {
       }
 
       axios
-        .get('https://api-v1.defi-os.com/projects', {
+        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/projects`, {
           params: searchParams,
           headers: {
             Authorization: firebase_jwt,
