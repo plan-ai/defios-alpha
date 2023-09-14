@@ -173,16 +173,15 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
       <Trade>
         <div className="mb-3 w-[18.7rem] border-b border-dashed border-gray-800 pb-2 xl:mb-5 xl:w-[20.2rem] xl:pb-4 2xl:w-[22.7rem] 3xl:mb-7 3xl:w-[24.2rem] 3xl:pb-6">
           <div className="mb-5 flex items-center gap-5">
-            <Button
+            <div
+              className="w-fit cursor-pointer rounded-full border border-gray-500 bg-newdark py-0.5 px-6 text-sm font-semibold text-gray-500 xl:text-base 3xl:text-lg"
               onClick={() => setConsoleType('swap')}
-              shape="rounded"
-              size="mini"
             >
               Swap
-            </Button>
-            <Button shape="rounded" size="mini" color="info">
+            </div>
+            <div className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-0.5 px-6 text-sm font-semibold text-primary xl:text-base 3xl:text-lg">
               Buy
-            </Button>
+            </div>
           </div>
           {coinList.length !== 0 ? (
             <div className={cn('relative flex flex-col gap-3')}>
@@ -232,17 +231,16 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
           <TransactionInfo label={'Network Fee'} />
           <TransactionInfo label={'DefiOS Fee'} />
         </div>
-        <Button
-          size="large"
-          shape="rounded"
-          fullWidth={true}
-          className="mt-4 uppercase xs:tracking-widest xl:mt-6 3xl:mt-8"
-          color="info"
+        <div
+          className="mt-4 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:mt-6 xl:text-base 3xl:mt-8 3xl:text-lg"
           onClick={handleBuyTransaction}
-          isLoading={stateLoading === 'loading'}
         >
-          BUY
-        </Button>
+          {stateLoading === 'loading' ? (
+            <Spinner className="h-7 w-7" label={null} />
+          ) : (
+            'BUY'
+          )}
+        </div>
       </Trade>
       <RightSideInfo coin={toCoin} />
       {/* remove below later */}
