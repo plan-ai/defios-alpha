@@ -214,7 +214,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                 objectiveSelected !== null &&
                 parentObjective === null && (
                   <div
-                    className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
+                    className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green bg-newdark py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
                     onClick={handleSetParent}
                   >
                     Confirm
@@ -295,7 +295,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             )}
           {chooseType !== 'Parent' && parentObjective === null && (
             <div
-              className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
+              className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 bg-newdark py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
               onClick={() => setChooseType('Parent')}
             >
               Choose Parent Objective
@@ -313,7 +313,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
                 objectiveSelected !== null &&
                 childObjective === null && (
                   <div
-                    className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
+                    className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-green bg-newdark py-0.5 px-8 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
                     onClick={handleSetChild}
                   >
                     Confirm
@@ -394,7 +394,7 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
             )}
           {chooseType !== 'Child' && childObjective === null && (
             <div
-              className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
+              className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-gray-400 bg-newdark py-0.5 px-8 text-xs font-semibold text-gray-400 xl:text-sm 3xl:text-base"
               onClick={() => setChooseType('Child')}
             >
               Choose Child Objective
@@ -403,13 +403,13 @@ const ObjectiveLink: React.FC<ObjectiveLinkProps> = ({
         </div>
         <div className="flex w-full flex-col">
           <div
-            className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-red py-1 px-8 text-sm font-semibold text-new-red xl:text-base 3xl:text-lg"
+            className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-red bg-newdark py-1 px-8 text-sm font-semibold text-new-red xl:text-base 3xl:text-lg"
             onClick={() => handleResetSelect()}
           >
             Reset
           </div>
           <div
-            className="bg-newDark mt-4 flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+            className="mt-4 flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
             onClick={() => handleObjectiveLink()}
           >
             Link the Objectives

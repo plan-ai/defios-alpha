@@ -10,6 +10,7 @@ import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
 import Spinner from '../custom/spinner';
 import cn from 'classnames';
+import Button from '@/components/ui/button/ButtonNew';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
@@ -48,13 +49,7 @@ const TagItem: React.FC<TagItemProps> = ({ tag, tagsSearch, addTag }) => {
       <div className="my-1 flex w-full items-center text-3xs xl:text-2xs 3xl:text-xs">
         {tag}
       </div>
-      <div
-        className={`h-0.5 w-full ${
-          tagsSearch.includes(tag)
-            ? 'lineGradientHorizontal'
-            : 'lineGradientHorizontalGray'
-        }`}
-      ></div>
+      <div className={'lineGradientHorizontalGray h-0.5 w-full'}></div>
     </div>
   );
 };
@@ -113,13 +108,7 @@ const IssueItem: React.FC<IssueItemProps> = ({
           </div>
         </div>
       </div>
-      <div
-        className={`h-0.5 w-full ${
-          selectedIssue?.id === item?.id
-            ? 'lineGradientHorizontal'
-            : 'lineGradientHorizontalGray'
-        }`}
-      ></div>
+      <div className={'lineGradientHorizontalGray h-0.5 w-full'}></div>
     </div>
   );
 };
@@ -450,18 +439,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
         <div className="normal w-full text-xs text-red-400 xl:text-sm 3xl:text-base">
           {nextError}
         </div>
-        <div
-          className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
-          onClick={() => setStep(1)}
-        >
+        <Button color="PrimaryOutline" onClick={() => setStep(1)}>
           back
-        </div>
-        <div
-          className="w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
-          onClick={handleSubmit}
-        >
+        </Button>
+        <Button color="PrimarySolid" onClick={handleSubmit}>
           next
-        </div>
+        </Button>
       </div>
     </div>
   );

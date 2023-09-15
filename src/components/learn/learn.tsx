@@ -379,7 +379,7 @@ const Learn: React.FC<LearnProps> = ({}) => {
                   development learning path.
                 </div>
                 <div
-                  className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                  className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
                   onClick={handleResume}
                 >
                   <div className="flex items-center gap-2">

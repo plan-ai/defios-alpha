@@ -1,4 +1,4 @@
-import Button from '@/components/ui/button';
+import Button from '@/components/ui/button/ButtonNew';
 import ProjectList from '@/components/projects/list';
 import ActiveLink from '@/components/ui/links/active-link';
 import React, { Fragment, useState, useEffect, useCallback } from 'react';
@@ -547,8 +547,8 @@ export default function Projects() {
               </div>
             </div> */}
             <div className="my-6 grid grid-cols-3 gap-3 text-sm">
-              <div
-                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+              <Button
+                fullWidth={true}
                 onClick={() => {
                   if (project?.project_account) {
                     const payload = {
@@ -563,9 +563,9 @@ export default function Projects() {
                 }}
               >
                 Explore Related Roadmaps
-              </div>
-              <div
-                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+              </Button>
+              <Button
+                fullWidth={true}
                 onClick={() => {
                   if (project?.project_account) {
                     const payload = {
@@ -580,66 +580,16 @@ export default function Projects() {
                 }}
               >
                 Explore Open Issues
-              </div>
-              <div
-                className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-new-green py-2 px-8 text-sm font-semibold text-new-green xl:text-base 3xl:text-lg"
+              </Button>
+              <Button
+                fullWidth={true}
+                color="GreenOutline"
                 onClick={() => {
                   claimPendingTokens(project);
                 }}
               >
                 Claim Pending Tokens
-              </div>
-              {/* <Button
-                onClick={() => {
-                  if (project?.project_account) {
-                    const payload = {
-                      searchQuery: `project_account:${project?.project_account}`,
-                      setSearchQuery: true,
-                      expandFirst: false,
-                      pathname: '/roadmaps',
-                    };
-                    dispatch(clicked(payload));
-                  }
-                  router.push('/roadmaps');
-                }}
-                shape="rounded"
-                fullWidth
-                size="medium"
-                color="info"
-              >
-                Explore Related Roadmaps
               </Button>
-              <Button
-                onClick={() => {
-                  if (project?.project_account) {
-                    const payload = {
-                      searchQuery: `issue_project_id:${project?.project_account};state:open`,
-                      setSearchQuery: true,
-                      expandFirst: false,
-                      pathname: '/issues',
-                    };
-                    dispatch(clicked(payload));
-                  }
-                  router.push('/issues');
-                }}
-                shape="rounded"
-                color="info"
-                fullWidth
-                size="medium"
-              >
-                Explore Open Issues
-              </Button>
-              <Button
-                shape="rounded"
-                color="info"
-                fullWidth
-                size="medium"
-                onClick={() => {
-                  claimPendingTokens(project);
-                }}
-              >
-                Claim Pending Tokens
-              </Button> */}
             </div>
           </ProjectList>
         ))}
@@ -649,17 +599,9 @@ export default function Projects() {
           <div className="text-lg text-gray-500">
             No projects found that match your filter and search settings
           </div>
-          <Button
-            onClick={() => router.push('incentivize-contributors')}
-            shape="rounded"
-            size="small"
-            color="info"
-          >
-            <div className="flex items-center gap-2">
-              <PlusCircle />
-              <div>Create New Project</div>
-            </div>
-          </Button>
+          <div className="mt-12">
+            <CreateProjectBtn />
+          </div>
         </div>
       )}
       {isLoading && (

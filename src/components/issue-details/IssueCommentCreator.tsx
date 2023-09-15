@@ -10,6 +10,7 @@ import { useAppSelector } from '@/store/store';
 import Textarea from '@/components/ui/forms/textarea';
 import Spinner from '@/components/custom/spinner';
 import MarkdownRenderer from '@/components/ui/markdown';
+import Button from '@/components/ui/button/ButtonNew';
 
 interface IssueCommentCreatorProps {
   issueUrl: string;
@@ -95,20 +96,16 @@ export const IssueCommentCreator: React.FC<IssueCommentCreatorProps> = ({
       {viewPreview && (
         <MarkdownRenderer className="w-full p-6">{newComment}</MarkdownRenderer>
       )}
-      <div
+      <Button
+        color="PrimarySolid"
         onClick={() => {
           if (!isCommenting) {
             handleCommentCreate();
           }
         }}
-        className="absolute bottom-6 right-6 z-[40] w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
-      >
-        {isCommenting ? (
-          <Spinner label={null} spinnerClass="!w-6 !h-6" className="px-3" />
-        ) : (
-          'comment'
-        )}
-      </div>
+        isLoading={isCommenting}
+        className='!absolute bottom-6 right-6'
+      >comment</Button>
     </div>
   );
 };

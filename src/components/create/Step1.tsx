@@ -12,6 +12,7 @@ import Input from '@/components/ui/forms/input';
 import Image from 'next/image';
 import Spinner from '../custom/spinner';
 import cn from 'classnames';
+import Button from '@/components/ui/button/ButtonNew';
 
 import axios from '@/lib/axiosClient';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -584,10 +585,7 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
                 </div>
               )}
               {importLoading && (
-                <Spinner
-                  label={'fetching token data'}
-                  className="!flex-row"
-                />
+                <Spinner label={'fetching token data'} className="!flex-row" />
               )}
               {!importLoading && splTokenAddressConfirm !== '' && (
                 <>
@@ -622,12 +620,9 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
         <div className="normal text-xs text-red-400 xl:text-sm 3xl:text-base">
           {nextError}
         </div>
-        <div
-          onClick={handleSubmit}
-          className="w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
-        >
+        <Button color="PrimarySolid" onClick={handleSubmit}>
           next
-        </div>
+        </Button>
       </div>
     </div>
   );

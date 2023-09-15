@@ -13,6 +13,7 @@ import { selectUserMapping } from '@/store/userMappingSlice';
 import Spinner from '@/components/custom/spinner';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
+import Button from '@/components/ui/button/ButtonNew';
 
 //icons
 import { ChevronDown } from '@/components/icons/chevron-down';
@@ -316,30 +317,18 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                 selectedSubmitPR={selectedSubmitPR}
                 setSelectedSubmitPR={setSelectedSubmitPR}
               />
-              <div
+              <Button
+                color={PRSort.length <= 1 ? 'GraySolid' : 'PrimarySolid'}
                 onClick={() => {
                   if (!isMerging) {
                     handleSelectedMerge();
                   }
                 }}
-                className={cn(
-                  'z-[40] w-fit rounded-full py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg',
-                  {
-                    'cursor-pointer bg-primary': PRSort.length > 1,
-                    'cursor-not-allowed bg-gray-600': PRSort.length <= 1,
-                  }
-                )}
+                disabled={PRSort.length <= 1}
+                isLoading={isMerging}
               >
-                {isMerging ? (
-                  <Spinner
-                    label={null}
-                    spinnerClass="!w-6 !h-6"
-                    className="px-1.5 py-0.5"
-                  />
-                ) : (
-                  'merge'
-                )}
-              </div>
+                merge
+              </Button>
             </div>
           )}
 
@@ -348,10 +337,10 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
             issueData.rewardee !== '' &&
             issueData.rewardee !== null && (
               <div className="flex flex-col items-center justify-center gap-10">
-                <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-base font-semibold text-new-green xl:text-lg 3xl:text-xl">
+                <Button color="GreenOutline" size="small">
                   <CheckIcon className="h-7 w-7" />
                   <div>Solved</div>
-                </div>
+                </Button>
                 <AnchorLink
                   href={
                     issueData?.issue_prs.filter((_item: any) => {

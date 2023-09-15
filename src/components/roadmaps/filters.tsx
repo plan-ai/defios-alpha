@@ -4,7 +4,7 @@ import Slider from 'rc-slider';
 import { RadioGroup } from '@/components/ui/radio-group';
 import Collapse from '@/components/ui/collapse';
 import { useDrawer } from '@/components/drawer-views/context';
-import Button from '@/components/ui/button';
+import ButtonOld from '@/components/ui/button';
 import { NormalGridIcon } from '@/components/icons/normal-grid';
 import { CompactGridIcon } from '@/components/icons/compact-grid';
 import { Close } from '@/components/icons/close';
@@ -13,6 +13,7 @@ import { Transition } from '@headlessui/react';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { useGridSwitcher } from '@/lib/hooks/use-grid-switcher';
 import { Check } from '@/components/icons/check';
+import Button from '@/components/ui/button/ButtonNew';
 
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setFilters, reset, triggerFilter } from '@/store/roadmapFilterSlice';
@@ -301,21 +302,9 @@ export function Filters() {
       <Collapse label="Outlook" initialOpen>
         <Status plan={outlook} setPlan={setOutlook} values={OutlookValues} />
       </Collapse>
-      <div
-        className="bg-newDark flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-new-red py-1 px-8 text-sm font-semibold text-new-red xl:text-base 3xl:text-lg"
-        onClick={() => {
-          setActiveObjectivesRange({
-            min: 0,
-            max: 100,
-          });
-          setOutlook('');
-        }}
-      >
-        Reset
-      </div>
-      {/* <Button
+      <Button
         size="small"
-        shape="rounded"
+        color="RedOutline"
         onClick={() => {
           setActiveObjectivesRange({
             min: 0,
@@ -325,7 +314,7 @@ export function Filters() {
         }}
       >
         Reset
-      </Button> */}
+      </Button>
     </>
   );
 }
@@ -338,20 +327,17 @@ export default function DrawerFilters() {
         <h2 className="text-base font-medium uppercase tracking-wider text-white xl:text-lg 3xl:text-xl">
           Filters
         </h2>
-        <Button shape="circle" size="small" onClick={closeDrawer}>
+        <ButtonOld shape="circle" size="small" onClick={closeDrawer}>
           <Close className="h-auto w-3" />
-        </Button>
+        </ButtonOld>
       </div>
       <div className="h-[75vh] overflow-y-scroll px-6 pb-20 pt-1">
         <Filters />
       </div>
       <div className="absolute left-0 bottom-4 z-10 w-full px-6">
-        <div
-          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
-          onClick={closeDrawer}
-        >
+        <Button size="small" onClick={closeDrawer} fullWidth={true}>
           Done
-        </div>
+        </Button>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import Spinner from '@/components/custom/spinner';
 import { Listbox } from '@/components/ui/listbox';
 import { Transition } from '@/components/ui/transition';
 import AnchorLink from '../ui/links/anchor-link';
+import Button from '@/components/ui/button/ButtonNew';
 
 //icons
 import { ChevronDown } from '@/components/icons/chevron-down';
@@ -135,6 +136,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
   const [PRSubmitted, setPRSubmitted] = useState(false);
   const [PRSubmittedLink, setPRSubmittedLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isClaiming, setIsClaiming] = useState(false);
 
   const handlePRSubmit = () => {
     if (
@@ -264,6 +266,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
       return;
 
     dispatch(onLoading('Claiming tokens for solving the issue...'));
+    setIsClaiming(true);
     claimReward(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
       new PublicKey(winner.issue_pr_account),
@@ -294,9 +297,11 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
           reward_amount: issueData?.issue_stake_amount,
           rewardee: issueData?.rewardee,
         });
+        setIsClaiming(false);
         setRefetch((state) => state + 1);
       })
       .catch((err) => {
+        setIsClaiming(false);
         dispatch(
           onFailure({
             label: 'Issue Reward Claiming Failed',
@@ -539,22 +544,15 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                   selectedSubmitPR={selectedSubmitPR}
                   setSelectedSubmitPR={setSelectedSubmitPR}
                 />
-                <div
+                <Button
+                  color="PrimarySolid"
                   onClick={() => {
                     if (!isSubmitting) handlePRSubmit();
                   }}
-                  className="z-[40] w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
+                  isLoading={isSubmitting}
                 >
-                  {isSubmitting ? (
-                    <Spinner
-                      label={null}
-                      spinnerClass="!w-6 !h-6"
-                      className="px-1.5 py-0.5"
-                    />
-                  ) : (
-                    'submit'
-                  )}
-                </div>
+                  submit
+                </Button>
               </div>
             )}
 
@@ -564,10 +562,10 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
               issueData.rewardee === '' ||
               issueData.rewardee === null) && (
               <div className="flex flex-col items-center justify-center gap-10">
-                <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-base font-semibold text-new-green xl:text-lg 3xl:text-xl">
+                <Button color="GreenOutline" size="small">
                   <CheckIcon className="h-7 w-7" />
                   <div>Submitted</div>
-                </div>
+                </Button>
                 <AnchorLink
                   href={PRSubmittedLink}
                   target="_blank"
@@ -584,10 +582,10 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             issueData.rewardee !== null &&
             issueData.rewardee !== wallet.publicKey?.toString() && (
               <div className="flex flex-col items-center justify-center gap-10">
-                <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-base font-semibold text-new-green xl:text-lg 3xl:text-xl">
+                <Button color="GreenOutline" size="small">
                   <CheckIcon className="h-7 w-7" />
                   <div>Solved</div>
-                </div>
+                </Button>
                 <AnchorLink
                   href={
                     issueData?.issue_prs.filter((_item: any) => {
@@ -608,13 +606,15 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             issueData.rewardee !== null &&
             issueData.rewardee === wallet.publicKey?.toString() && (
               <div className="flex flex-col items-center justify-center gap-10">
-                <div
+                <Button
+                  color="GreenOutline"
+                  size="medium"
                   onClick={() => {
                     if (issueData?.reward_claimed !== true) {
                       handleClaim();
                     }
                   }}
-                  className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-base font-semibold text-new-green xl:text-lg 3xl:text-xl"
+                  isLoading={isClaiming}
                 >
                   <BanknotesIcon className="h-7 w-7" />
                   <div>
@@ -622,7 +622,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                       ? 'Reward Claimed'
                       : 'Claim Reward'}
                   </div>
-                </div>
+                </Button>
                 <AnchorLink
                   href={
                     issueData?.issue_prs.filter((_item: any) => {

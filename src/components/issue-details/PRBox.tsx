@@ -5,6 +5,7 @@ import Image from '@/components/ui/image';
 import ProgressBar from '@/components/ui/progress-bar';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import Spinner from '@/components/custom/spinner';
+import Button from '@/components/ui/button/ButtonNew';
 
 //icons
 import {
@@ -107,18 +108,18 @@ export const PRBox: React.FC<PRBoxProps> = ({
 
       {/* not voted  */}
       {!voted && !isOwner && !(isClosed === true) && (
-        <div
+        <Button
+          size="small"
           onClick={() => {
             if (!voted && votingPower > 0) {
               votingFunc(prData);
             }
           }}
-          className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-primary bg-newdark py-1 px-6 text-xs font-semibold text-primary xl:text-sm 3xl:text-base"
         >
           {/* cant vote */}
           {votingPower === 0 && <LockClosedIcon className="h-5 w-5" />}
           <div>vote</div>
-        </div>
+        </Button>
       )}
 
       {/* voted */}
@@ -126,60 +127,48 @@ export const PRBox: React.FC<PRBoxProps> = ({
         !isOwner &&
         !(isClosed === true) &&
         prData.issue_pr_voters.includes(wallet.publicKey?.toString()) && (
-          <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
+          <Button size="small" color="GreenOutline">
             <CheckIcon className="h-5 w-5" />
             <div>voted</div>
-          </div>
+          </Button>
         )}
 
       {/* winner choosen , not you */}
       {isWinner === true && !(claimable === true) && (
-        <div className="flex w-fit items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
+        <Button size="small" color="GreenOutline">
           <CheckIcon className="h-5 w-5" />
           <div>Winner</div>
-        </div>
+        </Button>
       )}
 
       {/* you are winner */}
       {claimable === true && !(claimed === true) && (
-        <div
-          onClick={claimFunc}
-          className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base"
-        >
+        <Button onClick={claimFunc} size="small" color="GreenOutline">
           <BanknotesIcon className="h-5 w-5" />
           <div>Claim</div>
-        </div>
+        </Button>
       )}
 
       {claimable === true && claimed === true && (
-        <div className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-new-green bg-newdark py-1 px-6 text-xs font-semibold text-new-green xl:text-sm 3xl:text-base">
+        <Button size="small" color="GreenOutline">
           <BanknotesIcon className="h-5 w-5" />
           <div>Claimed</div>
-        </div>
+        </Button>
       )}
 
       {/* for owners */}
       {isOwner && !(isClosed === true) && (
-        <div
+        <Button
           onClick={() => {
             if (!isMerging) {
               mergeFunc(prData);
             }
           }}
-          className="flex w-fit cursor-pointer items-center gap-2 rounded-full border border-primary bg-newdark py-1 px-6 text-xs font-semibold text-primary xl:text-sm 3xl:text-base"
+          isLoading={isMerging}
+          size="small"
         >
-          <div>
-            {isMerging ? (
-              <Spinner
-                label={null}
-                spinnerClass="!w-6 !h-6"
-                className="px-1.5 py-0.5"
-              />
-            ) : (
-              'merge'
-            )}
-          </div>
-        </div>
+          <div>merge</div>
+        </Button>
       )}
     </div>
   );

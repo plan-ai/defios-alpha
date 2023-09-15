@@ -12,7 +12,6 @@ import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import { useSession } from 'next-auth/react';
 import mixpanel from 'mixpanel-browser';
 import axios from '@/lib/axiosClient';
-
 interface Step4Props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }

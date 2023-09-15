@@ -64,7 +64,7 @@ const IssueModal: React.FC<IssueModalProps> = ({
         )}
       </div>
       <div
-        className="bg-newDark flex w-full cursor-pointer items-center justify-center whitespace-pre rounded-full border-2 border-primary py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+        className="flex w-full cursor-pointer items-center justify-center whitespace-pre rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
         onClick={() => setModalOpen(false)}
       >
         Confirm Issue Selection

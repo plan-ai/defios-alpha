@@ -12,7 +12,7 @@ import ListCard from '@/components/ui/list-card';
 import { ClockIcon } from '@/components/icons/clock';
 import { Close } from '@/components/icons/close';
 
-import Button from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 
 import Avatar from 'react-avatar';
 
@@ -280,18 +280,20 @@ const RoadmapDetails: React.FC<RoadmapDetailsProps> = ({
                     <>
                       <div>OR</div>
                       <div className="flex items-center justify-between gap-2">
-                        <div
-                          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 whitespace-pre px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                        <Button
+                          fullWidth={true}
+                          size="small"
                           onClick={() => setCreateObjective(true)}
                         >
                           Create Objective
-                        </div>
-                        <div
-                          className="bg-newDark flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary py-1 whitespace-pre px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
+                        </Button>
+                        <Button
+                          fullWidth={true}
+                          size="small"
                           onClick={() => setLinkObjective(true)}
                         >
                           Link Objectives
-                        </div>
+                        </Button>
                       </div>
                     </>
                   )}

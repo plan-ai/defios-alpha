@@ -3,6 +3,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { GithubOutlineIcon } from '../icons/github-outline';
 import Image from '@/components/ui/image';
 import { useAppSelector } from '@/store/store';
+import Button from '@/components/ui/button/ButtonNew';
 
 interface Step3Props {
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -101,18 +102,12 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
       </div>
 
       <div className="flex w-full items-center justify-end gap-2">
-        <div
-          className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-2 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
-          onClick={() => setStep(2)}
-        >
+        <Button color="PrimaryOutline" onClick={() => setStep(2)}>
           back
-        </div>
-        <div
-          className="w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
-          onClick={() => setStep(4)}
-        >
+        </Button>
+        <Button color="PrimarySolid" onClick={() => setStep(4)}>
           create
-        </div>
+        </Button>
       </div>
     </div>
   );

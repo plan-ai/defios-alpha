@@ -12,6 +12,7 @@ import { onLoading, onFailure, onSuccess } from '@/store/callLoaderSlice';
 import Spinner from '@/components/custom/spinner';
 import Image from '@/components/ui/image';
 import Input from '@/components/ui/forms/input';
+import Button from '@/components/ui/button/ButtonNew';
 
 //contract functions , utils
 import {
@@ -19,7 +20,7 @@ import {
   unstakeIssueTokens,
 } from '@/lib/helpers/contractInteract';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js';
 
 interface IssueStakeProps {
   issueData: any;
@@ -203,32 +204,20 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
                 }}
               />
             </div>
-            <div
+            <Button
+              color={
+                issueData?.issue_state === 'open' ? 'PrimarySolid' : 'GraySolid'
+              }
               onClick={() => {
                 if (!isStaking && issueData?.issue_state === 'open') {
                   handleIssueStake();
                 }
               }}
-              className={cn(
-                'z-[40] w-fit rounded-full py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg',
-                {
-                  'cursor-pointer bg-primary':
-                    issueData?.issue_state === 'open',
-                  'cursor-not-allowed bg-gray-600':
-                    issueData?.issue_state !== 'open',
-                }
-              )}
+              disabled={issueData?.issue_state === 'closed'}
+              isLoading={isStaking}
             >
-              {isStaking ? (
-                <Spinner
-                  label={null}
-                  spinnerClass="!w-6 !h-6"
-                  className="px-1.5 py-0.5"
-                />
-              ) : (
-                'stake'
-              )}
-            </div>
+              stake
+            </Button>
           </div>
 
           <div className="flex items-center gap-2 text-xs xl:text-sm 3xl:text-base">
@@ -247,7 +236,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
             </div>
             <div>{tokenDetails?.tokenBalance}</div>
             <div className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-0.5 px-3 text-3xs font-semibold text-primary xl:text-2xs 3xl:text-xs">
-              but tokens
+              buy tokens
             </div>
           </div>
 
@@ -268,16 +257,12 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
                 <div>{tokenDetails?.stakeByMe}</div>
               </div>
             </div>
-            <div
-              className={cn(
-                'z-[40] w-fit rounded-full border bg-newdark py-1 px-4 text-xs font-semibold text-newdark xl:text-sm 3xl:text-base',
-                {
-                  'cursor-pointer border-new-red text-new-red':
-                    issueData?.issue_state === 'open' && !tokenDetails?.voted,
-                  'cursor-not-allowed border-gray-600 text-gray-600':
-                    issueData?.issue_state !== 'open' || tokenDetails?.voted,
-                }
-              )}
+            <Button
+              color={
+                issueData?.issue_state === 'open' && !tokenDetails?.voted
+                  ? 'RedOutline'
+                  : 'GrayOutline'
+              }
               onClick={() => {
                 if (
                   !isUnstaking &&
@@ -287,17 +272,14 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
                   handleIssueUnstake();
                 }
               }}
+              disabled={
+                issueData?.issue_state === 'closed' || tokenDetails?.voted
+              }
+              isLoading={isUnstaking}
+              size="small"
             >
-              {isUnstaking ? (
-                <Spinner
-                  label={null}
-                  spinnerClass="!w-5 !h-5 !text-red-300 fill-red-500"
-                  className="px-4 py-0.5"
-                />
-              ) : (
-                'unstake'
-              )}
-            </div>
+              unstake
+            </Button>
           </div>
         </div>
         <div className="absolute left-0 right-0 top-[30%] bottom-[20%] z-[10] rounded-full bg-[#1D606A] blur-[80px]"></div>

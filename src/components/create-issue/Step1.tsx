@@ -12,6 +12,7 @@ import Textarea from '@/components/ui/forms/textarea';
 import Spinner from '../custom/spinner';
 import cn from 'classnames';
 import Image from '@/components/ui/image';
+import Button from '@/components/ui/button/ButtonNew';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
@@ -51,13 +52,7 @@ const TagItem: React.FC<TagItemProps> = ({ tag, tagsSearch, addTag }) => {
       <div className="my-1 flex w-full items-center text-3xs xl:text-2xs 3xl:text-xs">
         {tag}
       </div>
-      <div
-        className={`h-0.5 w-full ${
-          tagsSearch.includes(tag)
-            ? 'lineGradientHorizontal'
-            : 'lineGradientHorizontalGray'
-        }`}
-      ></div>
+      <div className={'lineGradientHorizontalGray h-0.5 w-full'}></div>
     </div>
   );
 };
@@ -116,13 +111,7 @@ const IssueItem: React.FC<IssueItemProps> = ({
           </div>
         </div>
       </div>
-      <div
-        className={`h-0.5 w-full ${
-          selectedIssue?.id === item?.id
-            ? 'lineGradientHorizontal'
-            : 'lineGradientHorizontalGray'
-        }`}
-      ></div>
+      <div className={'lineGradientHorizontalGray h-0.5 w-full'}></div>
     </div>
   );
 };
@@ -168,13 +157,7 @@ const ProjectItem: React.FC<ProjectItemProps> = ({
           {item.project_name}
         </div>
       </div>
-      <div
-        className={`h-0.5 w-full ${
-          selectedProject?.project_account === item?.project_account
-            ? 'lineGradientHorizontal'
-            : 'lineGradientHorizontalGray'
-        }`}
-      ></div>
+      <div className={'lineGradientHorizontalGray h-0.5 w-full'}></div>
     </div>
   );
 };
@@ -675,12 +658,9 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
         <div className="normal text-xs text-red-400 xl:text-sm 3xl:text-base">
           {nextError}
         </div>
-        <div
-          onClick={handleSubmit}
-          className="w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
-        >
+        <Button color="PrimarySolid" onClick={handleSubmit}>
           next
-        </div>
+        </Button>
       </div>
     </div>
   );

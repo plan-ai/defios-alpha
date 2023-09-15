@@ -64,7 +64,7 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
   };
 
   return (
-    <div className="flex parentDiv flex-col items-center">
+    <div className="flex flex-col items-center">
       <div
         onClick={() => router.push(`/issues/${data?.issue_account}`)}
         className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-3xl bg-body py-4 px-8 pr-16"
@@ -112,7 +112,7 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
             100}
         </div>
       </div>
-      <div className="childDiv h-0.5 w-full"></div>
+      <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
     </div>
   );
 };

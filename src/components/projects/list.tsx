@@ -36,7 +36,7 @@ export default function ProjectList({
   return (
     <div
       className={cn(
-        'parentDiv relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl'
+        'relative overflow-hidden bg-light-dark shadow-lg transition-all last:mb-0 hover:shadow-2xl'
       )}
     >
       <div
@@ -99,7 +99,7 @@ export default function ProjectList({
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="childDiv h-0.5 w-full"></div>
+      <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
     </div>
   );
 }
