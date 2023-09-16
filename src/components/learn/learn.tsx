@@ -7,8 +7,8 @@ import mixpanel from 'mixpanel-browser';
 //UI components
 import Input from '@/components/ui/forms/input';
 import ListCard from '@/components/ui/list-card';
-import Button from '@/components/ui/button';
 import Spinner from '@/components/custom/spinner';
+import Button from '@/components/ui/button/ButtonNew';
 
 //Icons
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
@@ -245,12 +245,15 @@ const Learn: React.FC<LearnProps> = ({}) => {
 
   const getSpotlight = async () => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/daily/featured?daily_featured=repo`, {
-        headers: {
-          Authorization: firebase_jwt,
-          'Content-Type': 'application/json',
-        },
-      })
+      .get(
+        `${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/daily/featured?daily_featured=repo`,
+        {
+          headers: {
+            Authorization: firebase_jwt,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
       .then((res) => {
         if (res.data.featured_repo) {
           setFeaturedProject(res.data.featured_repo);
@@ -334,13 +337,8 @@ const Learn: React.FC<LearnProps> = ({}) => {
                     setSearch(learnRes?.learn_search_last_query);
                     setTriggerSearch(true);
                   }}
-                  size="small"
-                  shape="rounded"
-                  color="info"
                 >
-                  <div className="flex items-center gap-2">
-                    <div>Explore More Issues</div>
-                  </div>
+                  Explore More Issues
                 </Button>
               </div>
             )}
@@ -378,15 +376,12 @@ const Learn: React.FC<LearnProps> = ({}) => {
                   You seem to have dropped off midway during your last web
                   development learning path.
                 </div>
-                <div
-                  className="flex w-fit cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
-                  onClick={handleResume}
-                >
+                <Button onClick={handleResume} size="small">
                   <div className="flex items-center gap-2">
                     <div>Resume Now</div>
                     <ArrowRightIcon className="h-5 w-5" />
                   </div>
-                </div>
+                </Button>
               </div>
             )}
         </div>

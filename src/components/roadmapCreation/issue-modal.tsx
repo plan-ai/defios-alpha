@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Input from '@/components/ui/forms/input';
 import IssueItem from '@/components/roadmapCreation/issue-item';
-import Button from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 import EmptyList from '@/components/icons/EmptyList';
 interface IssueModalProps {
   issueData: any;
@@ -63,12 +63,9 @@ const IssueModal: React.FC<IssueModalProps> = ({
           </div>
         )}
       </div>
-      <div
-        className="flex w-full cursor-pointer items-center justify-center whitespace-pre rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg"
-        onClick={() => setModalOpen(false)}
-      >
+      <Button fullWidth={true} size='small' onClick={() => setModalOpen(false)}>
         Confirm Issue Selection
-      </div>
+      </Button>
     </div>
   );
 };

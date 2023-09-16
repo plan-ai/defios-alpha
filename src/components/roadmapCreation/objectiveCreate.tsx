@@ -1,7 +1,7 @@
 import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
-import Button from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import { ChevronDown } from '@/components/icons/chevron-down';
@@ -291,12 +291,13 @@ const ObjectiveCreate: React.FC<ObjectiveCreateProps> = ({
           setIssue={setObjectiveIssue}
           issueData={issuesData}
         />
-        <div
-          className="ml-auto mt-auto w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
+        <Button
           onClick={() => handleObjectiveCreate()}
+          className="ml-auto mt-auto"
+          color="PrimarySolid"
         >
           Add Objective
-        </div>
+        </Button>
       </div>
     </div>
   );

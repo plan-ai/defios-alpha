@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect, useCallback } from 'react';
 import Uploader from '@/components/ui/forms/uploader';
 import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
-import Button from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 import { Transition } from '@/components/ui/transition';
 import { Listbox } from '@/components/ui/listbox';
 import { ChevronDown } from '@/components/icons/chevron-down';
@@ -28,7 +28,7 @@ import { PublicKey } from '@solana/web3.js';
 
 import RepoList from '@/components/roadmapCreation/repo-list';
 
-import mixpanel from 'mixpanel-browser'
+import mixpanel from 'mixpanel-browser';
 
 interface SearchProps {
   search: string;
@@ -138,7 +138,10 @@ interface RoadmapCreateProps {
   setCreateRoadmap: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreateRoadmap }) => {
+const RoadmapCreate: React.FC<RoadmapCreateProps> = ({
+  existingRoadmaps,
+  setCreateRoadmap,
+}) => {
   const router = useRouter();
 
   const [roadmapTitle, setRoadmapTitle] = useState('');
@@ -298,7 +301,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
           roadmap_title: roadmapTitle,
           roadmap_description: roadmapDescription,
           roadmap_image_url: `https://ipfs.io/ipfs/${imageHash}`,
-          roadmapOutlook: roadmapOutlook.name
+          roadmapOutlook: roadmapOutlook.name,
         });
         setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
@@ -317,7 +320,7 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
         mixpanel.track('Roadmap Creation Failed', {
           github_id: userMappingState.userMapping?.userName,
           user_pubkey: userMappingState.userMapping?.userPubkey,
-          error: err.message
+          error: err.message,
         });
         setCreateRoadmap(false);
         dispatch(setRefetch('roadmaps'));
@@ -375,12 +378,13 @@ const RoadmapCreate: React.FC<RoadmapCreateProps> = ({ existingRoadmaps,setCreat
             setImageFile(file);
           }}
         />
-        <div
-          className="ml-auto mt-auto w-fit cursor-pointer rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:text-base 3xl:text-lg"
+        <Button
+          className="ml-auto mt-auto"
+          color="PrimarySolid"
           onClick={() => handleRoadmapCreate()}
         >
           Create Roadmap
-        </div>
+        </Button>
       </div>
       <div className="flex h-full w-[48%] flex-col">
         <Search

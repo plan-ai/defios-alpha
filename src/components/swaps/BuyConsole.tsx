@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import cn from 'classnames';
-import Button from '@/components/ui/button';
+import ButtonOld from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 import CoinInput from '@/components/ui/coin-input';
 import TransactionInfo from '@/components/ui/transaction-info';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
@@ -147,7 +148,7 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
         mixpanel.track('Buy Failed', {
           github_id: userMappingState.userMapping?.userName,
           user_pubkey: userMappingState.userMapping?.userPubkey,
-          error:err.message
+          error: err.message,
         });
       })
       .finally(() => {
@@ -173,15 +174,16 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
       <Trade>
         <div className="mb-3 w-[18.7rem] border-b border-dashed border-gray-800 pb-2 xl:mb-5 xl:w-[20.2rem] xl:pb-4 2xl:w-[22.7rem] 3xl:mb-7 3xl:w-[24.2rem] 3xl:pb-6">
           <div className="mb-5 flex items-center gap-5">
-            <div
-              className="w-fit cursor-pointer rounded-full border border-gray-500 bg-newdark py-0.5 px-6 text-sm font-semibold text-gray-500 xl:text-base 3xl:text-lg"
+            <Button
+              color="GrayOutline"
+              size="small"
               onClick={() => setConsoleType('swap')}
             >
               Swap
-            </div>
-            <div className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-0.5 px-6 text-sm font-semibold text-primary xl:text-base 3xl:text-lg">
+            </Button>
+            <Button color="PrimaryOutline" size="small">
               Buy
-            </div>
+            </Button>
           </div>
           {coinList.length !== 0 ? (
             <div className={cn('relative flex flex-col gap-3')}>
@@ -198,14 +200,14 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
                 setSelectedCoin={setToCoin}
               />
               <div className="absolute top-1/2 left-1/2 z-[1] -mt-4 -ml-4 rounded-full bg-gray-600 shadow-large">
-                <Button
+                <ButtonOld
                   size="mini"
                   color="gray"
                   shape="circle"
                   variant="transparent"
                 >
                   <ArrowDownIcon className="h-auto w-3" />
-                </Button>
+                </ButtonOld>
               </div>
               <CoinInput
                 label={'From'}
@@ -231,16 +233,15 @@ const BuyConsole: React.FC<BuyConsoleProps> = ({ setConsoleType }) => {
           <TransactionInfo label={'Network Fee'} />
           <TransactionInfo label={'DefiOS Fee'} />
         </div>
-        <div
-          className="mt-4 flex w-full cursor-pointer items-center justify-center rounded-full bg-primary py-2 px-8 text-sm font-semibold text-newdark xl:mt-6 xl:text-base 3xl:mt-8 3xl:text-lg"
+        <Button
+          color="PrimarySolid"
+          className="mt-4"
+          fullWidth={true}
           onClick={handleBuyTransaction}
+          isLoading={stateLoading === 'loading'}
         >
-          {stateLoading === 'loading' ? (
-            <Spinner className="h-7 w-7" label={null} />
-          ) : (
-            'BUY'
-          )}
-        </div>
+          BUY
+        </Button>
       </Trade>
       <RightSideInfo coin={toCoin} />
       {/* remove below later */}

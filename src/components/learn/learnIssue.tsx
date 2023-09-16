@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PullRequestIcon } from '@/components/icons/pull-request';
 import LangTags from '@/components/ui/tags/lang-tags';
 import Image from '@/components/ui/image';
-import Button from '@/components/ui/button/button';
+import Button from '@/components/ui/button/ButtonNew';
 import { Verified } from '@/components/icons/verified';
 import GithubTags from '@/components/ui/tags/github-tags';
 import IssueState from '@/components/ui/tags/issue-state';
@@ -61,15 +61,15 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
         });
 
         filteredData.map((item: any) => {
-          if (item.source.type === 'issue') {
+          if (item?.source?.type === 'issue') {
             if (
-              item.source.issue.repository_url === repo_url &&
-              item.source.issue.pull_request
+              item?.source?.issue.repository_url === repo_url &&
+              item?.source?.issue.pull_request
             ) {
               pull_requests++;
-              if (item.source.issue.pull_request.merged_at !== null) {
+              if (item?.source?.issue?.pull_request?.merged_at !== null) {
                 setNumClosed((state) => state + 1);
-                if (item.source.issue.user.id === (session as any)?.id) {
+                if (item?.source?.issue?.user?.id === (session as any)?.id) {
                   _solvedByMe = true;
                   setCompleted((state) => state + 1);
                 }
@@ -169,9 +169,9 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
           </div>
         </div>
         <AnchorLink href={item?.html_url} target="_blank" className="w-full">
-          <div className="flex w-full cursor-pointer items-center justify-center rounded-full border-2 border-primary bg-newdark py-1 px-8 text-sm font-semibold text-primary xl:text-base 3xl:text-lg">
+          <Button fullWidth={true} size="small">
             Check out the Project
-          </div>
+          </Button>
         </AnchorLink>
       </div>
     </div>
