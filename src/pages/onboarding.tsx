@@ -105,8 +105,8 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
               Contributor
             </div>
             <div className="text-wrap xl:w-68 w-64 text-center text-xs xl:text-sm 3xl:w-72 3xl:text-base">
-              if you are working on existing open source projects or
-              staking money on open issues.
+              if you are working on existing open source projects or staking
+              money on open issues.
             </div>
           </div>
           <div
@@ -130,8 +130,8 @@ const Onboarding: React.FC<OnboardingProps> = ({}) => {
               Repo Owner
             </div>
             <div className="text-wrap xl:w-68 w-64 text-center text-xs xl:text-sm 3xl:w-72 3xl:text-base">
-              For people who own and operate multiple open source
-              repositories and want a management console.
+              For people who manage multiple open-source repositories and need
+              advanced features.
             </div>
           </div>
         </div>
