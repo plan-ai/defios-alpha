@@ -170,7 +170,7 @@ const LearnIssue: React.FC<LearnIssueProps> = ({
         </div>
         <AnchorLink href={item?.html_url} target="_blank" className="w-full">
           <Button fullWidth={true} size="small">
-            Check out the Project
+            Check out the Issue
           </Button>
         </AnchorLink>
       </div>
