@@ -30,9 +30,9 @@ export const menuItems: any = [
     ),
     href: routes.swap,
   },
-  {
-    name: 'roadmaps',
-    icon: <MapIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
-    href: routes.roadmaps,
-  },
+  // {
+  //   name: 'roadmaps',
+  //   icon: <MapIcon className="h-5 w-5 xl:h-6 xl:w-6 3xl:h-7 3xl:w-7" />,
+  //   href: routes.roadmaps,
+  // },
 ];

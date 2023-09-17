@@ -122,7 +122,7 @@ const Search: React.FC<SearchProps> = ({
           }
         }}
       />
-      <Tooltip
+      {/* <Tooltip
         content={tooltipVal}
         placement="right-start"
         style="light"
@@ -130,7 +130,7 @@ const Search: React.FC<SearchProps> = ({
         arrow={false}
       >
         <InfoCircle className="ml-4" />
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };
@@ -361,7 +361,7 @@ export default function Projects() {
       </div>
 
       <div className="flex w-full items-center gap-8">
-        <div
+        {/* <div
           className={cn(
             'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
             {
@@ -372,7 +372,7 @@ export default function Projects() {
           onClick={() => setNewProjects(!newProjects)}
         >
           New Projects
-        </div>
+        </div> */}
         <div
           className={cn(
             'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
@@ -385,7 +385,7 @@ export default function Projects() {
         >
           My Projects
         </div>
-        <div className="flex gap-2 whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg">
+        {/* <div className="flex gap-2 whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg">
           <div
             className={cn('cursor-pointer whitespace-pre ', {
               'text-gray-400': duration !== '1D',
@@ -422,13 +422,13 @@ export default function Projects() {
           >
             ALL
           </div>
-        </div>
+        </div> */}
         <Search
           search={search}
           setSearch={setSearch}
           setTriggerSearch={setTriggerSearch}
         />
-        <div
+        {/* <div
           className={cn(
             'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
             {
@@ -451,7 +451,7 @@ export default function Projects() {
           onClick={() => setFavorites(!favorites)}
         >
           Favorites
-        </div>
+        </div> */}
       </div>
 
       <div className="my-3 grid grid-cols-11 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">

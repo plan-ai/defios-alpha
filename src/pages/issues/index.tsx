@@ -63,7 +63,6 @@ const Search: React.FC<searchProps> = ({
     <div className="relative flex w-full items-center rounded-full">
       <Input
         className="w-full"
-        inputClassName="!bg-newdark gradient-border-dark"
         placeholder={placeholder || 'Search'}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -75,7 +74,7 @@ const Search: React.FC<searchProps> = ({
           }
         }}
       />
-      <Tooltip
+      {/* <Tooltip
         content={tooltipVal}
         placement="right-start"
         style="light"
@@ -83,7 +82,7 @@ const Search: React.FC<searchProps> = ({
         arrow={false}
       >
         <InfoCircle className="ml-4" />
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };
@@ -369,7 +368,7 @@ const IssuesPage: NextPageWithLayout = () => {
             <CreateIssueBtn />
           </div>
           <div className="flex w-full items-center gap-8">
-            <div
+            {/* <div
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
                 {
@@ -380,7 +379,7 @@ const IssuesPage: NextPageWithLayout = () => {
               onClick={() => setNewIssues(!newIssues)}
             >
               New Issues
-            </div>
+            </div> */}
             <div
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
@@ -411,7 +410,7 @@ const IssuesPage: NextPageWithLayout = () => {
               setSearch={setSearch}
               setTriggerSearch={setTriggerSearch}
             />
-            <div
+            {/* <div
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
                 {
@@ -434,7 +433,7 @@ const IssuesPage: NextPageWithLayout = () => {
               onClick={() => setFavorites(!favorites)}
             >
               Favorites
-            </div>
+            </div> */}
           </div>
           <div className="my-3 grid grid-cols-7 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">
             <div></div>
