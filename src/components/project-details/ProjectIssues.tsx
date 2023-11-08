@@ -88,7 +88,11 @@ const Search: React.FC<searchProps> = ({
   );
 };
 
-const IssuesPage: NextPageWithLayout = () => {
+interface ProjectIssuessProps {
+  project_account: string;
+}
+
+const ProjectIssues: React.FC<ProjectIssuessProps> = ({ project_account }) => {
   mixpanel.track_pageview();
   //right sidebar (new issue) trigger
   const { openDrawer } = useDrawer();
@@ -103,7 +107,6 @@ const IssuesPage: NextPageWithLayout = () => {
 
   //issue choose states
   const [newIssues, setNewIssues] = useState(false);
-  const [myIssues, setMyIssues] = useState(false);
   const [showClosedIssues, setShowClosedIssues] = useState(false);
   const [filter, setFilter] = useState(false);
   const [favorites, setFavorites] = useState(false);
@@ -132,21 +135,25 @@ const IssuesPage: NextPageWithLayout = () => {
 
   //adds filters,search,page and fetches
   useEffect(() => {
+    if (
+      project_account === undefined ||
+      project_account === null ||
+      project_account === ''
+    )
+      return;
     if (firebase_jwt === '' || firebase_jwt === null) return;
     setIsLoading(true);
     // pagination
     const searchParams: any = {
       'filter.pageno': 1,
       'filter.pagesize': 50,
+      'search.issue_project_id': project_account,
     };
     //filters
     if (stakeOrder !== '') {
       searchParams['filter.order_by'] = `${
         stakeOrder === '-' ? '-' : ''
       }issue_stake_amount`;
-    }
-    if (myIssues) {
-      searchParams['filter.mine'] = true;
     }
     if (showClosedIssues) {
       searchParams['search.issue_state'] = 'closed';
@@ -159,9 +166,6 @@ const IssuesPage: NextPageWithLayout = () => {
           const [key, value] = item.trim().split(':');
           if (key === 'id') {
             searchParams['first_id'] = value;
-          }
-          if (key === 'issue_project_id') {
-            searchParams['search.issue_project_id'] = value;
           }
           if (key === 'issue_project_name') {
             searchParams['search.issue_project_name'] = value;
@@ -191,9 +195,6 @@ const IssuesPage: NextPageWithLayout = () => {
         const [key, value] = search.trim().split(':');
         if (key === 'id') {
           searchParams['first_id'] = value;
-        }
-        if (key === 'issue_project_id') {
-          searchParams['search.issue_project_id'] = value;
         }
         if (key === 'issue_project_name') {
           searchParams['search.issue_project_name'] = value;
@@ -238,11 +239,7 @@ const IssuesPage: NextPageWithLayout = () => {
         setTriggerSearch(false);
       });
     setInitExpand(false);
-  }, [
-    // page,
-    fetchTrigger,
-    firebase_jwt,
-  ]);
+  }, [fetchTrigger, firebase_jwt, project_account]);
 
   //triggers refetch when any of filters,search is changed from page1
   useEffect(() => {
@@ -250,7 +247,7 @@ const IssuesPage: NextPageWithLayout = () => {
     // setPage(1);
     // setDonePagination(false);
     setFetchTrigger(fetchTrigger + 1);
-  }, [myIssues, stakeOrder, showClosedIssues, triggerSearch, firebase_jwt]);
+  }, [stakeOrder, showClosedIssues, triggerSearch, firebase_jwt]);
 
   //redux redirected searches
   useEffect(() => {
@@ -275,70 +272,28 @@ const IssuesPage: NextPageWithLayout = () => {
   ]);
 
   return (
-    <>
-      <NextSeo
-        title="Issues"
-        description="DefiOS - Scaling Layer for Open Source Collaboration."
-      />
-      <div className="landing-font flex items-center justify-start">
-        <div className="relative flex h-full w-full flex-col">
-          <div className="flex h-[15rem] w-full flex-col justify-between rounded-3xl bg-[#7CAA8E] p-12">
-            <div className="w-[50%] text-2xl font-bold xl:text-3xl 3xl:text-4xl">
-              issues
-            </div>
-            <div className="w-[50%] text-base xl:text-lg 3xl:text-xl">
-              solve issues to earn tokens.
-              <br />
-              stake tokens on issues to incentivize contributors.
-            </div>
+    <div className="landing-font flex items-center justify-start">
+      <div className="relative flex h-full w-full flex-col">
+        <div className="flex w-full items-center gap-8">
+          <div
+            className={cn(
+              'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
+              {
+                'text-gray-400': !showClosedIssues,
+                'textShadow text-primary': showClosedIssues,
+              }
+            )}
+            onClick={() => setShowClosedIssues(!showClosedIssues)}
+          >
+            Show Closed Issues
           </div>
-          <div className="my-12">
-            <CreateIssueBtn />
-          </div>
-          <div className="flex w-full items-center gap-8">
-            {/* <div
-              className={cn(
-                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
-                {
-                  'text-gray-400': !newIssues,
-                  'textShadow text-primary': newIssues,
-                }
-              )}
-              onClick={() => setNewIssues(!newIssues)}
-            >
-              New Issues
-            </div> */}
-            <div
-              className={cn(
-                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
-                {
-                  'text-gray-400': !myIssues,
-                  'textShadow text-primary': myIssues,
-                }
-              )}
-              onClick={() => setMyIssues(!myIssues)}
-            >
-              My Issues
-            </div>
-            <div
-              className={cn(
-                'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
-                {
-                  'text-gray-400': !showClosedIssues,
-                  'textShadow text-primary': showClosedIssues,
-                }
-              )}
-              onClick={() => setShowClosedIssues(!showClosedIssues)}
-            >
-              Show Closed Issues
-            </div>
-            <Search
-              placeholder="search issues"
-              search={search}
-              setSearch={setSearch}
-              setTriggerSearch={setTriggerSearch}
-            />
-            {/* <div
+          <Search
+            placeholder="search issues"
+            search={search}
+            setSearch={setSearch}
+            setTriggerSearch={setTriggerSearch}
+          />
+          {/* <div
               className={cn(
                 'cursor-pointer whitespace-pre text-sm font-semibold uppercase xl:text-base 3xl:text-lg',
                 {
@@ -362,50 +317,45 @@ const IssuesPage: NextPageWithLayout = () => {
             >
               Favorites
             </div> */}
-          </div>
-          <div className="my-3 grid grid-cols-7 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">
-            <div></div>
-            <span className="col-span-5 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              issue title
-            </span>
-            <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
-              <div className="textShadow text-primary">rewards</div>
-              <div className="text-xs xl:text-sm 3xl:text-base">($)</div>
-            </span>
-          </div>
-          {issuesData?.length !== 0 &&
-            issuesData.map((issue: any, idx: number) => (
-              <IssuesList data={issue} key={issue._id} />
-            ))}
-          {!isLoading && issuesData.length === 0 && (
-            <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
-              <EmptyList />
-              <div className="text-lg text-gray-500">
-                No Issues found that match your filter and search settings
-              </div>
-              <Link href={'/issues/create'}>
-                <Button color="PrimarySolid">
-                  <div className="flex flex-row items-center justify-center gap-2">
-                    <PlusCircle />
-                    Create New Issue
-                  </div>
-                </Button>
-              </Link>
-            </div>
-          )}
-          {isLoading && (
-            <div className="mt-10 flex h-full w-full items-center justify-center">
-              <Spinner />
-            </div>
-          )}
         </div>
+        <div className="my-3 grid grid-cols-7 gap-6 border-b border-gray-600 bg-newdark text-base font-semibold shadow-card xl:text-lg 2xl:text-xl">
+          <div></div>
+          <span className="col-span-5 px-6 py-3 tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+            issue title
+          </span>
+          <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
+            <div className="textShadow text-primary">rewards</div>
+            <div className="text-xs xl:text-sm 3xl:text-base">($)</div>
+          </span>
+        </div>
+        {issuesData?.length !== 0 &&
+          issuesData.map((issue: any, idx: number) => (
+            <IssuesList data={issue} key={issue._id} />
+          ))}
+        {!isLoading && issuesData.length === 0 && (
+          <div className="mt-16 flex w-full flex-col items-center justify-center gap-5">
+            <EmptyList />
+            <div className="text-lg text-gray-500">
+              No Issues found that match your filter and search settings
+            </div>
+            <Link href={'/issues/create'}>
+              <Button color="PrimarySolid">
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <PlusCircle />
+                  Create New Issue
+                </div>
+              </Button>
+            </Link>
+          </div>
+        )}
+        {isLoading && (
+          <div className="mt-10 flex h-full w-full items-center justify-center">
+            <Spinner />
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
-IssuesPage.getLayout = function getLayout(page) {
-  return <RootLayout>{page}</RootLayout>;
-};
-
-export default IssuesPage;
+export default ProjectIssues;

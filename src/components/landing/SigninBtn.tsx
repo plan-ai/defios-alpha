@@ -13,7 +13,7 @@ export const SigninBtn: React.FC<SigninBtnProps> = ({}) => {
     <div
       onClick={() => {
         const user_type = localStorage.getItem('user_type');
-        if (session) {
+        if (session && (session as any)?.accessToken?.includes('gho_')) {
           if (user_type === null || user_type === undefined) {
             router.push('/onboarding');
           } else {

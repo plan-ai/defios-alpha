@@ -8,6 +8,8 @@ import axios from '@/lib/axiosClient';
 import { useAppSelector } from '@/store/store';
 import { fetchTokenMetadata } from '@/lib/helpers/metadata';
 
+import { useRouter } from 'next/router';
+
 interface ProjectListTypes {
   data: any;
   initExpand?: boolean;
@@ -21,6 +23,8 @@ export default function ProjectList({
   let [isExpand, setIsExpand] = useState(initExpand || false);
 
   let [tokenDecimals, setTokenDecimals] = useState(0);
+
+  const router = useRouter();
 
   useEffect(() => {
     getTokenInfo();
@@ -41,7 +45,8 @@ export default function ProjectList({
     >
       <div
         className="relative my-4 grid h-auto cursor-pointer grid-cols-11 items-start items-center gap-6 text-xs xl:text-sm 2xl:text-base"
-        onClick={() => setIsExpand(!isExpand)}
+        // onClick={() => setIsExpand(!isExpand)}
+        onClick={() => router.push(`/projects/${data?.project_account}`)}
       >
         {/* <div></div> */}
         <div className="col-span-8 flex items-center gap-5 px-6 font-medium tracking-wider text-white">
@@ -80,7 +85,7 @@ export default function ProjectList({
           {Math.round((data?.coins_rewarded * 100) / 10 ** tokenDecimals) / 100}
         </div>
       </div>
-      <AnimatePresence initial={false}>
+      {/* <AnimatePresence initial={false}>
         {isExpand && (
           <motion.div
             key="content"
@@ -98,7 +103,7 @@ export default function ProjectList({
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
       <div className="lineGradientHorizontalGray h-0.5 w-full"></div>
     </div>
   );
