@@ -15,7 +15,7 @@ import { ArrowLongLeftIcon } from '@heroicons/react/24/solid';
 //components
 import IssueBox from '@/components/issue-details/IssueBox';
 import IssueDescription from '@/components/issue-details/IssueDescription';
-import IssueStake from '@/components/issue-details/IssueStake';
+import IssueFunding from '@/components/issue-details/IssueFunding';
 import IssuePullRequests from '@/components/issue-details/IssuePullRequests';
 import IssuePullRequestsOwner from '@/components/issue-details/IssuePullRequestsOwner';
 
@@ -32,9 +32,7 @@ import { getTokenBalance } from '@/lib/helpers/metadata';
 //contract utils
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import {
-  BN,
-} from '@project-serum/anchor';
+import { BN } from '@project-serum/anchor';
 import { Signer, Connection } from '@/lib/helpers/wallet';
 
 interface IssueDetailsProps {}
@@ -71,7 +69,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       issueData.issue_token.token_spl_addr === undefined
     )
       return;
-    
+
     //total power calc
     const { supplyModified, decimals, supplyActual } = await getSupplyModified(
       issueData.issue_token.token_spl_addr
@@ -161,7 +159,6 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       });
   };
 
-
   useEffect(() => {
     if (firebase_jwt === '' || firebase_jwt === null) return;
     if (refetch === 0) {
@@ -240,7 +237,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
         <IssueDescription issue_url={issueData?.issue_gh_url} />
       )}
       {tabState === 'funding' && (
-        <IssueStake
+        <IssueFunding
           tokenDetails={tokenDetails}
           issueData={issueData}
           setRefetch={setRefetch}

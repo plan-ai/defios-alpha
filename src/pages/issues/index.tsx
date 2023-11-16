@@ -148,8 +148,8 @@ const IssuesPage: NextPageWithLayout = () => {
     if (myIssues) {
       searchParams['filter.mine'] = true;
     }
-    if (showClosedIssues) {
-      searchParams['search.issue_state'] = 'closed';
+    if (!showClosedIssues) {
+      searchParams['search.issue_state'] = 'open';
     }
     //search multiple
     if (search !== '') {
@@ -165,9 +165,6 @@ const IssuesPage: NextPageWithLayout = () => {
           }
           if (key === 'issue_project_name') {
             searchParams['search.issue_project_name'] = value;
-          }
-          if (key === 'state') {
-            searchParams['search.issue_state'] = value;
           }
           if (key === 'stake_amount') {
             searchParams['search.issue_stake_amount'] = parseInt(value);
@@ -197,9 +194,6 @@ const IssuesPage: NextPageWithLayout = () => {
         }
         if (key === 'issue_project_name') {
           searchParams['search.issue_project_name'] = value;
-        }
-        if (key === 'state') {
-          searchParams['search.issue_state'] = value;
         }
         if (key === 'stake_amount') {
           searchParams['search.issue_stake_amount'] = parseInt(value);

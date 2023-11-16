@@ -42,8 +42,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
   const { data: session } = useSession();
   const userMappingState = useAppSelector(selectUserMapping);
 
-  const [section, setSection] = useState(1);
-
   const [tokenAmount, setTokenAmount] = React.useState<number>(0);
   const [usdcAmount, setUsdcAmount] = React.useState<number>(0);
 
@@ -173,140 +171,114 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
   };
 
   return (
-    <div className="mt-16 flex w-full items-center justify-end">
-      <div className="relative mx-32 w-full">
-        <div className="relative z-[40] flex w-full flex-col justify-between gap-3 rounded-[3rem] bg-body px-12 py-8 xl:px-14 xl:py-10 3xl:px-16 3xl:py-12">
-          <div className="flex w-full w-full items-end gap-12">
-            <div className="flex w-[30%] flex-col gap-2">
-              <div className="ml-1 text-base font-semibold uppercase xl:text-lg 3xl:text-xl">
-                Token Incentive
-              </div>
-              <Input
-                inputClassName="border-light-gray"
-                type="number"
-                value={tokenAmount}
-                onChange={(e) => {
-                  setTokenAmount(parseFloat(e.target.value));
-                }}
-              />
+    <div className="relative mx-32 w-full">
+      <div className="relative z-[40] flex w-full flex-col justify-between gap-3 rounded-[3rem] bg-body px-12 py-8 xl:px-14 xl:py-10 3xl:px-16 3xl:py-12">
+        <div className="flex w-full w-full items-end gap-12">
+          <div className="flex w-[30%] flex-col gap-2">
+            <div className="ml-1 text-base font-semibold uppercase xl:text-lg 3xl:text-xl">
+              Token Incentive
             </div>
-            <div className="flex w-[30%] flex-col gap-2">
-              <div className="ml-1 text-base font-semibold uppercase xl:text-lg 3xl:text-xl">
-                USDC Incentive{' '}
-                <div className="inline font-normal">(OPTIONAL)</div>
-              </div>
-              <Input
-                inputClassName="border-light-gray"
-                type="number"
-                value={usdcAmount}
-                onChange={(e) => {
-                  setUsdcAmount(parseFloat(e.target.value));
-                }}
-              />
-            </div>
-            <Button
-              color={
-                issueData?.issue_state === 'open' ? 'PrimarySolid' : 'GraySolid'
-              }
-              onClick={() => {
-                if (!isStaking && issueData?.issue_state === 'open') {
-                  handleIssueStake();
-                }
+            <Input
+              inputClassName="border-light-gray"
+              type="number"
+              value={tokenAmount}
+              onChange={(e) => {
+                setTokenAmount(parseFloat(e.target.value));
               }}
-              disabled={issueData?.issue_state === 'closed'}
-              isLoading={isStaking}
-            >
-              stake
-            </Button>
+            />
           </div>
-
-          <div className="flex items-center gap-2 text-xs xl:text-sm 3xl:text-base">
-            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-              {issueData?.issue_token?.token_image_url !== '' && (
-                <Image
-                  src={issueData?.issue_token?.token_image_url}
-                  alt="token image"
-                  fill
-                  className="object-cover"
-                />
-              )}
+          <div className="flex w-[30%] flex-col gap-2">
+            <div className="ml-1 text-base font-semibold uppercase xl:text-lg 3xl:text-xl">
+              USDC Incentive{' '}
+              <div className="inline font-normal">(OPTIONAL)</div>
             </div>
-            <div className="mr-3">
-              {issueData?.issue_token?.token_symbol} balance:{' '}
-            </div>
-            <div>{tokenDetails?.tokenBalance}</div>
-            <div className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-0.5 px-3 text-3xs font-semibold text-primary xl:text-2xs 3xl:text-xs">
-              buy tokens
-            </div>
-          </div>
-
-          <div className="mt-8 flex w-full items-end gap-4">
-            <div className="flex w-[65%] flex-col gap-8 text-base xl:text-lg 3xl:text-xl">
-              <div className="flex w-full items-center justify-between">
-                <div>Your current voting power:</div>
-                <div>
-                  {Math.round(
-                    (tokenDetails?.votingPower / tokenDetails?.totalPower) *
-                      10000
-                  ) / 100}
-                  %
-                </div>
-              </div>
-              <div className="flex w-full items-center justify-between">
-                <div>Your current stake:</div>
-                <div>{tokenDetails?.stakeByMe}</div>
-              </div>
-            </div>
-            <Button
-              color={
-                issueData?.issue_state === 'open' && !tokenDetails?.voted
-                  ? 'RedOutline'
-                  : 'GrayOutline'
-              }
-              onClick={() => {
-                if (
-                  !isUnstaking &&
-                  issueData?.issue_state === 'open' &&
-                  !tokenDetails?.voted
-                ) {
-                  handleIssueUnstake();
-                }
+            <Input
+              inputClassName="border-light-gray"
+              type="number"
+              value={usdcAmount}
+              onChange={(e) => {
+                setUsdcAmount(parseFloat(e.target.value));
               }}
-              disabled={
-                issueData?.issue_state === 'closed' || tokenDetails?.voted
+            />
+          </div>
+          <Button
+            color={
+              issueData?.issue_state === 'open' ? 'PrimarySolid' : 'GraySolid'
+            }
+            onClick={() => {
+              if (!isStaking && issueData?.issue_state === 'open') {
+                handleIssueStake();
               }
-              isLoading={isUnstaking}
-              size="small"
-            >
-              unstake
-            </Button>
+            }}
+            disabled={issueData?.issue_state === 'closed'}
+            isLoading={isStaking}
+          >
+            stake
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs xl:text-sm 3xl:text-base">
+          <div className="relative h-6 w-6 overflow-hidden rounded-full">
+            {issueData?.issue_token?.token_image_url !== '' && (
+              <Image
+                src={issueData?.issue_token?.token_image_url}
+                alt="token image"
+                fill
+                className="object-cover"
+              />
+            )}
+          </div>
+          <div className="mr-3">
+            {issueData?.issue_token?.token_symbol} balance:{' '}
+          </div>
+          <div>{tokenDetails?.tokenBalance}</div>
+          <div className="w-fit cursor-pointer rounded-full border border-primary bg-newdark py-0.5 px-3 text-3xs font-semibold text-primary xl:text-2xs 3xl:text-xs">
+            buy tokens
           </div>
         </div>
-        <div className="absolute left-0 right-0 top-[30%] bottom-[20%] z-[10] rounded-full bg-[#1D606A] blur-[80px]"></div>
+
+        <div className="mt-8 flex w-full items-end gap-4">
+          <div className="flex w-[65%] flex-col gap-8 text-base xl:text-lg 3xl:text-xl">
+            <div className="flex w-full items-center justify-between">
+              <div>Your current voting power:</div>
+              <div>
+                {Math.round(
+                  (tokenDetails?.votingPower / tokenDetails?.totalPower) * 10000
+                ) / 100}
+                %
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <div>Your current stake:</div>
+              <div>{tokenDetails?.stakeByMe}</div>
+            </div>
+          </div>
+          <Button
+            color={
+              issueData?.issue_state === 'open' && !tokenDetails?.voted
+                ? 'RedOutline'
+                : 'GrayOutline'
+            }
+            onClick={() => {
+              if (
+                !isUnstaking &&
+                issueData?.issue_state === 'open' &&
+                !tokenDetails?.voted
+              ) {
+                handleIssueUnstake();
+              }
+            }}
+            disabled={
+              issueData?.issue_state === 'closed' || tokenDetails?.voted
+            }
+            isLoading={isUnstaking}
+            size="small"
+          >
+            unstake
+          </Button>
+        </div>
       </div>
-      {/* <div className="flex flex-col items-center gap-8">
-        <div
-          className={cn('cursor-pointer rounded-full border border-primary', {
-            'h-6 w-6 border-4': section === 1,
-            'h-4 w-4': section !== 1,
-          })}
-          onClick={() => setSection(1)}
-        ></div>
-        <div
-          className={cn('cursor-pointer rounded-full border border-primary', {
-            'h-6 w-6 border-4': section === 2,
-            'h-4 w-4': section !== 2,
-          })}
-          onClick={() => setSection(2)}
-        ></div>
-        <div
-          className={cn('cursor-pointer rounded-full border border-primary', {
-            'h-6 w-6 border-4': section === 3,
-            'h-4 w-4': section !== 3,
-          })}
-          onClick={() => setSection(3)}
-        ></div>
-      </div> */}
+      <div className="absolute left-0 right-0 top-[30%] bottom-[20%] z-[10] rounded-full bg-[#1D606A] blur-[80px]"></div>
     </div>
   );
 };

@@ -155,8 +155,8 @@ const ProjectIssues: React.FC<ProjectIssuessProps> = ({ project_account }) => {
         stakeOrder === '-' ? '-' : ''
       }issue_stake_amount`;
     }
-    if (showClosedIssues) {
-      searchParams['search.issue_state'] = 'closed';
+    if (!showClosedIssues) {
+      searchParams['search.issue_state'] = 'open';
     }
     //search multiple
     if (search !== '') {
@@ -169,9 +169,6 @@ const ProjectIssues: React.FC<ProjectIssuessProps> = ({ project_account }) => {
           }
           if (key === 'issue_project_name') {
             searchParams['search.issue_project_name'] = value;
-          }
-          if (key === 'state') {
-            searchParams['search.issue_state'] = value;
           }
           if (key === 'stake_amount') {
             searchParams['search.issue_stake_amount'] = parseInt(value);
@@ -198,9 +195,6 @@ const ProjectIssues: React.FC<ProjectIssuessProps> = ({ project_account }) => {
         }
         if (key === 'issue_project_name') {
           searchParams['search.issue_project_name'] = value;
-        }
-        if (key === 'state') {
-          searchParams['search.issue_state'] = value;
         }
         if (key === 'stake_amount') {
           searchParams['search.issue_stake_amount'] = parseInt(value);
