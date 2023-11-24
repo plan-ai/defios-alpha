@@ -11,6 +11,7 @@ import Textarea from '@/components/ui/forms/textarea';
 import Spinner from '../custom/spinner';
 import cn from 'classnames';
 import Button from '@/components/ui/button/ButtonNew';
+import Tooltip from '@/components/ui/Tooltip';
 
 import { useAppSelector, useAppDispatch } from '@/store/store';
 import axios from '@/lib/axiosClient';
@@ -292,7 +293,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>Choose or Create an Issue</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`Select or create an issue on your repository that you want to see solved. tokens you created in the last step will be staked on it.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <div className="relative">
           <Input
@@ -357,7 +363,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>Issue Description</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`Remember to be as descriptive as possible to help developers solve this effectively - who are unfamiliar with your codebase.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <Textarea
           placeholder="describe the issue in detail so that developers know how to solve it. like all issues in software, the more descriptive you can be about it, the easier it will be for developers to solve it "
@@ -370,7 +381,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>Select Tags</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`if this is a new issue, tags will automatically be created. for existing issues, any new tags added here will be automatically added to your repository.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <div className="relative">
           <Input
@@ -424,7 +440,12 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
               USDC Incentive{' '}
               <div className="normal inline text-gray-400">(optional)</div>
             </div>
-            <QuestionMarkCircleIcon className="h-5 w-5 " />
+            <Tooltip
+              note={`You can choose to stake USDC on this issue if this needs an urgent solution and your existing token has no $ value.`}
+              direction="top-left"
+            >
+              <QuestionMarkCircleIcon className="h-5 w-5 " />
+            </Tooltip>
           </div>
           <Input
             placeholder="0"

@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Spinner from '../custom/spinner';
 import cn from 'classnames';
 import Button from '@/components/ui/button/ButtonNew';
+import Tooltip from '@/components/ui/Tooltip';
 
 import axios from '@/lib/axiosClient';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -49,7 +50,22 @@ export const TokenType: React.FC<TokenTypeProps> = ({
             <div className="text-sm uppercase xl:text-base 3xl:text-lg">
               {item.name}
             </div>
-            <QuestionMarkCircleIcon className="h-5 w-5 " />
+            {idx == 0 && (
+              <Tooltip
+                note={`Repository Tokens are at the heart of how defiOS enables open source projects to scale. This token will not only be used to reward early contributors of your project for their efforts but also allow token holders who stake on issues to vote on PRs relevant to that issue. This would be a token on the Solana blockchain, and if you already have a token on the Solana blockchain associated with this project - you can use that instead by clicking on the button on the right side of this and import that instead.`}
+                direction="top-left"
+              >
+                <QuestionMarkCircleIcon className="h-5 w-5 " />
+              </Tooltip>
+            )}
+            {idx == 1 && (
+              <Tooltip
+                note={`If you already have a token associated with your open source project, you can choose to import that for use in defiOS here.`}
+                direction="top-right"
+              >
+                <QuestionMarkCircleIcon className="h-5 w-5 " />
+              </Tooltip>
+            )}
           </div>
         );
       })}
@@ -409,7 +425,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>Choose Repository</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`This should be a repository that is open source, and one that you are a owner of. The token that you create here, your "Repository Token" will be associated with this repository.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <div className="relative">
           <Input
@@ -459,7 +480,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>Project Name</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`This can be identical to your repository name, and serves as a signifier for your open source project.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <Input
           placeholder="e.g. Linux, VLC media player"
@@ -472,7 +498,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3 uppercase ">
           <div>One Line Description</div>
-          <QuestionMarkCircleIcon className="h-5 w-5 " />
+          <Tooltip
+            note={`What does your open source project do? Try to keep this brief so that contributors can easily & quickly understand what your project does.`}
+            direction="top-left"
+          >
+            <QuestionMarkCircleIcon className="h-5 w-5 " />
+          </Tooltip>
         </div>
         <Input
           placeholder="e.g. Audacity is a free and open-source digital audio editor."
@@ -491,7 +522,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
           <div className="flex w-[40%] flex-col gap-2">
             <div className="flex items-center gap-3 uppercase ">
               <div>Token Symbol</div>
-              <QuestionMarkCircleIcon className="h-5 w-5 " />
+              <Tooltip
+                note={`This is the symbol your repository token will be denoted by. Similar to how Bitcoin is denoted by $BTC & Solana is denoted by $SOL, pick a 3 (or 4) letter abbreviation that accurately serves as a signifier for your open source project.`}
+                direction="top-left"
+              >
+                <QuestionMarkCircleIcon className="h-5 w-5 " />
+              </Tooltip>
             </div>
             <Input
               placeholder="e.g. ADX, TGT, BUYN"
@@ -503,7 +539,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
           <div className="flex w-[55%] flex-col gap-2">
             <div className="flex items-center gap-3 uppercase ">
               <div>Token Name</div>
-              <QuestionMarkCircleIcon className="h-5 w-5 " />
+              <Tooltip
+                note={`This will be the name your repository token will be known by, so pick a name that accurately depicts that this is a token that is associated with your open source project.`}
+                direction="top-left"
+              >
+                <QuestionMarkCircleIcon className="h-5 w-5 " />
+              </Tooltip>
             </div>
             <Input
               placeholder="e.g. Audacity token, Uber dev token"
@@ -558,7 +599,12 @@ export const Step1: React.FC<Step1Props> = ({ setStep }) => {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3 uppercase ">
             <div>Token Icon</div>
-            <QuestionMarkCircleIcon className="h-5 w-5 " />
+            <Tooltip
+              note={`Your token icon should accurately depict your open source project. While it doesn't have to be your project logo, it's more accurate if it is. In short, when people see your Token Symbol, Token Name & Token Icon - all of them should match one another and your open source project.`}
+              direction="top-left"
+            >
+              <QuestionMarkCircleIcon className="h-5 w-5 " />
+            </Tooltip>
           </div>
           <div className="flex w-full items-center gap-2">
             <Uploader
