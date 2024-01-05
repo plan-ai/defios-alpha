@@ -170,7 +170,10 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
   const handleAcceptPR = (prData: any) => {
     dispatch(onLoading('Merging pull request...'));
     setIsMerging(true);
-    acceptPr(new PublicKey(prData.issue_pr_account))
+    acceptPr(
+      new PublicKey(prData.issue_pr_account),
+      new PublicKey(issueData?.issue_account)
+    )
       .then((res) => {
         const pullApiUrl = prData.issue_pr_link
           .replace('https://github.com/', '')

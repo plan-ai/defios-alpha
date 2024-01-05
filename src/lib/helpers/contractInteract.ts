@@ -148,14 +148,6 @@ export const createRepository = (
         mintKeypair,
         Signer.publicKey
       );
-      const [defaultVestingSchedule] = await get_pda_from_seeds(
-        [
-          Buffer.from('isGodReal?'),
-          Buffer.from('DoULoveMe?'),
-          Buffer.from('SweetChick'),
-        ],
-        program
-      );
 
       await program.methods
         .createRepository(
@@ -175,7 +167,6 @@ export const createRepository = (
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: vestingAccount,
           vestingTokenAccount: vestingTokenAccount,
-          defaultSchedule: defaultVestingSchedule,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           metadata: metadataAddress,
           importedMint: null,
@@ -262,14 +253,6 @@ export const createRepositoryUnlockIssueStake = (
       const repositoryCreatorTokenAccount = await getAssociatedTokenAddress(
         mintKeypair,
         Signer.publicKey
-      );
-      const [defaultVestingSchedule] = await get_pda_from_seeds(
-        [
-          Buffer.from('isGodReal?'),
-          Buffer.from('DoULoveMe?'),
-          Buffer.from('SweetChick'),
-        ],
-        program
       );
 
       const ixUnlock = await program.methods
@@ -412,7 +395,6 @@ export const createRepositoryUnlockIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: vestingAccount,
           vestingTokenAccount: vestingTokenAccount,
-          defaultSchedule: defaultVestingSchedule,
           metadata: metadataAddress,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: null,
@@ -473,14 +455,6 @@ export const createRepositoryImported = (
         ],
         program
       );
-      const [defaultVestingSchedule] = await get_pda_from_seeds(
-        [
-          Buffer.from('isGodReal?'),
-          Buffer.from('DoULoveMe?'),
-          Buffer.from('SweetChick'),
-        ],
-        program
-      );
 
       program.methods
         .createRepository(
@@ -500,7 +474,6 @@ export const createRepositoryImported = (
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
           vestingTokenAccount: null,
-          defaultSchedule: defaultVestingSchedule,
           metadata: null,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: new PublicKey(tokenAddress),
@@ -569,14 +542,6 @@ export const createRepositoryImportedIssueStake = (
           Buffer.from('repository'),
           Buffer.from(repoName),
           Signer.publicKey.toBuffer(),
-        ],
-        program
-      );
-      const [defaultVestingSchedule] = await get_pda_from_seeds(
-        [
-          Buffer.from('isGodReal?'),
-          Buffer.from('DoULoveMe?'),
-          Buffer.from('SweetChick'),
         ],
         program
       );
@@ -723,7 +688,6 @@ export const createRepositoryImportedIssueStake = (
           systemProgram: web3.SystemProgram.programId,
           vestingAccount: null,
           vestingTokenAccount: null,
-          defaultSchedule: defaultVestingSchedule,
           metadata: null,
           tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,
           importedMint: new PublicKey(tokenAddress),
@@ -825,7 +789,7 @@ export const createIssueStake = (
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { rewardsMint } = await program.account.repository.fetch(
+    const { repoToken } = await program.account.repository.fetch(
       repositoryAccount
     );
 
@@ -843,7 +807,7 @@ export const createIssueStake = (
       program
     );
 
-    const mintKeypair = rewardsMint;
+    const mintKeypair = repoToken;
 
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -978,9 +942,9 @@ export const stakeIssueTokens = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
+    const { repoToken } = await program.account.repository.fetch(repository);
 
-    const mintKeypair = rewardsMint;
+    const mintKeypair = repoToken;
 
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -1118,7 +1082,6 @@ export const stakeIssue = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
 
     const [issueStakerAccount] = await get_pda_from_seeds(
       [
@@ -1197,9 +1160,9 @@ export const unstakeIssueTokens = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
+    const { repoToken } = await program.account.repository.fetch(repository);
 
-    const mintKeypair = rewardsMint;
+    const mintKeypair = repoToken;
 
     const issueTokenPoolAccount = await getAssociatedTokenAddress(
       mintKeypair,
@@ -1285,7 +1248,6 @@ export const unstakeIssue = (
     const program = await getDefiOsProgram(provider);
 
     const { repository } = await program.account.issue.fetch(issueAccount);
-    const { rewardsMint } = await program.account.repository.fetch(repository);
 
     const [issueStakerAccount] = await get_pda_from_seeds(
       [
@@ -1333,64 +1295,33 @@ export const unstakeIssue = (
 };
 
 export const addPullRequest = (
-  commitCreator: PublicKey,
+  PrCreator: PublicKey,
   issueAccount: PublicKey,
-  commitVerifiedUser: PublicKey,
-  treeHashUnsliced: string,
-  commitHashUnsliced: string,
+  PrVerifiedUser: PublicKey,
   metadataURI: string
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
-    const treeHash = treeHashUnsliced.slice(0, 8);
-    const commitHash = commitHashUnsliced.slice(0, 8);
-    const { repository } = await program.account.issue.fetch(issueAccount);
-
-    const [commitAccount] = await get_pda_from_seeds(
-      [
-        Buffer.from('commit'),
-        Buffer.from(commitHash),
-        commitCreator.toBuffer(),
-        issueAccount.toBuffer(),
-      ],
-      program
-    );
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
         issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
+        PrCreator.toBuffer(),
       ],
       program
     );
 
-    const ixAddPr = await program.methods
+    await program.methods
       .addPr(metadataURI)
       .accounts({
-        pullRequestVerifiedUser: commitVerifiedUser,
+        pullRequestVerifiedUser: PrVerifiedUser,
         issue: issueAccount,
         pullRequestMetadataAccount: pullRequestMetadataAccount,
-        pullRequestAddr: commitCreator,
+        pullRequestAddr: PrCreator,
         systemProgram: web3.SystemProgram.programId,
       })
-      .remainingAccounts([
-        { pubkey: commitAccount, isWritable: true, isSigner: false },
-      ])
-      .instruction();
-
-    await program.methods
-      .addCommit(commitHash, treeHash, metadataURI)
-      .accounts({
-        commitAccount,
-        commitCreator: commitCreator,
-        commitVerifiedUser,
-        issueAccount,
-        repositoryAccount: repository,
-        systemProgram: web3.SystemProgram.programId,
-      })
-      .postInstructions([ixAddPr])
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);
@@ -1401,27 +1332,23 @@ export const addPullRequest = (
   });
 };
 
-export const votePr = (issueStaker: PublicKey, prAccount: PublicKey) => {
+export const votePr = (issueStaker: PublicKey, prAccount: PublicKey, issueAccount: PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { sentBy, commits } = await program.account.pullRequest.fetch(
+    const { sentBy } = await program.account.pullRequest.fetch(
       prAccount
     );
+
     const pullRequestAddr = sentBy;
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
-    );
-    const issueAccount = issue;
     const { repository } = await program.account.issue.fetch(issueAccount);
 
     const [pullRequestMetadataAccount] = await get_pda_from_seeds(
       [
         Buffer.from('pullrequestadded'),
         issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
+        sentBy.toBuffer(),
       ],
       program
     );
@@ -1456,20 +1383,16 @@ export const votePr = (issueStaker: PublicKey, prAccount: PublicKey) => {
 };
 
 
-export const acceptPr = (prAccount: PublicKey) => {
+export const acceptPr = (prAccount: PublicKey,issueAccount:PublicKey) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { sentBy, commits } = await program.account.pullRequest.fetch(
+    const { sentBy } = await program.account.pullRequest.fetch(
       prAccount
     );
     const pullRequestAddr = sentBy;
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
-    );
-    const issueAccount = issue;
+    
     const { repository } = await program.account.issue.fetch(issueAccount);
     const { repositoryCreator, id: repositoryId } =
       await program.account.repository.fetch(repository);
@@ -1478,7 +1401,7 @@ export const acceptPr = (prAccount: PublicKey) => {
       [
         Buffer.from('pullrequestadded'),
         issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
+        pullRequestAddr.toBuffer(),
       ],
       program
     );
@@ -1506,23 +1429,18 @@ export const acceptPr = (prAccount: PublicKey) => {
 export const claimReward = (
   pullRequestAddr: PublicKey,
   prAccount: PublicKey,
-  tokenAddress: PublicKey
+  tokenAddress: PublicKey,
+  issueAccount: PublicKey,
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { commits } = await program.account.pullRequest.fetch(prAccount);
-    const commitAccount = commits[0];
-    const { issue, commitCreator } = await program.account.commit.fetch(
-      commitAccount
-    );
-    const issueAccount = issue;
     const { repository, issueCreator } = await program.account.issue.fetch(
       issueAccount
     );
 
-    const { repositoryCreator, rewardsMint } =
+    const { repositoryCreator } =
       await program.account.repository.fetch(repository);
 
     const mintKeypair = tokenAddress;
@@ -1531,7 +1449,7 @@ export const claimReward = (
       [
         Buffer.from('pullrequestadded'),
         issueAccount.toBuffer(),
-        commitCreator.toBuffer(),
+        pullRequestAddr.toBuffer(),
       ],
       program
     );
@@ -1583,10 +1501,6 @@ export const unlockTokens = (
       const provider = await getProvider(Connection, Signer);
       const program = await getDefiOsProgram(provider);
 
-      const { rewardsMint } = await program.account.repository.fetch(
-        repositoryAccount
-      );
-
       const mintKeypair = tokenAddress;
 
       const [vestingAccount] = await get_pda_from_seeds(
@@ -1614,232 +1528,6 @@ export const unlockTokens = (
           tokenMint: mintKeypair,
           vestingTokenAccount: vestingTokenAccount,
         })
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-export const addRoadmapData = (
-  roadmapDataAdder: PublicKey,
-  roadmapVerifiedUser: PublicKey,
-  repositoryAccount: PublicKey,
-  roadmapTitle: string,
-  roadmapDescription: string,
-  roadmapImageUrl: string,
-  roadmapOutlook: any
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const provider = await getProvider(Connection, Signer);
-      const program = await getDefiOsProgram(provider);
-
-      const [metadataAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('roadmapmetadataadd'),
-          repositoryAccount.toBuffer(),
-          roadmapDataAdder.toBuffer(),
-        ],
-        program
-      );
-
-      await program.methods
-        .addRoadmapData(
-          roadmapTitle,
-          roadmapDescription,
-          roadmapImageUrl,
-          roadmapOutlook
-        )
-        .accounts({
-          metadataAccount,
-          roadmapDataAdder,
-          roadmapVerifiedUser,
-          repositoryAccount: repositoryAccount,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-export const addObjectiveData = (
-  objectiveDataAddr: PublicKey,
-  objectiveVerifiedUser: PublicKey,
-  repositoryAccount: PublicKey,
-  issueAccount: PublicKey,
-  objectiveId: string,
-  objectiveTitle: string,
-  objectiveDescription: string,
-  objectiveDeliverable: any
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const provider = await getProvider(Connection, Signer);
-      const program = await getDefiOsProgram(provider);
-
-      const [objectiveAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('objectivedataadd'),
-          issueAccount.toBuffer(),
-          objectiveDataAddr.toBuffer(),
-          Buffer.from(objectiveId),
-        ],
-        program
-      );
-
-      const objectiveStartUnix = new BN(Date.now());
-
-      await program.methods
-        .addObjectiveData(
-          objectiveId,
-          objectiveTitle,
-          objectiveStartUnix,
-          null,
-          objectiveDescription,
-          objectiveDeliverable
-        )
-        .accounts({
-          objectiveIssue: issueAccount,
-          metadataAccount: objectiveAccount,
-          objectiveDataAddr,
-          objectiveVerifiedUser,
-          repositoryAccount: repositoryAccount,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-export const addObjectiveToRoadmap = (
-  objectiveDataAddr: PublicKey,
-  objectiveVerifiedUser: PublicKey,
-  repositoryAccount: PublicKey,
-  issueAccount: PublicKey,
-  objectiveId: string,
-  objectiveTitle: string,
-  objectiveDescription: string,
-  objectiveDeliverable: any,
-  parentObjectiveAccount: any
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const provider = await getProvider(Connection, Signer);
-      const program = await getDefiOsProgram(provider);
-
-      const [objectiveAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('objectivedataadd'),
-          issueAccount.toBuffer(),
-          objectiveDataAddr.toBuffer(),
-          Buffer.from(objectiveId),
-        ],
-        program
-      );
-
-      const [metadataAccount] = await get_pda_from_seeds(
-        [
-          Buffer.from('roadmapmetadataadd'),
-          repositoryAccount.toBuffer(),
-          objectiveDataAddr.toBuffer(),
-        ],
-        program
-      );
-
-      const objectiveStartUnix = new BN(Date.now() / 1000);
-
-      const ixAddToRoot = await program.methods
-        .addChildObjective()
-        .accounts({
-          roadmapMetadataAccount:
-            parentObjectiveAccount !== null ? null : metadataAccount,
-          childObjectiveAdder: objectiveDataAddr,
-          parentObjectiveAccount:
-            parentObjectiveAccount !== null
-              ? new PublicKey(parentObjectiveAccount)
-              : null,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .remainingAccounts([
-          { pubkey: objectiveAccount, isWritable: true, isSigner: false },
-        ])
-        .instruction();
-
-      await program.methods
-        .addObjectiveData(
-          objectiveId,
-          objectiveTitle,
-          objectiveStartUnix,
-          null,
-          objectiveDescription,
-          objectiveDeliverable
-        )
-        .accounts({
-          objectiveIssue: issueAccount,
-          metadataAccount: objectiveAccount,
-          objectiveDataAddr,
-          objectiveVerifiedUser,
-          repositoryAccount: repositoryAccount,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .postInstructions([ixAddToRoot])
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-export const addChildObjectiveToObjective = (
-  childObjectiveAdder: PublicKey,
-  parentObjectiveAccount: PublicKey,
-  childObjectiveAccount: PublicKey
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const provider = await getProvider(Connection, Signer);
-      const program = await getDefiOsProgram(provider);
-
-      await program.methods
-        .addChildObjective()
-        .accounts({
-          roadmapMetadataAccount: null,
-          childObjectiveAdder,
-          parentObjectiveAccount,
-          systemProgram: web3.SystemProgram.programId,
-        })
-        .remainingAccounts([
-          { pubkey: childObjectiveAccount, isWritable: true, isSigner: false },
-        ])
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
           resolve(res);
@@ -1888,43 +1576,34 @@ export const buyTransaction = (
       Signer.publicKey
     );
 
-    const { rewardsMint } = await program.account.repository.fetch(
+    const { repoToken } = await program.account.repository.fetch(
       repositoryAccount
     );
-    if (rewardsMint === null) return;
+    if (repoToken === null) return;
 
     const [communal_account] = await get_pda_from_seeds(
       [
         Buffer.from('are_we_conscious'),
         Buffer.from('is love life ?  '),
         Buffer.from('arewemadorinlove'),
-        rewardsMint.toBuffer(),
+        repoToken.toBuffer(),
       ],
       program
     );
 
     const communalTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      repoToken,
       communal_account,
       true
     );
 
     const buyerTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      repoToken,
       Signer.publicKey
     );
 
-    const [defaultVestingSchedule] = await get_pda_from_seeds(
-      [
-        Buffer.from('isGodReal?'),
-        Buffer.from('DoULoveMe?'),
-        Buffer.from('SweetChick'),
-      ],
-      program
-    );
-
     const { supplyModified, decimals } = await getSupplyModified(
-      rewardsMint.toString()
+      repoToken.toString()
     );
 
     if (
@@ -1944,13 +1623,12 @@ export const buyTransaction = (
         buyer: Signer.publicKey,
         communalDeposit: communal_account,
         communalTokenAccount: communalTokenAccount,
-        rewardsMint: rewardsMint,
+        rewardsMint: repoToken,
         tokenProgram: TOKEN_PROGRAM_ID,
         repositoryAccount: repositoryAccount,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
-        defaultSchedule: defaultVestingSchedule,
         communalUsdcAccount,
         buyerUsdcAccount,
         usdcMint,
@@ -1998,29 +1676,29 @@ export const sellTransaction = (
       Signer.publicKey
     );
 
-    const { rewardsMint } = await program.account.repository.fetch(
+    const { repoToken } = await program.account.repository.fetch(
       repositoryAccount
     );
-    if (rewardsMint === null) return;
+    if (repoToken === null) return;
 
     const [communal_account] = await get_pda_from_seeds(
       [
         Buffer.from('are_we_conscious'),
         Buffer.from('is love life ?  '),
         Buffer.from('arewemadorinlove'),
-        rewardsMint.toBuffer(),
+        repoToken.toBuffer(),
       ],
       program
     );
 
     const communalTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      repoToken,
       communal_account,
       true
     );
 
     const sellerTokenAccount = await getAssociatedTokenAddress(
-      rewardsMint,
+      repoToken,
       Signer.publicKey
     );
 
@@ -2034,7 +1712,7 @@ export const sellTransaction = (
     );
 
     const { supplyModified, decimals } = await getSupplyModified(
-      rewardsMint.toString()
+      repoToken.toString()
     );
 
     if (
@@ -2055,13 +1733,12 @@ export const sellTransaction = (
         seller: Signer.publicKey,
         communalDeposit: communal_account,
         communalTokenAccount: communalTokenAccount,
-        rewardsMint: rewardsMint,
+        rewardsMint: repoToken,
         tokenProgram: TOKEN_PROGRAM_ID,
         repositoryAccount: repositoryAccount,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
-        defaultSchedule: defaultVestingSchedule,
         communalUsdcAccount,
         sellerUsdcAccount,
         usdcMint,
@@ -2141,8 +1818,8 @@ export const getSupplyModified = async (tokenAddress: string) => {
     ],
     program
   );
-  const { numberOfSchedules, perVestingAmount } =
-    await program.account.defaultVestingSchedule.fetch(defaultVestingSchedule);
+  const numberOfSchedules = 4
+  const perVestingAmount = new BN(2500)
 
   const supplyModified = supplyActual.sub(
     perVestingAmount.muln(numberOfSchedules)
@@ -2161,9 +1838,9 @@ export const swapTransaction = (
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
 
-    const { rewardsMint: rewardsMintBuy } =
+    const { repoToken: rewardsMintBuy } =
       await program.account.repository.fetch(repositoryAccountBuy);
-    const { rewardsMint: rewardsMintSell } =
+    const { repoToken: rewardsMintSell } =
       await program.account.repository.fetch(repositoryAccountSell);
 
     if (rewardsMintBuy === null || rewardsMintSell === null) return;
@@ -2243,10 +1920,8 @@ export const swapTransaction = (
       program
     );
 
-    const { numberOfSchedules, perVestingAmount } =
-      await program.account.defaultVestingSchedule.fetch(
-        defaultVestingSchedule
-      );
+    const numberOfSchedules = 4;
+    const perVestingAmount = new BN(2500);
 
     //checks
     //tokenSupply(modified)=tokenSupply(actual)-(number_of_schedules*per_vesting_amount)
@@ -2284,7 +1959,6 @@ export const swapTransaction = (
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         buyerTokenAccount,
-        defaultSchedule: defaultVestingSchedule,
         communalUsdcAccount,
         buyerUsdcAccount: UserUsdcAccount,
         usdcMint,
@@ -2303,7 +1977,6 @@ export const swapTransaction = (
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
         sellerTokenAccount,
-        defaultSchedule: defaultVestingSchedule,
         communalUsdcAccount,
         sellerUsdcAccount: UserUsdcAccount,
         usdcMint,

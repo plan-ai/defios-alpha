@@ -185,8 +185,6 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             new PublicKey(
               userMappingState.userMapping?.verifiedUserAccount as string
             ),
-            latestCommit.commit.tree.sha,
-            latestCommit.sha,
             res.data.html_url
           )
             .then((resp: any) => {
@@ -270,7 +268,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
     claimReward(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
       new PublicKey(winner.issue_pr_account),
-      new PublicKey(issueData?.issue_token?.token_spl_addr)
+      new PublicKey(issueData?.issue_token?.token_spl_addr),
+      new PublicKey(issueData?.issue_account)
     )
       .then((res) => {
         dispatch(
@@ -330,7 +329,8 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
     dispatch(onLoading('Voting on the pull request...'));
     votePr(
       new PublicKey(userMappingState.userMapping?.userPubkey as string),
-      new PublicKey(prData.issue_pr_account)
+      new PublicKey(prData.issue_pr_account),
+      new PublicKey(issueData?.issue_account)
     )
       .then((res) => {
         dispatch(
