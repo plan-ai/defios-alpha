@@ -113,7 +113,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
     if (issueStakerFetch !== null) {
       myStake =
         Math.round(
-          (parseFloat(issueStakerFetch.stakedAmount[0].toString()) * 100) /
+          (parseFloat(issueStakerFetch.stakedAmount.toString()) * 100) /
             10 ** decimals
         ) / 100;
       myVotingPower = parseFloat(issueStakerFetch.prVotingPower.toString());

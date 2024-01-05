@@ -26,7 +26,6 @@ const notifMessages = {
   'issue-staked': 'Staked Tokens on an issue.',
   'issue-voting-open': 'Voting is open on an issue.',
   'issue-closed': 'Issue Closed.',
-  'new-obj-added-on-roadmap': 'New objective added on Roadmap.',
 };
 
 export default function NotificationCard({

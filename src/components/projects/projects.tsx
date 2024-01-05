@@ -550,17 +550,18 @@ export default function Projects() {
               <Button
                 fullWidth={true}
                 onClick={() => {
-                  if (project?.project_account) {
-                    const payload = {
-                      searchQuery: `project_account:${project?.project_account}`,
-                      setSearchQuery: true,
-                      expandFirst: false,
-                      pathname: '/roadmaps',
-                    };
-                    dispatch(clicked(payload));
-                  }
-                  router.push('/roadmaps');
+                  // if (project?.project_account) {
+                  //   const payload = {
+                  //     searchQuery: `project_account:${project?.project_account}`,
+                  //     setSearchQuery: true,
+                  //     expandFirst: false,
+                  //     pathname: '/roadmaps',
+                  //   };
+                  //   dispatch(clicked(payload));
+                  // }
+                  // router.push('/roadmaps');
                 }}
+                disabled={true}
               >
                 Explore Related Roadmaps
               </Button>
