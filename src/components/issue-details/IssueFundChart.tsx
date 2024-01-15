@@ -15,8 +15,6 @@ import { motion } from 'framer-motion';
 import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
 import Image from '@/components/ui/image';
 
-import { monthlyComparison } from './price-history';
-
 const dateFormatter = (date: any) => {
   const xDate = new Date(date);
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -44,23 +42,23 @@ function CustomAxisX({ x, y, payload }: any) {
   );
 }
 
-function CustomAxisY({ x, y, payload }: any) {
+function CustomAxisY({ x, y, payload,tokenSymbol }: any) {
   return (
     <g transform={`translate(${x},${y})`} className="text-sm text-white">
       <text x={-20} y={5} textAnchor="middle" fill="currentColor">
-        ${payload.value}
+        {payload.value}
       </text>
     </g>
   );
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label,tokenSymbol }: any) => {
   if (active && payload && payload.length) {
     // console.log(payload);
     return (
       <div className="relative">
         <div className="relative z-[40] flex  items-center gap-3 rounded-full border-2 border-primary bg-body p-3 text-sm xl:text-base 3xl:text-lg">
-          {Object.keys(payload[0]?.payload?.data).length!==0 ? (
+          {Object.keys(payload[0]?.payload?.data).length !== 0 ? (
             <>
               <div className="relative h-10 w-10 overflow-hidden rounded-full">
                 <Image
@@ -70,12 +68,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                   className="object-cover"
                 />
               </div>
-              <div className="font-bold">{payload[0]?.payload?.data?.staker_name}</div>
+              <div className="font-bold">
+                {payload[0]?.payload?.data?.staker_name}
+              </div>
               {payload[0]?.payload?.data?.staked === true && (
                 <>
                   <div>funded this issue with</div>
                   <div className="font-medium text-[#90FAC7]">
-                    ${payload[0]?.payload?.data?.staker_amount}
+                    {payload[0]?.payload?.data?.staker_amount} {tokenSymbol}
                   </div>
                 </>
               )}
@@ -83,7 +83,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 <>
                   <div>withdrew their stake worth</div>
                   <div className="font-medium text-[#FA9090]">
-                    ${payload[0]?.payload?.data?.staker_amount}
+                    {payload[0]?.payload?.data?.staker_amount} {tokenSymbol}
                   </div>
                 </>
               )}
@@ -91,7 +91,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           ) : (
             <>
               <div>Total Amount Staked :</div>
-              <div className="font-medium">${payload[0].value}</div>
+              <div className="font-medium">
+                {payload[0].value} {tokenSymbol}
+              </div>
             </>
           )}
         </div>
@@ -122,10 +124,12 @@ const calculateFallsRises = (data: any) => {
 
 interface IssueFundChartProps {
   chartData: any;
+  token: any;
 }
 
 export const IssueFundChart: React.FC<IssueFundChartProps> = ({
   chartData,
+  token
 }) => {
   
   const [gradData, setgradData] = useState([
@@ -174,7 +178,7 @@ export const IssueFundChart: React.FC<IssueFundChartProps> = ({
           <Tooltip
             // position={{ y: 250 }}
             wrapperStyle={{ outline: 'none' }}
-            content={<CustomTooltip />}
+            content={<CustomTooltip tokenSymbol={token?.token_symbol} />}
           />
           <Line
             type="linear"
@@ -184,7 +188,10 @@ export const IssueFundChart: React.FC<IssueFundChartProps> = ({
             strokeWidth={2}
             dot={true}
           />
-          <YAxis stroke="#FFF" tick={<CustomAxisY />} />
+          <YAxis
+            stroke="#FFF"
+            tick={<CustomAxisY tokenSymbol={token?.token_symbol} />}
+          />
           <XAxis
             stroke="#FFF"
             scale="linear"

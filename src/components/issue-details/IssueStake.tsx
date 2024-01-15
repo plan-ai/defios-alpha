@@ -65,7 +65,8 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
       wallet.publicKey as PublicKey,
       new PublicKey(issueData?.issue_account),
       tokenAmount,
-      firebase_jwt
+      firebase_jwt,
+      issueData?.issue_token?.token_decimals
     )
       .then((res) => {
         setTokenAmount(0);

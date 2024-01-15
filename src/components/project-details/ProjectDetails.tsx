@@ -56,15 +56,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({}) => {
 
   const [refetch, setRefetch] = useState(0);
 
-  let [tokenDecimals, setTokenDecimals] = useState(0);
-
-  const getTokenInfo = async () => {
-    const response: any = await fetchTokenMetadata(
-      projectData?.project_token?.token_spl_addr
-    );
-    setTokenDecimals(response.decimals);
-  };
-
   const getProjectsData = async () => {
     setIsLoading(true);
     axios
@@ -99,16 +90,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({}) => {
     }
   }, [firebase_jwt, refetch]);
 
-  useEffect(() => {
-    if (
-      projectData?.project_token?.token_spl_addr !== null &&
-      projectData?.project_token?.token_spl_addr !== undefined &&
-      projectData?.project_token?.token_spl_addr !== ''
-    ) {
-      getTokenInfo();
-    }
-  }, [projectData]);
-
   return (
     <div className="landing-font flex h-full w-full flex-col gap-3 px-3.5 pb-4">
       <AnchorLink
@@ -118,7 +99,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({}) => {
         <ArrowLongLeftIcon className="h-10" />
         <div>Go back to projects</div>
       </AnchorLink>
-      <ProjectTopBoxes data={projectData} tokenDecimals={tokenDecimals} />
+      <ProjectTopBoxes data={projectData} />
       <div className="mt-6 mb-4 flex w-full flex-col gap-6">
         <div className="flex w-full items-center justify-between px-6">
           <div

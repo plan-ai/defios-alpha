@@ -817,7 +817,8 @@ export const stakeIssueTokens = (
   issueStaker: PublicKey,
   issueAccount: PublicKey,
   tokenAmount: number,
-  firebase_jwt: string
+  firebase_jwt: string,
+  decimals: number
 ) => {
   return new Promise(async (resolve, reject) => {
     const provider = await getProvider(Connection, Signer);
@@ -848,27 +849,27 @@ export const stakeIssueTokens = (
       issueStaker
     );
 
-    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
-    if (!tokenMetadata.decimals) {
-      tokenMetadata = await axios
-        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
-          headers: {
-            Authorization: firebase_jwt,
-          },
-          params: {
-            token_addr: mintKeypair.toString(),
-          },
-        })
-        .then((res) => {
-          const response = { ...res.data };
-          response.decimals = res.data.token_decimals;
-          return response;
-        });
-    }
-    if (!tokenMetadata.decimals) {
-      reject('cannot find decimals of token');
-    }
-    const transferAmount = tokenAmount * 10 ** tokenMetadata.decimals;
+    // let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    // if (!tokenMetadata.decimals) {
+    //   tokenMetadata = await axios
+    //     .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
+    //       headers: {
+    //         Authorization: firebase_jwt,
+    //       },
+    //       params: {
+    //         token_addr: mintKeypair.toString(),
+    //       },
+    //     })
+    //     .then((res) => {
+    //       const response = { ...res.data };
+    //       response.decimals = res.data.token_decimals;
+    //       return response;
+    //     });
+    // }
+    // if (!tokenMetadata.decimals) {
+    //   reject('cannot find decimals of token');
+    // }
+    const transferAmount = tokenAmount * 10 ** decimals;
 
     const ixTokenStake = await program.methods
       .stakeIssue(new BN(transferAmount))

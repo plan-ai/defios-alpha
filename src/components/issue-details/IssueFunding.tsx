@@ -27,8 +27,19 @@ export const IssueFunding: React.FC<IssueFundingProps> = ({
           setRefetch={setRefetch}
         />
       )}
-      {section === 2 && <IssueFundChart chartData={issueData?.issue_stake_timeline} />}
-      {section === 3 && <IssueStakers data={issueData?.issue_stakers} total_stake={issueData?.issue_stake_amount} />}
+      {section === 2 && (
+        <IssueFundChart
+          chartData={issueData?.issue_stake_timeline}
+          token={issueData?.issue_token}
+        />
+      )}
+      {section === 3 && (
+        <IssueStakers
+          data={issueData?.issue_stakers}
+          total_stake={issueData?.issue_stake_amount}
+          token={issueData?.issue_token}
+        />
+      )}
       <div className="mt-20 flex flex-col items-center gap-8">
         <div
           className={cn('cursor-pointer rounded-full border border-primary', {

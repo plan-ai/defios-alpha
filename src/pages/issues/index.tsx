@@ -364,7 +364,6 @@ const IssuesPage: NextPageWithLayout = () => {
             </span>
             <span className="flex flex-col items-center justify-center gap-1 py-3 text-center tracking-wider text-gray-300 xl:py-3.5 3xl:py-4">
               <div className="textShadow text-primary">rewards</div>
-              <div className="text-xs xl:text-sm 3xl:text-base">($)</div>
             </span>
           </div>
           {issuesData?.length !== 0 &&

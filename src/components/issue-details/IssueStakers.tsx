@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from '@/components/ui/image';
 import ProgressBar from '@/components/ui/progress-bar';
+import { token } from '@metaplex-foundation/js';
 
 interface StakerListProps {
   stakerData: any;
@@ -61,9 +62,14 @@ const StakerList: React.FC<StakerListProps> = ({ stakerData, total_stake }) => {
 interface IssueStakersProps {
   data: any;
   total_stake: number;
+  token: any;
 }
 
-const IssueStakers: React.FC<IssueStakersProps> = ({ data, total_stake }) => {
+const IssueStakers: React.FC<IssueStakersProps> = ({
+  data,
+  total_stake,
+  token,
+}) => {
   const [stakersData, setStakersData] = useState<any[]>([]);
   useEffect(() => {
     const sortedData = data.sort((a: any, b: any) =>
@@ -78,7 +84,9 @@ const IssueStakers: React.FC<IssueStakersProps> = ({ data, total_stake }) => {
       </div>
       <div className="grid w-full grid-cols-6 text-sm font-medium uppercase xl:text-base 3xl:text-lg">
         <div className="col-span-2 underline">Supporter</div>
-        <div className="flex justify-end underline">Stake (in $)</div>
+        <div className="flex justify-end underline">
+          Stake (in {token?.token_symbol})
+        </div>
         <div className="col-span-3 flex justify-end underline">
           Voting Power
         </div>
@@ -86,13 +94,15 @@ const IssueStakers: React.FC<IssueStakersProps> = ({ data, total_stake }) => {
       <div className="flex w-full flex-col">
         {stakersData.length > 0 &&
           stakersData.map((staker, idx) => {
-            return (
-              <StakerList
-                stakerData={staker}
-                total_stake={total_stake}
-                key={idx}
-              />
-            );
+            if (staker.issue_staker_amount > 0) {
+              return (
+                <StakerList
+                  stakerData={staker}
+                  total_stake={total_stake}
+                  key={idx}
+                />
+              );
+            }
           })}
       </div>
     </div>

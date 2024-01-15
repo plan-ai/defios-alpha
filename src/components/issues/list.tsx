@@ -30,37 +30,14 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
 
-  let [tokenDecimals, setTokenDecimals] = useState(0);
 
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === undefined) return;
-    getTokenInfo();
     setIssueTags(removeDuplicates(data?.issue_tags));
   }, [data, firebase_jwt]);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
-  };
-
-  const getTokenInfo = async () => {
-    const response: any = await fetchTokenMetadata(
-      data?.issue_token?.token_spl_addr
-    );
-    if (response?.decimals) {
-      setTokenDecimals(response.decimals);
-    } else {
-      const resp: any = await axios.get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
-        headers: {
-          Authorization: firebase_jwt,
-        },
-        params: {
-          token_addr: data?.issue_token?.token_spl_addr,
-        },
-      });
-      if (resp.token_decimals) {
-        setTokenDecimals(resp.token_decimals);
-      }
-    }
   };
 
   return (
@@ -107,9 +84,9 @@ const IssuesList: React.FC<IssuesListTypes> = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className="text-base text-new-green xl:text-lg 3xl:text-xl">
-          {Math.round((data?.issue_stake_amount * 100) / 10 ** tokenDecimals) /
-            100}
+        <div className="flex text-base gap-3 xl:text-lg 3xl:text-xl">
+          <div className="text-new-green">{data?.issue_stake_amount}</div>
+          <div>{data?.issue_token?.token_symbol}</div>
         </div>
       </div>
       <div className="lineGradientHorizontalGray h-0.5 w-full"></div>

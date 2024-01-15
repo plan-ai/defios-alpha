@@ -108,15 +108,14 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
     let myVotingPower = 0;
 
     myStake = myStaker[0].issue_staker_amount;
-    myVotingPower =
-      Math.round((myStake / issueData?.issue_stake_amount) * 1000) / 10;
-
+    if (myStake > 0) {
+      myVotingPower =
+        Math.round((myStake / issueData?.issue_stake_amount) * 1000) / 10;
+    }
     //token balance
     const tokenBalanceData = await getTokenBalance(
       issueData?.issue_token?.token_spl_addr
     );
-
-    console.log('votingpower ', myVotingPower);
 
     //fix in a state for nested use in child components
     setTokenDetails({

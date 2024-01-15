@@ -81,8 +81,9 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
                 </div>
               </div>
             </div>
-            <div className="text-base text-new-green xl:text-lg 3xl:text-xl">
-                {data?.issue_stake_amount}
+            <div className="flex gap-3 text-base xl:text-lg 3xl:text-xl">
+              <div className="text-new-green">{data?.issue_stake_amount}</div>
+              <div>{data?.issue_token?.token_symbol}</div>
             </div>
           </>
         )}

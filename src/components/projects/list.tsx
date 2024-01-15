@@ -22,20 +22,7 @@ export default function ProjectList({
 }: React.PropsWithChildren<ProjectListTypes>) {
   let [isExpand, setIsExpand] = useState(initExpand || false);
 
-  let [tokenDecimals, setTokenDecimals] = useState(0);
-
   const router = useRouter();
-
-  useEffect(() => {
-    getTokenInfo();
-  }, [data]);
-
-  const getTokenInfo = async () => {
-    const response: any = await fetchTokenMetadata(
-      data?.project_token?.token_spl_addr
-    );
-    setTokenDecimals(response.decimals);
-  };
 
   return (
     <div
@@ -79,10 +66,10 @@ export default function ProjectList({
           {data?.num_open_issues}
         </div>
         <div className="text-center font-semibold uppercase tracking-wider text-white">
-          {Math.round((data?.coins_staked * 100) / 10 ** tokenDecimals) / 100}
+          {data?.coins_staked}
         </div>
         <div className="text-center font-semibold uppercase tracking-wider text-new-green">
-          {Math.round((data?.coins_rewarded * 100) / 10 ** tokenDecimals) / 100}
+          {data?.coins_rewarded}
         </div>
       </div>
       {/* <AnimatePresence initial={false}>
