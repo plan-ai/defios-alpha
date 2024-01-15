@@ -21,7 +21,6 @@ export interface step2Props {
   issueDescription: string;
   selectedIssue: any;
   tokenIncentive: number;
-  usdcIncentive: number;
   tags: string[];
   issueNumber: number | undefined;
   issueLink: string | undefined;
@@ -59,7 +58,6 @@ const initialState: creationState = {
     issueDescription: '',
     selectedIssue: undefined,
     tokenIncentive: 0,
-    usdcIncentive: 0,
     tags: [],
     issueNumber: undefined,
     issueLink: undefined,
@@ -104,7 +102,6 @@ export const newCreation = createSlice({
         issueDescription: '',
         selectedIssue: undefined,
         tokenIncentive: 0,
-        usdcIncentive: 0,
         tags: [],
         issueNumber: undefined,
         issueLink: undefined,

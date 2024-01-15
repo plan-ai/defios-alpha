@@ -25,6 +25,8 @@ const dateFormatter = (date: any) => {
     day: 'numeric',
     month: 'short',
     year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
     // timeZone: tz,
   }).format(xDate);
 
@@ -58,7 +60,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="relative">
         <div className="relative z-[40] flex  items-center gap-3 rounded-full border-2 border-primary bg-body p-3 text-sm xl:text-base 3xl:text-lg">
-          {payload[0]?.payload?.data ? (
+          {Object.keys(payload[0]?.payload?.data).length!==0 ? (
             <>
               <div className="relative h-10 w-10 overflow-hidden rounded-full">
                 <Image
@@ -68,12 +70,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                   className="object-cover"
                 />
               </div>
-              <div className="font-bold">{payload[0]?.payload?.data?.name}</div>
+              <div className="font-bold">{payload[0]?.payload?.data?.staker_name}</div>
               {payload[0]?.payload?.data?.staked === true && (
                 <>
                   <div>funded this issue with</div>
                   <div className="font-medium text-[#90FAC7]">
-                    ${payload[0]?.payload?.data?.amount}
+                    ${payload[0]?.payload?.data?.staker_amount}
                   </div>
                 </>
               )}
@@ -81,7 +83,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                 <>
                   <div>withdrew their stake worth</div>
                   <div className="font-medium text-[#FA9090]">
-                    ${payload[0]?.payload?.data?.amount}
+                    ${payload[0]?.payload?.data?.staker_amount}
                   </div>
                 </>
               )}
@@ -118,24 +120,29 @@ const calculateFallsRises = (data: any) => {
   return res;
 };
 
-interface IssueFundChartProps {}
+interface IssueFundChartProps {
+  chartData: any;
+}
 
-export const IssueFundChart: React.FC<IssueFundChartProps> = ({}) => {
+export const IssueFundChart: React.FC<IssueFundChartProps> = ({
+  chartData,
+}) => {
+  
   const [gradData, setgradData] = useState([
     { start: 100, end: 100, difference: 1 },
   ]);
 
   useEffect(() => {
-    const output = calculateFallsRises(monthlyComparison);
+    const output = calculateFallsRises(chartData);
     console.log(output);
     setgradData(output);
-  }, [monthlyComparison]);
+  }, [chartData]);
 
   return (
     <div className="mx-10 mb-5 h-[30rem] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          data={monthlyComparison}
+          data={chartData}
           width={500}
           height={400}
           margin={{
@@ -181,10 +188,7 @@ export const IssueFundChart: React.FC<IssueFundChartProps> = ({}) => {
           <XAxis
             stroke="#FFF"
             scale="linear"
-            domain={[
-              monthlyComparison[0].date,
-              monthlyComparison[monthlyComparison.length - 1].date,
-            ]}
+            domain={[chartData[0].date, chartData[chartData.length - 1].date]}
             type="number"
             dataKey="date"
             tick={<CustomAxisX />}

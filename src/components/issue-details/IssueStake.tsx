@@ -43,7 +43,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
   const userMappingState = useAppSelector(selectUserMapping);
 
   const [tokenAmount, setTokenAmount] = React.useState<number>(0);
-  const [usdcAmount, setUsdcAmount] = React.useState<number>(0);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isStaking, setIsStaking] = useState(false);
@@ -59,19 +58,17 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
     )
       return;
     if (firebase_jwt === null || firebase_jwt === undefined) return;
-    if (tokenAmount <= 0 && usdcAmount <= 0) return;
+    if (tokenAmount <= 0 ) return;
     dispatch(onLoading('Staking tokens on the issue...'));
     setIsStaking(true);
     stakeIssueTokens(
       wallet.publicKey as PublicKey,
       new PublicKey(issueData?.issue_account),
       tokenAmount,
-      usdcAmount,
       firebase_jwt
     )
       .then((res) => {
         setTokenAmount(0);
-        setUsdcAmount(0);
         dispatch(
           onSuccess({
             label: 'Issue Staking Successful',
@@ -91,7 +88,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
           issue_account: issueData?.issue_account,
           token_address: issueData?.issue_token?.token_spl_addr,
           token_amount: tokenAmount,
-          usdc_amount: usdcAmount,
           issue_github_link: issueData?.issue_gh_url,
         });
         setIsStaking(false);
@@ -99,7 +95,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
       })
       .catch((err) => {
         setTokenAmount(0);
-        setUsdcAmount(0);
         dispatch(
           onFailure({
             label: 'Issue Staking Failed',
@@ -126,7 +121,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
     )
       .then((res) => {
         setTokenAmount(0);
-        setUsdcAmount(0);
         dispatch(
           onSuccess({
             label: 'Issue Unstaking Successful',
@@ -152,7 +146,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
       })
       .catch((err) => {
         setTokenAmount(0);
-        setUsdcAmount(0);
         dispatch(
           onFailure({
             label: 'Issue Unstaking Failed',
@@ -184,20 +177,6 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
               value={tokenAmount}
               onChange={(e) => {
                 setTokenAmount(parseFloat(e.target.value));
-              }}
-            />
-          </div>
-          <div className="flex w-[30%] flex-col gap-2">
-            <div className="ml-1 text-base font-semibold uppercase xl:text-lg 3xl:text-xl">
-              USDC Incentive{' '}
-              <div className="inline font-normal">(OPTIONAL)</div>
-            </div>
-            <Input
-              inputClassName="border-light-gray"
-              type="number"
-              value={usdcAmount}
-              onChange={(e) => {
-                setUsdcAmount(parseFloat(e.target.value));
               }}
             />
           </div>
@@ -242,9 +221,7 @@ export const IssueStake: React.FC<IssueStakeProps> = ({
             <div className="flex w-full items-center justify-between">
               <div>Your current voting power:</div>
               <div>
-                {Math.round(
-                  (tokenDetails?.votingPower / tokenDetails?.totalPower) * 10000
-                ) / 100}
+                {tokenDetails?.votingPower}
                 %
               </div>
             </div>

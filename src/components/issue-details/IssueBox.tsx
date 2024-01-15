@@ -26,44 +26,15 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
   );
 
   const [issueTags, setIssueTags] = useState<string[]>([]);
-  const [tokenDecimals, setTokenDecimals] = useState(0);
 
   const removeDuplicates = (arr: string[]) => {
     return arr.filter((item, index) => arr.indexOf(item) === index);
-  };
-
-  //fetched token decimals
-  const getTokenInfo = async () => {
-    if (
-      data.issue_token?.token_spl_addr === null ||
-      data.issue_token?.token_spl_addr === undefined
-    )
-      return;
-    const response: any = await fetchTokenMetadata(
-      data?.issue_token?.token_spl_addr
-    );
-    if (response.decimals) {
-      setTokenDecimals(response.decimals);
-    } else {
-      const resp: any = await axios.get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
-        headers: {
-          Authorization: firebase_jwt,
-        },
-        params: {
-          token_addr: data?.issue_token?.token_spl_addr,
-        },
-      });
-      if (resp.token_decimals) {
-        setTokenDecimals(resp.token_decimals);
-      }
-    }
   };
 
   //refetched token decimals , removed tag duplicates on data change
   useEffect(() => {
     if (firebase_jwt === null || firebase_jwt === undefined) return;
     if (data === null || data === undefined) return;
-    getTokenInfo();
     setIssueTags(removeDuplicates(data?.issue_tags));
   }, [data, firebase_jwt]);
 
@@ -111,9 +82,7 @@ const IssueBox: React.FC<IssueBoxProps> = ({ data }) => {
               </div>
             </div>
             <div className="text-base text-new-green xl:text-lg 3xl:text-xl">
-              {Math.round(
-                (data?.issue_stake_amount * 100) / 10 ** tokenDecimals
-              ) / 100}
+                {data?.issue_stake_amount}
             </div>
           </>
         )}

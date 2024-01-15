@@ -131,7 +131,6 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
   const [issueType, setIssueType] = useState<'import' | 'create'>('create');
 
   const [tokenIncentive, setTokenIncentive] = useState(0);
-  const [usdcIncentive, setUsdcIncentive] = useState(0);
 
   const { data: session } = useSession();
   const dispatch = useAppDispatch();
@@ -216,7 +215,6 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
           : step2Data.tags.join('')
       );
       setTokenIncentive(step2Data.tokenIncentive);
-      setUsdcIncentive(step2Data.usdcIncentive);
       setIssueType(step2Data.issueType);
     }
   }, [session]);
@@ -243,7 +241,6 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
           issueDescription: issueDescription,
           selectedIssue: selectedIssue,
           tokenIncentive: tokenIncentive,
-          usdcIncentive: usdcIncentive,
           tags: TagsRefined,
           issueNumber: undefined,
           issueLink: undefined,
@@ -263,7 +260,6 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
           issueDescription: issueDescription,
           selectedIssue: selectedIssue,
           tokenIncentive: tokenIncentive,
-          usdcIncentive: usdcIncentive,
           tags: TagsRefined,
           issueNumber: selectedIssue.number,
           issueLink: selectedIssue.html_url,
@@ -430,27 +426,6 @@ export const Step2: React.FC<Step2Props> = ({ setStep }) => {
             placeholder="0"
             value={tokenIncentive}
             onChange={(e) => setTokenIncentive(parseFloat(e.target.value))}
-            type="number"
-            inputClassName="text-2xs xl:text-xs 3xl:text-sm"
-          />
-        </div>
-        <div className="flex w-[55%] flex-col gap-2">
-          <div className="flex items-center gap-3 uppercase ">
-            <div>
-              USDC Incentive{' '}
-              <div className="normal inline text-gray-400">(optional)</div>
-            </div>
-            <Tooltip
-              note={`You can choose to stake USDC on this issue if this needs an urgent solution and your existing token has no $ value.`}
-              direction="top-left"
-            >
-              <QuestionMarkCircleIcon className="h-5 w-5 " />
-            </Tooltip>
-          </div>
-          <Input
-            placeholder="0"
-            value={usdcIncentive}
-            onChange={(e) => setUsdcIncentive(parseFloat(e.target.value))}
             type="number"
             inputClassName="text-2xs xl:text-xs 3xl:text-sm"
           />

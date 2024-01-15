@@ -46,7 +46,7 @@ import axios from '@/lib/axiosClient';
 
 //change
 const nameRouterAccount = new PublicKey(
-  '7PG2xWFzSphpV66ZruD3P7quYzpR5zeGqRmerHMTQTjQ'
+  'YZX1Mxe9VysTAXCv5FE2pAfDjDPriFZx2W9yd7i2Uv9'
 );
 const routerCreator = new PublicKey(
   '55kBY9yxqSC42boV8PywT2gqGzgLi5MPAtifNRgPNezF'
@@ -215,8 +215,7 @@ export const createRepositoryUnlockIssueStake = (
   //issue
   issueURI: string,
   //stake
-  tokenAmount: number,
-  usdcAmount: number
+  tokenAmount: number
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -326,53 +325,14 @@ export const createRepositoryUnlockIssueStake = (
         })
         .instruction();
 
-      const usdcMint = new PublicKey(
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-      );
-
-      const issueStakerUsdcAccount = await getAssociatedTokenAddress(
-        usdcMint,
-        repositoryCreator
-      );
-
-      const issueUsdcPoolAccount = await getAssociatedTokenAddress(
-        usdcMint,
-        issueAccount,
-        true
-      );
-
-      const ixUsdcStake = await program.methods
-        .stakeIssue(new BN(usdcAmount * 10 ** 6))
-        .accounts({
-          issueAccount,
-          repositoryAccount,
-          issueTokenPoolAccount: issueUsdcPoolAccount,
-          issueStaker: repositoryCreator,
-          issueStakerAccount,
-          issueStakerTokenAccount: issueStakerUsdcAccount,
-          rewardsMint: usdcMint,
-          systemProgram: web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          pullRequestMetadataAccount: null,
-        })
-        .instruction();
-
       const arrNoStake = [ixUnlock, ixIssueCreate];
 
       const arrOnlyTokenStake = [ixUnlock, ixIssueCreate, ixTokenStake];
-      const arrOnlyUsdcStake = [ixUnlock, ixIssueCreate, ixUsdcStake];
-
-      const arrAllStake = [ixUnlock, ixIssueCreate, ixTokenStake, ixUsdcStake];
 
       let postIxs: web3.TransactionInstruction[] = arrNoStake;
 
-      if (tokenAmount > 0 && usdcAmount * 10 ** 6 > 0) {
-        postIxs = arrAllStake;
-      } else if (tokenAmount > 0) {
+      if (tokenAmount > 0) {
         postIxs = arrOnlyTokenStake;
-      } else if (usdcAmount * 10 ** 6 > 0) {
-        postIxs = arrOnlyUsdcStake;
       } else {
         postIxs = arrNoStake;
       }
@@ -529,8 +489,7 @@ export const createRepositoryImportedIssueStake = (
   //issue
   issueURI: string,
   //stake
-  tokenAmount: number,
-  usdcAmount: number
+  tokenAmount: number
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -626,53 +585,14 @@ export const createRepositoryImportedIssueStake = (
         })
         .instruction();
 
-      const usdcMint = new PublicKey(
-        'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-      );
-
-      const issueStakerUsdcAccount = await getAssociatedTokenAddress(
-        usdcMint,
-        repositoryCreator
-      );
-
-      const issueUsdcPoolAccount = await getAssociatedTokenAddress(
-        usdcMint,
-        issueAccount,
-        true
-      );
-
-      const ixUsdcStake = await program.methods
-        .stakeIssue(new BN(usdcAmount * 10 ** 6))
-        .accounts({
-          issueAccount,
-          repositoryAccount,
-          issueTokenPoolAccount: issueUsdcPoolAccount,
-          issueStaker: repositoryCreator,
-          issueStakerAccount,
-          issueStakerTokenAccount: issueStakerUsdcAccount,
-          rewardsMint: usdcMint,
-          systemProgram: web3.SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          pullRequestMetadataAccount: null,
-        })
-        .instruction();
-
       const arrNoStake = [ixIssueCreate];
 
       const arrOnlyTokenStake = [ixIssueCreate, ixTokenStake];
-      const arrOnlyUsdcStake = [ixIssueCreate, ixUsdcStake];
-
-      const arrAllStake = [ixIssueCreate, ixTokenStake, ixUsdcStake];
 
       let postIxs: web3.TransactionInstruction[] = arrNoStake;
 
-      if (tokenAmount > 0 && usdcAmount * 10 ** 6 > 0) {
-        postIxs = arrAllStake;
-      } else if (tokenAmount > 0) {
+      if (tokenAmount > 0) {
         postIxs = arrOnlyTokenStake;
-      } else if (usdcAmount * 10 ** 6 > 0) {
-        postIxs = arrOnlyUsdcStake;
       } else {
         postIxs = arrNoStake;
       }
@@ -782,7 +702,6 @@ export const createIssueStake = (
   repositoryAccount: PublicKey,
   issueVerifiedUser: PublicKey,
   tokenAmount: number,
-  usdcAmount: number,
   firebase_jwt: string
 ) => {
   return new Promise<PublicKey>(async (resolve, reject) => {
@@ -868,46 +787,10 @@ export const createIssueStake = (
       })
       .instruction();
 
-    const usdcMint = new PublicKey(
-      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-    );
-
-    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueCreator
-    );
-
-    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueAccount,
-      true
-    );
-
-    const ixUsdcStake = await program.methods
-      .stakeIssue(new BN(usdcAmount * 10 ** 6))
-      .accounts({
-        issueAccount,
-        repositoryAccount: repositoryAccount,
-        issueTokenPoolAccount: issueUsdcPoolAccount,
-        issueStaker: issueCreator,
-        issueStakerAccount,
-        issueStakerTokenAccount: issueStakerUsdcAccount,
-        rewardsMint: usdcMint,
-        systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        pullRequestMetadataAccount: null,
-      })
-      .instruction();
-
     let ixArr: web3.TransactionInstruction[] = [];
 
-    if (tokenAmount > 0 && usdcAmount > 0) {
-      ixArr = [ixTokenStake, ixUsdcStake];
-    } else if (tokenAmount > 0) {
+    if (tokenAmount > 0) {
       ixArr = [ixTokenStake];
-    } else if (usdcAmount > 0) {
-      ixArr = [ixUsdcStake];
     }
 
     program.methods
@@ -934,7 +817,6 @@ export const stakeIssueTokens = (
   issueStaker: PublicKey,
   issueAccount: PublicKey,
   tokenAmount: number,
-  usdcAmount: number,
   firebase_jwt: string
 ) => {
   return new Promise(async (resolve, reject) => {
@@ -1004,59 +886,8 @@ export const stakeIssueTokens = (
         pullRequestMetadataAccount: null,
       });
 
-    const usdcMint = new PublicKey(
-      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-    );
-
-    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueStaker
-    );
-
-    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueAccount,
-      true
-    );
-
-    const ixUsdcStake = await program.methods
-      .stakeIssue(new BN(usdcAmount * 10 ** 6))
-      .accounts({
-        issueAccount,
-        repositoryAccount: repository,
-        issueTokenPoolAccount: issueUsdcPoolAccount,
-        issueStaker: issueStaker,
-        issueStakerAccount,
-        issueStakerTokenAccount: issueStakerUsdcAccount,
-        rewardsMint: usdcMint,
-        systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        pullRequestMetadataAccount: null,
-      });
-
-    if (tokenAmount > 0 && usdcAmount > 0) {
-      const instUsdc = await ixUsdcStake.instruction();
+    if (tokenAmount > 0) {
       await ixTokenStake
-        .postInstructions([instUsdc])
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } else if (tokenAmount > 0) {
-      await ixTokenStake
-        .rpc({ skipPreflight: false, maxRetries: 3 })
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((e) => {
-          reject(e);
-        });
-    } else if (usdcAmount > 0) {
-      await ixUsdcStake
         .rpc({ skipPreflight: false, maxRetries: 3 })
         .then((res) => {
           resolve(res);
@@ -1196,38 +1027,7 @@ export const unstakeIssueTokens = (
       tokenProgram: TOKEN_PROGRAM_ID,
     });
 
-    const usdcMint = new PublicKey(
-      'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
-    );
-
-    const issueStakerUsdcAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueStaker
-    );
-
-    const issueUsdcPoolAccount = await getAssociatedTokenAddress(
-      usdcMint,
-      issueAccount,
-      true
-    );
-
-    const ixUsdcUnstake = await program.methods
-      .unstakeIssue()
-      .accounts({
-        issueAccount,
-        repositoryAccount: repository,
-        issueTokenPoolAccount: issueUsdcPoolAccount,
-        issueStaker: issueStaker,
-        issueStakerAccount,
-        issueStakerTokenAccount: issueStakerUsdcAccount,
-        rewardsMint: usdcMint,
-        systemProgram: web3.SystemProgram.programId,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      })
-      .instruction();
-
     await ixTokenUnstake
-      // .postInstructions([ixUsdcUnstake])
       .rpc({ skipPreflight: false, maxRetries: 3 })
       .then((res) => {
         resolve(res);

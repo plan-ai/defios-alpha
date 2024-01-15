@@ -70,14 +70,6 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
     )
       return;
 
-    //total power calc
-    const { supplyModified, decimals, supplyActual } = await getSupplyModified(
-      issueData.issue_token.token_spl_addr
-    );
-
-    const total_stake_BN = new BN(issueData.issue_stake_amount);
-    const total_power = calculateSellAmount(supplyActual, total_stake_BN);
-
     //init contract connection
     const provider = await getProvider(Connection, Signer);
     const program = await getDefiOsProgram(provider);
@@ -108,31 +100,30 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       });
 
     //voting,staking
+    const myStaker = issueData?.issue_stakers?.filter(
+      (item: any) => item.issue_staker_account === issueStaker.toString()
+    );
+
     let myStake = 0;
     let myVotingPower = 0;
-    if (issueStakerFetch !== null) {
-      myStake =
-        Math.round(
-          (parseFloat(issueStakerFetch.stakedAmount.toString()) * 100) /
-            10 ** decimals
-        ) / 100;
-      myVotingPower = parseFloat(issueStakerFetch.prVotingPower.toString());
-    }
+
+    myStake = myStaker[0].issue_staker_amount;
+    myVotingPower =
+      Math.round((myStake / issueData?.issue_stake_amount) * 1000) / 10;
 
     //token balance
     const tokenBalanceData = await getTokenBalance(
       issueData?.issue_token?.token_spl_addr
     );
 
+    console.log('votingpower ', myVotingPower);
+
     //fix in a state for nested use in child components
     setTokenDetails({
-      totalPower: parseInt(total_power.toString()),
       voted: issueStakerFetch !== null ? issueStakerFetch.hasVoted : false,
       votingPower: myVotingPower,
       tokenBalance: tokenBalanceData?.uiAmount || 0,
       stakeByMe: myStake,
-      decimals: decimals,
-      repositoryCreator: repositoryCreator,
     });
   };
 

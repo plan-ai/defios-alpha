@@ -77,19 +77,8 @@ export const Step3: React.FC<Step3Props> = ({ setStep }) => {
               />
             </div>
             <div>
-              {step1Data.tokenSymbol} + {step2Data.usdcIncentive}
+              {step1Data.tokenSymbol}
             </div>
-            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-              <Image
-                src={
-                  'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU/logo.png'
-                }
-                alt="icon"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div>USDC</div>
           </div>
         </div>
         <div className="lineGradientHorizontalGray h-0.5 w-full"></div>

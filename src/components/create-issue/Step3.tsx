@@ -96,7 +96,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
         userMappingState.userMapping?.verifiedUserAccount as string
       ),
       step1Data.tokenIncentive,
-      step1Data.usdcIncentive,
       firebase_jwt || ''
     )
       .then((res) => {
@@ -128,7 +127,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
           issue_title: step1Data.selectedIssue.title,
           issue_description: step1Data.issueDescription,
           issue_token_incentive: step1Data.tokenIncentive,
-          issue_usdc_incentive: step1Data.usdcIncentive,
         });
         setStep(4);
       })

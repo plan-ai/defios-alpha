@@ -102,17 +102,6 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
     }
   );
 
-  let [tokenDecimals, setTokenDecimals] = useState(0);
-
-  const getDecimals = async () => {
-    const decimals = await fetchDecimals(item?.token_spl_addr);
-    setTokenDecimals(decimals);
-  };
-
-  useEffect(() => {
-    getDecimals();
-  }, []);
-
   return (
     <div className="rounded-xl bg-light-dark p-4 text-sm shadow-card sm:p-5 md:p-6">
       <div className="flex items-center justify-between border-b border-dashed border-gray-700 pb-3.5 sm:pb-5">
@@ -172,9 +161,7 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
           ) : (
             <TrasactionAmountEL
               transactionAmount={
-                Math.round(
-                  (item?.contribution_amt * 100) / 10 ** tokenDecimals
-                ) / 100
+                item?.contribution_amt
               }
               transactionCoin={item?.contribution_token_symbol}
               transactionCoinImg={item?.token_image_url}
@@ -188,9 +175,7 @@ const ContributionsHistoryCard: React.FC<CardProps> = ({ item }) => {
           {item?.contribution_type === 'inbound' ? (
             <TrasactionAmountEL
               transactionAmount={
-                Math.round(
-                  (item?.contribution_amt * 100) / 10 ** tokenDecimals
-                ) / 100
+                item?.contribution_amt
               }
               transactionCoin={item?.contribution_token_symbol}
               transactionCoinImg={item?.token_image_url}

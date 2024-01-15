@@ -132,7 +132,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
       issueUrl,
       //stake
       step2Data.tokenIncentive,
-      step2Data.usdcIncentive
     )
       .then((res) => {
         dispatch(
@@ -169,7 +168,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
           issue_title: step2Data.issueTitle,
           issue_description: step2Data.issueDescription,
           issue_token_incentive: step2Data.tokenIncentive,
-          issue_usdc_incentive: step2Data.usdcIncentive,
         });
         setStep(5);
       })
@@ -238,7 +236,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
       issueUrl,
       //stake
       step2Data.tokenIncentive,
-      step2Data.usdcIncentive
     )
       .then((res) => {
         dispatch(
@@ -276,7 +273,6 @@ export const Step4: React.FC<Step4Props> = ({ setStep }) => {
           issue_title: step2Data.issueTitle,
           issue_description: step2Data.issueDescription,
           issue_token_incentive: step2Data.tokenIncentive,
-          issue_usdc_incentive: step2Data.usdcIncentive,
         });
         setStep(5);
       })
