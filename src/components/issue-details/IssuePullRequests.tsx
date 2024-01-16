@@ -26,6 +26,7 @@ import {
   addPullRequest,
   claimReward,
   votePr,
+  acceptIssueVote
 } from '@/lib/helpers/contractInteract';
 
 //contract utils
@@ -112,6 +113,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
   const firebase_jwt = useAppSelector(
     (state) => state.firebaseTokens.firebaseTokens.auth_creds
   );
+
   const userInfo = useAppSelector((state) => state.userInfo.githubInfo);
   const wallet = useWallet();
   const { data: session } = useSession();
@@ -137,6 +139,20 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
   const [PRSubmittedLink, setPRSubmittedLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
+
+  const [majorityPr,setMajorityPr] = useState('')
+
+  const findMajorityPr = ()=>{
+    if(issueData.issue_prs.length==0) return;
+    const unsortedPrs = issueData.issue_prs;
+    const sortedPrs = unsortedPrs.sort(
+      (a: any, b: any) => a.issue_vote_amount > b.issue_vote_amount ? -1 : 1
+    );
+    const highestVotes  = sortedPrs[0]
+    if(highestVotes.issue_vote_amount>issueData.issue_stake_amount){
+      setMajorityPr(highestVotes.issue_pr_author);
+    }
+  }
 
   const handlePRSubmit = () => {
     if (
@@ -317,6 +333,56 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
       });
   };
 
+  const handleAcceptIssueVote = async () =>{
+    if(majorityPr==='') return;
+    dispatch(onLoading('Trying Accept Issue Vote ...'));
+    acceptIssueVote(
+      new PublicKey(userMappingState.userMapping?.userPubkey as string),
+      new PublicKey(issueData.issue_project_id),
+      new PublicKey(issueData.issue_account),
+      new PublicKey(majorityPr)
+    )
+      .then((res) => {
+        dispatch(
+          onSuccess({
+            label: 'Accept Issue Vote Successful',
+            description: 'check out the tx at',
+            redirect: null,
+            link: res
+              ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+              : '',
+          })
+        );
+        mixpanel.track('Accept Issue Vote Success', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          tx_link: res
+            ? `https://solscan.io/account/${res.toString()}?cluster=devnet`
+            : '',
+          issue_account: issueData?.issue_account,
+          project_account: issueData?.issue_project_id,
+          issue_github_link: issueData?.issue_gh_url,
+          PR_github_author: majorityPr,
+        });
+        setRefetch((state) => state + 1);
+      })
+      .catch((err) => {
+        dispatch(
+          onFailure({
+            label: 'Accept Issue Vote Failed',
+            description: err.message,
+            redirect: null,
+            link: '',
+          })
+        );
+        mixpanel.track('Accept Issue Vote Failed', {
+          github_id: userMappingState.userMapping?.userName,
+          user_pubkey: userMappingState.userMapping?.userPubkey,
+          error: err.message,
+        });
+      });
+  }
+
   const handleVoting = async (prData: any) => {
     if (
       prData === null ||
@@ -446,6 +512,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
         setPRSubmittedLink('');
         getPRsToSelect();
       }
+      findMajorityPr();
     }
   }, [issueData, section]);
 
@@ -642,18 +709,21 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
             issueData.rewardee === '' ||
             issueData.rewardee === null) && (
             <>
-              <div className="textShadowWhite mb-8 text-xl font-semibold xl:text-2xl 3xl:text-3xl">
-                Vote for a PR
+              <div className="flex items-center justify-center gap-10 mb-8">
+                <div className="textShadowWhite text-xl font-semibold xl:text-2xl 3xl:text-3xl">
+                  Vote for a PR
+                </div>
+                <Button size='small' color='PrimaryOutline' disabled={majorityPr===''} onClick={handleAcceptIssueVote} >Accept Issue Vote</Button>
               </div>
               {issueData.issue_prs.length > 0 &&
                 issueData?.issue_prs.map((item: any, idx: number) => {
                   return (
                     <PRBox
                       prData={item}
-                      totalPower={100}
+                      totalPower={issueData?.issue_stake_amount}
                       key={idx}
                       voted={tokenDetails?.voted || false}
-                      votingPower={tokenDetails?.votingPower || 0}
+                      votingPower={tokenDetails?.myStake || 0}
                       isOwner={false}
                       votingFunc={handleVoting}
                     />
@@ -686,7 +756,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                     return (
                       <PRBox
                         prData={item}
-                        totalPower={100}
+                        totalPower={issueData?.issue_stake_amount}
                         key={idx}
                         voted={false}
                         votingPower={0}
@@ -710,7 +780,7 @@ export const IssuePullRequests: React.FC<IssuePullRequestsProps> = ({
                     return (
                       <PRBox
                         prData={item}
-                        totalPower={100}
+                        totalPower={issueData?.issue_stake_amount}
                         key={idx}
                         voted={false}
                         votingPower={0}

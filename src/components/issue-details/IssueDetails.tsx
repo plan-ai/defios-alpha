@@ -107,7 +107,10 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
     let myStake = 0;
     let myVotingPower = 0;
 
-    myStake = myStaker[0].issue_staker_amount;
+    if (myStaker.length > 0) {
+      myStake = myStaker[0].issue_staker_amount;
+    }
+
     if (myStake > 0) {
       myVotingPower =
         Math.round((myStake / issueData?.issue_stake_amount) * 1000) / 10;
@@ -123,6 +126,7 @@ const IssueDetails: React.FC<IssueDetailsProps> = ({}) => {
       votingPower: myVotingPower,
       tokenBalance: tokenBalanceData?.uiAmount || 0,
       stakeByMe: myStake,
+      repositoryCreator: repositoryCreator,
     });
   };
 

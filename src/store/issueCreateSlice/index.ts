@@ -8,6 +8,7 @@ export interface step1Props {
   selectedProject: any;
   tokenSymbol: string;
   tokenName: string;
+  tokenDecimals: number;
   tokenImgLink: string;
   issueType: 'create' | 'import';
   issueTitle: string;
@@ -37,6 +38,7 @@ const initialState: creationState = {
     selectedProject: undefined,
     tokenSymbol: '',
     tokenName: '',
+    tokenDecimals: 0,
     tokenImgLink: '',
     issueType: 'create',
     issueTitle: '',
@@ -71,6 +73,7 @@ export const issueCreate = createSlice({
         selectedProject: undefined,
         tokenSymbol: '',
         tokenName: '',
+        tokenDecimals: 0,
         tokenImgLink: '',
         issueType: 'create',
         issueTitle: '',

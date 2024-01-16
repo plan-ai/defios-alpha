@@ -371,7 +371,7 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                   return (
                     <PRBox
                       prData={item}
-                      totalPower={100}
+                      totalPower={issueData?.issue_stake_amount}
                       key={idx}
                       voted={false}
                       votingPower={0}
@@ -414,7 +414,7 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                       return (
                         <PRBox
                           prData={item}
-                          totalPower={100}
+                          totalPower={issueData?.issue_stake_amount}
                           key={idx}
                           voted={false}
                           votingPower={0}
@@ -438,7 +438,7 @@ export const IssuePullRequestsOwner: React.FC<IssuePullRequestsOwnerProps> = ({
                       return (
                         <PRBox
                           prData={item}
-                          totalPower={100}
+                          totalPower={issueData?.issue_stake_amount}
                           key={idx}
                           voted={false}
                           votingPower={0}

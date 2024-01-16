@@ -43,6 +43,7 @@ import {
 } from '@solana/spl-token';
 
 import axios from '@/lib/axiosClient';
+import { reject } from 'lodash';
 
 //change
 const nameRouterAccount = new PublicKey(
@@ -702,6 +703,7 @@ export const createIssueStake = (
   repositoryAccount: PublicKey,
   issueVerifiedUser: PublicKey,
   tokenAmount: number,
+  tokenDecimals: number,
   firebase_jwt: string
 ) => {
   return new Promise<PublicKey>(async (resolve, reject) => {
@@ -748,27 +750,27 @@ export const createIssueStake = (
       issueCreator
     );
 
-    let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
-    if (!tokenMetadata.decimals) {
-      tokenMetadata = await axios
-        .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
-          headers: {
-            Authorization: firebase_jwt,
-          },
-          params: {
-            token_addr: mintKeypair.toString(),
-          },
-        })
-        .then((res) => {
-          const response = { ...res.data };
-          response.decimals = res.data.token_decimals;
-          return response;
-        });
-    }
-    if (!tokenMetadata.decimals) {
-      reject('cannot find decimals of token');
-    }
-    const transferAmount = tokenAmount * 10 ** tokenMetadata.decimals;
+    // let tokenMetadata = await fetchTokenMetadata(mintKeypair.toString());
+    // if (!tokenMetadata.decimals) {
+    //   tokenMetadata = await axios
+    //     .get(`${process.env.NEXT_PUBLIC_DEFIOS_SERVER}/tokens`, {
+    //       headers: {
+    //         Authorization: firebase_jwt,
+    //       },
+    //       params: {
+    //         token_addr: mintKeypair.toString(),
+    //       },
+    //     })
+    //     .then((res) => {
+    //       const response = { ...res.data };
+    //       response.decimals = res.data.token_decimals;
+    //       return response;
+    //     });
+    // }
+    // if (!tokenMetadata.decimals) {
+    //   reject('cannot find decimals of token');
+    // }
+    const transferAmount = tokenAmount * 10 ** tokenDecimals;
 
     const ixTokenStake = await program.methods
       .stakeIssue(new BN(transferAmount))
@@ -1226,6 +1228,42 @@ export const acceptPr = (prAccount: PublicKey,issueAccount:PublicKey) => {
       });
   });
 };
+
+export const acceptIssueVote = (
+  initiator: PublicKey,
+  repositoryAccount: PublicKey,
+  issueAccount:PublicKey,
+  pullRequestAddr:PublicKey,
+)=>{
+  return new Promise(async (resolve,reject)=>{
+    const provider = await getProvider(Connection, Signer);
+    const program = await getDefiOsProgram(provider);
+    const [pullRequestMetadataAccount] = await get_pda_from_seeds(
+      [
+        Buffer.from('pullrequestadded'),
+        issueAccount.toBuffer(),
+        pullRequestAddr.toBuffer(),
+      ],
+      program
+     );
+     program.methods
+       .acceptIssueVote()
+       .accounts({
+         initiator,
+         repositoryAccount,
+         issue: issueAccount,
+         pullRequestMetadataAccount,
+         systemProgram: web3.SystemProgram.programId,
+       })
+       .rpc({ skipPreflight: false, maxRetries: 3 })
+       .then((res) => {
+         resolve(res);
+       })
+       .catch((e) => {
+         reject(e);
+       });
+  })
+}
 
 export const claimReward = (
   pullRequestAddr: PublicKey,
